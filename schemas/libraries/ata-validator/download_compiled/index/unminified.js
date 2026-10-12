@@ -21,7 +21,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.3.3_ata-validator@1.46.1_yaml@2.9.1_/node_modules/@ata-project/keywords/index.js
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.3.3_ata-validator@1.51.0_yaml@2.9.1_/node_modules/@ata-project/keywords/index.js
 var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -537,14 +537,30 @@ var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	});
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/native-load.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/native-load.browser.js
 var require_native_load_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = function loadNative() {
 		return null;
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/keywords.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/env.js
+var require_env = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function env(name) {
+		return typeof process !== "undefined" && process.env ? process.env[name] : void 0;
+	}
+	module.exports = { env };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/compile-fn.js
+var require_compile_fn = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	function compileFunction(...args) {
+		return new Function(...args);
+	}
+	module.exports = { compileFunction };
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/keywords.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const RESERVED = /* @__PURE__ */ new Set([
 		"$id",
@@ -666,15 +682,24 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/draft7.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const DRAFT7_SCHEMAS = /* @__PURE__ */ new Set(["http://json-schema.org/draft-07/schema#", "http://json-schema.org/draft-07/schema"]);
+	const DRAFT7_SCHEMAS = /* @__PURE__ */ new Set([
+		"http://json-schema.org/draft-07/schema#",
+		"http://json-schema.org/draft-07/schema",
+		"http://json-schema.org/draft-06/schema#",
+		"http://json-schema.org/draft-06/schema"
+	]);
+	const DRAFT6_SCHEMAS = /* @__PURE__ */ new Set(["http://json-schema.org/draft-06/schema#", "http://json-schema.org/draft-06/schema"]);
 	function isDraft7(schema) {
-		return !!(schema && schema.$schema && DRAFT7_SCHEMAS.has(schema.$schema));
+		return !!(schema && typeof schema.$schema === "string" && DRAFT7_SCHEMAS.has(schema.$schema));
 	}
-	function normalizeDraft7(schema, force) {
+	function isDraft6(schema) {
+		return !!(schema && typeof schema.$schema === "string" && DRAFT6_SCHEMAS.has(schema.$schema));
+	}
+	function normalizeDraft7(schema, force, draft6) {
 		if (!force && !isDraft7(schema)) return schema;
-		_normalize(schema);
+		_normalize(schema, draft6 === true || isDraft6(schema));
 		return schema;
 	}
 	const REF_SIBLINGS_KEPT = /* @__PURE__ */ new Set([
@@ -690,8 +715,13 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		"readOnly",
 		"writeOnly"
 	]);
-	function _normalize(schema) {
+	function _normalize(schema, d6) {
 		if (typeof schema !== "object" || schema === null) return;
+		if (d6) {
+			delete schema.if;
+			delete schema.then;
+			delete schema.else;
+		}
 		if (typeof schema.$ref === "string") {
 			for (const key of Object.keys(schema)) if (!REF_SIBLINGS_KEPT.has(key)) delete schema[key];
 		}
@@ -730,7 +760,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			"definitions",
 			"dependentSchemas"
 		]) if (schema[key] && typeof schema[key] === "object") {
-			for (const v of Object.values(schema[key])) if (typeof v === "object" && v !== null) _normalize(v);
+			for (const v of Object.values(schema[key])) if (typeof v === "object" && v !== null) _normalize(v, d6);
 		}
 		for (const key of [
 			"allOf",
@@ -738,7 +768,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			"oneOf",
 			"prefixItems"
 		]) if (Array.isArray(schema[key])) {
-			for (const s of schema[key]) if (typeof s === "object" && s !== null) _normalize(s);
+			for (const s of schema[key]) if (typeof s === "object" && s !== null) _normalize(s, d6);
 		}
 		for (const key of [
 			"items",
@@ -749,7 +779,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			"else",
 			"additionalProperties",
 			"propertyNames"
-		]) if (typeof schema[key] === "object" && schema[key] !== null) _normalize(schema[key]);
+		]) if (typeof schema[key] === "object" && schema[key] !== null) _normalize(schema[key], d6);
 	}
 	function normalizeExclusiveBounds(schema) {
 		_walkExclusive(schema, /* @__PURE__ */ new Set());
@@ -863,8 +893,84 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		]) if (Array.isArray(schema[key])) for (const s of schema[key]) _stripFormat(s, seen);
 		else _stripFormat(schema[key], seen);
 	}
+	const DRAFT2019_SCHEMAS = /* @__PURE__ */ new Set(["https://json-schema.org/draft/2019-09/schema", "https://json-schema.org/draft/2019-09/schema#"]);
+	const RECURSIVE_ANCHOR = "__ata_recursive_anchor";
+	function isDraft2019(schema) {
+		return !!(schema && typeof schema.$schema === "string" && DRAFT2019_SCHEMAS.has(schema.$schema));
+	}
+	const SUB_OBJECT = [
+		"properties",
+		"patternProperties",
+		"$defs",
+		"definitions",
+		"dependentSchemas"
+	];
+	const SUB_ARRAY = [
+		"allOf",
+		"anyOf",
+		"oneOf",
+		"prefixItems",
+		"items"
+	];
+	const SUB_SINGLE = [
+		"items",
+		"additionalItems",
+		"contains",
+		"not",
+		"if",
+		"then",
+		"else",
+		"additionalProperties",
+		"propertyNames",
+		"unevaluatedItems",
+		"unevaluatedProperties",
+		"contentSchema"
+	];
+	function normalizeDraft2019(schema, force) {
+		if (!force && !isDraft2019(schema)) return schema;
+		_normalize2019(schema, schema, false);
+		return schema;
+	}
+	function _normalize2019(node, resourceRoot, isRoot) {
+		if (typeof node !== "object" || node === null || Array.isArray(node)) return;
+		const root = !isRoot && typeof node.$id === "string" && !node.$id.startsWith("#") ? node : resourceRoot;
+		if (node.$recursiveAnchor === true && node === root) node.$dynamicAnchor = RECURSIVE_ANCHOR;
+		delete node.$recursiveAnchor;
+		if (typeof node.$recursiveRef === "string") {
+			if (node.$recursiveRef === "#" && root.$dynamicAnchor === RECURSIVE_ANCHOR) node.$dynamicRef = "#" + RECURSIVE_ANCHOR;
+			else if (node.$ref === void 0) node.$ref = node.$recursiveRef;
+			delete node.$recursiveRef;
+		}
+		for (const key of SUB_OBJECT) {
+			const sub = node[key];
+			if (sub && typeof sub === "object") for (const v of Object.values(sub)) _normalize2019(v, root, false);
+		}
+		for (const key of SUB_ARRAY) if (Array.isArray(node[key])) for (const v of node[key]) _normalize2019(v, root, false);
+		for (const key of SUB_SINGLE) {
+			const sub = node[key];
+			if (sub && typeof sub === "object" && !Array.isArray(sub)) _normalize2019(sub, root, false);
+		}
+		if (Array.isArray(node.items)) {
+			node.prefixItems = node.items;
+			if (node.additionalItems !== void 0) {
+				node.items = node.additionalItems;
+				delete node.additionalItems;
+			} else delete node.items;
+		} else delete node.additionalItems;
+	}
+	function draftCode(uri) {
+		if (typeof uri !== "string") return 0;
+		if (DRAFT6_SCHEMAS.has(uri)) return 2;
+		if (DRAFT7_SCHEMAS.has(uri)) return 1;
+		if (DRAFT2019_SCHEMAS.has(uri)) return 3;
+		return 0;
+	}
 	module.exports = {
+		draftCode,
 		isDraft7,
+		isDraft6,
+		isDraft2019,
+		normalizeDraft2019,
 		normalizeDraft7,
 		normalizeNullable,
 		normalizeExclusiveBounds,
@@ -872,9 +978,9 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/metaschemas.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/metaschemas.js
 var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = { METASCHEMAS: /* @__PURE__ */ new Map([
+	const METASCHEMAS = /* @__PURE__ */ new Map([
 		["https://json-schema.org/draft/2020-12/schema", {
 			"$schema": "https://json-schema.org/draft/2020-12/schema",
 			"$id": "https://json-schema.org/draft/2020-12/schema",
@@ -1285,11 +1391,392 @@ var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				"not": { "$ref": "#" }
 			},
 			"default": true
+		}],
+		["http://json-schema.org/draft-06/schema#", {
+			"$schema": "http://json-schema.org/draft-06/schema#",
+			"$id": "http://json-schema.org/draft-06/schema#",
+			"title": "Core schema meta-schema",
+			"definitions": {
+				"schemaArray": {
+					"type": "array",
+					"minItems": 1,
+					"items": { "$ref": "#" }
+				},
+				"nonNegativeInteger": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"nonNegativeIntegerDefault0": { "allOf": [{ "$ref": "#/definitions/nonNegativeInteger" }, { "default": 0 }] },
+				"simpleTypes": { "enum": [
+					"array",
+					"boolean",
+					"integer",
+					"null",
+					"number",
+					"object",
+					"string"
+				] },
+				"stringArray": {
+					"type": "array",
+					"items": { "type": "string" },
+					"uniqueItems": true,
+					"default": []
+				}
+			},
+			"type": ["object", "boolean"],
+			"properties": {
+				"$id": {
+					"type": "string",
+					"format": "uri-reference"
+				},
+				"$schema": {
+					"type": "string",
+					"format": "uri"
+				},
+				"$ref": {
+					"type": "string",
+					"format": "uri-reference"
+				},
+				"title": { "type": "string" },
+				"description": { "type": "string" },
+				"default": {},
+				"examples": {
+					"type": "array",
+					"items": {}
+				},
+				"multipleOf": {
+					"type": "number",
+					"exclusiveMinimum": 0
+				},
+				"maximum": { "type": "number" },
+				"exclusiveMaximum": { "type": "number" },
+				"minimum": { "type": "number" },
+				"exclusiveMinimum": { "type": "number" },
+				"maxLength": { "$ref": "#/definitions/nonNegativeInteger" },
+				"minLength": { "$ref": "#/definitions/nonNegativeIntegerDefault0" },
+				"pattern": {
+					"type": "string",
+					"format": "regex"
+				},
+				"additionalItems": { "$ref": "#" },
+				"items": {
+					"anyOf": [{ "$ref": "#" }, { "$ref": "#/definitions/schemaArray" }],
+					"default": {}
+				},
+				"maxItems": { "$ref": "#/definitions/nonNegativeInteger" },
+				"minItems": { "$ref": "#/definitions/nonNegativeIntegerDefault0" },
+				"uniqueItems": {
+					"type": "boolean",
+					"default": false
+				},
+				"contains": { "$ref": "#" },
+				"maxProperties": { "$ref": "#/definitions/nonNegativeInteger" },
+				"minProperties": { "$ref": "#/definitions/nonNegativeIntegerDefault0" },
+				"required": { "$ref": "#/definitions/stringArray" },
+				"additionalProperties": { "$ref": "#" },
+				"definitions": {
+					"type": "object",
+					"additionalProperties": { "$ref": "#" },
+					"default": {}
+				},
+				"properties": {
+					"type": "object",
+					"additionalProperties": { "$ref": "#" },
+					"default": {}
+				},
+				"patternProperties": {
+					"type": "object",
+					"additionalProperties": { "$ref": "#" },
+					"propertyNames": { "format": "regex" },
+					"default": {}
+				},
+				"dependencies": {
+					"type": "object",
+					"additionalProperties": { "anyOf": [{ "$ref": "#" }, { "$ref": "#/definitions/stringArray" }] }
+				},
+				"propertyNames": { "$ref": "#" },
+				"const": {},
+				"enum": {
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true
+				},
+				"type": { "anyOf": [{ "$ref": "#/definitions/simpleTypes" }, {
+					"type": "array",
+					"items": { "$ref": "#/definitions/simpleTypes" },
+					"minItems": 1,
+					"uniqueItems": true
+				}] },
+				"format": { "type": "string" },
+				"allOf": { "$ref": "#/definitions/schemaArray" },
+				"anyOf": { "$ref": "#/definitions/schemaArray" },
+				"oneOf": { "$ref": "#/definitions/schemaArray" },
+				"not": { "$ref": "#" }
+			},
+			"default": {}
+		}],
+		["https://json-schema.org/draft/2019-09/schema", {
+			"$schema": "https://json-schema.org/draft/2019-09/schema",
+			"$id": "https://json-schema.org/draft/2019-09/schema",
+			"$vocabulary": {
+				"https://json-schema.org/draft/2019-09/vocab/core": true,
+				"https://json-schema.org/draft/2019-09/vocab/applicator": true,
+				"https://json-schema.org/draft/2019-09/vocab/validation": true,
+				"https://json-schema.org/draft/2019-09/vocab/meta-data": true,
+				"https://json-schema.org/draft/2019-09/vocab/format": false,
+				"https://json-schema.org/draft/2019-09/vocab/content": true
+			},
+			"$recursiveAnchor": true,
+			"title": "Core and Validation specifications meta-schema",
+			"allOf": [
+				{ "$ref": "meta/core" },
+				{ "$ref": "meta/applicator" },
+				{ "$ref": "meta/validation" },
+				{ "$ref": "meta/meta-data" },
+				{ "$ref": "meta/format" },
+				{ "$ref": "meta/content" }
+			],
+			"type": ["object", "boolean"],
+			"properties": {
+				"definitions": {
+					"$comment": "While no longer an official keyword as it is replaced by $defs, this keyword is retained in the meta-schema to prevent incompatible extensions as it remains in common use.",
+					"type": "object",
+					"additionalProperties": { "$recursiveRef": "#" },
+					"default": {}
+				},
+				"dependencies": {
+					"$comment": "\"dependencies\" is no longer a keyword, but schema authors should avoid redefining it to facilitate a smooth transition to \"dependentSchemas\" and \"dependentRequired\"",
+					"type": "object",
+					"additionalProperties": { "anyOf": [{ "$recursiveRef": "#" }, { "$ref": "meta/validation#/$defs/stringArray" }] }
+				}
+			}
+		}],
+		["https://json-schema.org/draft/2019-09/meta/core", {
+			"$schema": "https://json-schema.org/draft/2019-09/schema",
+			"$id": "https://json-schema.org/draft/2019-09/meta/core",
+			"$recursiveAnchor": true,
+			"title": "Core vocabulary meta-schema",
+			"type": ["object", "boolean"],
+			"properties": {
+				"$id": {
+					"type": "string",
+					"format": "uri-reference",
+					"$comment": "Non-empty fragments not allowed.",
+					"pattern": "^[^#]*#?$"
+				},
+				"$schema": {
+					"type": "string",
+					"format": "uri"
+				},
+				"$anchor": {
+					"type": "string",
+					"pattern": "^[A-Za-z][-A-Za-z0-9.:_]*$"
+				},
+				"$ref": {
+					"type": "string",
+					"format": "uri-reference"
+				},
+				"$recursiveRef": {
+					"type": "string",
+					"format": "uri-reference"
+				},
+				"$recursiveAnchor": {
+					"type": "boolean",
+					"default": false
+				},
+				"$vocabulary": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string",
+						"format": "uri"
+					},
+					"additionalProperties": { "type": "boolean" }
+				},
+				"$comment": { "type": "string" },
+				"$defs": {
+					"type": "object",
+					"additionalProperties": { "$recursiveRef": "#" },
+					"default": {}
+				}
+			}
+		}],
+		["https://json-schema.org/draft/2019-09/meta/applicator", {
+			"$schema": "https://json-schema.org/draft/2019-09/schema",
+			"$id": "https://json-schema.org/draft/2019-09/meta/applicator",
+			"$recursiveAnchor": true,
+			"title": "Applicator vocabulary meta-schema",
+			"type": ["object", "boolean"],
+			"properties": {
+				"additionalItems": { "$recursiveRef": "#" },
+				"unevaluatedItems": { "$recursiveRef": "#" },
+				"items": { "anyOf": [{ "$recursiveRef": "#" }, { "$ref": "#/$defs/schemaArray" }] },
+				"contains": { "$recursiveRef": "#" },
+				"additionalProperties": { "$recursiveRef": "#" },
+				"unevaluatedProperties": { "$recursiveRef": "#" },
+				"properties": {
+					"type": "object",
+					"additionalProperties": { "$recursiveRef": "#" },
+					"default": {}
+				},
+				"patternProperties": {
+					"type": "object",
+					"additionalProperties": { "$recursiveRef": "#" },
+					"propertyNames": { "format": "regex" },
+					"default": {}
+				},
+				"dependentSchemas": {
+					"type": "object",
+					"additionalProperties": { "$recursiveRef": "#" }
+				},
+				"propertyNames": { "$recursiveRef": "#" },
+				"if": { "$recursiveRef": "#" },
+				"then": { "$recursiveRef": "#" },
+				"else": { "$recursiveRef": "#" },
+				"allOf": { "$ref": "#/$defs/schemaArray" },
+				"anyOf": { "$ref": "#/$defs/schemaArray" },
+				"oneOf": { "$ref": "#/$defs/schemaArray" },
+				"not": { "$recursiveRef": "#" }
+			},
+			"$defs": { "schemaArray": {
+				"type": "array",
+				"minItems": 1,
+				"items": { "$recursiveRef": "#" }
+			} }
+		}],
+		["https://json-schema.org/draft/2019-09/meta/validation", {
+			"$schema": "https://json-schema.org/draft/2019-09/schema",
+			"$id": "https://json-schema.org/draft/2019-09/meta/validation",
+			"$recursiveAnchor": true,
+			"title": "Validation vocabulary meta-schema",
+			"type": ["object", "boolean"],
+			"properties": {
+				"multipleOf": {
+					"type": "number",
+					"exclusiveMinimum": 0
+				},
+				"maximum": { "type": "number" },
+				"exclusiveMaximum": { "type": "number" },
+				"minimum": { "type": "number" },
+				"exclusiveMinimum": { "type": "number" },
+				"maxLength": { "$ref": "#/$defs/nonNegativeInteger" },
+				"minLength": { "$ref": "#/$defs/nonNegativeIntegerDefault0" },
+				"pattern": {
+					"type": "string",
+					"format": "regex"
+				},
+				"maxItems": { "$ref": "#/$defs/nonNegativeInteger" },
+				"minItems": { "$ref": "#/$defs/nonNegativeIntegerDefault0" },
+				"uniqueItems": {
+					"type": "boolean",
+					"default": false
+				},
+				"maxContains": { "$ref": "#/$defs/nonNegativeInteger" },
+				"minContains": {
+					"$ref": "#/$defs/nonNegativeInteger",
+					"default": 1
+				},
+				"maxProperties": { "$ref": "#/$defs/nonNegativeInteger" },
+				"minProperties": { "$ref": "#/$defs/nonNegativeIntegerDefault0" },
+				"required": { "$ref": "#/$defs/stringArray" },
+				"dependentRequired": {
+					"type": "object",
+					"additionalProperties": { "$ref": "#/$defs/stringArray" }
+				},
+				"const": true,
+				"enum": {
+					"type": "array",
+					"items": true
+				},
+				"type": { "anyOf": [{ "$ref": "#/$defs/simpleTypes" }, {
+					"type": "array",
+					"items": { "$ref": "#/$defs/simpleTypes" },
+					"minItems": 1,
+					"uniqueItems": true
+				}] }
+			},
+			"$defs": {
+				"nonNegativeInteger": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"nonNegativeIntegerDefault0": {
+					"$ref": "#/$defs/nonNegativeInteger",
+					"default": 0
+				},
+				"simpleTypes": { "enum": [
+					"array",
+					"boolean",
+					"integer",
+					"null",
+					"number",
+					"object",
+					"string"
+				] },
+				"stringArray": {
+					"type": "array",
+					"items": { "type": "string" },
+					"uniqueItems": true,
+					"default": []
+				}
+			}
+		}],
+		["https://json-schema.org/draft/2019-09/meta/meta-data", {
+			"$schema": "https://json-schema.org/draft/2019-09/schema",
+			"$id": "https://json-schema.org/draft/2019-09/meta/meta-data",
+			"$recursiveAnchor": true,
+			"title": "Meta-data vocabulary meta-schema",
+			"type": ["object", "boolean"],
+			"properties": {
+				"title": { "type": "string" },
+				"description": { "type": "string" },
+				"default": true,
+				"deprecated": {
+					"type": "boolean",
+					"default": false
+				},
+				"readOnly": {
+					"type": "boolean",
+					"default": false
+				},
+				"writeOnly": {
+					"type": "boolean",
+					"default": false
+				},
+				"examples": {
+					"type": "array",
+					"items": true
+				}
+			}
+		}],
+		["https://json-schema.org/draft/2019-09/meta/format", {
+			"$schema": "https://json-schema.org/draft/2019-09/schema",
+			"$id": "https://json-schema.org/draft/2019-09/meta/format",
+			"$recursiveAnchor": true,
+			"title": "Format vocabulary meta-schema",
+			"type": ["object", "boolean"],
+			"properties": { "format": { "type": "string" } }
+		}],
+		["https://json-schema.org/draft/2019-09/meta/content", {
+			"$schema": "https://json-schema.org/draft/2019-09/schema",
+			"$id": "https://json-schema.org/draft/2019-09/meta/content",
+			"$recursiveAnchor": true,
+			"title": "Content vocabulary meta-schema",
+			"type": ["object", "boolean"],
+			"properties": {
+				"contentMediaType": { "type": "string" },
+				"contentEncoding": { "type": "string" },
+				"contentSchema": { "$recursiveRef": "#" }
+			}
 		}]
-	]) };
+	]);
+	{
+		const { isDraft2019, normalizeDraft2019 } = require_draft7();
+		for (const [id, doc] of METASCHEMAS) if (isDraft2019(doc)) METASCHEMAS.set(id, normalizeDraft2019(JSON.parse(JSON.stringify(doc)), true));
+	}
+	module.exports = { METASCHEMAS };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/vocabularies.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/vocabularies.js
 var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CORE_VOCABULARY = "https://json-schema.org/draft/2020-12/vocab/core";
 	let KEYWORDS_BY_VOCABULARY = null;
@@ -1308,6 +1795,18 @@ var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			const meta = require_metaschemas().METASCHEMAS.get(`https://json-schema.org/draft/2020-12/meta/${name}`);
 			if (!meta || !meta.properties) continue;
 			byVocabulary.set(`https://json-schema.org/draft/2020-12/vocab/${name}`, new Set(Object.keys(meta.properties)));
+		}
+		for (const name of [
+			"core",
+			"applicator",
+			"validation",
+			"meta-data",
+			"format",
+			"content"
+		]) {
+			const meta = require_metaschemas().METASCHEMAS.get(`https://json-schema.org/draft/2019-09/meta/${name}`);
+			if (!meta || !meta.properties) continue;
+			byVocabulary.set(`https://json-schema.org/draft/2019-09/vocab/${name}`, new Set(Object.keys(meta.properties)));
 		}
 		byVocabulary.set("https://json-schema.org/draft/2020-12/vocab/format-assertion", /* @__PURE__ */ new Set(["format"]));
 		KEYWORDS_BY_VOCABULARY = byVocabulary;
@@ -1393,7 +1892,7 @@ var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/schema-scan.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/schema-scan.js
 var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const NULLABLE = 1;
 	const REF_SIBLINGS = 2;
@@ -1473,7 +1972,7 @@ var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/dialect.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/dialect.js
 var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const V1_DIALECTS = /* @__PURE__ */ new Set([
 		"https://json-schema.org/v1",
@@ -1493,7 +1992,7 @@ var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/shape-classifier.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
 		"string",
@@ -1600,7 +2099,7 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/tier0.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/tier0.js
 var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const TYPE_MASK = {
 		string: 1,
@@ -1808,7 +2307,7 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/defaults.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/defaults.js
 var require_defaults = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function buildDefaultsApplier(schema) {
 		if (typeof schema !== "object" || schema === null) return null;
@@ -1860,7 +2359,7 @@ var require_defaults = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/schema-order.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/schema-order.js
 var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const _keyIndexCache = /* @__PURE__ */ new WeakMap();
 	const _rankCache = /* @__PURE__ */ new WeakMap();
@@ -1896,11 +2395,50 @@ var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		byPath.set(schemaPath, rank);
 		return rank;
 	}
+	const _documents = /* @__PURE__ */ new WeakMap();
+	const CONFLICT = /* @__PURE__ */ new Map();
+	function registerDocuments(rootSchema, map) {
+		if (rootSchema === null || typeof rootSchema !== "object" || !map || map.size === 0) return;
+		const had = _documents.get(rootSchema);
+		if (had === CONFLICT) return;
+		if (had === void 0) {
+			_documents.set(rootSchema, new Map(map));
+			_rankCache.delete(rootSchema);
+			return;
+		}
+		let added = false;
+		for (const [id, doc] of map) {
+			const cur = had.get(id);
+			if (cur === void 0) {
+				had.set(id, doc);
+				added = true;
+			} else if (cur !== doc) {
+				_documents.set(rootSchema, CONFLICT);
+				_rankCache.delete(rootSchema);
+				return;
+			}
+		}
+		if (added) _rankCache.delete(rootSchema);
+	}
+	function withoutEmptyFragment(uri) {
+		return uri.endsWith("#") ? uri.slice(0, -1) : uri;
+	}
+	function resolveUri(ref, base) {
+		try {
+			return base ? new URL(ref, base).href : new URL(ref).href;
+		} catch {
+			return null;
+		}
+	}
 	function computeRank(rootSchema, schemaPath) {
 		const rank = [];
 		let node = rootSchema;
 		let start = 1;
 		let hops = 0;
+		const docs = _documents.get(rootSchema);
+		let doc = rootSchema;
+		const follow = docs !== void 0 && docs !== CONFLICT;
+		let base = follow && typeof rootSchema.$id === "string" ? resolveUri(rootSchema.$id, null) : null;
 		while (start <= schemaPath.length) {
 			let end = schemaPath.indexOf("/", start);
 			if (end < 0) end = schemaPath.length;
@@ -1910,6 +2448,7 @@ var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			}
 			const seg = unescapePointerSegment(schemaPath.slice(start, end));
 			if (node == null || typeof node !== "object") break;
+			if (follow && node !== doc && !Array.isArray(node) && typeof node.$id === "string" && node.$id[0] !== "#") base = resolveUri(node.$id, base);
 			if (Array.isArray(node)) {
 				const idx = Number(seg);
 				if (!Number.isInteger(idx) || idx < 0 || idx >= node.length) break;
@@ -1918,7 +2457,15 @@ var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			} else {
 				const idx = keyIndex(node, seg);
 				if (idx < 0) {
-					const target = hops < 64 ? localTarget(rootSchema, node) : null;
+					let target = hops < 64 ? localTarget(doc, node) : null;
+					if (target === null && hops < 64 && follow) {
+						const remote = remoteTarget(docs, base, node);
+						if (remote !== null) {
+							target = remote.node;
+							doc = remote.doc;
+							base = remote.base;
+						}
+					}
 					if (target === null) break;
 					hops++;
 					rank.push(keyIndex(node, "$ref"));
@@ -1931,6 +2478,36 @@ var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			start = end + 1;
 		}
 		return rank;
+	}
+	function remoteTarget(docs, base, node) {
+		const ref = node.$ref;
+		if (typeof ref !== "string" || ref.charCodeAt(0) === 35) return null;
+		const abs = resolveUri(ref, base);
+		if (abs === null) return null;
+		const hash = abs.indexOf("#");
+		const uri = hash < 0 ? abs : abs.slice(0, hash);
+		let target = docs.get(uri);
+		if (target === void 0) target = docs.get(uri + "#");
+		if (target === void 0) {
+			for (const [id, s] of docs) if (withoutEmptyFragment(resolveUri(id, null) || "") === uri) {
+				target = s;
+				break;
+			}
+		}
+		if (target === null || typeof target !== "object") return null;
+		const frag = hash < 0 ? "" : abs.slice(hash + 1);
+		if (frag === "") return {
+			node: target,
+			doc: target,
+			base: uri
+		};
+		if (frag.charCodeAt(0) !== 47) return null;
+		const t = localTarget(target, { $ref: "#" + frag });
+		return t === null ? null : {
+			node: t,
+			doc: target,
+			base: uri
+		};
 	}
 	function localTarget(rootSchema, node) {
 		const ref = node.$ref;
@@ -2011,11 +2588,12 @@ var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		rankFor,
 		ordinalFor,
-		unescapePointerSegment
+		unescapePointerSegment,
+		registerDocuments
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/diagnostic-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/diagnostic-source.js
 var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const KEY = Symbol.for("ata.diagnosticSource");
 	const DESCRIPTOR = {
@@ -2048,7 +2626,7 @@ var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module)
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/error-codes.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/error-codes.js
 var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CODES = Object.freeze({
 		ATA1001: {
@@ -2362,7 +2940,7 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/levenshtein.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/levenshtein.js
 var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let scratchA = /* @__PURE__ */ new Int32Array(64);
 	let scratchB = /* @__PURE__ */ new Int32Array(64);
@@ -2409,7 +2987,7 @@ var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { levenshtein };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/pointer.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/pointer.js
 var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Resolve a JSON pointer against a document, for the diagnostic paths that run
@@ -2454,7 +3032,7 @@ var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/suggestions.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/suggestions.js
 var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const { resolvePointer: walk, UNRESOLVED } = require_pointer();
@@ -2590,7 +3168,7 @@ var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/enrich-error.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/enrich-error.js
 var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor, fromNative } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -2646,15 +3224,15 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (t === "number" || t === "boolean") return String(v);
 		if (Array.isArray(v)) return `[array, ${v.length} items]`;
 		if (t === "object") {
-			if (jsonSizeWithin(v, 60) >= 0) try {
-				const s = JSON.stringify(v);
-				if (s !== void 0 && s.length <= 60) return s;
-			} catch {
-				return "[object, unserializable]";
-			}
 			let n;
 			try {
 				n = Object.keys(v).length;
+			} catch {
+				return "[object, unserializable]";
+			}
+			if (n <= 12 && jsonSizeWithin(v, 60) >= 0) try {
+				const s = JSON.stringify(v);
+				if (s !== void 0 && s.length <= 60) return s;
 			} catch {
 				return "[object, unserializable]";
 			}
@@ -2688,10 +3266,10 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	* Pure: returns a new object. Source frames and suggestions are added by
 	* other helpers later in the pipeline.
 	*/
-	function detailFor(err, out) {
+	function detailFor(err, out, at) {
 		const p = err.params || {};
 		switch (err.keyword) {
-			case "type": return `expected ${p.type}, found ${typeNameOf(out.received)}`;
+			case "type": return `expected ${p.type}, found ${(at === void 0 || at === MISSING ? null : typeNameOfValue(at)) || typeNameOf(out.received)}`;
 			case "required": return `missing required property "${p.missingProperty}"`;
 			case "additionalProperties": return `unknown property "${p.additionalProperty}"`;
 			case "unevaluatedProperties": return `unevaluated property "${p.unevaluatedProperty}"`;
@@ -2705,6 +3283,16 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			case "minLength":
 			case "maxLength": return `expected ${out.expected}, found ${out.received}`;
 			default: return out.expected ? `expected ${out.expected}, found ${out.received}` : void 0;
+		}
+	}
+	function typeNameOfValue(v) {
+		if (v === null) return "null";
+		switch (typeof v) {
+			case "boolean": return "boolean";
+			case "string": return "string";
+			case "number": return Number.isFinite(v) ? "number" : "value";
+			case "object": return Array.isArray(v) ? "array" : typeof v.toJSON === "function" ? null : "object";
+			default: return "value";
 		}
 	}
 	function typeNameOf(received) {
@@ -2775,7 +3363,8 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		};
 		if ("data" in rawErr) out.data = rawErr.data;
 		if ("schema" in rawErr) out.schema = rawErr.schema;
-		if (rawErr.branchErrors) out.branchErrors = rawErr.branchErrors.map((b) => enrich(b, data !== void 0 ? { data } : null));
+		if (rawErr.branchErrors) out.branchErrors = rawErr.branchErrors.map((b) => b !== null && typeof b === "object" && b.rank !== void 0 && b.docUrl !== void 0 && b._o === void 0 ? b : enrich(b, data !== void 0 ? { data } : null));
+		const named = rawErr.params && (rawErr.params.additionalProperty || rawErr.params.unevaluatedProperty) || null;
 		if (positions && positions[path]) {
 			const p = positions[path];
 			out.dataFrame = {
@@ -2785,7 +3374,7 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				col: p.col,
 				text: p.text
 			};
-		}
+		} else if (!positions && opts && opts.lazyPositions) defineLazyFrames(out, path, named, opts.lazyPositions);
 		if (opts && opts.schemaPositions && rawErr.schemaPath) {
 			const sp = rawErr.schemaPath;
 			const ptr = sp.startsWith("#") ? sp.slice(1) : sp;
@@ -2799,11 +3388,10 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		const sugg = suggestFor(out, data, at === MISSING ? void 0 : at);
 		if (sugg) out.suggestion = sugg;
-		const detail = detailFor(rawErr, out);
+		const detail = detailFor(rawErr, out, at);
 		if (detail !== void 0) out.detail = detail;
 		out.rank = st.rank;
 		if (opts && opts.positions) {
-			const named = rawErr.params && (rawErr.params.additionalProperty || rawErr.params.unevaluatedProperty) || null;
 			const own = opts.positions[path];
 			const src = (named ? opts.positions[(path === "" ? "" : path) + "/" + named] : null) || own;
 			if (src) {
@@ -2821,6 +3409,78 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		return out;
 	}
+	function defineLazyFrames(out, path, named, lazy) {
+		let done = false;
+		let frames = null;
+		const resolve = () => {
+			if (done) return frames;
+			done = true;
+			const positions = lazy();
+			const own = positions ? positions[path] : null;
+			const dataFrame = own ? {
+				byteOffset: own.byteOffset,
+				length: own.length,
+				line: own.line,
+				col: own.col,
+				text: own.text
+			} : void 0;
+			const src = (positions && named ? positions[(path === "" ? "" : path) + "/" + named] : null) || own;
+			let anchor;
+			if (src) {
+				anchor = {
+					line: src.line,
+					col: src.col,
+					length: src.length
+				};
+				if (src.keyOffset !== void 0) {
+					anchor.keyLine = src.keyLine;
+					anchor.keyCol = src.keyCol;
+					anchor.keyLength = src.keyLength;
+				}
+			}
+			frames = {
+				dataFrame,
+				anchor
+			};
+			if (dataFrame !== void 0) Object.defineProperty(out, "dataFrame", {
+				value: dataFrame,
+				enumerable: true,
+				configurable: true,
+				writable: true
+			});
+			else delete out.dataFrame;
+			if (anchor !== void 0) Object.defineProperty(out, "anchor", {
+				value: anchor,
+				enumerable: true,
+				configurable: true,
+				writable: true
+			});
+			else delete out.anchor;
+			return frames;
+		};
+		const settable = (name) => (v) => Object.defineProperty(out, name, {
+			value: v,
+			enumerable: true,
+			configurable: true,
+			writable: true
+		});
+		Object.defineProperty(out, "dataFrame", {
+			get() {
+				return resolve().dataFrame;
+			},
+			set: settable("dataFrame"),
+			enumerable: true,
+			configurable: true
+		});
+		Object.defineProperty(out, "anchor", {
+			get() {
+				return resolve().anchor;
+			},
+			set: settable("anchor"),
+			enumerable: true,
+			configurable: true
+		});
+	}
 	module.exports = {
 		enrich,
 		reprValue,
@@ -2832,7 +3492,7 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/correlate.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/correlate.js
 var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const MAX_DISTANCE = 2;
@@ -2937,7 +3597,7 @@ var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { correlateTypos };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/rejections.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/rejections.js
 var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { ordinalFor: schemaOrdinal, rankFor: schemaRank } = require_schema_order();
 	const { setDiagnosticSource: attachDiagnosticSource } = require_diagnostic_source();
@@ -2997,14 +3657,11 @@ var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	function presentErrors(raw, data, rawInput, self, root, enrich) {
 		if (needsOrdering(raw)) raw = sortErrorsBySchemaOrder(root, raw);
-		let positions = null;
-		if (enrich && raw.length && rawInput != null) {
-			positions = self._pos().targeted(rawInput, wantedPointersFor(raw));
-			if (positions) self._posCache.reset();
-		}
+		const lazyPositions = enrich && raw.length && rawInput != null ? lazyPositionsFor(self, rawInput, raw) : null;
 		const opts = enrich && raw.length ? {
 			data,
-			positions,
+			positions: null,
+			lazyPositions,
 			schemaPositions: self._schemaPositions,
 			schemaFile: self._source ? self._source.path : void 0
 		} : null;
@@ -3060,11 +3717,12 @@ var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				if (parsedData !== void 0 && self._preprocess) self._preprocess(parsedData);
 			}
 			if (!raw[0] || !("received" in raw[0])) {
-				const positions = self._pos().targeted(jsonStr, wantedPointersFor(raw));
 				const ordered = needsOrdering(raw) ? sortErrorsBySchemaOrder(self._schemaObj, raw) : raw;
+				const lazyPositions = lazyPositionsFor(self, jsonStr, ordered);
 				const enrichOpts = {
 					data: parsedData,
-					positions,
+					positions: null,
+					lazyPositions,
 					schemaPositions: self._schemaPositions,
 					schemaFile: self._source ? self._source.path : void 0
 				};
@@ -3073,11 +3731,12 @@ var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				attachDiagnosticSource(enriched, {
 					data: parsedData,
 					text: jsonStr,
-					positions,
+					get positions() {
+						return lazyPositions();
+					},
 					schema: self._schemaObj,
 					mutatesInput: self._mutatesInput === true
 				});
-				if (positions) self._posCache.reset();
 				this._cached = enriched;
 				return enriched;
 			}
@@ -3108,6 +3767,17 @@ var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			return raw;
 		}
 	});
+	function lazyPositionsFor(self, text, errors) {
+		let done = false;
+		let positions = null;
+		return () => {
+			if (done) return positions;
+			done = true;
+			positions = self._pos().targeted(text, wantedPointersFor(errors));
+			if (positions) self._posCache.reset();
+			return positions;
+		};
+	}
 	function wantedPointersFor(errors) {
 		const wanted = /* @__PURE__ */ new Set();
 		for (const e of errors) {
@@ -3246,7 +3916,7 @@ var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/strict-check.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/strict-check.js
 var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { METASCHEMAS } = require_metaschemas();
 	const { levenshtein } = require_levenshtein();
@@ -3443,7 +4113,7 @@ var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { checkSchemaStrict };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/source-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/source-positions.js
 var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build a map of JSON pointer → { line, col, text } by scanning JSON text.
@@ -3599,7 +4269,7 @@ var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/data-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/data-positions.js
 var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build pointer → { byteOffset, length, line, col, text } from a JSON
@@ -3976,7 +4646,7 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/data-position-cache.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/data-position-cache.js
 var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { buildDataPositionMap, buildTargetedPositionMap } = require_data_positions();
 	/**
@@ -4063,98 +4733,7 @@ var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, modul
 	module.exports = { createCache };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/branch-collapse.js
-var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const __ATA_SEVERITY = {
-		type: 10,
-		const: 8,
-		enum: 8,
-		required: 5,
-		format: 3,
-		minLength: 3,
-		maxLength: 3,
-		minimum: 3,
-		maximum: 3,
-		pattern: 3,
-		additionalProperties: 2,
-		unevaluatedProperties: 2,
-		unevaluatedItems: 2
-	};
-	function __ataScore(errs) {
-		if (!errs || !errs.length) return 0;
-		let s = 0;
-		for (const e of errs) s += __ATA_SEVERITY[e.keyword] || 4;
-		return errs.length * 100 + s;
-	}
-	function __ataMulti(passIdx, total, pp, sp, o) {
-		const multi = {
-			code: "ATA4002",
-			keyword: "oneOf",
-			instancePath: pp || "",
-			path: pp || "",
-			schemaPath: sp,
-			message: "value matched " + passIdx.length + " of " + total + " oneOf variants, expected exactly one",
-			params: { passingSchemas: passIdx }
-		};
-		if (o !== null) Object.defineProperty(multi, "_o", { value: o });
-		return multi;
-	}
-	function __ataCollapse(kw, br, pp, sp, o, titles) {
-		let passN = 0;
-		for (let i = 0; i < br.length; i++) if (br[i].valid) passN++;
-		const pass = { length: passN };
-		if (kw === "oneOf") {
-			if (pass.length === 1) return null;
-			if (pass.length > 1) {
-				const passIdx = [];
-				for (let i = 0; i < br.length; i++) if (br[i].valid) passIdx.push(i);
-				return __ataMulti(passIdx, br.length, pp, sp, o);
-			}
-		} else if (pass.length >= 1) return null;
-		let bi = 0;
-		let bs = Infinity;
-		for (let i = 0; i < br.length; i++) {
-			const s = __ataScore(br[i].errors);
-			if (s < bs) {
-				bs = s;
-				bi = i;
-			}
-		}
-		const best = br[bi];
-		const none = {
-			code: kw === "oneOf" ? "ATA4001" : "ATA4003",
-			keyword: kw,
-			instancePath: pp || "",
-			path: pp || "",
-			schemaPath: sp,
-			message: "value matched 0 of " + br.length + " " + kw + " variants",
-			params: {
-				variants: br.length,
-				closest: bi,
-				closestName: (titles !== void 0 ? titles[bi] : best.title) || "variant " + (bi + 1)
-			},
-			branchErrors: best.errors
-		};
-		if (o !== null) Object.defineProperty(none, "_o", { value: o });
-		return none;
-	}
-	function collapseBranches({ keyword, branchResults, parentPath, parentSchemaPath, ordinal }) {
-		return __ataCollapse(keyword, branchResults, parentPath, parentSchemaPath, ordinal === void 0 ? null : ordinal);
-	}
-	function embedSource() {
-		return "const __ATA_SEVERITY=" + JSON.stringify(__ATA_SEVERITY) + ";const __ataScore=" + __ataScore.toString() + ";const __ataMulti=" + __ataMulti.toString() + ";const __ataCollapse=" + __ataCollapse.toString() + ";";
-	}
-	module.exports = {
-		collapseBranches,
-		scoreBranch: __ataScore,
-		SEVERITY: __ATA_SEVERITY,
-		embedSource,
-		_collapse: __ataCollapse,
-		_multi: __ataMulti
-	};
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/safe-regex.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/safe-regex.js
 var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function __ataSafeRegex() {
 		const WS = [
@@ -4757,6 +5336,7 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				states.push({
 					pcs: Int32Array.from(pcs),
 					isMatch,
+					dead: anchored && pcs.length === 0,
 					next: (/* @__PURE__ */ new Int32Array(128)).fill(-2),
 					nextEnd: (/* @__PURE__ */ new Int32Array(128)).fill(-2)
 				});
@@ -4801,24 +5381,35 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				}
 				if (id < 0) return testNFA(s);
 				let state = states[id];
-				for (let pos = 0; pos < len; pos++) {
+				if (len === 0) return state.isMatch;
+				const last = len - 1;
+				for (let pos = 0; pos < last; pos++) {
 					if (state.isMatch) return true;
 					const c = s.charCodeAt(pos);
-					const atEnd = pos + 1 === len;
 					let nid;
 					if (c < 128) {
-						const table = atEnd ? state.nextEnd : state.next;
-						nid = table[c];
+						nid = state.next[c];
 						if (nid === -2) {
-							nid = step(state, c, atEnd);
-							table[c] = nid;
+							nid = step(state, c, false);
+							state.next[c] = nid;
 						}
-					} else nid = step(state, c, atEnd);
+					} else nid = step(state, c, false);
 					if (nid < 0) return testNFA(s);
 					state = states[nid];
-					if (anchored && state.pcs.length === 0) return false;
+					if (state.dead) return false;
 				}
-				return state.isMatch;
+				if (state.isMatch) return true;
+				const c = s.charCodeAt(last);
+				let nid;
+				if (c < 128) {
+					nid = state.nextEnd[c];
+					if (nid === -2) {
+						nid = step(state, c, true);
+						state.nextEnd[c] = nid;
+					}
+				} else nid = step(state, c, true);
+				if (nid < 0) return testNFA(s);
+				return states[nid].isMatch;
 			}
 			return function test(s) {
 				return overflow ? testNFA(s) : testDFA(s);
@@ -4849,7 +5440,98 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports.engineSource = () => __ataSafeRegex.toString();
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/unique-items.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/branch-collapse.js
+var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const __ATA_SEVERITY = {
+		type: 10,
+		const: 8,
+		enum: 8,
+		required: 5,
+		format: 3,
+		minLength: 3,
+		maxLength: 3,
+		minimum: 3,
+		maximum: 3,
+		pattern: 3,
+		additionalProperties: 2,
+		unevaluatedProperties: 2,
+		unevaluatedItems: 2
+	};
+	function __ataScore(errs) {
+		if (!errs || !errs.length) return 0;
+		let s = 0;
+		for (const e of errs) s += __ATA_SEVERITY[e.keyword] || 4;
+		return errs.length * 100 + s;
+	}
+	function __ataMulti(passIdx, total, pp, sp, o) {
+		const multi = {
+			code: "ATA4002",
+			keyword: "oneOf",
+			instancePath: pp || "",
+			path: pp || "",
+			schemaPath: sp,
+			message: "value matched " + passIdx.length + " of " + total + " oneOf variants, expected exactly one",
+			params: { passingSchemas: passIdx }
+		};
+		if (o !== null) Object.defineProperty(multi, "_o", { value: o });
+		return multi;
+	}
+	function __ataCollapse(kw, br, pp, sp, o, titles) {
+		let passN = 0;
+		for (let i = 0; i < br.length; i++) if (br[i].valid) passN++;
+		const pass = { length: passN };
+		if (kw === "oneOf") {
+			if (pass.length === 1) return null;
+			if (pass.length > 1) {
+				const passIdx = [];
+				for (let i = 0; i < br.length; i++) if (br[i].valid) passIdx.push(i);
+				return __ataMulti(passIdx, br.length, pp, sp, o);
+			}
+		} else if (pass.length >= 1) return null;
+		let bi = 0;
+		let bs = Infinity;
+		for (let i = 0; i < br.length; i++) {
+			const s = __ataScore(br[i].errors);
+			if (s < bs) {
+				bs = s;
+				bi = i;
+			}
+		}
+		const best = br[bi];
+		const none = {
+			code: kw === "oneOf" ? "ATA4001" : "ATA4003",
+			keyword: kw,
+			instancePath: pp || "",
+			path: pp || "",
+			schemaPath: sp,
+			message: "value matched 0 of " + br.length + " " + kw + " variants",
+			params: {
+				variants: br.length,
+				closest: bi,
+				closestName: (titles !== void 0 ? titles[bi] : best.title) || "variant " + (bi + 1)
+			},
+			branchErrors: best.errors
+		};
+		if (o !== null) Object.defineProperty(none, "_o", { value: o });
+		return none;
+	}
+	function collapseBranches({ keyword, branchResults, parentPath, parentSchemaPath, ordinal }) {
+		return __ataCollapse(keyword, branchResults, parentPath, parentSchemaPath, ordinal === void 0 ? null : ordinal);
+	}
+	function embedSource() {
+		return "const __ATA_SEVERITY=" + JSON.stringify(__ATA_SEVERITY) + ";const __ataScore=" + __ataScore.toString() + ";const __ataMulti=" + __ataMulti.toString() + ";const __ataCollapse=" + __ataCollapse.toString() + ";";
+	}
+	module.exports = {
+		collapseBranches,
+		scoreBranch: __ataScore,
+		SEVERITY: __ATA_SEVERITY,
+		embedSource,
+		_collapse: __ataCollapse,
+		_multi: __ataMulti
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/unique-items.js
 var require_unique_items = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function _deq(a, b) {
 		if (a === b) return true;
@@ -5014,7 +5696,7 @@ var require_unique_items = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/formats.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/formats.js
 var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function isDigit(c) {
 		return c >= 48 && c <= 57;
@@ -5611,7 +6293,1324 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/plan-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/interpreter-core.js
+var require_interpreter_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	let _safeRe = null;
+	const compileSafe = (src) => (_safeRe || (_safeRe = require_safe_regex())).compileSafe(src);
+	const SCHEMA_KEYWORDS = {
+		single: [
+			"additionalProperties",
+			"contains",
+			"propertyNames",
+			"if",
+			"then",
+			"else",
+			"not",
+			"items",
+			"unevaluatedItems",
+			"unevaluatedProperties"
+		],
+		maps: [
+			"$defs",
+			"definitions",
+			"properties",
+			"patternProperties",
+			"dependentSchemas"
+		],
+		lists: [
+			"allOf",
+			"anyOf",
+			"oneOf",
+			"prefixItems"
+		]
+	};
+	const FALLBACK_BASE = "ata://root";
+	function resolveUri(base, ref) {
+		try {
+			return new URL(ref, base || FALLBACK_BASE).href;
+		} catch {
+			return ref;
+		}
+	}
+	function splitFragment(uri) {
+		const hash = uri.indexOf("#");
+		if (hash < 0) return [uri, ""];
+		return [uri.slice(0, hash), decodeURIComponent(uri.slice(hash + 1))];
+	}
+	let _collapse = null;
+	const collapseBranches = (args) => (_collapse || (_collapse = require_branch_collapse().collapseBranches))(args);
+	function indexSchemas(rootSchema, schemaMap, flat) {
+		const state = {
+			resources: /* @__PURE__ */ new Map(),
+			anchors: /* @__PURE__ */ new Map(),
+			dynamicAnchors: /* @__PURE__ */ new Map(),
+			nodeBase: /* @__PURE__ */ new Map(),
+			rootBase: FALLBACK_BASE
+		};
+		const rootBase = typeof rootSchema === "object" && rootSchema !== null && typeof rootSchema.$id === "string" ? resolveUri(FALLBACK_BASE, splitFragment(rootSchema.$id)[0]) : FALLBACK_BASE;
+		state.rootBase = rootBase;
+		if (flat === true && !schemaMap && typeof rootSchema === "object" && rootSchema !== null) {
+			state.resources.set(rootBase, rootSchema);
+			state.anchors.set(rootBase, /* @__PURE__ */ new Map());
+			state.dynamicAnchors.set(rootBase, /* @__PURE__ */ new Map());
+			state.nodeBase.set(rootSchema, rootBase);
+			return state;
+		}
+		indexResource(rootSchema, rootBase, state);
+		if (schemaMap) for (const [id, schema] of schemaMap) {
+			const base = resolveUri(FALLBACK_BASE, splitFragment(id)[0]);
+			if (!state.resources.has(base)) indexResource(schema, base, state);
+			if (!state.resources.has(id)) state.resources.set(id, schema);
+		}
+		return state;
+	}
+	function indexResource(node, baseUri, state) {
+		if (typeof node !== "object" || node === null) return;
+		if (!state.resources.has(baseUri)) state.resources.set(baseUri, node);
+		if (!state.anchors.has(baseUri)) state.anchors.set(baseUri, /* @__PURE__ */ new Map());
+		if (!state.dynamicAnchors.has(baseUri)) state.dynamicAnchors.set(baseUri, /* @__PURE__ */ new Map());
+		walkSchema(node, baseUri, state, true);
+	}
+	function walkSchema(node, baseUri, state, isResourceRoot) {
+		if (typeof node !== "object" || node === null) return;
+		if (state.nodeBase.has(node)) return;
+		state.nodeBase.set(node, baseUri);
+		if (!isResourceRoot && typeof node.$id === "string") {
+			const newBase = splitFragment(resolveUri(baseUri, node.$id))[0];
+			state.nodeBase.delete(node);
+			indexResource(node, newBase, state);
+			return;
+		}
+		if (typeof node.$anchor === "string") state.anchors.get(baseUri).set(node.$anchor, node);
+		if (typeof node.$dynamicAnchor === "string") {
+			state.dynamicAnchors.get(baseUri).set(node.$dynamicAnchor, node);
+			state.anchors.get(baseUri).set(node.$dynamicAnchor, node);
+		}
+		for (const kw of SCHEMA_KEYWORDS.single) if (node[kw] !== void 0) walkSchema(node[kw], baseUri, state, false);
+		for (const kw of SCHEMA_KEYWORDS.maps) {
+			const map = node[kw];
+			if (map && typeof map === "object" && !Array.isArray(map)) for (const key of Object.keys(map)) walkSchema(map[key], baseUri, state, false);
+		}
+		for (const kw of SCHEMA_KEYWORDS.lists) {
+			const list = node[kw];
+			if (Array.isArray(list)) for (const sub of list) walkSchema(sub, baseUri, state, false);
+		}
+		const propDeps = node.propertyDependencies;
+		if (propDeps && typeof propDeps === "object" && !Array.isArray(propDeps)) {
+			for (const choices of Object.values(propDeps)) if (choices && typeof choices === "object" && !Array.isArray(choices)) for (const sub of Object.values(choices)) walkSchema(sub, baseUri, state, false);
+		}
+	}
+	function walkPointer(root, pointer) {
+		if (pointer === "" || pointer === "/") return root;
+		const parts = pointer.split("/").slice(1).map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
+		let node = root;
+		for (const part of parts) {
+			if (node === null || typeof node !== "object") return void 0;
+			if (Array.isArray(node)) node = node[Number(part)];
+			else if (part in node) node = node[part];
+			else if (part === "definitions" && node.$defs) node = node.$defs;
+			else if (part === "$defs" && node.definitions) node = node.definitions;
+			else if (part === "items" && Array.isArray(node.prefixItems)) node = node.prefixItems;
+			else return;
+		}
+		return node;
+	}
+	function resolveRef(ref, fromBase, state) {
+		const [uri, fragment] = splitFragment(resolveUri(fromBase, ref));
+		let resource = state.resources.get(uri);
+		let resourceBase = uri;
+		if (resource === void 0 && (uri === FALLBACK_BASE || uri === "")) {
+			resource = state.resources.get(state.rootBase);
+			resourceBase = state.rootBase;
+		}
+		if (resource === void 0) {
+			const [rawUri, rawFragment] = splitFragment(ref);
+			if (state.resources.has(rawUri)) {
+				resource = state.resources.get(rawUri);
+				resourceBase = rawUri;
+				if (rawFragment === "") return {
+					node: resource,
+					base: resourceBase
+				};
+				if (rawFragment.startsWith("/")) return {
+					node: walkPointer(resource, rawFragment),
+					base: resourceBase
+				};
+				const anchored = state.anchors.get(resourceBase);
+				return {
+					node: anchored ? anchored.get(rawFragment) : void 0,
+					base: resourceBase
+				};
+			}
+			return {
+				node: void 0,
+				base: resourceBase
+			};
+		}
+		if (fragment === "") return {
+			node: resource,
+			base: resourceBase
+		};
+		if (fragment.startsWith("/")) {
+			const node = walkPointer(resource, fragment);
+			return {
+				node,
+				base: node !== null && typeof node === "object" && state.nodeBase.has(node) ? state.nodeBase.get(node) : resourceBase
+			};
+		}
+		const anchored = state.anchors.get(resourceBase);
+		return {
+			node: anchored ? anchored.get(fragment) : void 0,
+			base: resourceBase
+		};
+	}
+	const { allDistinct, duplicatePair, _deq } = require_unique_items();
+	function enumMember(P, data) {
+		if (data === null || typeof data !== "object") return P.enumPrims.has(data);
+		const objs = P.enumObjs;
+		for (let i = 0; i < objs.length; i++) if (deepEqual(objs[i], data)) return true;
+		return false;
+	}
+	const deepEqual = _deq;
+	function codePointLength(s) {
+		let n = 0;
+		for (let i = 0; i < s.length; i++) {
+			if (s.charCodeAt(i) - 55296 >>> 0 < 1024 && i + 1 < s.length) i++;
+			n++;
+		}
+		return n;
+	}
+	function cpAtLeast(s, min) {
+		if (s.length >= 2 * min) return true;
+		if (s.length < min) return false;
+		return codePointLength(s) >= min;
+	}
+	function cpAtMost(s, max) {
+		if (s.length <= max) return true;
+		if (s.length > 2 * max + 1) return false;
+		return codePointLength(s) <= max;
+	}
+	function multipleOfOk(d, m) {
+		if (m === 0) return false;
+		const q = d / m;
+		if (Number.isInteger(q)) return true;
+		return Math.abs(q - Math.round(q)) < 1e-9;
+	}
+	let _formatChecks = null;
+	function buildFormatChecks() {
+		const _formats = require_formats();
+		return {
+			email: _formats.email,
+			date: _formats.date,
+			"date-time": _formats.dateTime,
+			time: _formats.time,
+			duration: _formats.duration,
+			uuid: _formats.uuid,
+			uri: _formats.uri,
+			"uri-reference": _formats.uriReference,
+			ipv4: _formats.ipv4,
+			ipv6: _formats.ipv6,
+			hostname: _formats.hostname,
+			regex: (s) => {
+				try {
+					new RegExp(s, "u");
+					return true;
+				} catch {
+					return false;
+				}
+			},
+			"json-pointer": _formats.jsonPointer,
+			"relative-json-pointer": _formats.relativeJsonPointer,
+			"uri-template": _formats.uriTemplate,
+			iri: _formats.iri,
+			"iri-reference": _formats.iriReference,
+			"idn-email": _formats.idnEmail
+		};
+	}
+	const DISCARD = {
+		props: null,
+		items: null
+	};
+	const NOERRORS = Object.freeze([]);
+	function mergeAnnotations(target, from) {
+		if (from.props && from.props.size) {
+			if (!target.props) target.props = /* @__PURE__ */ new Set();
+			for (const p of from.props) target.props.add(p);
+		}
+		if (from.items && from.items.size) {
+			if (!target.items) target.items = /* @__PURE__ */ new Set();
+			for (const i of from.items) target.items.add(i);
+		}
+	}
+	const T_STRING = 1;
+	const T_NUMBER = 2;
+	const T_INTEGER = 4;
+	const T_BOOLEAN = 8;
+	const T_NULL = 16;
+	const T_OBJECT = 32;
+	const T_ARRAY = 64;
+	const T_ANY = 127;
+	function typeBit(name) {
+		switch (name) {
+			case "string": return T_STRING;
+			case "number": return T_NUMBER;
+			case "integer": return T_INTEGER;
+			case "boolean": return T_BOOLEAN;
+			case "null": return T_NULL;
+			case "object": return T_OBJECT;
+			case "array": return T_ARRAY;
+			default: return T_ANY;
+		}
+	}
+	function dataBits(d) {
+		switch (typeof d) {
+			case "string": return T_STRING;
+			case "number":
+				if (!isFinite(d)) return 0;
+				return Number.isInteger(d) ? 6 : T_NUMBER;
+			case "boolean": return T_BOOLEAN;
+			case "object":
+				if (d === null) return T_NULL;
+				return Array.isArray(d) ? T_ARRAY : T_OBJECT;
+			default: return 0;
+		}
+	}
+	function isObjectMap(v) {
+		return v !== null && typeof v === "object" && !Array.isArray(v);
+	}
+	var Plan = class {
+		constructor(schema) {
+			this.schema = schema;
+		}
+		link(interp) {
+			const schema = this.schema;
+			const child = (sub) => interp.node(sub);
+			this.refCache = null;
+			this.refBase0 = void 0;
+			this.refRes0 = null;
+			this.dynCache = null;
+			this.ref = typeof schema.$ref === "string" ? schema.$ref : null;
+			this.dynamicRef = typeof schema.$dynamicRef === "string" ? schema.$dynamicRef : null;
+			this.tracked = this.ref !== null || this.dynamicRef !== null;
+			this.typeMask = 0;
+			this.typeNames = null;
+			if (schema.type !== void 0) {
+				const types = Array.isArray(schema.type) ? schema.type : [schema.type];
+				let mask = 0;
+				for (const t of types) mask |= typeBit(t);
+				this.typeMask = mask;
+				this.typeNames = types;
+			}
+			this.hasType = schema.type !== void 0;
+			this.enum = schema.enum !== void 0 ? schema.enum : null;
+			this.enumPrims = null;
+			this.enumObjs = null;
+			if (Array.isArray(this.enum)) {
+				this.enumPrims = /* @__PURE__ */ new Set();
+				this.enumObjs = [];
+				for (const v of this.enum) if (v !== null && typeof v === "object") this.enumObjs.push(v);
+				else if (!(typeof v === "number" && v !== v)) this.enumPrims.add(v);
+			}
+			this.hasConst = schema.const !== void 0;
+			this.const = schema.const;
+			this.minimum = typeof schema.minimum === "number" ? schema.minimum : void 0;
+			this.maximum = typeof schema.maximum === "number" ? schema.maximum : void 0;
+			this.exclusiveMinimum = typeof schema.exclusiveMinimum === "number" ? schema.exclusiveMinimum : void 0;
+			this.exclusiveMaximum = typeof schema.exclusiveMaximum === "number" ? schema.exclusiveMaximum : void 0;
+			this.multipleOf = typeof schema.multipleOf === "number" ? schema.multipleOf : void 0;
+			this.hasNumber = this.minimum !== void 0 || this.maximum !== void 0 || this.exclusiveMinimum !== void 0 || this.exclusiveMaximum !== void 0 || this.multipleOf !== void 0;
+			this.minLength = schema.minLength;
+			this.maxLength = schema.maxLength;
+			this.pattern = schema.pattern !== void 0 ? interp.pattern(schema.pattern) : null;
+			this.patternSource = schema.pattern;
+			this.format = schema.format;
+			this.formatFn = null;
+			if (schema.format !== void 0) {
+				const uf = interp.userFormats;
+				const fc = uf && typeof uf[schema.format] === "function" ? uf[schema.format] : (_formatChecks || (_formatChecks = buildFormatChecks()))[schema.format];
+				this.formatFn = fc || null;
+			}
+			this.hasString = this.minLength !== void 0 || this.maxLength !== void 0 || this.pattern !== null || this.formatFn !== null;
+			this.minItems = schema.minItems;
+			this.maxItems = schema.maxItems;
+			this.uniqueItems = schema.uniqueItems === true;
+			this.prefixItems = Array.isArray(schema.prefixItems) ? schema.prefixItems.map(child) : null;
+			this.items = schema.items !== void 0 ? child(schema.items) : void 0;
+			this.contains = schema.contains !== void 0 ? child(schema.contains) : void 0;
+			this.minContains = schema.minContains;
+			this.maxContains = schema.maxContains;
+			this.hasArray = this.minItems !== void 0 || this.maxItems !== void 0 || this.uniqueItems || this.prefixItems !== null || this.items !== void 0 || this.contains !== void 0;
+			this.required = Array.isArray(schema.required) ? schema.required : null;
+			this.minProperties = schema.minProperties;
+			this.maxProperties = schema.maxProperties;
+			this.dependentRequired = isObjectMap(schema.dependentRequired) ? Object.entries(schema.dependentRequired) : null;
+			this.propertyNames = schema.propertyNames !== void 0 ? child(schema.propertyNames) : void 0;
+			this.properties = null;
+			if (isObjectMap(schema.properties)) {
+				this.properties = /* @__PURE__ */ new Map();
+				for (const key of Object.keys(schema.properties)) {
+					const ek = escapePointer(key);
+					this.properties.set(key, {
+						node: child(schema.properties[key]),
+						seg: "/" + ek,
+						schemaSeg: "/properties/" + ek
+					});
+				}
+			}
+			this.patternProperties = null;
+			if (isObjectMap(schema.patternProperties)) this.patternProperties = Object.keys(schema.patternProperties).map((src) => ({
+				src,
+				re: interp.pattern(src),
+				node: child(schema.patternProperties[src])
+			}));
+			this.additionalProperties = schema.additionalProperties !== void 0 ? child(schema.additionalProperties) : void 0;
+			this.dependentSchemas = isObjectMap(schema.dependentSchemas) ? Object.entries(schema.dependentSchemas).map(([k, v]) => [k, child(v)]) : null;
+			this.propertyDependencies = null;
+			if (isObjectMap(schema.propertyDependencies)) this.propertyDependencies = Object.entries(schema.propertyDependencies).filter(([, choices]) => isObjectMap(choices)).map(([k, choices]) => [k, new Map(Object.keys(choices).map((v) => [v, child(choices[v])]))]);
+			this.hasObject = this.required !== null || this.minProperties !== void 0 || this.maxProperties !== void 0 || this.dependentRequired !== null || this.propertyNames !== void 0 || this.properties !== null || this.patternProperties !== null || this.additionalProperties !== void 0 || this.dependentSchemas !== null || this.propertyDependencies !== null;
+			this.allOf = Array.isArray(schema.allOf) ? schema.allOf.map(child) : null;
+			this.anyOf = Array.isArray(schema.anyOf) ? schema.anyOf.map(child) : null;
+			this.oneOf = Array.isArray(schema.oneOf) ? schema.oneOf.map(child) : null;
+			this.not = schema.not !== void 0 ? child(schema.not) : void 0;
+			this.if = schema.if !== void 0 ? child(schema.if) : void 0;
+			this.then = schema.then !== void 0 ? child(schema.then) : void 0;
+			this.else = schema.else !== void 0 ? child(schema.else) : void 0;
+			this.macros = null;
+			if (interp.keywords !== null) for (const key of Object.keys(schema)) {
+				const def = interp.keywords[key];
+				if (def === void 0 || def.macro === null) continue;
+				const expanded = def.macro(schema[key], schema);
+				if (expanded === void 0) continue;
+				if (this.macros === null) this.macros = [];
+				this.macros.push({
+					keyword: key,
+					node: child(expanded)
+				});
+			}
+			this.hasApplicators = this.allOf !== null || this.anyOf !== null || this.oneOf !== null || this.not !== void 0 || this.if !== void 0 || this.macros !== null;
+			this.unevaluatedProperties = schema.unevaluatedProperties !== void 0 ? child(schema.unevaluatedProperties) : void 0;
+			this.unevaluatedItems = schema.unevaluatedItems !== void 0 ? child(schema.unevaluatedItems) : void 0;
+			this.unevaluatedPropertiesFalse = schema.unevaluatedProperties === false;
+			this.unevaluatedItemsFalse = schema.unevaluatedItems === false;
+			this.hasUnevaluated = this.unevaluatedProperties !== void 0 || this.unevaluatedItems !== void 0;
+			this.custom = null;
+			if (interp.keywords !== null) for (const key of Object.keys(schema)) {
+				const def = interp.keywords[key];
+				if (def === void 0 || def.macro !== null) continue;
+				const value = schema[key];
+				let mask = T_ANY;
+				if (def.types !== null) {
+					mask = 0;
+					for (const t of def.types) mask |= typeBit(t);
+				}
+				let fn;
+				if (def.compile !== null) {
+					fn = def.compile(value, schema);
+					if (typeof fn !== "function") throw new Error(`keyword "${key}": compile must return a function`);
+				} else {
+					const validate = def.validate;
+					fn = (data) => validate(value, data, schema);
+					fn.source = validate;
+				}
+				if (this.custom === null) this.custom = [];
+				this.custom.push({
+					keyword: key,
+					fn,
+					mask
+				});
+			}
+			this.hasCustom = this.custom !== null;
+			const nodeBase = interp.state.nodeBase.get(schema);
+			this.isResourceRoot = nodeBase !== void 0 && interp.state.resources.get(nodeBase) === schema;
+			this.nodeBase = this.isResourceRoot ? nodeBase : null;
+			this.leaf = !this.tracked && !this.hasApplicators && !this.hasUnevaluated && this.properties === null && this.patternProperties === null && this.additionalProperties === void 0 && this.propertyNames === void 0 && this.dependentSchemas === null && this.propertyDependencies === null && this.prefixItems === null && this.items === void 0 && this.contains === void 0 && this.nodeBase === null;
+		}
+	};
+	function evalLeafV(P, data) {
+		const bits = dataBits(data);
+		if (P.hasType && (bits & P.typeMask) === 0) return false;
+		if (P.enum !== null) {
+			if (!enumMember(P, data)) return false;
+		}
+		if (P.hasConst && !deepEqual(P.const, data)) return false;
+		if (P.hasNumber && Number.isFinite(data)) {
+			if (P.minimum !== void 0 && !(data >= P.minimum)) return false;
+			if (P.maximum !== void 0 && !(data <= P.maximum)) return false;
+			if (P.exclusiveMinimum !== void 0 && !(data > P.exclusiveMinimum)) return false;
+			if (P.exclusiveMaximum !== void 0 && !(data < P.exclusiveMaximum)) return false;
+			if (P.multipleOf !== void 0 && !multipleOfOk(data, P.multipleOf)) return false;
+		}
+		if (P.hasString && bits === T_STRING) {
+			if (P.minLength !== void 0 && !cpAtLeast(data, P.minLength)) return false;
+			if (P.maxLength !== void 0 && !cpAtMost(data, P.maxLength)) return false;
+			if (P.pattern !== null && !P.pattern.test(data)) return false;
+			if (P.formatFn !== null && !P.formatFn(data)) return false;
+		}
+		if (P.hasArray && bits === T_ARRAY) {
+			if (P.minItems !== void 0 && data.length < P.minItems) return false;
+			if (P.maxItems !== void 0 && data.length > P.maxItems) return false;
+			if (P.uniqueItems && !allDistinct(data)) return false;
+		}
+		if (P.hasObject && bits === T_OBJECT) {
+			if (P.required !== null) {
+				const req = P.required;
+				for (let i = 0; i < req.length; i++) if (!Object.hasOwn(data, req[i])) return false;
+			}
+			if (P.minProperties !== void 0 && Object.keys(data).length < P.minProperties) return false;
+			if (P.maxProperties !== void 0 && Object.keys(data).length > P.maxProperties) return false;
+			if (P.dependentRequired !== null) {
+				for (const [key, deps] of P.dependentRequired) if (Object.hasOwn(data, key)) {
+					for (const dep of deps) if (!Object.hasOwn(data, dep)) return false;
+				}
+			}
+		}
+		if (P.hasCustom && !runCustomV(P, data, bits)) return false;
+		return true;
+	}
+	function runCustomV(P, data, bits) {
+		const ops = P.custom;
+		for (let i = 0; i < ops.length; i++) {
+			const op = ops[i];
+			if ((bits & op.mask) === 0) continue;
+			const fn = op.fn;
+			const ok = fn(data);
+			const holder = fn.source || fn;
+			if (holder.errors) holder.errors = null;
+			if (!ok) return false;
+		}
+		return true;
+	}
+	function runCustom(P, data, bits, errors, instancePath, schemaPath) {
+		const ops = P.custom;
+		let valid = true;
+		for (let i = 0; i < ops.length; i++) {
+			const op = ops[i];
+			if ((bits & op.mask) === 0) continue;
+			const fn = op.fn;
+			const ok = fn(data);
+			const holder = fn.source || fn;
+			const own = holder.errors;
+			if (own) holder.errors = null;
+			if (ok) continue;
+			valid = false;
+			if (errors === NOERRORS) return false;
+			const kwPath = schemaPath + "/" + op.keyword;
+			if (Array.isArray(own) && own.length > 0) for (let j = 0; j < own.length; j++) {
+				const e = own[j];
+				errors.push(err(op.keyword, e.keyword || op.keyword, e.instancePath !== void 0 ? instancePath + e.instancePath : instancePath, e.schemaPath !== void 0 ? e.schemaPath : kwPath, e.params !== void 0 ? e.params : {}, e.message !== void 0 ? e.message : `must pass "${op.keyword}" keyword validation`));
+			}
+			else errors.push(err(op.keyword, op.keyword, instancePath, kwPath, { keyword: op.keyword }, `must pass "${op.keyword}" keyword validation`));
+		}
+		return valid;
+	}
+	function evalLeaf(P, data, errors, instancePath, schemaPath) {
+		let valid = true;
+		const schema = P.schema;
+		const bits = dataBits(data);
+		if (P.hasType && (bits & P.typeMask) === 0) {
+			if (errors !== NOERRORS) errors.push(err("type", "type", instancePath, schemaPath + "/type", { type: schema.type }, `must be ${P.typeNames.join(", ")}`));
+			valid = false;
+		}
+		if (P.enum !== null) {
+			if (!enumMember(P, data)) {
+				if (errors !== NOERRORS) errors.push(err("enum", "enum", instancePath, schemaPath + "/enum", { allowedValues: P.enum }, "must be equal to one of the allowed values"));
+				valid = false;
+			}
+		}
+		if (P.hasConst && !deepEqual(P.const, data)) {
+			if (errors !== NOERRORS) errors.push(err("const", "const", instancePath, schemaPath + "/const", { allowedValue: P.const }, "must be equal to constant"));
+			valid = false;
+		}
+		if (P.hasNumber && Number.isFinite(data)) {
+			if (P.minimum !== void 0 && !(data >= P.minimum)) {
+				errors === NOERRORS || errors.push(err("minimum", "minimum", instancePath, schemaPath + "/minimum", {
+					comparison: ">=",
+					limit: P.minimum
+				}, `must be >= ${P.minimum}`));
+				valid = false;
+			}
+			if (P.maximum !== void 0 && !(data <= P.maximum)) {
+				errors === NOERRORS || errors.push(err("maximum", "maximum", instancePath, schemaPath + "/maximum", {
+					comparison: "<=",
+					limit: P.maximum
+				}, `must be <= ${P.maximum}`));
+				valid = false;
+			}
+			if (P.exclusiveMinimum !== void 0 && !(data > P.exclusiveMinimum)) {
+				errors === NOERRORS || errors.push(err("exclusiveMinimum", "exclusiveMinimum", instancePath, schemaPath + "/exclusiveMinimum", {
+					comparison: ">",
+					limit: P.exclusiveMinimum
+				}, `must be > ${P.exclusiveMinimum}`));
+				valid = false;
+			}
+			if (P.exclusiveMaximum !== void 0 && !(data < P.exclusiveMaximum)) {
+				errors === NOERRORS || errors.push(err("exclusiveMaximum", "exclusiveMaximum", instancePath, schemaPath + "/exclusiveMaximum", {
+					comparison: "<",
+					limit: P.exclusiveMaximum
+				}, `must be < ${P.exclusiveMaximum}`));
+				valid = false;
+			}
+			if (P.multipleOf !== void 0 && !multipleOfOk(data, P.multipleOf)) {
+				errors === NOERRORS || errors.push(err("multipleOf", "multipleOf", instancePath, schemaPath + "/multipleOf", { multipleOf: P.multipleOf }, `must be multiple of ${P.multipleOf}`));
+				valid = false;
+			}
+		}
+		if (P.hasString && bits === T_STRING) {
+			if (P.minLength !== void 0 && !cpAtLeast(data, P.minLength)) {
+				errors === NOERRORS || errors.push(err("minLength", "minLength", instancePath, schemaPath + "/minLength", { limit: P.minLength }, `must NOT have fewer than ${P.minLength} characters`));
+				valid = false;
+			}
+			if (P.maxLength !== void 0 && !cpAtMost(data, P.maxLength)) {
+				errors === NOERRORS || errors.push(err("maxLength", "maxLength", instancePath, schemaPath + "/maxLength", { limit: P.maxLength }, `must NOT have more than ${P.maxLength} characters`));
+				valid = false;
+			}
+			if (P.pattern !== null && !P.pattern.test(data)) {
+				errors === NOERRORS || errors.push(err("pattern", "pattern", instancePath, schemaPath + "/pattern", { pattern: P.patternSource }, `must match pattern "${P.patternSource}"`));
+				valid = false;
+			}
+			if (P.formatFn !== null && !P.formatFn(data)) {
+				errors === NOERRORS || errors.push(err("format", "format", instancePath, schemaPath + "/format", { format: P.format }, `must match format "${P.format}"`));
+				valid = false;
+			}
+		}
+		if (P.hasArray && bits === T_ARRAY) {
+			if (P.minItems !== void 0 && data.length < P.minItems) {
+				errors === NOERRORS || errors.push(err("minItems", "minItems", instancePath, schemaPath + "/minItems", { limit: P.minItems }, `must NOT have fewer than ${P.minItems} items`));
+				valid = false;
+			}
+			if (P.maxItems !== void 0 && data.length > P.maxItems) {
+				errors === NOERRORS || errors.push(err("maxItems", "maxItems", instancePath, schemaPath + "/maxItems", { limit: P.maxItems }, `must NOT have more than ${P.maxItems} items`));
+				valid = false;
+			}
+			if (P.uniqueItems) {
+				const pair = duplicatePair(data);
+				if (pair !== null) {
+					const i = pair[0], j = pair[1];
+					if (errors !== NOERRORS) errors.push(err("uniqueItems", "uniqueItems", instancePath, schemaPath + "/uniqueItems", {
+						i,
+						j
+					}, `must NOT have duplicate items (items ## ${j} and ${i} are identical)`));
+					valid = false;
+				}
+			}
+		}
+		if (P.hasObject && bits === T_OBJECT) {
+			const keys = Object.keys(data);
+			if (P.required !== null) {
+				const req = P.required;
+				for (let i = 0; i < req.length; i++) {
+					const key = req[i];
+					if (!Object.hasOwn(data, key)) {
+						errors === NOERRORS || errors.push(err("required", "required", instancePath, schemaPath + "/required", { missingProperty: key }, `must have required property '${key}'`));
+						valid = false;
+					}
+				}
+			}
+			if (P.minProperties !== void 0 && keys.length < P.minProperties) {
+				errors === NOERRORS || errors.push(err("minProperties", "minProperties", instancePath, schemaPath + "/minProperties", { limit: P.minProperties }, `must NOT have fewer than ${P.minProperties} properties`));
+				valid = false;
+			}
+			if (P.maxProperties !== void 0 && keys.length > P.maxProperties) {
+				errors === NOERRORS || errors.push(err("maxProperties", "maxProperties", instancePath, schemaPath + "/maxProperties", { limit: P.maxProperties }, `must NOT have more than ${P.maxProperties} properties`));
+				valid = false;
+			}
+			if (P.dependentRequired !== null) {
+				for (const [key, deps] of P.dependentRequired) if (Object.hasOwn(data, key)) {
+					for (const dep of deps) if (!Object.hasOwn(data, dep)) {
+						errors === NOERRORS || errors.push(err("required", "required", instancePath, schemaPath + "/dependentRequired", { missingProperty: dep }, `must have required property '${dep}'`));
+						valid = false;
+					}
+				}
+			}
+		}
+		if (P.hasCustom && !runCustom(P, data, bits, errors, instancePath, schemaPath)) valid = false;
+		return valid;
+	}
+	var Interpreter = class {
+		constructor(rootSchema, options) {
+			const opts = options || {};
+			this.root = rootSchema;
+			this.state = indexSchemas(rootSchema, opts.schemaMap, opts.flat === true);
+			this.userFormats = opts.formats || null;
+			this.keywords = opts.keywords || null;
+			this.bookending = !opts.v1;
+			this.patternCache = /* @__PURE__ */ new Map();
+			this.plans = /* @__PURE__ */ new Map();
+			this.rootNode = this.node(rootSchema);
+			this._fast = void 0;
+			this._calls = 0;
+			this._tier = typeof opts.tier === "number" ? opts.tier : TIER;
+		}
+		_fastRoot() {
+			if (this._fast === void 0) {
+				const compile = planCompiler();
+				if (compile === null) this._fast = null;
+				else try {
+					this._fast = compile(this);
+				} catch {
+					this._fast = null;
+				}
+			}
+			return this._fast;
+		}
+		_tiered() {
+			if (this._fast !== void 0) return this._fast;
+			return ++this._calls > this._tier ? this._fastRoot() : null;
+		}
+		_deep(e) {
+			if (!(e instanceof RangeError) || this._fast !== void 0) throw e;
+			const fast = this._fastRoot();
+			if (fast === null) throw e;
+			return fast;
+		}
+		pattern(src) {
+			let re = this.patternCache.get(src);
+			if (!re) {
+				if (/\\[pP]\{/.test(src)) try {
+					re = new RegExp(src, "u");
+				} catch {
+					re = new RegExp(src);
+				}
+				else try {
+					re = compileSafe(src);
+				} catch {
+					try {
+						re = new RegExp(src, "u");
+					} catch {
+						re = new RegExp(src);
+					}
+				}
+				this.patternCache.set(src, re);
+			}
+			return re;
+		}
+		plan(schema) {
+			let p = this.plans.get(schema);
+			if (p === void 0) {
+				p = new Plan(schema);
+				this.plans.set(schema, p);
+				p.link(this);
+			}
+			return p;
+		}
+		resolveRefCached(P, base) {
+			if (P.refBase0 === base) return P.refRes0;
+			let cache = P.refCache;
+			let r = cache !== null ? cache.get(base) : void 0;
+			if (r === void 0) {
+				const raw = resolveRef(P.ref, base, this.state);
+				r = {
+					child: raw.node === void 0 ? void 0 : this.node(raw.node),
+					base: raw.base
+				};
+				if (P.refBase0 === void 0) {
+					P.refBase0 = base;
+					P.refRes0 = r;
+				} else {
+					if (cache === null) cache = P.refCache = /* @__PURE__ */ new Map();
+					cache.set(base, r);
+				}
+			}
+			return r;
+		}
+		resolveDynamicRefCached(P, base) {
+			let cache = P.dynCache;
+			if (cache === null) cache = P.dynCache = /* @__PURE__ */ new Map();
+			let r = cache.get(base);
+			if (r === void 0) {
+				const { node, base: refBase } = resolveRef(P.dynamicRef, base, this.state);
+				const [, fragment] = splitFragment(resolveUri(base, P.dynamicRef));
+				r = {
+					node,
+					base: refBase,
+					fragment,
+					byAnchor: Boolean(fragment) && !fragment.startsWith("/")
+				};
+				cache.set(base, r);
+			}
+			return r;
+		}
+		node(schema) {
+			if (schema === true || schema === false) return schema;
+			if (typeof schema !== "object" || schema === null) return true;
+			return this.plan(schema);
+		}
+		isValid(data) {
+			const fast = this._fast !== void 0 ? this._fast : this._tiered();
+			if (fast !== null) return fast.v(data, fast.cyclic ? [] : null);
+			const dynScope = [this.state.rootBase];
+			try {
+				return this.eval(this.rootNode, data, this.state.rootBase, dynScope, NOERRORS, "", "#", [], DISCARD);
+			} catch (e) {
+				const deep = this._deep(e);
+				return deep.v(data, deep.cyclic ? [] : null);
+			}
+		}
+		validate(data) {
+			const fast = this._fast !== void 0 ? this._fast : this._tiered();
+			if (fast !== null) {
+				const errors = [];
+				return fast.c(data, errors, "", "#", fast.cyclic ? [] : null) ? {
+					valid: true,
+					data,
+					errors: []
+				} : {
+					valid: false,
+					errors
+				};
+			}
+			let errors = [];
+			const dynScope = [this.state.rootBase];
+			let valid;
+			try {
+				valid = this.eval(this.rootNode, data, this.state.rootBase, dynScope, errors, "", "#", [], DISCARD);
+			} catch (e) {
+				const deep = this._deep(e);
+				errors = [];
+				valid = deep.c(data, errors, "", "#", deep.cyclic ? [] : null);
+			}
+			return valid ? {
+				valid: true,
+				data,
+				errors: []
+			} : {
+				valid: false,
+				errors
+			};
+		}
+		eval(P, data, base, dynScope, errors, instancePath, schemaPath, stack, sink) {
+			const E = errors !== NOERRORS;
+			if (P === true) return true;
+			if (P === false) {
+				if (errors !== NOERRORS) errors.push(err("false schema", "not", instancePath, schemaPath, {}, "boolean schema is false"));
+				return false;
+			}
+			if (P.leaf) return evalLeaf(P, data, errors, instancePath, schemaPath);
+			const schema = P.schema;
+			const tracked = P.tracked;
+			if (tracked) {
+				for (let i = stack.length - 2; i >= 0; i -= 2) if (stack[i] === schema && stack[i + 1] === data) return true;
+				stack.push(schema, data);
+			}
+			if (P.nodeBase !== null && P.nodeBase !== base) base = P.nodeBase;
+			let scopePushed = false;
+			if (dynScope[dynScope.length - 1] !== base) {
+				dynScope.push(base);
+				scopePushed = true;
+			}
+			let valid = true;
+			const collect = sink !== DISCARD || P.hasUnevaluated;
+			const local = collect ? {
+				props: null,
+				items: null
+			} : DISCARD;
+			if (P.ref !== null) {
+				const { child, base: refBase } = this.resolveRefCached(P, base);
+				if (child === void 0) {
+					if (errors !== NOERRORS) errors.push(err("$ref", "$ref", instancePath, schemaPath + "/$ref", { ref: P.ref }, `cannot resolve $ref ${P.ref}`));
+					valid = false;
+				} else {
+					const sub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					if (!this.eval(child, data, refBase, dynScope, errors, instancePath, schemaPath, stack, sub)) valid = false;
+					else if (collect) mergeAnnotations(local, sub);
+				}
+			}
+			if (P.dynamicRef !== null) {
+				const ref = P.dynamicRef;
+				const initial = this.resolveDynamicRefCached(P, base);
+				let node = initial.node;
+				let refBase = initial.base;
+				const fragment = initial.fragment;
+				if (initial.byAnchor) {
+					const initialDyn = this.state.dynamicAnchors.get(refBase);
+					if (node !== void 0 && initialDyn && initialDyn.get(fragment) === node || !this.bookending) for (const scopeBase of dynScope) {
+						const dyn = this.state.dynamicAnchors.get(scopeBase);
+						if (dyn && dyn.has(fragment)) {
+							node = dyn.get(fragment);
+							refBase = scopeBase;
+							break;
+						}
+					}
+				}
+				if (node === void 0) {
+					if (errors !== NOERRORS) errors.push(err("$dynamicRef", "$dynamicRef", instancePath, schemaPath + "/$dynamicRef", { ref }, `cannot resolve $dynamicRef ${ref}`));
+					valid = false;
+				} else {
+					const sub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					if (!this.eval(this.node(node), data, refBase, dynScope, errors, instancePath, schemaPath, stack, sub)) valid = false;
+					else if (collect) mergeAnnotations(local, sub);
+				}
+			}
+			const bits = dataBits(data);
+			if (P.hasType && (bits & P.typeMask) === 0) {
+				if (errors !== NOERRORS) errors.push(err("type", "type", instancePath, schemaPath + "/type", { type: schema.type }, `must be ${P.typeNames.join(", ")}`));
+				valid = false;
+			}
+			if (P.enum !== null) {
+				if (!enumMember(P, data)) {
+					if (errors !== NOERRORS) errors.push(err("enum", "enum", instancePath, schemaPath + "/enum", { allowedValues: P.enum }, "must be equal to one of the allowed values"));
+					valid = false;
+				}
+			}
+			if (P.hasConst && !deepEqual(P.const, data)) {
+				if (errors !== NOERRORS) errors.push(err("const", "const", instancePath, schemaPath + "/const", { allowedValue: P.const }, "must be equal to constant"));
+				valid = false;
+			}
+			if (P.hasNumber && Number.isFinite(data)) {
+				if (P.minimum !== void 0 && !(data >= P.minimum)) {
+					errors === NOERRORS || errors.push(err("minimum", "minimum", instancePath, schemaPath + "/minimum", {
+						comparison: ">=",
+						limit: P.minimum
+					}, `must be >= ${P.minimum}`));
+					valid = false;
+				}
+				if (P.maximum !== void 0 && !(data <= P.maximum)) {
+					errors === NOERRORS || errors.push(err("maximum", "maximum", instancePath, schemaPath + "/maximum", {
+						comparison: "<=",
+						limit: P.maximum
+					}, `must be <= ${P.maximum}`));
+					valid = false;
+				}
+				if (P.exclusiveMinimum !== void 0 && !(data > P.exclusiveMinimum)) {
+					errors === NOERRORS || errors.push(err("exclusiveMinimum", "exclusiveMinimum", instancePath, schemaPath + "/exclusiveMinimum", {
+						comparison: ">",
+						limit: P.exclusiveMinimum
+					}, `must be > ${P.exclusiveMinimum}`));
+					valid = false;
+				}
+				if (P.exclusiveMaximum !== void 0 && !(data < P.exclusiveMaximum)) {
+					errors === NOERRORS || errors.push(err("exclusiveMaximum", "exclusiveMaximum", instancePath, schemaPath + "/exclusiveMaximum", {
+						comparison: "<",
+						limit: P.exclusiveMaximum
+					}, `must be < ${P.exclusiveMaximum}`));
+					valid = false;
+				}
+				if (P.multipleOf !== void 0 && !multipleOfOk(data, P.multipleOf)) {
+					errors === NOERRORS || errors.push(err("multipleOf", "multipleOf", instancePath, schemaPath + "/multipleOf", { multipleOf: P.multipleOf }, `must be multiple of ${P.multipleOf}`));
+					valid = false;
+				}
+			}
+			if (P.hasString && bits === T_STRING) {
+				if (P.minLength !== void 0 && !cpAtLeast(data, P.minLength)) {
+					errors === NOERRORS || errors.push(err("minLength", "minLength", instancePath, schemaPath + "/minLength", { limit: P.minLength }, `must NOT have fewer than ${P.minLength} characters`));
+					valid = false;
+				}
+				if (P.maxLength !== void 0 && !cpAtMost(data, P.maxLength)) {
+					errors === NOERRORS || errors.push(err("maxLength", "maxLength", instancePath, schemaPath + "/maxLength", { limit: P.maxLength }, `must NOT have more than ${P.maxLength} characters`));
+					valid = false;
+				}
+				if (P.pattern !== null && !P.pattern.test(data)) {
+					errors === NOERRORS || errors.push(err("pattern", "pattern", instancePath, schemaPath + "/pattern", { pattern: P.patternSource }, `must match pattern "${P.patternSource}"`));
+					valid = false;
+				}
+				if (P.formatFn !== null && !P.formatFn(data)) {
+					errors === NOERRORS || errors.push(err("format", "format", instancePath, schemaPath + "/format", { format: P.format }, `must match format "${P.format}"`));
+					valid = false;
+				}
+			}
+			if (P.hasCustom && !runCustom(P, data, bits, errors, instancePath, schemaPath)) valid = false;
+			if (P.hasArray && bits === T_ARRAY) {
+				if (P.minItems !== void 0 && data.length < P.minItems) {
+					errors === NOERRORS || errors.push(err("minItems", "minItems", instancePath, schemaPath + "/minItems", { limit: P.minItems }, `must NOT have fewer than ${P.minItems} items`));
+					valid = false;
+				}
+				if (P.maxItems !== void 0 && data.length > P.maxItems) {
+					errors === NOERRORS || errors.push(err("maxItems", "maxItems", instancePath, schemaPath + "/maxItems", { limit: P.maxItems }, `must NOT have more than ${P.maxItems} items`));
+					valid = false;
+				}
+				if (P.uniqueItems) {
+					const pair = duplicatePair(data);
+					if (pair !== null) {
+						const i = pair[0], j = pair[1];
+						if (errors !== NOERRORS) errors.push(err("uniqueItems", "uniqueItems", instancePath, schemaPath + "/uniqueItems", {
+							i,
+							j
+						}, `must NOT have duplicate items (items ## ${j} and ${i} are identical)`));
+						valid = false;
+					}
+				}
+				const prefix = P.prefixItems;
+				if (prefix !== null) {
+					const n = Math.min(prefix.length, data.length);
+					for (let i = 0; i < n; i++) {
+						if (!this.eval(prefix[i], data[i], base, dynScope, errors, E ? instancePath + "/" + i : "", E ? schemaPath + "/prefixItems/" + i : "", stack, DISCARD)) valid = false;
+						if (collect) {
+							if (!local.items) local.items = /* @__PURE__ */ new Set();
+							local.items.add(i);
+						}
+					}
+				}
+				if (P.items !== void 0) {
+					const start = prefix !== null ? prefix.length : 0;
+					for (let i = start; i < data.length; i++) {
+						if (!this.eval(P.items, data[i], base, dynScope, errors, E ? instancePath + "/" + i : "", E ? schemaPath + "/items" : "", stack, DISCARD)) valid = false;
+						if (collect) {
+							if (!local.items) local.items = /* @__PURE__ */ new Set();
+							local.items.add(i);
+						}
+					}
+				}
+				if (P.contains !== void 0) {
+					const matched = [];
+					for (let i = 0; i < data.length; i++) {
+						const scratch = errors === NOERRORS ? NOERRORS : [];
+						if (this.eval(P.contains, data[i], base, dynScope, scratch, E ? instancePath + "/" + i : "", E ? schemaPath + "/contains" : "", stack, DISCARD)) matched.push(i);
+					}
+					const minC = P.minContains !== void 0 ? P.minContains : 1;
+					if (matched.length < minC) {
+						errors === NOERRORS || errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", { minContains: minC }, `must contain at least ${minC} valid item(s)`));
+						valid = false;
+					}
+					if (P.maxContains !== void 0 && matched.length > P.maxContains) {
+						errors === NOERRORS || errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", {
+							minContains: minC,
+							maxContains: P.maxContains
+						}, `must NOT contain more than ${P.maxContains} valid item(s)`));
+						valid = false;
+					}
+					if (collect && matched.length) {
+						if (!local.items) local.items = /* @__PURE__ */ new Set();
+						for (const i of matched) local.items.add(i);
+					}
+				}
+			}
+			if (P.hasObject && bits === T_OBJECT) {
+				const keys = Object.keys(data);
+				if (P.required !== null) {
+					const req = P.required;
+					for (let i = 0; i < req.length; i++) {
+						const key = req[i];
+						if (!Object.hasOwn(data, key)) {
+							errors === NOERRORS || errors.push(err("required", "required", instancePath, schemaPath + "/required", { missingProperty: key }, `must have required property '${key}'`));
+							valid = false;
+						}
+					}
+				}
+				if (P.minProperties !== void 0 && keys.length < P.minProperties) {
+					errors === NOERRORS || errors.push(err("minProperties", "minProperties", instancePath, schemaPath + "/minProperties", { limit: P.minProperties }, `must NOT have fewer than ${P.minProperties} properties`));
+					valid = false;
+				}
+				if (P.maxProperties !== void 0 && keys.length > P.maxProperties) {
+					errors === NOERRORS || errors.push(err("maxProperties", "maxProperties", instancePath, schemaPath + "/maxProperties", { limit: P.maxProperties }, `must NOT have more than ${P.maxProperties} properties`));
+					valid = false;
+				}
+				if (P.dependentRequired !== null) {
+					for (const [key, deps] of P.dependentRequired) if (Object.hasOwn(data, key)) {
+						for (const dep of deps) if (!Object.hasOwn(data, dep)) {
+							errors === NOERRORS || errors.push(err("required", "required", instancePath, schemaPath + "/dependentRequired", { missingProperty: dep }, `must have required property '${dep}'`));
+							valid = false;
+						}
+					}
+				}
+				if (P.propertyNames !== void 0) {
+					for (const key of keys) if (!this.eval(P.propertyNames, key, base, dynScope, errors, instancePath, E ? schemaPath + "/propertyNames" : "", stack, DISCARD)) valid = false;
+				}
+				const props = P.properties;
+				const patterns = P.patternProperties;
+				for (let k = 0; k < keys.length; k++) {
+					const key = keys[k];
+					let evaluated = false;
+					const prop = props !== null ? props.get(key) : void 0;
+					if (prop !== void 0) {
+						if (!this.eval(prop.node, data[key], base, dynScope, errors, E ? instancePath + prop.seg : "", E ? schemaPath + prop.schemaSeg : "", stack, DISCARD)) valid = false;
+						evaluated = true;
+					}
+					if (patterns !== null) for (let pi = 0; pi < patterns.length; pi++) {
+						const pp = patterns[pi];
+						if (pp.re.test(key)) {
+							if (!this.eval(pp.node, data[key], base, dynScope, errors, E ? instancePath + "/" + escapePointer(key) : "", E ? schemaPath + "/patternProperties/" + escapePointer(pp.src) : "", stack, DISCARD)) valid = false;
+							evaluated = true;
+						}
+					}
+					if (!evaluated && P.additionalProperties !== void 0) {
+						if (P.additionalProperties === false) {
+							valid = false;
+							if (errors !== NOERRORS) errors.push(err("additionalProperties", "additionalProperties", instancePath, schemaPath + "/additionalProperties", { additionalProperty: key }, "must NOT have additional properties"));
+						} else if (!this.eval(P.additionalProperties, data[key], base, dynScope, errors, E ? instancePath + "/" + escapePointer(key) : "", E ? schemaPath + "/additionalProperties" : "", stack, DISCARD)) valid = false;
+						evaluated = true;
+					}
+					if (evaluated && collect) {
+						if (!local.props) local.props = /* @__PURE__ */ new Set();
+						local.props.add(key);
+					}
+				}
+				if (P.dependentSchemas !== null) {
+					for (const [key, dep] of P.dependentSchemas) if (Object.hasOwn(data, key)) {
+						const sub = collect ? {
+							props: null,
+							items: null
+						} : DISCARD;
+						if (!this.eval(dep, data, base, dynScope, errors, instancePath, E ? schemaPath + "/dependentSchemas/" + escapePointer(key) : "", stack, sub)) valid = false;
+						else if (collect) mergeAnnotations(local, sub);
+					}
+				}
+				if (P.propertyDependencies !== null) for (const [key, choices] of P.propertyDependencies) {
+					if (!Object.hasOwn(data, key)) continue;
+					const value = data[key];
+					if (typeof value !== "string") continue;
+					const choice = choices.get(value);
+					if (choice === void 0) continue;
+					const sub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					const branchPath = schemaPath + "/propertyDependencies/" + escapePointer(key) + "/" + escapePointer(value);
+					if (!this.eval(choice, data, base, dynScope, errors, instancePath, branchPath, stack, sub)) valid = false;
+					else if (collect) mergeAnnotations(local, sub);
+				}
+			}
+			if (P.hasApplicators) {
+				if (P.allOf !== null) for (let i = 0; i < P.allOf.length; i++) {
+					const sub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					if (!this.eval(P.allOf[i], data, base, dynScope, errors, instancePath, E ? schemaPath + "/allOf/" + i : "", stack, sub)) valid = false;
+					else if (collect) mergeAnnotations(local, sub);
+				}
+				if (P.macros !== null) for (let i = 0; i < P.macros.length; i++) {
+					const m = P.macros[i];
+					const sp = schemaPath + "/" + m.keyword;
+					const sub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					if (!this.eval(m.node, data, base, dynScope, errors, instancePath, sp, stack, sub)) {
+						valid = false;
+						if (errors !== NOERRORS) errors.push(err(m.keyword, m.keyword, instancePath, sp, { keyword: m.keyword }, `must pass "${m.keyword}" keyword validation`));
+					} else if (collect) mergeAnnotations(local, sub);
+				}
+				if (P.anyOf !== null) {
+					let any = false;
+					const scratch = errors === NOERRORS ? NOERRORS : [];
+					const branches = errors === NOERRORS ? null : [];
+					for (let i = 0; i < P.anyOf.length; i++) {
+						const sub = collect ? {
+							props: null,
+							items: null
+						} : DISCARD;
+						const mark = branches === null ? 0 : scratch.length;
+						const ok = this.eval(P.anyOf[i], data, base, dynScope, scratch, instancePath, E ? schemaPath + "/anyOf/" + i : "", stack, sub);
+						if (branches !== null) branches.push({
+							valid: ok,
+							errors: scratch.slice(mark),
+							title: branchTitle(P.anyOf[i])
+						});
+						if (ok) {
+							any = true;
+							if (collect) mergeAnnotations(local, sub);
+						}
+					}
+					if (!any) {
+						if (branches !== null) {
+							const collapsed = collapseBranches({
+								keyword: "anyOf",
+								branchResults: branches,
+								parentPath: instancePath,
+								parentSchemaPath: schemaPath + "/anyOf"
+							});
+							if (collapsed !== null) errors.push(collapsed);
+						}
+						valid = false;
+					}
+				}
+				if (P.oneOf !== null) {
+					let count = 0;
+					let winner = null;
+					const scratch = errors === NOERRORS ? NOERRORS : [];
+					const branches = errors === NOERRORS ? null : [];
+					for (let i = 0; i < P.oneOf.length; i++) {
+						const sub = collect ? {
+							props: null,
+							items: null
+						} : DISCARD;
+						const mark = branches === null ? 0 : scratch.length;
+						const ok = this.eval(P.oneOf[i], data, base, dynScope, scratch, instancePath, E ? schemaPath + "/oneOf/" + i : "", stack, sub);
+						if (branches !== null) branches.push({
+							valid: ok,
+							errors: scratch.slice(mark),
+							title: branchTitle(P.oneOf[i])
+						});
+						if (ok) {
+							count++;
+							winner = sub;
+						}
+					}
+					if (count === 1) {
+						if (collect) mergeAnnotations(local, winner);
+					} else {
+						if (branches !== null) {
+							const collapsed = collapseBranches({
+								keyword: "oneOf",
+								branchResults: branches,
+								parentPath: instancePath,
+								parentSchemaPath: schemaPath + "/oneOf"
+							});
+							if (collapsed !== null) errors.push(collapsed);
+						}
+						valid = false;
+					}
+				}
+				if (P.not !== void 0) {
+					const scratch = errors === NOERRORS ? NOERRORS : [];
+					if (this.eval(P.not, data, base, dynScope, scratch, instancePath, E ? schemaPath + "/not" : "", stack, DISCARD)) {
+						if (errors !== NOERRORS) errors.push(err("not", "not", instancePath, schemaPath + "/not", {}, "must NOT be valid"));
+						valid = false;
+					}
+				}
+				if (P.if !== void 0) {
+					const ifSub = collect ? {
+						props: null,
+						items: null
+					} : DISCARD;
+					const ifScratch = errors === NOERRORS ? NOERRORS : [];
+					if (this.eval(P.if, data, base, dynScope, ifScratch, instancePath, E ? schemaPath + "/if" : "", stack, ifSub)) {
+						if (collect) mergeAnnotations(local, ifSub);
+						if (P.then !== void 0) {
+							const sub = collect ? {
+								props: null,
+								items: null
+							} : DISCARD;
+							if (!this.eval(P.then, data, base, dynScope, errors, instancePath, E ? schemaPath + "/then" : "", stack, sub)) valid = false;
+							else if (collect) mergeAnnotations(local, sub);
+						}
+					} else if (P.else !== void 0) {
+						const sub = collect ? {
+							props: null,
+							items: null
+						} : DISCARD;
+						if (!this.eval(P.else, data, base, dynScope, errors, instancePath, E ? schemaPath + "/else" : "", stack, sub)) valid = false;
+						else if (collect) mergeAnnotations(local, sub);
+					}
+				}
+			}
+			if (P.hasUnevaluated) {
+				if (P.unevaluatedProperties !== void 0 && bits === T_OBJECT) for (const key of Object.keys(data)) {
+					if (local.props && local.props.has(key)) continue;
+					if (P.unevaluatedPropertiesFalse) {
+						valid = false;
+						if (errors !== NOERRORS) errors.push(err("unevaluatedProperties", "unevaluatedProperties", instancePath, schemaPath + "/unevaluatedProperties", { unevaluatedProperty: key }, "must NOT have unevaluated properties"));
+					} else if (!this.eval(P.unevaluatedProperties, data[key], base, dynScope, errors, E ? instancePath + "/" + escapePointer(key) : "", E ? schemaPath + "/unevaluatedProperties" : "", stack, DISCARD)) valid = false;
+					if (!local.props) local.props = /* @__PURE__ */ new Set();
+					local.props.add(key);
+				}
+				if (P.unevaluatedItems !== void 0 && bits === T_ARRAY) for (let i = 0; i < data.length; i++) {
+					if (local.items && local.items.has(i)) continue;
+					if (P.unevaluatedItemsFalse) {
+						valid = false;
+						if (errors !== NOERRORS) errors.push(err("unevaluatedItems", "unevaluatedItems", instancePath, schemaPath + "/unevaluatedItems", { limit: i }, "must NOT have more than " + i + " items"));
+						break;
+					}
+					if (!this.eval(P.unevaluatedItems, data[i], base, dynScope, errors, E ? instancePath + "/" + i : "", E ? schemaPath + "/unevaluatedItems" : "", stack, DISCARD)) valid = false;
+					if (!local.items) local.items = /* @__PURE__ */ new Set();
+					local.items.add(i);
+				}
+			}
+			if (scopePushed) dynScope.pop();
+			if (tracked) stack.length -= 2;
+			if (valid && collect && sink !== DISCARD) mergeAnnotations(sink, local);
+			return valid;
+		}
+	};
+	function branchTitle(node) {
+		return node && node.schema && typeof node.schema.title === "string" ? node.schema.title : "";
+	}
+	function escapePointer(s) {
+		if (typeof s !== "string") s = String(s);
+		for (let i = 0; i < s.length; i++) {
+			const c = s.charCodeAt(i);
+			if (c === 126 || c === 47) return s.replace(/~/g, "~0").replace(/\//g, "~1");
+		}
+		return s;
+	}
+	function err(code, keyword, instancePath, schemaPath, params, message) {
+		return {
+			keyword,
+			instancePath,
+			schemaPath,
+			params,
+			message
+		};
+	}
+	const TIER = 1e3;
+	let loadPlanCompiler = null;
+	let compileInterpreter = null;
+	function setPlanCompiler(load) {
+		loadPlanCompiler = load;
+		compileInterpreter = null;
+	}
+	function planCompiler() {
+		if (compileInterpreter === null && loadPlanCompiler !== null) compileInterpreter = loadPlanCompiler()({
+			Plan,
+			NOERRORS,
+			err,
+			evalLeaf,
+			evalLeafV,
+			runCustomV,
+			dataBits,
+			escapePointer,
+			deepEqual,
+			enumMember,
+			allDistinct,
+			multipleOfOk,
+			cpAtLeast,
+			cpAtMost,
+			T_STRING,
+			T_ARRAY,
+			T_OBJECT,
+			resolveRef,
+			splitFragment,
+			resolveUri
+		}).compileInterpreter;
+		return compileInterpreter;
+	}
+	function createInterpreter(schema, options) {
+		return new Interpreter(schema, options);
+	}
+	module.exports = { createInterpreter };
+	Object.defineProperty(module.exports, "_setPlanCompiler", {
+		value: setPlanCompiler,
+		enumerable: false
+	});
+	Object.defineProperty(module.exports, "_refInternals", {
+		value: {
+			indexSchemas,
+			resolveRef,
+			splitFragment,
+			resolveUri,
+			FALLBACK_BASE
+		},
+		enumerable: false
+	});
+	Object.defineProperty(module.exports, "_planInternals", {
+		value: {
+			Plan,
+			deepEqual,
+			cpAtLeast,
+			cpAtMost,
+			multipleOfOk,
+			dataBits,
+			typeBit,
+			T_STRING,
+			T_NUMBER,
+			T_INTEGER,
+			T_BOOLEAN,
+			T_NULL,
+			T_OBJECT,
+			T_ARRAY,
+			T_ANY
+		},
+		enumerable: false
+	});
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/plan-compiler.js
 var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { collapseBranches } = require_branch_collapse();
 	const branchTitle = (n) => n && n.schema && typeof n.schema.title === "string" ? n.schema.title : "";
@@ -6641,1267 +8640,14 @@ var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	module.exports = { install };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/interpreter.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/interpreter.js
 var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { collapseBranches } = require_branch_collapse();
-	const { compileSafe } = require_safe_regex();
-	const SCHEMA_KEYWORDS = {
-		single: [
-			"additionalProperties",
-			"contains",
-			"propertyNames",
-			"if",
-			"then",
-			"else",
-			"not",
-			"items",
-			"unevaluatedItems",
-			"unevaluatedProperties"
-		],
-		maps: [
-			"$defs",
-			"definitions",
-			"properties",
-			"patternProperties",
-			"dependentSchemas"
-		],
-		lists: [
-			"allOf",
-			"anyOf",
-			"oneOf",
-			"prefixItems"
-		]
-	};
-	const FALLBACK_BASE = "ata://root";
-	function resolveUri(base, ref) {
-		try {
-			return new URL(ref, base || FALLBACK_BASE).href;
-		} catch {
-			return ref;
-		}
-	}
-	function splitFragment(uri) {
-		const hash = uri.indexOf("#");
-		if (hash < 0) return [uri, ""];
-		return [uri.slice(0, hash), decodeURIComponent(uri.slice(hash + 1))];
-	}
-	function indexSchemas(rootSchema, schemaMap) {
-		const state = {
-			resources: /* @__PURE__ */ new Map(),
-			anchors: /* @__PURE__ */ new Map(),
-			dynamicAnchors: /* @__PURE__ */ new Map(),
-			nodeBase: /* @__PURE__ */ new Map(),
-			rootBase: FALLBACK_BASE
-		};
-		const rootBase = typeof rootSchema === "object" && rootSchema !== null && typeof rootSchema.$id === "string" ? resolveUri(FALLBACK_BASE, splitFragment(rootSchema.$id)[0]) : FALLBACK_BASE;
-		state.rootBase = rootBase;
-		indexResource(rootSchema, rootBase, state);
-		if (schemaMap) for (const [id, schema] of schemaMap) {
-			const base = resolveUri(FALLBACK_BASE, splitFragment(id)[0]);
-			if (!state.resources.has(base)) indexResource(schema, base, state);
-			if (!state.resources.has(id)) state.resources.set(id, schema);
-		}
-		return state;
-	}
-	function indexResource(node, baseUri, state) {
-		if (typeof node !== "object" || node === null) return;
-		if (!state.resources.has(baseUri)) state.resources.set(baseUri, node);
-		if (!state.anchors.has(baseUri)) state.anchors.set(baseUri, /* @__PURE__ */ new Map());
-		if (!state.dynamicAnchors.has(baseUri)) state.dynamicAnchors.set(baseUri, /* @__PURE__ */ new Map());
-		walkSchema(node, baseUri, state, true);
-	}
-	function walkSchema(node, baseUri, state, isResourceRoot) {
-		if (typeof node !== "object" || node === null) return;
-		if (state.nodeBase.has(node)) return;
-		state.nodeBase.set(node, baseUri);
-		if (!isResourceRoot && typeof node.$id === "string") {
-			const newBase = splitFragment(resolveUri(baseUri, node.$id))[0];
-			state.nodeBase.delete(node);
-			indexResource(node, newBase, state);
-			return;
-		}
-		if (typeof node.$anchor === "string") state.anchors.get(baseUri).set(node.$anchor, node);
-		if (typeof node.$dynamicAnchor === "string") {
-			state.dynamicAnchors.get(baseUri).set(node.$dynamicAnchor, node);
-			state.anchors.get(baseUri).set(node.$dynamicAnchor, node);
-		}
-		for (const kw of SCHEMA_KEYWORDS.single) if (node[kw] !== void 0) walkSchema(node[kw], baseUri, state, false);
-		for (const kw of SCHEMA_KEYWORDS.maps) {
-			const map = node[kw];
-			if (map && typeof map === "object" && !Array.isArray(map)) for (const key of Object.keys(map)) walkSchema(map[key], baseUri, state, false);
-		}
-		for (const kw of SCHEMA_KEYWORDS.lists) {
-			const list = node[kw];
-			if (Array.isArray(list)) for (const sub of list) walkSchema(sub, baseUri, state, false);
-		}
-		const propDeps = node.propertyDependencies;
-		if (propDeps && typeof propDeps === "object" && !Array.isArray(propDeps)) {
-			for (const choices of Object.values(propDeps)) if (choices && typeof choices === "object" && !Array.isArray(choices)) for (const sub of Object.values(choices)) walkSchema(sub, baseUri, state, false);
-		}
-	}
-	function walkPointer(root, pointer) {
-		if (pointer === "" || pointer === "/") return root;
-		const parts = pointer.split("/").slice(1).map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
-		let node = root;
-		for (const part of parts) {
-			if (node === null || typeof node !== "object") return void 0;
-			if (Array.isArray(node)) node = node[Number(part)];
-			else if (part in node) node = node[part];
-			else if (part === "definitions" && node.$defs) node = node.$defs;
-			else if (part === "$defs" && node.definitions) node = node.definitions;
-			else if (part === "items" && Array.isArray(node.prefixItems)) node = node.prefixItems;
-			else return;
-		}
-		return node;
-	}
-	function resolveRef(ref, fromBase, state) {
-		const [uri, fragment] = splitFragment(resolveUri(fromBase, ref));
-		let resource = state.resources.get(uri);
-		let resourceBase = uri;
-		if (resource === void 0 && (uri === FALLBACK_BASE || uri === "")) {
-			resource = state.resources.get(state.rootBase);
-			resourceBase = state.rootBase;
-		}
-		if (resource === void 0) {
-			const [rawUri, rawFragment] = splitFragment(ref);
-			if (state.resources.has(rawUri)) {
-				resource = state.resources.get(rawUri);
-				resourceBase = rawUri;
-				if (rawFragment === "") return {
-					node: resource,
-					base: resourceBase
-				};
-				if (rawFragment.startsWith("/")) return {
-					node: walkPointer(resource, rawFragment),
-					base: resourceBase
-				};
-				const anchored = state.anchors.get(resourceBase);
-				return {
-					node: anchored ? anchored.get(rawFragment) : void 0,
-					base: resourceBase
-				};
-			}
-			return {
-				node: void 0,
-				base: resourceBase
-			};
-		}
-		if (fragment === "") return {
-			node: resource,
-			base: resourceBase
-		};
-		if (fragment.startsWith("/")) {
-			const node = walkPointer(resource, fragment);
-			return {
-				node,
-				base: node !== null && typeof node === "object" && state.nodeBase.has(node) ? state.nodeBase.get(node) : resourceBase
-			};
-		}
-		const anchored = state.anchors.get(resourceBase);
-		return {
-			node: anchored ? anchored.get(fragment) : void 0,
-			base: resourceBase
-		};
-	}
-	const { allDistinct, duplicatePair, _deq } = require_unique_items();
-	function enumMember(P, data) {
-		if (data === null || typeof data !== "object") return P.enumPrims.has(data);
-		const objs = P.enumObjs;
-		for (let i = 0; i < objs.length; i++) if (deepEqual(objs[i], data)) return true;
-		return false;
-	}
-	const deepEqual = _deq;
-	function codePointLength(s) {
-		let n = 0;
-		for (let i = 0; i < s.length; i++) {
-			if (s.charCodeAt(i) - 55296 >>> 0 < 1024 && i + 1 < s.length) i++;
-			n++;
-		}
-		return n;
-	}
-	function cpAtLeast(s, min) {
-		if (s.length >= 2 * min) return true;
-		if (s.length < min) return false;
-		return codePointLength(s) >= min;
-	}
-	function cpAtMost(s, max) {
-		if (s.length <= max) return true;
-		if (s.length > 2 * max + 1) return false;
-		return codePointLength(s) <= max;
-	}
-	function multipleOfOk(d, m) {
-		if (m === 0) return false;
-		const q = d / m;
-		if (Number.isInteger(q)) return true;
-		return Math.abs(q - Math.round(q)) < 1e-9;
-	}
-	const _formats = require_formats();
-	const FORMAT_CHECKS = {
-		email: _formats.email,
-		date: _formats.date,
-		"date-time": _formats.dateTime,
-		time: _formats.time,
-		duration: _formats.duration,
-		uuid: _formats.uuid,
-		uri: _formats.uri,
-		"uri-reference": _formats.uriReference,
-		ipv4: _formats.ipv4,
-		ipv6: _formats.ipv6,
-		hostname: _formats.hostname,
-		regex: (s) => {
-			try {
-				new RegExp(s, "u");
-				return true;
-			} catch {
-				return false;
-			}
-		},
-		"json-pointer": _formats.jsonPointer,
-		"relative-json-pointer": _formats.relativeJsonPointer,
-		"uri-template": _formats.uriTemplate,
-		iri: _formats.iri,
-		"iri-reference": _formats.iriReference,
-		"idn-email": _formats.idnEmail
-	};
-	const DISCARD = {
-		props: null,
-		items: null
-	};
-	const NOERRORS = Object.freeze([]);
-	function mergeAnnotations(target, from) {
-		if (from.props && from.props.size) {
-			if (!target.props) target.props = /* @__PURE__ */ new Set();
-			for (const p of from.props) target.props.add(p);
-		}
-		if (from.items && from.items.size) {
-			if (!target.items) target.items = /* @__PURE__ */ new Set();
-			for (const i of from.items) target.items.add(i);
-		}
-	}
-	const T_STRING = 1;
-	const T_NUMBER = 2;
-	const T_INTEGER = 4;
-	const T_BOOLEAN = 8;
-	const T_NULL = 16;
-	const T_OBJECT = 32;
-	const T_ARRAY = 64;
-	const T_ANY = 127;
-	function typeBit(name) {
-		switch (name) {
-			case "string": return T_STRING;
-			case "number": return T_NUMBER;
-			case "integer": return T_INTEGER;
-			case "boolean": return T_BOOLEAN;
-			case "null": return T_NULL;
-			case "object": return T_OBJECT;
-			case "array": return T_ARRAY;
-			default: return T_ANY;
-		}
-	}
-	function dataBits(d) {
-		switch (typeof d) {
-			case "string": return T_STRING;
-			case "number":
-				if (!isFinite(d)) return 0;
-				return Number.isInteger(d) ? 6 : T_NUMBER;
-			case "boolean": return T_BOOLEAN;
-			case "object":
-				if (d === null) return T_NULL;
-				return Array.isArray(d) ? T_ARRAY : T_OBJECT;
-			default: return 0;
-		}
-	}
-	function isObjectMap(v) {
-		return v !== null && typeof v === "object" && !Array.isArray(v);
-	}
-	var Plan = class {
-		constructor(schema) {
-			this.schema = schema;
-		}
-		link(interp) {
-			const schema = this.schema;
-			const child = (sub) => interp.node(sub);
-			this.refCache = null;
-			this.refBase0 = void 0;
-			this.refRes0 = null;
-			this.dynCache = null;
-			this.ref = typeof schema.$ref === "string" ? schema.$ref : null;
-			this.dynamicRef = typeof schema.$dynamicRef === "string" ? schema.$dynamicRef : null;
-			this.tracked = this.ref !== null || this.dynamicRef !== null;
-			this.typeMask = 0;
-			this.typeNames = null;
-			if (schema.type !== void 0) {
-				const types = Array.isArray(schema.type) ? schema.type : [schema.type];
-				let mask = 0;
-				for (const t of types) mask |= typeBit(t);
-				this.typeMask = mask;
-				this.typeNames = types;
-			}
-			this.hasType = schema.type !== void 0;
-			this.enum = schema.enum !== void 0 ? schema.enum : null;
-			this.enumPrims = null;
-			this.enumObjs = null;
-			if (Array.isArray(this.enum)) {
-				this.enumPrims = /* @__PURE__ */ new Set();
-				this.enumObjs = [];
-				for (const v of this.enum) if (v !== null && typeof v === "object") this.enumObjs.push(v);
-				else if (!(typeof v === "number" && v !== v)) this.enumPrims.add(v);
-			}
-			this.hasConst = schema.const !== void 0;
-			this.const = schema.const;
-			this.minimum = typeof schema.minimum === "number" ? schema.minimum : void 0;
-			this.maximum = typeof schema.maximum === "number" ? schema.maximum : void 0;
-			this.exclusiveMinimum = typeof schema.exclusiveMinimum === "number" ? schema.exclusiveMinimum : void 0;
-			this.exclusiveMaximum = typeof schema.exclusiveMaximum === "number" ? schema.exclusiveMaximum : void 0;
-			this.multipleOf = typeof schema.multipleOf === "number" ? schema.multipleOf : void 0;
-			this.hasNumber = this.minimum !== void 0 || this.maximum !== void 0 || this.exclusiveMinimum !== void 0 || this.exclusiveMaximum !== void 0 || this.multipleOf !== void 0;
-			this.minLength = schema.minLength;
-			this.maxLength = schema.maxLength;
-			this.pattern = schema.pattern !== void 0 ? interp.pattern(schema.pattern) : null;
-			this.patternSource = schema.pattern;
-			this.format = schema.format;
-			this.formatFn = null;
-			if (schema.format !== void 0) {
-				const uf = interp.userFormats;
-				const fc = uf && typeof uf[schema.format] === "function" ? uf[schema.format] : FORMAT_CHECKS[schema.format];
-				this.formatFn = fc || null;
-			}
-			this.hasString = this.minLength !== void 0 || this.maxLength !== void 0 || this.pattern !== null || this.formatFn !== null;
-			this.minItems = schema.minItems;
-			this.maxItems = schema.maxItems;
-			this.uniqueItems = schema.uniqueItems === true;
-			this.prefixItems = Array.isArray(schema.prefixItems) ? schema.prefixItems.map(child) : null;
-			this.items = schema.items !== void 0 ? child(schema.items) : void 0;
-			this.contains = schema.contains !== void 0 ? child(schema.contains) : void 0;
-			this.minContains = schema.minContains;
-			this.maxContains = schema.maxContains;
-			this.hasArray = this.minItems !== void 0 || this.maxItems !== void 0 || this.uniqueItems || this.prefixItems !== null || this.items !== void 0 || this.contains !== void 0;
-			this.required = Array.isArray(schema.required) ? schema.required : null;
-			this.minProperties = schema.minProperties;
-			this.maxProperties = schema.maxProperties;
-			this.dependentRequired = isObjectMap(schema.dependentRequired) ? Object.entries(schema.dependentRequired) : null;
-			this.propertyNames = schema.propertyNames !== void 0 ? child(schema.propertyNames) : void 0;
-			this.properties = null;
-			if (isObjectMap(schema.properties)) {
-				this.properties = /* @__PURE__ */ new Map();
-				for (const key of Object.keys(schema.properties)) {
-					const ek = escapePointer(key);
-					this.properties.set(key, {
-						node: child(schema.properties[key]),
-						seg: "/" + ek,
-						schemaSeg: "/properties/" + ek
-					});
-				}
-			}
-			this.patternProperties = null;
-			if (isObjectMap(schema.patternProperties)) this.patternProperties = Object.keys(schema.patternProperties).map((src) => ({
-				src,
-				re: interp.pattern(src),
-				node: child(schema.patternProperties[src])
-			}));
-			this.additionalProperties = schema.additionalProperties !== void 0 ? child(schema.additionalProperties) : void 0;
-			this.dependentSchemas = isObjectMap(schema.dependentSchemas) ? Object.entries(schema.dependentSchemas).map(([k, v]) => [k, child(v)]) : null;
-			this.propertyDependencies = null;
-			if (isObjectMap(schema.propertyDependencies)) this.propertyDependencies = Object.entries(schema.propertyDependencies).filter(([, choices]) => isObjectMap(choices)).map(([k, choices]) => [k, new Map(Object.keys(choices).map((v) => [v, child(choices[v])]))]);
-			this.hasObject = this.required !== null || this.minProperties !== void 0 || this.maxProperties !== void 0 || this.dependentRequired !== null || this.propertyNames !== void 0 || this.properties !== null || this.patternProperties !== null || this.additionalProperties !== void 0 || this.dependentSchemas !== null || this.propertyDependencies !== null;
-			this.allOf = Array.isArray(schema.allOf) ? schema.allOf.map(child) : null;
-			this.anyOf = Array.isArray(schema.anyOf) ? schema.anyOf.map(child) : null;
-			this.oneOf = Array.isArray(schema.oneOf) ? schema.oneOf.map(child) : null;
-			this.not = schema.not !== void 0 ? child(schema.not) : void 0;
-			this.if = schema.if !== void 0 ? child(schema.if) : void 0;
-			this.then = schema.then !== void 0 ? child(schema.then) : void 0;
-			this.else = schema.else !== void 0 ? child(schema.else) : void 0;
-			this.macros = null;
-			if (interp.keywords !== null) for (const key of Object.keys(schema)) {
-				const def = interp.keywords[key];
-				if (def === void 0 || def.macro === null) continue;
-				const expanded = def.macro(schema[key], schema);
-				if (expanded === void 0) continue;
-				if (this.macros === null) this.macros = [];
-				this.macros.push({
-					keyword: key,
-					node: child(expanded)
-				});
-			}
-			this.hasApplicators = this.allOf !== null || this.anyOf !== null || this.oneOf !== null || this.not !== void 0 || this.if !== void 0 || this.macros !== null;
-			this.unevaluatedProperties = schema.unevaluatedProperties !== void 0 ? child(schema.unevaluatedProperties) : void 0;
-			this.unevaluatedItems = schema.unevaluatedItems !== void 0 ? child(schema.unevaluatedItems) : void 0;
-			this.unevaluatedPropertiesFalse = schema.unevaluatedProperties === false;
-			this.unevaluatedItemsFalse = schema.unevaluatedItems === false;
-			this.hasUnevaluated = this.unevaluatedProperties !== void 0 || this.unevaluatedItems !== void 0;
-			this.custom = null;
-			if (interp.keywords !== null) for (const key of Object.keys(schema)) {
-				const def = interp.keywords[key];
-				if (def === void 0 || def.macro !== null) continue;
-				const value = schema[key];
-				let mask = T_ANY;
-				if (def.types !== null) {
-					mask = 0;
-					for (const t of def.types) mask |= typeBit(t);
-				}
-				let fn;
-				if (def.compile !== null) {
-					fn = def.compile(value, schema);
-					if (typeof fn !== "function") throw new Error(`keyword "${key}": compile must return a function`);
-				} else {
-					const validate = def.validate;
-					fn = (data) => validate(value, data, schema);
-					fn.source = validate;
-				}
-				if (this.custom === null) this.custom = [];
-				this.custom.push({
-					keyword: key,
-					fn,
-					mask
-				});
-			}
-			this.hasCustom = this.custom !== null;
-			const nodeBase = interp.state.nodeBase.get(schema);
-			this.nodeBase = nodeBase !== void 0 ? nodeBase : null;
-			this.isResourceRoot = nodeBase !== void 0 && interp.state.resources.get(nodeBase) === schema;
-			this.leaf = !this.tracked && !this.hasApplicators && !this.hasUnevaluated && this.properties === null && this.patternProperties === null && this.additionalProperties === void 0 && this.propertyNames === void 0 && this.dependentSchemas === null && this.propertyDependencies === null && this.prefixItems === null && this.items === void 0 && this.contains === void 0 && this.nodeBase === null;
-		}
-	};
-	function evalLeafV(P, data) {
-		const bits = dataBits(data);
-		if (P.hasType && (bits & P.typeMask) === 0) return false;
-		if (P.enum !== null) {
-			if (!enumMember(P, data)) return false;
-		}
-		if (P.hasConst && !deepEqual(P.const, data)) return false;
-		if (P.hasNumber && Number.isFinite(data)) {
-			if (P.minimum !== void 0 && !(data >= P.minimum)) return false;
-			if (P.maximum !== void 0 && !(data <= P.maximum)) return false;
-			if (P.exclusiveMinimum !== void 0 && !(data > P.exclusiveMinimum)) return false;
-			if (P.exclusiveMaximum !== void 0 && !(data < P.exclusiveMaximum)) return false;
-			if (P.multipleOf !== void 0 && !multipleOfOk(data, P.multipleOf)) return false;
-		}
-		if (P.hasString && bits === T_STRING) {
-			if (P.minLength !== void 0 && !cpAtLeast(data, P.minLength)) return false;
-			if (P.maxLength !== void 0 && !cpAtMost(data, P.maxLength)) return false;
-			if (P.pattern !== null && !P.pattern.test(data)) return false;
-			if (P.formatFn !== null && !P.formatFn(data)) return false;
-		}
-		if (P.hasArray && bits === T_ARRAY) {
-			if (P.minItems !== void 0 && data.length < P.minItems) return false;
-			if (P.maxItems !== void 0 && data.length > P.maxItems) return false;
-			if (P.uniqueItems && !allDistinct(data)) return false;
-		}
-		if (P.hasObject && bits === T_OBJECT) {
-			if (P.required !== null) {
-				const req = P.required;
-				for (let i = 0; i < req.length; i++) if (!Object.hasOwn(data, req[i])) return false;
-			}
-			if (P.minProperties !== void 0 && Object.keys(data).length < P.minProperties) return false;
-			if (P.maxProperties !== void 0 && Object.keys(data).length > P.maxProperties) return false;
-			if (P.dependentRequired !== null) {
-				for (const [key, deps] of P.dependentRequired) if (Object.hasOwn(data, key)) {
-					for (const dep of deps) if (!Object.hasOwn(data, dep)) return false;
-				}
-			}
-		}
-		if (P.hasCustom && !runCustomV(P, data, bits)) return false;
-		return true;
-	}
-	function runCustomV(P, data, bits) {
-		const ops = P.custom;
-		for (let i = 0; i < ops.length; i++) {
-			const op = ops[i];
-			if ((bits & op.mask) === 0) continue;
-			const fn = op.fn;
-			const ok = fn(data);
-			const holder = fn.source || fn;
-			if (holder.errors) holder.errors = null;
-			if (!ok) return false;
-		}
-		return true;
-	}
-	function runCustom(P, data, bits, errors, instancePath, schemaPath) {
-		const ops = P.custom;
-		let valid = true;
-		for (let i = 0; i < ops.length; i++) {
-			const op = ops[i];
-			if ((bits & op.mask) === 0) continue;
-			const fn = op.fn;
-			const ok = fn(data);
-			const holder = fn.source || fn;
-			const own = holder.errors;
-			if (own) holder.errors = null;
-			if (ok) continue;
-			valid = false;
-			if (errors === NOERRORS) return false;
-			const kwPath = schemaPath + "/" + op.keyword;
-			if (Array.isArray(own) && own.length > 0) for (let j = 0; j < own.length; j++) {
-				const e = own[j];
-				errors.push(err(op.keyword, e.keyword || op.keyword, e.instancePath !== void 0 ? instancePath + e.instancePath : instancePath, e.schemaPath !== void 0 ? e.schemaPath : kwPath, e.params !== void 0 ? e.params : {}, e.message !== void 0 ? e.message : `must pass "${op.keyword}" keyword validation`));
-			}
-			else errors.push(err(op.keyword, op.keyword, instancePath, kwPath, { keyword: op.keyword }, `must pass "${op.keyword}" keyword validation`));
-		}
-		return valid;
-	}
-	function evalLeaf(P, data, errors, instancePath, schemaPath) {
-		let valid = true;
-		const schema = P.schema;
-		const bits = dataBits(data);
-		if (P.hasType && (bits & P.typeMask) === 0) {
-			if (errors !== NOERRORS) errors.push(err("type", "type", instancePath, schemaPath + "/type", { type: schema.type }, `must be ${P.typeNames.join(", ")}`));
-			valid = false;
-		}
-		if (P.enum !== null) {
-			if (!enumMember(P, data)) {
-				if (errors !== NOERRORS) errors.push(err("enum", "enum", instancePath, schemaPath + "/enum", { allowedValues: P.enum }, "must be equal to one of the allowed values"));
-				valid = false;
-			}
-		}
-		if (P.hasConst && !deepEqual(P.const, data)) {
-			if (errors !== NOERRORS) errors.push(err("const", "const", instancePath, schemaPath + "/const", { allowedValue: P.const }, "must be equal to constant"));
-			valid = false;
-		}
-		if (P.hasNumber && Number.isFinite(data)) {
-			if (P.minimum !== void 0 && !(data >= P.minimum)) {
-				errors === NOERRORS || errors.push(err("minimum", "minimum", instancePath, schemaPath + "/minimum", {
-					comparison: ">=",
-					limit: P.minimum
-				}, `must be >= ${P.minimum}`));
-				valid = false;
-			}
-			if (P.maximum !== void 0 && !(data <= P.maximum)) {
-				errors === NOERRORS || errors.push(err("maximum", "maximum", instancePath, schemaPath + "/maximum", {
-					comparison: "<=",
-					limit: P.maximum
-				}, `must be <= ${P.maximum}`));
-				valid = false;
-			}
-			if (P.exclusiveMinimum !== void 0 && !(data > P.exclusiveMinimum)) {
-				errors === NOERRORS || errors.push(err("exclusiveMinimum", "exclusiveMinimum", instancePath, schemaPath + "/exclusiveMinimum", {
-					comparison: ">",
-					limit: P.exclusiveMinimum
-				}, `must be > ${P.exclusiveMinimum}`));
-				valid = false;
-			}
-			if (P.exclusiveMaximum !== void 0 && !(data < P.exclusiveMaximum)) {
-				errors === NOERRORS || errors.push(err("exclusiveMaximum", "exclusiveMaximum", instancePath, schemaPath + "/exclusiveMaximum", {
-					comparison: "<",
-					limit: P.exclusiveMaximum
-				}, `must be < ${P.exclusiveMaximum}`));
-				valid = false;
-			}
-			if (P.multipleOf !== void 0 && !multipleOfOk(data, P.multipleOf)) {
-				errors === NOERRORS || errors.push(err("multipleOf", "multipleOf", instancePath, schemaPath + "/multipleOf", { multipleOf: P.multipleOf }, `must be multiple of ${P.multipleOf}`));
-				valid = false;
-			}
-		}
-		if (P.hasString && bits === T_STRING) {
-			if (P.minLength !== void 0 && !cpAtLeast(data, P.minLength)) {
-				errors === NOERRORS || errors.push(err("minLength", "minLength", instancePath, schemaPath + "/minLength", { limit: P.minLength }, `must NOT have fewer than ${P.minLength} characters`));
-				valid = false;
-			}
-			if (P.maxLength !== void 0 && !cpAtMost(data, P.maxLength)) {
-				errors === NOERRORS || errors.push(err("maxLength", "maxLength", instancePath, schemaPath + "/maxLength", { limit: P.maxLength }, `must NOT have more than ${P.maxLength} characters`));
-				valid = false;
-			}
-			if (P.pattern !== null && !P.pattern.test(data)) {
-				errors === NOERRORS || errors.push(err("pattern", "pattern", instancePath, schemaPath + "/pattern", { pattern: P.patternSource }, `must match pattern "${P.patternSource}"`));
-				valid = false;
-			}
-			if (P.formatFn !== null && !P.formatFn(data)) {
-				errors === NOERRORS || errors.push(err("format", "format", instancePath, schemaPath + "/format", { format: P.format }, `must match format "${P.format}"`));
-				valid = false;
-			}
-		}
-		if (P.hasArray && bits === T_ARRAY) {
-			if (P.minItems !== void 0 && data.length < P.minItems) {
-				errors === NOERRORS || errors.push(err("minItems", "minItems", instancePath, schemaPath + "/minItems", { limit: P.minItems }, `must NOT have fewer than ${P.minItems} items`));
-				valid = false;
-			}
-			if (P.maxItems !== void 0 && data.length > P.maxItems) {
-				errors === NOERRORS || errors.push(err("maxItems", "maxItems", instancePath, schemaPath + "/maxItems", { limit: P.maxItems }, `must NOT have more than ${P.maxItems} items`));
-				valid = false;
-			}
-			if (P.uniqueItems) {
-				const pair = duplicatePair(data);
-				if (pair !== null) {
-					const i = pair[0], j = pair[1];
-					if (errors !== NOERRORS) errors.push(err("uniqueItems", "uniqueItems", instancePath, schemaPath + "/uniqueItems", {
-						i,
-						j
-					}, `must NOT have duplicate items (items ## ${j} and ${i} are identical)`));
-					valid = false;
-				}
-			}
-		}
-		if (P.hasObject && bits === T_OBJECT) {
-			const keys = Object.keys(data);
-			if (P.required !== null) {
-				const req = P.required;
-				for (let i = 0; i < req.length; i++) {
-					const key = req[i];
-					if (!Object.hasOwn(data, key)) {
-						errors === NOERRORS || errors.push(err("required", "required", instancePath, schemaPath + "/required", { missingProperty: key }, `must have required property '${key}'`));
-						valid = false;
-					}
-				}
-			}
-			if (P.minProperties !== void 0 && keys.length < P.minProperties) {
-				errors === NOERRORS || errors.push(err("minProperties", "minProperties", instancePath, schemaPath + "/minProperties", { limit: P.minProperties }, `must NOT have fewer than ${P.minProperties} properties`));
-				valid = false;
-			}
-			if (P.maxProperties !== void 0 && keys.length > P.maxProperties) {
-				errors === NOERRORS || errors.push(err("maxProperties", "maxProperties", instancePath, schemaPath + "/maxProperties", { limit: P.maxProperties }, `must NOT have more than ${P.maxProperties} properties`));
-				valid = false;
-			}
-			if (P.dependentRequired !== null) {
-				for (const [key, deps] of P.dependentRequired) if (Object.hasOwn(data, key)) {
-					for (const dep of deps) if (!Object.hasOwn(data, dep)) {
-						errors === NOERRORS || errors.push(err("required", "required", instancePath, schemaPath + "/dependentRequired", { missingProperty: dep }, `must have required property '${dep}'`));
-						valid = false;
-					}
-				}
-			}
-		}
-		if (P.hasCustom && !runCustom(P, data, bits, errors, instancePath, schemaPath)) valid = false;
-		return valid;
-	}
-	var Interpreter = class {
-		constructor(rootSchema, options) {
-			const opts = options || {};
-			this.root = rootSchema;
-			this.state = indexSchemas(rootSchema, opts.schemaMap);
-			this.userFormats = opts.formats || null;
-			this.keywords = opts.keywords || null;
-			this.bookending = !opts.v1;
-			this.patternCache = /* @__PURE__ */ new Map();
-			this.plans = /* @__PURE__ */ new Map();
-			this.rootNode = this.node(rootSchema);
-			this._fast = void 0;
-		}
-		_fastRoot() {
-			if (this._fast === void 0) try {
-				this._fast = compileInterpreter(this);
-			} catch {
-				this._fast = null;
-			}
-			return this._fast;
-		}
-		pattern(src) {
-			let re = this.patternCache.get(src);
-			if (!re) {
-				if (/\\[pP]\{/.test(src)) try {
-					re = new RegExp(src, "u");
-				} catch {
-					re = new RegExp(src);
-				}
-				else try {
-					re = compileSafe(src);
-				} catch {
-					try {
-						re = new RegExp(src, "u");
-					} catch {
-						re = new RegExp(src);
-					}
-				}
-				this.patternCache.set(src, re);
-			}
-			return re;
-		}
-		plan(schema) {
-			let p = this.plans.get(schema);
-			if (p === void 0) {
-				p = new Plan(schema);
-				this.plans.set(schema, p);
-				p.link(this);
-			}
-			return p;
-		}
-		resolveRefCached(P, base) {
-			if (P.refBase0 === base) return P.refRes0;
-			let cache = P.refCache;
-			let r = cache !== null ? cache.get(base) : void 0;
-			if (r === void 0) {
-				const raw = resolveRef(P.ref, base, this.state);
-				r = {
-					child: raw.node === void 0 ? void 0 : this.node(raw.node),
-					base: raw.base
-				};
-				if (P.refBase0 === void 0) {
-					P.refBase0 = base;
-					P.refRes0 = r;
-				} else {
-					if (cache === null) cache = P.refCache = /* @__PURE__ */ new Map();
-					cache.set(base, r);
-				}
-			}
-			return r;
-		}
-		resolveDynamicRefCached(P, base) {
-			let cache = P.dynCache;
-			if (cache === null) cache = P.dynCache = /* @__PURE__ */ new Map();
-			let r = cache.get(base);
-			if (r === void 0) {
-				const { node, base: refBase } = resolveRef(P.dynamicRef, base, this.state);
-				const [, fragment] = splitFragment(resolveUri(base, P.dynamicRef));
-				r = {
-					node,
-					base: refBase,
-					fragment,
-					byAnchor: Boolean(fragment) && !fragment.startsWith("/")
-				};
-				cache.set(base, r);
-			}
-			return r;
-		}
-		node(schema) {
-			if (schema === true || schema === false) return schema;
-			if (typeof schema !== "object" || schema === null) return true;
-			return this.plan(schema);
-		}
-		isValid(data) {
-			const fast = this._fastRoot();
-			if (fast !== null) return fast.v(data, fast.cyclic ? [] : null);
-			const dynScope = [this.state.rootBase];
-			return this.eval(this.rootNode, data, this.state.rootBase, dynScope, NOERRORS, "", "#", [], DISCARD);
-		}
-		validate(data) {
-			const fast = this._fastRoot();
-			if (fast !== null) {
-				const errors = [];
-				return fast.c(data, errors, "", "#", fast.cyclic ? [] : null) ? {
-					valid: true,
-					data,
-					errors: []
-				} : {
-					valid: false,
-					errors
-				};
-			}
-			const errors = [];
-			const dynScope = [this.state.rootBase];
-			return this.eval(this.rootNode, data, this.state.rootBase, dynScope, errors, "", "#", [], DISCARD) ? {
-				valid: true,
-				data,
-				errors: []
-			} : {
-				valid: false,
-				errors
-			};
-		}
-		eval(P, data, base, dynScope, errors, instancePath, schemaPath, stack, sink) {
-			if (P === true) return true;
-			if (P === false) {
-				if (errors !== NOERRORS) errors.push(err("false schema", "not", instancePath, schemaPath, {}, "boolean schema is false"));
-				return false;
-			}
-			if (P.leaf) return evalLeaf(P, data, errors, instancePath, schemaPath);
-			const schema = P.schema;
-			const tracked = P.tracked;
-			if (tracked) {
-				for (let i = stack.length - 2; i >= 0; i -= 2) if (stack[i] === schema && stack[i + 1] === data) return true;
-				stack.push(schema, data);
-			}
-			if (P.nodeBase !== null && P.nodeBase !== base) base = P.nodeBase;
-			let scopePushed = false;
-			if (dynScope[dynScope.length - 1] !== base) {
-				dynScope.push(base);
-				scopePushed = true;
-			}
-			let valid = true;
-			const collect = sink !== DISCARD || P.hasUnevaluated;
-			const local = collect ? {
-				props: null,
-				items: null
-			} : DISCARD;
-			if (P.ref !== null) {
-				const { child, base: refBase } = this.resolveRefCached(P, base);
-				if (child === void 0) {
-					if (errors !== NOERRORS) errors.push(err("$ref", "$ref", instancePath, schemaPath + "/$ref", { ref: P.ref }, `cannot resolve $ref ${P.ref}`));
-					valid = false;
-				} else {
-					const sub = collect ? {
-						props: null,
-						items: null
-					} : DISCARD;
-					if (!this.eval(child, data, refBase, dynScope, errors, instancePath, schemaPath, stack, sub)) valid = false;
-					else if (collect) mergeAnnotations(local, sub);
-				}
-			}
-			if (P.dynamicRef !== null) {
-				const ref = P.dynamicRef;
-				const initial = this.resolveDynamicRefCached(P, base);
-				let node = initial.node;
-				let refBase = initial.base;
-				const fragment = initial.fragment;
-				if (initial.byAnchor) {
-					const initialDyn = this.state.dynamicAnchors.get(refBase);
-					if (node !== void 0 && initialDyn && initialDyn.get(fragment) === node || !this.bookending) for (const scopeBase of dynScope) {
-						const dyn = this.state.dynamicAnchors.get(scopeBase);
-						if (dyn && dyn.has(fragment)) {
-							node = dyn.get(fragment);
-							refBase = scopeBase;
-							break;
-						}
-					}
-				}
-				if (node === void 0) {
-					if (errors !== NOERRORS) errors.push(err("$dynamicRef", "$dynamicRef", instancePath, schemaPath + "/$dynamicRef", { ref }, `cannot resolve $dynamicRef ${ref}`));
-					valid = false;
-				} else {
-					const sub = collect ? {
-						props: null,
-						items: null
-					} : DISCARD;
-					if (!this.eval(this.node(node), data, refBase, dynScope, errors, instancePath, schemaPath, stack, sub)) valid = false;
-					else if (collect) mergeAnnotations(local, sub);
-				}
-			}
-			const bits = dataBits(data);
-			if (P.hasType && (bits & P.typeMask) === 0) {
-				if (errors !== NOERRORS) errors.push(err("type", "type", instancePath, schemaPath + "/type", { type: schema.type }, `must be ${P.typeNames.join(", ")}`));
-				valid = false;
-			}
-			if (P.enum !== null) {
-				if (!enumMember(P, data)) {
-					if (errors !== NOERRORS) errors.push(err("enum", "enum", instancePath, schemaPath + "/enum", { allowedValues: P.enum }, "must be equal to one of the allowed values"));
-					valid = false;
-				}
-			}
-			if (P.hasConst && !deepEqual(P.const, data)) {
-				if (errors !== NOERRORS) errors.push(err("const", "const", instancePath, schemaPath + "/const", { allowedValue: P.const }, "must be equal to constant"));
-				valid = false;
-			}
-			if (P.hasNumber && Number.isFinite(data)) {
-				if (P.minimum !== void 0 && !(data >= P.minimum)) {
-					errors === NOERRORS || errors.push(err("minimum", "minimum", instancePath, schemaPath + "/minimum", {
-						comparison: ">=",
-						limit: P.minimum
-					}, `must be >= ${P.minimum}`));
-					valid = false;
-				}
-				if (P.maximum !== void 0 && !(data <= P.maximum)) {
-					errors === NOERRORS || errors.push(err("maximum", "maximum", instancePath, schemaPath + "/maximum", {
-						comparison: "<=",
-						limit: P.maximum
-					}, `must be <= ${P.maximum}`));
-					valid = false;
-				}
-				if (P.exclusiveMinimum !== void 0 && !(data > P.exclusiveMinimum)) {
-					errors === NOERRORS || errors.push(err("exclusiveMinimum", "exclusiveMinimum", instancePath, schemaPath + "/exclusiveMinimum", {
-						comparison: ">",
-						limit: P.exclusiveMinimum
-					}, `must be > ${P.exclusiveMinimum}`));
-					valid = false;
-				}
-				if (P.exclusiveMaximum !== void 0 && !(data < P.exclusiveMaximum)) {
-					errors === NOERRORS || errors.push(err("exclusiveMaximum", "exclusiveMaximum", instancePath, schemaPath + "/exclusiveMaximum", {
-						comparison: "<",
-						limit: P.exclusiveMaximum
-					}, `must be < ${P.exclusiveMaximum}`));
-					valid = false;
-				}
-				if (P.multipleOf !== void 0 && !multipleOfOk(data, P.multipleOf)) {
-					errors === NOERRORS || errors.push(err("multipleOf", "multipleOf", instancePath, schemaPath + "/multipleOf", { multipleOf: P.multipleOf }, `must be multiple of ${P.multipleOf}`));
-					valid = false;
-				}
-			}
-			if (P.hasString && bits === T_STRING) {
-				if (P.minLength !== void 0 && !cpAtLeast(data, P.minLength)) {
-					errors === NOERRORS || errors.push(err("minLength", "minLength", instancePath, schemaPath + "/minLength", { limit: P.minLength }, `must NOT have fewer than ${P.minLength} characters`));
-					valid = false;
-				}
-				if (P.maxLength !== void 0 && !cpAtMost(data, P.maxLength)) {
-					errors === NOERRORS || errors.push(err("maxLength", "maxLength", instancePath, schemaPath + "/maxLength", { limit: P.maxLength }, `must NOT have more than ${P.maxLength} characters`));
-					valid = false;
-				}
-				if (P.pattern !== null && !P.pattern.test(data)) {
-					errors === NOERRORS || errors.push(err("pattern", "pattern", instancePath, schemaPath + "/pattern", { pattern: P.patternSource }, `must match pattern "${P.patternSource}"`));
-					valid = false;
-				}
-				if (P.formatFn !== null && !P.formatFn(data)) {
-					errors === NOERRORS || errors.push(err("format", "format", instancePath, schemaPath + "/format", { format: P.format }, `must match format "${P.format}"`));
-					valid = false;
-				}
-			}
-			if (P.hasArray && bits === T_ARRAY) {
-				if (P.minItems !== void 0 && data.length < P.minItems) {
-					errors === NOERRORS || errors.push(err("minItems", "minItems", instancePath, schemaPath + "/minItems", { limit: P.minItems }, `must NOT have fewer than ${P.minItems} items`));
-					valid = false;
-				}
-				if (P.maxItems !== void 0 && data.length > P.maxItems) {
-					errors === NOERRORS || errors.push(err("maxItems", "maxItems", instancePath, schemaPath + "/maxItems", { limit: P.maxItems }, `must NOT have more than ${P.maxItems} items`));
-					valid = false;
-				}
-				if (P.uniqueItems) {
-					const pair = duplicatePair(data);
-					if (pair !== null) {
-						const i = pair[0], j = pair[1];
-						if (errors !== NOERRORS) errors.push(err("uniqueItems", "uniqueItems", instancePath, schemaPath + "/uniqueItems", {
-							i,
-							j
-						}, `must NOT have duplicate items (items ## ${j} and ${i} are identical)`));
-						valid = false;
-					}
-				}
-				const prefix = P.prefixItems;
-				if (prefix !== null) {
-					const n = Math.min(prefix.length, data.length);
-					for (let i = 0; i < n; i++) {
-						if (!this.eval(prefix[i], data[i], base, dynScope, errors, instancePath + "/" + i, schemaPath + "/prefixItems/" + i, stack, DISCARD)) valid = false;
-						if (collect) {
-							if (!local.items) local.items = /* @__PURE__ */ new Set();
-							local.items.add(i);
-						}
-					}
-				}
-				if (P.items !== void 0) {
-					const start = prefix !== null ? prefix.length : 0;
-					for (let i = start; i < data.length; i++) {
-						if (!this.eval(P.items, data[i], base, dynScope, errors, instancePath + "/" + i, schemaPath + "/items", stack, DISCARD)) valid = false;
-						if (collect) {
-							if (!local.items) local.items = /* @__PURE__ */ new Set();
-							local.items.add(i);
-						}
-					}
-				}
-				if (P.contains !== void 0) {
-					const matched = [];
-					for (let i = 0; i < data.length; i++) {
-						const scratch = errors === NOERRORS ? NOERRORS : [];
-						if (this.eval(P.contains, data[i], base, dynScope, scratch, instancePath + "/" + i, schemaPath + "/contains", stack, DISCARD)) matched.push(i);
-					}
-					const minC = P.minContains !== void 0 ? P.minContains : 1;
-					if (matched.length < minC) {
-						errors === NOERRORS || errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", { minContains: minC }, `must contain at least ${minC} valid item(s)`));
-						valid = false;
-					}
-					if (P.maxContains !== void 0 && matched.length > P.maxContains) {
-						errors === NOERRORS || errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", {
-							minContains: minC,
-							maxContains: P.maxContains
-						}, `must NOT contain more than ${P.maxContains} valid item(s)`));
-						valid = false;
-					}
-					if (collect && matched.length) {
-						if (!local.items) local.items = /* @__PURE__ */ new Set();
-						for (const i of matched) local.items.add(i);
-					}
-				}
-			}
-			if (P.hasObject && bits === T_OBJECT) {
-				const keys = Object.keys(data);
-				if (P.required !== null) {
-					const req = P.required;
-					for (let i = 0; i < req.length; i++) {
-						const key = req[i];
-						if (!Object.hasOwn(data, key)) {
-							errors === NOERRORS || errors.push(err("required", "required", instancePath, schemaPath + "/required", { missingProperty: key }, `must have required property '${key}'`));
-							valid = false;
-						}
-					}
-				}
-				if (P.minProperties !== void 0 && keys.length < P.minProperties) {
-					errors === NOERRORS || errors.push(err("minProperties", "minProperties", instancePath, schemaPath + "/minProperties", { limit: P.minProperties }, `must NOT have fewer than ${P.minProperties} properties`));
-					valid = false;
-				}
-				if (P.maxProperties !== void 0 && keys.length > P.maxProperties) {
-					errors === NOERRORS || errors.push(err("maxProperties", "maxProperties", instancePath, schemaPath + "/maxProperties", { limit: P.maxProperties }, `must NOT have more than ${P.maxProperties} properties`));
-					valid = false;
-				}
-				if (P.dependentRequired !== null) {
-					for (const [key, deps] of P.dependentRequired) if (Object.hasOwn(data, key)) {
-						for (const dep of deps) if (!Object.hasOwn(data, dep)) {
-							errors === NOERRORS || errors.push(err("required", "required", instancePath, schemaPath + "/dependentRequired", { missingProperty: dep }, `must have required property '${dep}'`));
-							valid = false;
-						}
-					}
-				}
-				if (P.propertyNames !== void 0) {
-					for (const key of keys) if (!this.eval(P.propertyNames, key, base, dynScope, errors, instancePath, schemaPath + "/propertyNames", stack, DISCARD)) valid = false;
-				}
-				const props = P.properties;
-				const patterns = P.patternProperties;
-				for (let k = 0; k < keys.length; k++) {
-					const key = keys[k];
-					let evaluated = false;
-					const prop = props !== null ? props.get(key) : void 0;
-					if (prop !== void 0) {
-						if (!this.eval(prop.node, data[key], base, dynScope, errors, instancePath + prop.seg, schemaPath + prop.schemaSeg, stack, DISCARD)) valid = false;
-						evaluated = true;
-					}
-					if (patterns !== null) for (let pi = 0; pi < patterns.length; pi++) {
-						const pp = patterns[pi];
-						if (pp.re.test(key)) {
-							if (!this.eval(pp.node, data[key], base, dynScope, errors, instancePath + "/" + escapePointer(key), schemaPath + "/patternProperties/" + escapePointer(pp.src), stack, DISCARD)) valid = false;
-							evaluated = true;
-						}
-					}
-					if (!evaluated && P.additionalProperties !== void 0) {
-						if (P.additionalProperties === false) {
-							valid = false;
-							if (errors !== NOERRORS) errors.push(err("additionalProperties", "additionalProperties", instancePath, schemaPath + "/additionalProperties", { additionalProperty: key }, "must NOT have additional properties"));
-						} else if (!this.eval(P.additionalProperties, data[key], base, dynScope, errors, instancePath + "/" + escapePointer(key), schemaPath + "/additionalProperties", stack, DISCARD)) valid = false;
-						evaluated = true;
-					}
-					if (evaluated && collect) {
-						if (!local.props) local.props = /* @__PURE__ */ new Set();
-						local.props.add(key);
-					}
-				}
-				if (P.dependentSchemas !== null) {
-					for (const [key, dep] of P.dependentSchemas) if (Object.hasOwn(data, key)) {
-						const sub = collect ? {
-							props: null,
-							items: null
-						} : DISCARD;
-						if (!this.eval(dep, data, base, dynScope, errors, instancePath, schemaPath + "/dependentSchemas/" + escapePointer(key), stack, sub)) valid = false;
-						else if (collect) mergeAnnotations(local, sub);
-					}
-				}
-				if (P.propertyDependencies !== null) for (const [key, choices] of P.propertyDependencies) {
-					if (!Object.hasOwn(data, key)) continue;
-					const value = data[key];
-					if (typeof value !== "string") continue;
-					const choice = choices.get(value);
-					if (choice === void 0) continue;
-					const sub = collect ? {
-						props: null,
-						items: null
-					} : DISCARD;
-					const branchPath = schemaPath + "/propertyDependencies/" + escapePointer(key) + "/" + escapePointer(value);
-					if (!this.eval(choice, data, base, dynScope, errors, instancePath, branchPath, stack, sub)) valid = false;
-					else if (collect) mergeAnnotations(local, sub);
-				}
-			}
-			if (P.hasApplicators) {
-				if (P.allOf !== null) for (let i = 0; i < P.allOf.length; i++) {
-					const sub = collect ? {
-						props: null,
-						items: null
-					} : DISCARD;
-					if (!this.eval(P.allOf[i], data, base, dynScope, errors, instancePath, schemaPath + "/allOf/" + i, stack, sub)) valid = false;
-					else if (collect) mergeAnnotations(local, sub);
-				}
-				if (P.macros !== null) for (let i = 0; i < P.macros.length; i++) {
-					const m = P.macros[i];
-					const sp = schemaPath + "/" + m.keyword;
-					const sub = collect ? {
-						props: null,
-						items: null
-					} : DISCARD;
-					if (!this.eval(m.node, data, base, dynScope, errors, instancePath, sp, stack, sub)) {
-						valid = false;
-						if (errors !== NOERRORS) errors.push(err(m.keyword, m.keyword, instancePath, sp, { keyword: m.keyword }, `must pass "${m.keyword}" keyword validation`));
-					} else if (collect) mergeAnnotations(local, sub);
-				}
-				if (P.anyOf !== null) {
-					let any = false;
-					const scratch = errors === NOERRORS ? NOERRORS : [];
-					const branches = errors === NOERRORS ? null : [];
-					for (let i = 0; i < P.anyOf.length; i++) {
-						const sub = collect ? {
-							props: null,
-							items: null
-						} : DISCARD;
-						const mark = branches === null ? 0 : scratch.length;
-						const ok = this.eval(P.anyOf[i], data, base, dynScope, scratch, instancePath, schemaPath + "/anyOf/" + i, stack, sub);
-						if (branches !== null) branches.push({
-							valid: ok,
-							errors: scratch.slice(mark),
-							title: branchTitle(P.anyOf[i])
-						});
-						if (ok) {
-							any = true;
-							if (collect) mergeAnnotations(local, sub);
-						}
-					}
-					if (!any) {
-						if (branches !== null) {
-							const collapsed = collapseBranches({
-								keyword: "anyOf",
-								branchResults: branches,
-								parentPath: instancePath,
-								parentSchemaPath: schemaPath + "/anyOf"
-							});
-							if (collapsed !== null) errors.push(collapsed);
-						}
-						valid = false;
-					}
-				}
-				if (P.oneOf !== null) {
-					let count = 0;
-					let winner = null;
-					const scratch = errors === NOERRORS ? NOERRORS : [];
-					const branches = errors === NOERRORS ? null : [];
-					for (let i = 0; i < P.oneOf.length; i++) {
-						const sub = collect ? {
-							props: null,
-							items: null
-						} : DISCARD;
-						const mark = branches === null ? 0 : scratch.length;
-						const ok = this.eval(P.oneOf[i], data, base, dynScope, scratch, instancePath, schemaPath + "/oneOf/" + i, stack, sub);
-						if (branches !== null) branches.push({
-							valid: ok,
-							errors: scratch.slice(mark),
-							title: branchTitle(P.oneOf[i])
-						});
-						if (ok) {
-							count++;
-							winner = sub;
-						}
-					}
-					if (count === 1) {
-						if (collect) mergeAnnotations(local, winner);
-					} else {
-						if (branches !== null) {
-							const collapsed = collapseBranches({
-								keyword: "oneOf",
-								branchResults: branches,
-								parentPath: instancePath,
-								parentSchemaPath: schemaPath + "/oneOf"
-							});
-							if (collapsed !== null) errors.push(collapsed);
-						}
-						valid = false;
-					}
-				}
-				if (P.not !== void 0) {
-					const scratch = errors === NOERRORS ? NOERRORS : [];
-					if (this.eval(P.not, data, base, dynScope, scratch, instancePath, schemaPath + "/not", stack, DISCARD)) {
-						if (errors !== NOERRORS) errors.push(err("not", "not", instancePath, schemaPath + "/not", {}, "must NOT be valid"));
-						valid = false;
-					}
-				}
-				if (P.if !== void 0) {
-					const ifSub = collect ? {
-						props: null,
-						items: null
-					} : DISCARD;
-					const ifScratch = errors === NOERRORS ? NOERRORS : [];
-					if (this.eval(P.if, data, base, dynScope, ifScratch, instancePath, schemaPath + "/if", stack, ifSub)) {
-						if (collect) mergeAnnotations(local, ifSub);
-						if (P.then !== void 0) {
-							const sub = collect ? {
-								props: null,
-								items: null
-							} : DISCARD;
-							if (!this.eval(P.then, data, base, dynScope, errors, instancePath, schemaPath + "/then", stack, sub)) valid = false;
-							else if (collect) mergeAnnotations(local, sub);
-						}
-					} else if (P.else !== void 0) {
-						const sub = collect ? {
-							props: null,
-							items: null
-						} : DISCARD;
-						if (!this.eval(P.else, data, base, dynScope, errors, instancePath, schemaPath + "/else", stack, sub)) valid = false;
-						else if (collect) mergeAnnotations(local, sub);
-					}
-				}
-			}
-			if (P.hasUnevaluated) {
-				if (P.unevaluatedProperties !== void 0 && bits === T_OBJECT) for (const key of Object.keys(data)) {
-					if (local.props && local.props.has(key)) continue;
-					if (P.unevaluatedPropertiesFalse) {
-						valid = false;
-						if (errors !== NOERRORS) errors.push(err("unevaluatedProperties", "unevaluatedProperties", instancePath, schemaPath + "/unevaluatedProperties", { unevaluatedProperty: key }, "must NOT have unevaluated properties"));
-					} else if (!this.eval(P.unevaluatedProperties, data[key], base, dynScope, errors, instancePath + "/" + escapePointer(key), schemaPath + "/unevaluatedProperties", stack, DISCARD)) valid = false;
-					if (!local.props) local.props = /* @__PURE__ */ new Set();
-					local.props.add(key);
-				}
-				if (P.unevaluatedItems !== void 0 && bits === T_ARRAY) for (let i = 0; i < data.length; i++) {
-					if (local.items && local.items.has(i)) continue;
-					if (P.unevaluatedItemsFalse) {
-						valid = false;
-						if (errors !== NOERRORS) errors.push(err("unevaluatedItems", "unevaluatedItems", instancePath, schemaPath + "/unevaluatedItems", { limit: i }, "must NOT have more than " + i + " items"));
-						break;
-					}
-					if (!this.eval(P.unevaluatedItems, data[i], base, dynScope, errors, instancePath + "/" + i, schemaPath + "/unevaluatedItems", stack, DISCARD)) valid = false;
-					if (!local.items) local.items = /* @__PURE__ */ new Set();
-					local.items.add(i);
-				}
-			}
-			if (scopePushed) dynScope.pop();
-			if (tracked) stack.length -= 2;
-			if (valid && collect && sink !== DISCARD) mergeAnnotations(sink, local);
-			return valid;
-		}
-	};
-	function branchTitle(node) {
-		return node && node.schema && typeof node.schema.title === "string" ? node.schema.title : "";
-	}
-	function escapePointer(s) {
-		if (typeof s !== "string") s = String(s);
-		for (let i = 0; i < s.length; i++) {
-			const c = s.charCodeAt(i);
-			if (c === 126 || c === 47) return s.replace(/~/g, "~0").replace(/\//g, "~1");
-		}
-		return s;
-	}
-	function err(code, keyword, instancePath, schemaPath, params, message) {
-		return {
-			keyword,
-			instancePath,
-			schemaPath,
-			params,
-			message
-		};
-	}
-	const { compileInterpreter } = require_plan_compiler().install({
-		Plan,
-		NOERRORS,
-		err,
-		evalLeaf,
-		evalLeafV,
-		runCustomV,
-		dataBits,
-		escapePointer,
-		deepEqual,
-		enumMember,
-		allDistinct,
-		multipleOfOk,
-		cpAtLeast,
-		cpAtMost,
-		T_STRING,
-		T_ARRAY,
-		T_OBJECT,
-		resolveRef,
-		splitFragment,
-		resolveUri
-	});
-	function createInterpreter(schema, options) {
-		return new Interpreter(schema, options);
-	}
-	module.exports = { createInterpreter };
-	Object.defineProperty(module.exports, "_refInternals", {
-		value: {
-			indexSchemas,
-			resolveRef,
-			splitFragment,
-			resolveUri,
-			FALLBACK_BASE
-		},
-		enumerable: false
-	});
-	Object.defineProperty(module.exports, "_planInternals", {
-		value: {
-			Plan,
-			deepEqual,
-			cpAtLeast,
-			cpAtMost,
-			multipleOfOk,
-			dataBits,
-			typeBit,
-			T_STRING,
-			T_NUMBER,
-			T_INTEGER,
-			T_BOOLEAN,
-			T_NULL,
-			T_OBJECT,
-			T_ARRAY,
-			T_ANY
-		},
-		enumerable: false
-	});
+	const core = require_interpreter_core();
+	core._setPlanCompiler(() => require_plan_compiler().install);
+	module.exports = core;
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/error-messages.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/error-messages.js
 var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function resolveOwner(rootSchema, schemaPath) {
 		if (!schemaPath || typeof schemaPath !== "string" || schemaPath[0] !== "#") return void 0;
@@ -7959,7 +8705,7 @@ var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/buffer-gate.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/buffer-gate.browser.js
 var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		bufferNeedsSlowPath: () => false,
@@ -7969,7 +8715,7 @@ var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, modul
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/refine.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/refine.js
 var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const REFINE = Symbol.for("ata.t.refine");
 	function getRefinements(schema) {
@@ -8020,18 +8766,20 @@ var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/version.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/version.js
 var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = "1.46.1";
+	module.exports = "1.51.0";
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/validator-core.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/validator-core.js
 var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let _nativeMod;
 	function getNative() {
 		if (_nativeMod === void 0) _nativeMod = require_native_load_browser()();
 		return _nativeMod;
 	}
+	const { env } = require_env();
+	const { compileFunction } = require_compile_fn();
 	const { normalizeKeywords, schemaUsesKeywords } = require_keywords();
 	let _codegen = null;
 	let compileToJS;
@@ -8042,7 +8790,11 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		_codegen = engine;
 		({compileToJS, compileToJSCodegen, compileToJSCodegenWithErrors, compileToJSCombined} = engine.jsCompiler);
 	}
-	const { normalizeDraft7, normalizeNullable, normalizeExclusiveBounds, stripFormatAssertions } = require_draft7();
+	let _aotLoader = null;
+	function _registerAot(load) {
+		_aotLoader = load;
+	}
+	const { draftCode, normalizeDraft2019, normalizeDraft7, normalizeNullable, normalizeExclusiveBounds, stripFormatAssertions } = require_draft7();
 	const { enabledKeywords, stripDisabledKeywords } = require_vocabularies();
 	const { needsNormalization } = require_schema_scan();
 	const { isV1Dialect } = require_dialect();
@@ -8181,7 +8933,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	function codegenAvailable() {
 		if (_codegen === null) return false;
 		if (_codegenAvailable === null) try {
-			_codegenAvailable = new Function("return 1")() === 1;
+			_codegenAvailable = compileFunction("return 1")() === 1;
 		} catch {
 			_codegenAvailable = false;
 		}
@@ -8321,11 +9073,16 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		return Object.setPrototypeOf(out, Object.prototype);
 	}
 	function _normalizeCallerSchema(s, inheritDraft7) {
-		const needsDraft7 = s && typeof s === "object" && s.$schema !== void 0 ? s.$schema === "http://json-schema.org/draft-07/schema#" || s.$schema === "http://json-schema.org/draft-07/schema" : !!inheritDraft7;
-		if (!needsNormalization(s, needsDraft7)) return s;
+		const declared = s && typeof s === "object" ? s.$schema : void 0;
+		const code = declared !== void 0 ? draftCode(declared) : inheritDraft7 || 0;
+		const needsDraft7 = code === 1 || code === 2;
+		const draft6 = code === 2;
+		const draft2019 = code === 3;
+		if (!draft6 && !draft2019 && !needsNormalization(s, needsDraft7)) return s;
 		const str = JSON.stringify(s);
 		const copy = _deepCloneWithSymbols(s);
-		if (needsDraft7) normalizeDraft7(copy, true);
+		if (needsDraft7) normalizeDraft7(copy, true, draft6);
+		if (draft2019) normalizeDraft2019(copy, true);
 		normalizeNullable(copy);
 		normalizeExclusiveBounds(copy);
 		return JSON.stringify(copy) === str ? s : copy;
@@ -8341,12 +9098,17 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		if (!schemas) return null;
 		const byDraft = _schemaMapCache.get(schemas);
 		if (byDraft) {
-			const hit = byDraft[inheritDraft7 ? 1 : 0];
+			const hit = byDraft[inheritDraft7 || 0];
 			if (hit) return hit;
 		}
 		const map = _buildSchemaMap(schemas, inheritDraft7);
-		const slot = byDraft || [null, null];
-		slot[inheritDraft7 ? 1 : 0] = map;
+		const slot = byDraft || [
+			null,
+			null,
+			null,
+			null
+		];
+		slot[inheritDraft7 || 0] = map;
 		if (!byDraft) _schemaMapCache.set(schemas, slot);
 		return map;
 	}
@@ -8480,7 +9242,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				if (hit) return hit;
 			}
 			const raw = typeof schema === "string" ? JSON.parse(schema) : schema;
-			const rootIsDraft7 = !!(raw && typeof raw === "object" && typeof raw.$schema === "string" && (raw.$schema === "http://json-schema.org/draft-07/schema#" || raw.$schema === "http://json-schema.org/draft-07/schema"));
+			const rootIsDraft7 = raw && typeof raw === "object" ? draftCode(raw.$schema) : 0;
 			const shared = buildSchemaMap(options.schemas, rootIsDraft7);
 			const schemaMap = shared || /* @__PURE__ */ new Map();
 			this._schemaMapShared = shared !== null;
@@ -8562,6 +9324,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 			if (this._initialized) return;
 			this._ensureVocabularies();
 			this._initialized = true;
+			if (this._schemaMap && this._schemaMap.size > 0) require_schema_order().registerDocuments(this._schemaObj, this._schemaMap);
 			const schemaObj = this._schemaObj;
 			const options = this._options;
 			if (!this._schemaStr) this._schemaStr = JSON.stringify(schemaObj);
@@ -8581,7 +9344,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 			}
 			const sm = this._schemaMap.size > 0 ? this._schemaMap : null;
 			const mapKey = compileCacheKey(this._schemaStr, this._schemaMap);
-			var _forceNapi = this._interpretOnly || typeof process !== "undefined" && process.env && process.env.ATA_FORCE_NAPI;
+			var _forceNapi = this._interpretOnly || env("ATA_FORCE_NAPI");
 			const cached = this._userFormats || this._usesKeywords || _forceNapi ? null : _compileCache.get(mapKey);
 			let jsFn, jsCombinedFn, jsErrFn, _isCodegen = false;
 			this._v1Dynamic = isV1Dialect(schemaObj) && (this._schemaStr.includes("\"$dynamicRef\"") || this._schemaStr.includes("\"$dynamicAnchor\""));
@@ -9013,7 +9776,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 			if (this._initialized) throw new Error("Cannot add schema after compilation — call addSchema() before validate()");
 			if (!schema || !schema.$id) throw new Error("Schema must have $id");
 			const root = this._schemaObj;
-			const normalized = _normalizeCallerSchema(schema, !!(root && typeof root === "object" && typeof root.$schema === "string" && (root.$schema === "http://json-schema.org/draft-07/schema#" || root.$schema === "http://json-schema.org/draft-07/schema")));
+			const normalized = _normalizeCallerSchema(schema, root && typeof root === "object" ? draftCode(root.$schema) : 0);
 			this._ownSchemaMap();
 			this._schemaMap.set(normalized.$id, normalized);
 		}
@@ -9029,11 +9792,11 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				return;
 			}
 			this._ensureVocabularies();
-			if (this._interpretOnly || _codegen === null || typeof process !== "undefined" && process.env && process.env.ATA_FORCE_NAPI) return;
+			if (this._interpretOnly || _codegen === null || env("ATA_FORCE_NAPI")) return;
 			_codegen.compileVerdict.call(this);
 		}
 		static fromStandalone(mod, schema, opts) {
-			if (_codegen === null) throw new TypeError("Validator.fromStandalone is not part of ata-validator/lite, like the bundle methods it loads for. Import it from ata-validator, or import a module from `ata build` directly.");
+			if (_codegen === null && _aotLoader === null) throw new TypeError("Validator.fromStandalone is not part of ata-validator/lite, like the bundle methods it loads for. Import it from ata-validator, or import a module from `ata build` directly.");
 			const options = opts || {};
 			const schemaObj = typeof schema === "string" ? JSON.parse(schema) : schema;
 			const v = Object.create(Validator.prototype);
@@ -9060,7 +9823,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				}]
 			});
 			if (mod.errFn) errFn = (d) => mod.errFn(d, true);
-			else {
+			else if (compileToJSCodegenWithErrors !== void 0) {
 				const jsErrFn = compileToJSCodegenWithErrors(schemaObj);
 				if (jsErrFn) try {
 					jsErrFn({}, true);
@@ -9172,8 +9935,9 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		}
 	}
 	function _aot() {
-		if (_codegen === null) throw new TypeError("The ahead-of-time bundle methods are not part of ata-validator/lite. Import them from ata-validator.");
-		return _codegen.aot();
+		if (_codegen !== null) return _codegen.aot();
+		if (_aotLoader !== null) return _aotLoader();
+		throw new TypeError("The ahead-of-time bundle methods are not part of ata-validator/lite. Import them from ata-validator.");
 	}
 	Validator.bundle = function(schemas, opts) {
 		return _aot().bundle(Validator, schemas, opts);
@@ -9189,7 +9953,8 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 	function parseJSON(input) {
 		const native = getNative();
-		return native ? native.parseJSON(input) : JSON.parse(input);
+		if (native && typeof native.parseJSON === "function") return native.parseJSON(input);
+		return JSON.parse(typeof input === "string" ? input : String(input));
 	}
 	const _compileFnCache = /* @__PURE__ */ new WeakMap();
 	function compile(schema, opts) {
@@ -9471,7 +10236,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		if (o.removeAdditional === "all") return decline("removeAdditional: 'all' decides the kept keys at check time");
 		if (self._usesKeywords) return decline("custom keywords are in use, and what they accept is not known to the copy");
 		const extended = self._verdictTail !== null || self._validateTail !== null;
-		if (_codegen === null) return decline("ata-validator/lite has no code generator to build the copy with", "Use parse() from ata-validator, or validate(); a valid result carries the input as it is.");
+		if (_codegen === null) return decline("this entry has no code generator to build the copy with", "Use validate(); a valid result carries the input as it is.");
 		return _codegen.buildParse(self, decline, extended);
 	}
 	Validator.prototype._extendChecks = function(resolve) {
@@ -9655,6 +10420,10 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		value: _registerCodegen,
 		enumerable: false
 	});
+	Object.defineProperty(module.exports, "_registerAot", {
+		value: _registerAot,
+		enumerable: false
+	});
 	Object.defineProperty(module.exports, "_internals", {
 		value: {
 			_jsonSyntaxRejection,
@@ -9678,7 +10447,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	});
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/combined-runtime.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/combined-runtime.js
 var require_combined_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function apState() {
 		return {
@@ -9786,6 +10555,7 @@ var require_combined_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		ap,
 		sr,
 		srX,
+		multiBranch,
 		_PN,
 		_OP,
 		_gp,
@@ -9818,7 +10588,7 @@ var require_combined_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	});
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/regex-linear.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/regex-linear.js
 var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { parse } = require_safe_regex();
 	const NATIVE_ESCAPES = /* @__PURE__ */ new Set([
@@ -9852,26 +10622,22 @@ var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		"x",
 		"u"
 	]);
-	function nativeIsLinear(src) {
-		if (typeof src !== "string" || src.length > 512) return false;
-		for (let i = 0; i < src.length; i++) {
-			const c = src.charCodeAt(i);
-			if (c >= 55296 && c <= 57343) return false;
-			if (src[i] === "\\") {
-				const e = src[i + 1];
-				if (!NATIVE_ESCAPES.has(e)) return false;
-				if (e === "x" && !/^[0-9a-fA-F]{2}$/.test(src.slice(i + 2, i + 4))) return false;
-				if (e === "u" && !/^[0-9a-fA-F]{4}$/.test(src.slice(i + 2, i + 6))) return false;
-				i++;
-			}
-		}
-		let ast;
-		try {
-			ast = parse(src);
-		} catch {
-			return false;
-		}
-		const atom = (n) => n.t === "char" || n.t === "class" || n.t === "any";
+	const MAX_BOUNDED_CHOICES = 64;
+	const atom = (n) => n.t === "char" || n.t === "class" || n.t === "any";
+	function anchored(ast) {
+		let top = ast;
+		while (top.t === "group") top = top.child;
+		const branches = top.t === "alt" ? top.opts : [top];
+		const first = (n) => {
+			while (n && n.t === "group") n = n.child;
+			return n && n.t === "concat" ? first(n.parts[0]) : n;
+		};
+		return branches.every((b) => {
+			const f = first(b);
+			return f && f.t === "bol";
+		});
+	}
+	function simpleRule(ast) {
 		const info = (n) => {
 			switch (n.t) {
 				case "star":
@@ -9927,29 +10693,195 @@ var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			}
 		};
 		const r = info(ast);
-		const ok = r !== null;
-		const unbounded = ok ? r.u : 0;
-		const bounded = ok ? r.b : 0;
-		if (!ok || unbounded > 1 || bounded > 64) return false;
-		if (unbounded === 1) {
-			let top = ast;
-			while (top.t === "group") top = top.child;
-			const branches = top.t === "alt" ? top.opts : [top];
-			const first = (n) => {
-				while (n && n.t === "group") n = n.child;
-				return n && n.t === "concat" ? first(n.parts[0]) : n;
-			};
-			if (!branches.every((b) => {
-				const f = first(b);
-				return f && f.t === "bol";
-			})) return false;
+		if (r === null || r.u > 1 || r.b > MAX_BOUNDED_CHOICES) return false;
+		return r.u === 0 || anchored(ast);
+	}
+	function charSet(node) {
+		const bits = /* @__PURE__ */ new Uint8Array(128);
+		let high = 0;
+		if (node.t === "any") {
+			bits.fill(1);
+			bits[10] = 0;
+			bits[13] = 0;
+			high = 1;
+		} else if (node.t === "char") {
+			if (node.c < 128) bits[node.c] = 1;
+			else high = 1;
+		} else {
+			for (const [lo, hi] of node.ranges) {
+				for (let c = Math.max(0, lo), top = Math.min(127, hi); c <= top; c++) bits[c] = 1;
+				if (hi >= 128) high = 1;
+			}
+			if (node.neg) {
+				for (let c = 0; c < 128; c++) bits[c] ^= 1;
+				high = 1;
+			}
 		}
-		return true;
+		return {
+			bits,
+			high
+		};
+	}
+	function overlap(a, b) {
+		if (a.high && b.high) return true;
+		for (let c = 0; c < 128; c++) if (a.bits[c] & b.bits[c]) return true;
+		return false;
+	}
+	function hasUnbounded(n) {
+		switch (n.t) {
+			case "star":
+			case "plus": return true;
+			case "repeat": return n.max === Infinity || hasUnbounded(n.child);
+			case "quest":
+			case "group": return hasUnbounded(n.child);
+			case "concat": return n.parts.some(hasUnbounded);
+			case "alt": return n.opts.some(hasUnbounded);
+			default: return false;
+		}
+	}
+	function deterministicRule(ast) {
+		const sets = [];
+		const follow = [];
+		const inLoop = [];
+		let ok = true;
+		let unbounded = 0;
+		let bounded = 0;
+		let depth = 0;
+		const disjoint = (ids) => {
+			const arr = Array.from(ids);
+			if (!arr.some((p) => inLoop[p])) return;
+			for (let i = 0; i < arr.length && ok; i++) for (let j = i + 1; j < arr.length; j++) if (overlap(sets[arr[i]], sets[arr[j]])) {
+				ok = false;
+				return;
+			}
+		};
+		const link = (from, to) => {
+			for (const p of to) {
+				if (follow[from].has(p)) {
+					ok = false;
+					return;
+				}
+				follow[from].add(p);
+			}
+		};
+		const empty = () => ({
+			nullable: true,
+			first: /* @__PURE__ */ new Set(),
+			last: /* @__PURE__ */ new Set()
+		});
+		const walk = (n) => {
+			if (!ok) return empty();
+			switch (n.t) {
+				case "char":
+				case "class":
+				case "any": {
+					const id = sets.length;
+					sets.push(charSet(n));
+					follow.push(/* @__PURE__ */ new Set());
+					inLoop.push(depth > 0);
+					return {
+						nullable: false,
+						first: /* @__PURE__ */ new Set([id]),
+						last: /* @__PURE__ */ new Set([id])
+					};
+				}
+				case "bol":
+				case "eol": return empty();
+				case "group": return walk(n.child);
+				case "star":
+				case "plus":
+				case "quest":
+				case "repeat": {
+					const infinite = n.t === "star" || n.t === "plus" || n.t === "repeat" && n.max === Infinity;
+					const loops = infinite || n.t === "repeat" && n.max > 1 && hasUnbounded(n.child);
+					const optional = n.t === "star" || n.t === "quest" || n.t === "repeat" && n.min === 0;
+					if (loops) depth++;
+					const c = walk(n.child);
+					if (loops) depth--;
+					if (infinite) {
+						unbounded++;
+						if (c.nullable) ok = false;
+					} else if (n.t === "quest") bounded += 1;
+					else {
+						bounded += n.max - n.min;
+						if (!atom(n.child)) bounded += n.max;
+					}
+					if (loops) for (const l of c.last) link(l, c.first);
+					return {
+						nullable: c.nullable || optional,
+						first: c.first,
+						last: c.last
+					};
+				}
+				case "concat": {
+					let acc = empty();
+					for (const part of n.parts) {
+						const r = walk(part);
+						for (const l of acc.last) link(l, r.first);
+						const first = new Set(acc.first);
+						if (acc.nullable) for (const f of r.first) first.add(f);
+						const last = new Set(r.last);
+						if (r.nullable) for (const l of acc.last) last.add(l);
+						acc = {
+							nullable: acc.nullable && r.nullable,
+							first,
+							last
+						};
+					}
+					return acc;
+				}
+				case "alt": {
+					const rs = n.opts.map(walk);
+					const first = /* @__PURE__ */ new Set();
+					const last = /* @__PURE__ */ new Set();
+					for (const r of rs) {
+						for (const f of r.first) first.add(f);
+						for (const l of r.last) last.add(l);
+					}
+					return {
+						nullable: rs.some((r) => r.nullable),
+						first,
+						last
+					};
+				}
+				default:
+					ok = false;
+					return empty();
+			}
+		};
+		const root = walk(ast);
+		if (!ok) return false;
+		disjoint(root.first);
+		for (let p = 0; p < sets.length && ok; p++) disjoint(follow[p]);
+		if (!ok) return false;
+		if (bounded > MAX_BOUNDED_CHOICES) return false;
+		return unbounded === 0 || anchored(ast);
+	}
+	function nativeIsLinear(src) {
+		if (typeof src !== "string" || src.length > 512) return false;
+		for (let i = 0; i < src.length; i++) {
+			const c = src.charCodeAt(i);
+			if (c >= 55296 && c <= 57343) return false;
+			if (src[i] === "\\") {
+				const e = src[i + 1];
+				if (!NATIVE_ESCAPES.has(e)) return false;
+				if (e === "x" && !/^[0-9a-fA-F]{2}$/.test(src.slice(i + 2, i + 4))) return false;
+				if (e === "u" && !/^[0-9a-fA-F]{4}$/.test(src.slice(i + 2, i + 6))) return false;
+				i++;
+			}
+		}
+		let ast;
+		try {
+			ast = parse(src);
+		} catch {
+			return false;
+		}
+		return simpleRule(ast) || deterministicRule(ast);
 	}
 	module.exports = { nativeIsLinear };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/formats-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/formats-source.js
 var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { DURATION_RE, URI_TEMPLATE_EXPR, URI_FAST } = require_formats();
 	const uriCharsSource = (v, from) => `for(let _ri=${from};_ri<${v}.length;_ri++){const _rc=${v}.charCodeAt(_ri);if(_rc<33||_rc>126||_rc===34||_rc===60||_rc===62||_rc===92||_rc===94||_rc===96||_rc===123||_rc===124||_rc===125)return false;if(_rc===37){const _h1=${v}.charCodeAt(_ri+1),_h2=${v}.charCodeAt(_ri+2);if(!((_h1>=48&&_h1<=57)||(_h1>=97&&_h1<=102)||(_h1>=65&&_h1<=70))||!((_h2>=48&&_h2<=57)||(_h2>=97&&_h2<=102)||(_h2>=65&&_h2<=70)))return false;_ri+=2}}`;
@@ -10046,7 +10978,7 @@ var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/enrich-site.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/enrich-site.js
 var require_enrich_site = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -10091,7 +11023,7 @@ var require_enrich_site = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const detail = detailFor({
 			keyword: site.keyword,
 			params
-		}, out);
+		}, out, at);
 		if (detail !== void 0) out.detail = detail;
 		out.rank = site.rank;
 		return out;
@@ -10102,8 +11034,3014 @@ var require_enrich_site = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler-errors.js
+var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { env } = require_env();
+	const { compileFunction } = require_compile_fn();
+	const { hasConstraints, assertEmitted, prepareForCodegen, sharedCodegenGate, codegenSafe, isSimplePN, hasUnresolvableRef, needsBaseTracking, _cpLen, sharedRt, DECLINE, bindRt, compileSafe, emitGuardState, withPlain, REF_NEUTRAL_SIBLINGS, resolveCrossSchemaRef, enumCondition, enumOperand, emitDeq, emitConstant, ownGuard, ownKeyExpr, multipleOfBad, compilePatternInline, useSafeEngine, reFlags, FORMAT_CODEGEN, PROTO_NAMES, setOwn, nestedGenCode, compileToJSCodegen, SKIP_VALUE_KEYS, skipString, CYCLE_DEPTH, cyclicDefNames, sharedDefNames, reFlagArg, hoistOnce, PTR_ESC_HELPER, unevalContributions, emitUq, uqSources, safeReClosure, fastPrefixCheck, replaceTopLevel, refTargetFor, genCode, addLocalAnnotations, addTopApplicatorAnnotations, protoIs, ANNOT_APPLICATORS, SIZE_SKIPS, emitRootGuard, emitGuardedRun } = require_js_compiler()._internal;
+	function emitPtrEsc(ctx) {
+		hoistOnce(ctx, "_peHoisted", PTR_ESC_HELPER);
+		return "_pe";
+	}
+	function emitUqp(ctx) {
+		emitUq(ctx);
+		hoistOnce(ctx, "_uqpHoisted", uqSources().uqp);
+		return "_uqp";
+	}
+	function emitParamConstant(ctx, value) {
+		const name = `_pc${ctx.varCounter++}`;
+		const decl = `const ${name}=JSON.parse(${JSON.stringify(JSON.stringify(value))})`;
+		if (ctx.preamble) ctx.preamble.push(decl);
+		else ctx.helperCode.push(decl);
+		return name;
+	}
+	const { codeFor } = require_error_codes();
+	const { ordinalFor, rankFor } = require_schema_order();
+	const DOC_BASE = "https://ata-validator.com/e/";
+	function ordinalField(ctx, schemaPath) {
+		if (ctx && ctx.noOrdinal) return "";
+		const o = ctx && ctx.rootSchema ? ordinalFor(ctx.rootSchema, unescapeSp(schemaPath)) : null;
+		return o === null ? "" : `,_o:${o}`;
+	}
+	function literalValue(lit) {
+		try {
+			return Function("return " + lit)();
+		} catch {
+			throw DECLINE;
+		}
+	}
+	function unescapeSp(sp) {
+		return sp.indexOf("\\") === -1 ? sp : sp.replace(/\\u([0-9a-fA-F]{4})|\\(.)/g, (m, h, c) => h !== void 0 ? String.fromCharCode(parseInt(h, 16)) : c);
+	}
+	const FRAME_INLINE_MAX = 120;
+	function buildErrorLiteral(opts) {
+		const { keyword, format, schemaPath, sourceMap } = opts;
+		let code = keyword === "format" && format ? codeFor("format", format) : codeFor(keyword);
+		if (!code) code = "ATA9001";
+		const docUrl = DOC_BASE + code;
+		let frame = "";
+		if (sourceMap && sourceMap.file && sourceMap.map) {
+			const ptr = schemaPath && schemaPath.charAt(0) === "#" ? schemaPath.slice(1) : schemaPath || "";
+			let hit = sourceMap.map[ptr + "#key"];
+			if (!hit) hit = sourceMap.map[ptr];
+			if (hit) {
+				const line = Array.isArray(hit) ? hit[0] : hit.line;
+				const col = Array.isArray(hit) ? hit[1] : hit.col;
+				const text = Array.isArray(hit) ? hit[2] : hit.text;
+				if (sourceMap.frames && text.length > FRAME_INLINE_MAX) {
+					const key = line + ":" + col;
+					let f = sourceMap.frames.get(key);
+					if (!f) {
+						f = {
+							line,
+							col,
+							text,
+							index: sourceMap.frames.size
+						};
+						sourceMap.frames.set(key, f);
+					}
+					frame = ",schemaSource:__ataSS[" + f.index + "]";
+				} else frame = ",schemaSource:Object.freeze({file:" + JSON.stringify(sourceMap.file) + ",line:" + line + ",col:" + col + ",text:" + JSON.stringify(text) + "})";
+			}
+		}
+		return {
+			codeStr: code,
+			docUrl,
+			frame
+		};
+	}
+	const SP_PLACEHOLDER = "@@ata-sp@@";
+	function esc(s) {
+		return JSON.stringify(s).slice(1, -1).replace(/'/g, "\\'");
+	}
+	function ptrSeg(s) {
+		return s.replace(/~/g, "~0").replace(/\//g, "~1").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/[\u0000-\u001f\u2028\u2029]/g, (c) => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"));
+	}
+	function childPathExpr(parentExpr, suffix) {
+		if (!parentExpr) return `'/${suffix}'`;
+		if (parentExpr.startsWith("'") && !parentExpr.includes("+")) return `'${parentExpr.slice(1, -1)}/${suffix}'`;
+		return `${parentExpr}+'/${suffix}'`;
+	}
+	function childPathDynExpr(parentExpr, indexExpr) {
+		if (!parentExpr) return `'/'+${indexExpr}`;
+		return `${parentExpr}+'/'+${indexExpr}`;
+	}
+	function unevalLocalOk(node, key) {
+		if (node[key] !== false) return false;
+		if (node.$ref !== void 0 || node.$dynamicRef !== void 0 || node.$recursiveRef !== void 0) return false;
+		if (node.dependentSchemas !== void 0 || node.dependencies !== void 0) return false;
+		const kind = key === "unevaluatedProperties" ? "props" : "items";
+		if (kind === "props" && node.patternProperties !== void 0) return false;
+		if (kind === "items" && node.contains !== void 0) return false;
+		const names = /* @__PURE__ */ new Set();
+		const state = { prefix: 0 };
+		for (const k of [
+			"allOf",
+			"anyOf",
+			"oneOf"
+		]) if (node[k] !== void 0) {
+			if (!Array.isArray(node[k])) return false;
+			for (const b of node[k]) if (!unevalContributions(b, kind, names, state, 0)) return false;
+		}
+		for (const k of [
+			"if",
+			"then",
+			"else"
+		]) if (node[k] !== void 0 && !unevalContributions(node[k], kind, names, state, 0)) return false;
+		if (kind === "props") {
+			const own = node.properties && typeof node.properties === "object" ? node.properties : {};
+			for (const n of names) if (!Object.prototype.hasOwnProperty.call(own, n)) return false;
+		} else {
+			const ownPrefix = Array.isArray(node.prefixItems) ? node.prefixItems.length : Array.isArray(node.items) ? node.items.length : 0;
+			if (node.items !== void 0 && !Array.isArray(node.items)) {} else if (state.prefix > ownPrefix) return false;
+		}
+		return true;
+	}
+	function unevalAllProvablyLocal(root, only) {
+		const seen = /* @__PURE__ */ new Set();
+		const stack = [root];
+		while (stack.length) {
+			const n = stack.pop();
+			if (n === null || typeof n !== "object" || seen.has(n)) continue;
+			seen.add(n);
+			if (!Array.isArray(n)) {
+				if (only !== "items" && n.unevaluatedProperties !== void 0 && !unevalLocalOk(n, "unevaluatedProperties")) return false;
+				if (n.unevaluatedItems !== void 0 && !unevalLocalOk(n, "unevaluatedItems")) return false;
+			}
+			for (const k of Array.isArray(n) ? n : Object.values(n)) stack.push(k);
+		}
+		return true;
+	}
+	function compileToJSCodegenWithErrors(schema, schemaMap, userFormats, sourceOpts) {
+		const inputSchema = schema;
+		schema = prepareForCodegen(schema, schemaMap);
+		if (typeof schema === "object" && schema !== null) {
+			const s = JSON.stringify(schema);
+			if ((s.includes("unevaluatedProperties") || s.includes("unevaluatedItems")) && !unevalAllProvablyLocal(schema)) return null;
+		}
+		if (typeof schema === "boolean") return schema ? () => ({
+			valid: true,
+			errors: []
+		}) : () => ({
+			valid: false,
+			errors: [{
+				keyword: "not",
+				instancePath: "",
+				schemaPath: "#",
+				params: {},
+				message: "boolean schema is false"
+			}]
+		});
+		if (typeof schema !== "object" || schema === null) return null;
+		if (!sharedCodegenGate(schema, schemaMap)) return null;
+		if (schema.patternProperties) {
+			for (const [pat, sub] of Object.entries(schema.patternProperties)) if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
+		}
+		if (schema.dependentSchemas) {
+			for (const sub of Object.values(schema.dependentSchemas)) if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
+		}
+		if (schema.propertyNames && typeof schema.propertyNames === "object" && !isSimplePN(schema.propertyNames) && !codegenSafe(schema.propertyNames, schemaMap)) return null;
+		const eRootDefs = schema.$defs || schema.definitions || null;
+		const eAnchors = {};
+		if (schema.$dynamicAnchor) eAnchors["#" + schema.$dynamicAnchor] = schema;
+		if (schema.$anchor) eAnchors["#" + schema.$anchor] = schema;
+		if (typeof schema.$id === "string" && schema.$id.startsWith("#")) eAnchors[schema.$id] = schema;
+		if (eRootDefs) {
+			for (const def of Object.values(eRootDefs)) if (def && typeof def === "object") {
+				if (def.$dynamicAnchor) eAnchors["#" + def.$dynamicAnchor] = def;
+				if (def.$anchor) eAnchors["#" + def.$anchor] = def;
+				if (typeof def.$id === "string" && def.$id.startsWith("#")) eAnchors[def.$id] = def;
+			}
+		}
+		if (schemaMap) {
+			for (const ext of schemaMap.values()) if (ext && typeof ext === "object") {
+				if (ext.$dynamicAnchor && !eAnchors["#" + ext.$dynamicAnchor]) eAnchors["#" + ext.$dynamicAnchor] = ext;
+				if (ext.$anchor && !eAnchors["#" + ext.$anchor]) eAnchors["#" + ext.$anchor] = ext;
+				if (typeof ext.$id === "string" && ext.$id.startsWith("#") && !eAnchors[ext.$id]) eAnchors[ext.$id] = ext;
+			}
+		}
+		if (hasUnresolvableRef(schema, eRootDefs, eAnchors, schemaMap, /* @__PURE__ */ new Set())) return null;
+		if (needsBaseTracking(schema, schemaMap, /* @__PURE__ */ new Set())) return null;
+		const ctx = {
+			noOrdinal: !!(sourceOpts && sourceOpts.noOrdinal),
+			varCounter: 0,
+			helperCode: [],
+			rootDefs: eRootDefs,
+			shared: [],
+			refStack: /* @__PURE__ */ new Set(),
+			schemaMap: schemaMap || null,
+			anchors: eAnchors,
+			rootE: schema,
+			rootSchema: inputSchema,
+			userFormats: userFormats || null,
+			closureVars: [],
+			closureVals: [],
+			sourceMap: sourceOpts && sourceOpts.sourceMap && sourceOpts.schemaFile ? {
+				file: sourceOpts.schemaFile,
+				map: sourceOpts.sourceMap,
+				frames: sourceOpts.frames || null
+			} : null
+		};
+		ctx.helperCode.push("const _cpLen=s=>{let n=0;for(const _ of s)n++;return n}");
+		const lines = [];
+		try {
+			genCodeE(schema, "d", "", lines, ctx, "#");
+		} catch (e) {
+			if (e === DECLINE) return null;
+			throw e;
+		}
+		if (ctx.usesBranchCollapse) ctx.helperCode.push(require_branch_collapse().embedSource());
+		if (lines.length === 0) {
+			if (hasConstraints(schema, false)) return null;
+			return (d) => ({
+				valid: true,
+				errors: []
+			});
+		}
+		const checkStr = lines.join("\n  ");
+		const defSetsE = ctx.defFns ? Array.from(ctx.defFns.values()) : [];
+		const needsGuardE = ctx.usesRecursion || defSetsE.length > 0;
+		const guardStrE = needsGuardE ? emitGuardState() : "";
+		const helpersE = ctx.helperCode.length ? ctx.helperCode.join("\n  ") + "\n  " : "";
+		let body;
+		if (ctx.usesRecursion) body = `const _e=[];\n  ` + guardStrE + helpersE + emitRootGuard("_validateE", "d,_all,_e", "") + `function _validateE_b(d,_all,_e){\n  ${checkStr}\n  }\n  ` + emitGuardedRun("_validateE(d,_all,_e)", "_e.length=0;", defSetsE) + `return{valid:_e.length===0,errors:_e}`;
+		else if (defSetsE.length > 0) body = `const _e=[];\n  ` + guardStrE + helpersE + `function _bodyE(d,_all,_e){\n  ${checkStr}\n  }\n  ` + emitGuardedRun("_bodyE(d,_all,_e)", "_e.length=0;", defSetsE) + `return{valid:_e.length===0,errors:_e}`;
+		else body = `const _e=[];\n  ` + helpersE + checkStr + `\n  return{valid:_e.length===0,errors:_e}`;
+		try {
+			let fn;
+			const cvars = ctx.closureVars;
+			const cvals = ctx.closureVals;
+			let factoryBody;
+			if (needsGuardE) {
+				const attempt = ctx.usesRecursion ? "_validateE(d,_all,_e)" : "_bodyE(d,_all,_e)";
+				const runner = ctx.usesRecursion ? emitRootGuard("_validateE", "d,_all,_e", "") + `function _validateE_b(d,_all,_e){\n  ${checkStr}\n  }\n  ` : `function _bodyE(d,_all,_e){\n  ${checkStr}\n  }\n  `;
+				factoryBody = guardStrE + helpersE + runner + `return function(d,_all){const _e=[];\n  ` + emitGuardedRun(attempt, "_e.length=0;", defSetsE) + `return{valid:_e.length===0,errors:_e}}`;
+			} else factoryBody = helpersE + "return function(d,_all){const _e=[];\n  " + checkStr + "\n  return{valid:_e.length===0,errors:_e}}";
+			if (sourceOpts && sourceOpts.runtimeShape) {
+				const shape = (src) => src.replace(/code:'ATA\d{4}',/g, "").replace(/,docUrl:'https:\/\/ata-validator\.com\/e\/ATA\d{4}'/g, "").replace(/,_o:\d+/g, "");
+				body = shape(body);
+				factoryBody = shape(factoryBody);
+			}
+			if (!ctx.usesRecursion && defSetsE.length === 0 && helpersE !== "" || needsGuardE) {
+				const params = [...cvars, "__ataSafeRe"];
+				const args = [...cvals, compileSafe];
+				const make = compileFunction(...params, factoryBody);
+				const main = make(...args);
+				if (needsGuardE) {
+					let busy = false;
+					fn = (d, _all) => {
+						if (busy) return make(...args)(d, _all);
+						busy = true;
+						try {
+							return main(d, _all);
+						} finally {
+							busy = false;
+						}
+					};
+				} else fn = main;
+			} else if (ctx.usesSafeRe) {
+				const built = compileFunction(...cvars, "__ataSafeRe", "d", "_all", body);
+				fn = cvars.length ? (d, _all) => built(...cvals, compileSafe, d, _all) : (d, _all) => built(compileSafe, d, _all);
+			} else if (cvars.length) {
+				const built = compileFunction(...cvars, "d", "_all", body);
+				fn = (d, _all) => built(...cvals, d, _all);
+			} else fn = compileFunction("d", "_all", body);
+			fn._errSource = body;
+			fn._errFactory = factoryBody;
+			fn._errGuarded = needsGuardE;
+			fn._sharedHelpers = ctx.shared ? ctx.shared.slice() : [];
+			fn._usesSafeRe = !!ctx.usesSafeRe;
+			if (cvars.length) fn._formatClosures = cvars.map((name, i) => {
+				let format = null;
+				for (const key of Object.keys(ctx.userFormats)) if (ctx.userFormats[key] === cvals[i]) {
+					format = key;
+					break;
+				}
+				return {
+					name,
+					fn: cvals[i],
+					format
+				};
+			});
+			return fn;
+		} catch (e) {
+			if (env("ATA_DEBUG_ERRGEN")) console.error("error codegen declined:", e.message);
+			return null;
+		}
+	}
+	const BRANCH_VERDICT_MAX = 4096;
+	function snapshotCtx(ctx) {
+		const out = /* @__PURE__ */ new Map();
+		for (const k of Object.keys(ctx)) {
+			const x = ctx[k];
+			if (Array.isArray(x)) out.set(k, {
+				kind: "a",
+				ref: x,
+				n: x.length
+			});
+			else if (x instanceof Map || x instanceof Set) out.set(k, {
+				kind: "c",
+				ref: x,
+				n: x.size
+			});
+			else out.set(k, {
+				kind: "v",
+				ref: x
+			});
+		}
+		return out;
+	}
+	function restoreCtx(ctx, saved) {
+		for (const k of Object.keys(ctx)) if (!saved.has(k)) delete ctx[k];
+		for (const [k, e] of saved) if (e.kind === "a") {
+			e.ref.length = Math.min(e.ref.length, e.n);
+			ctx[k] = e.ref;
+		} else if (e.kind === "c") {
+			if (e.ref.size - e.n > 0) {
+				const added = [];
+				let i = 0;
+				for (const key of e.ref.keys()) if (i++ >= e.n) added.push(key);
+				for (const key of added) e.ref.delete(key);
+			}
+			ctx[k] = e.ref;
+		} else ctx[k] = e.ref;
+	}
+	function holdsRef(node, seen = /* @__PURE__ */ new Set()) {
+		if (node === null || typeof node !== "object" || seen.has(node)) return false;
+		seen.add(node);
+		if (typeof node.$ref === "string" || typeof node.$dynamicRef === "string") return true;
+		for (const k of Object.keys(node)) if (holdsRef(node[k], seen)) return true;
+		return false;
+	}
+	const BRANCH_SCOPE_KEYS = /* @__PURE__ */ new Set([
+		"$id",
+		"$anchor",
+		"$dynamicAnchor",
+		"$dynamicRef",
+		"$defs",
+		"definitions",
+		"$schema"
+	]);
+	function branchRefsLocal(node, defsKey, seen) {
+		if (node === null || typeof node !== "object") return true;
+		if (seen.has(node)) return true;
+		seen.add(node);
+		if (Array.isArray(node)) {
+			for (const x of node) if (!branchRefsLocal(x, defsKey, seen)) return false;
+			return true;
+		}
+		for (const k of Object.keys(node)) {
+			if (SKIP_VALUE_KEYS.has(k)) continue;
+			if (BRANCH_SCOPE_KEYS.has(k)) return false;
+			const v = node[k];
+			if (k === "$ref") {
+				if (typeof v !== "string" || !v.startsWith("#/" + defsKey + "/")) return false;
+				continue;
+			}
+			if (!branchRefsLocal(v, defsKey, seen)) return false;
+		}
+		return true;
+	}
+	const _defsLocal = /* @__PURE__ */ new WeakMap();
+	function compileBranchVerdicts(branches, ctx) {
+		const root = ctx.rootC;
+		if (root === null || typeof root !== "object") return null;
+		const defsKey = root.$defs && typeof root.$defs === "object" ? "$defs" : root.definitions && typeof root.definitions === "object" ? "definitions" : null;
+		if (defsKey !== null) {
+			let ok = _defsLocal.get(root);
+			if (ok === void 0) {
+				ok = branchRefsLocal(root[defsKey], defsKey, /* @__PURE__ */ new Set());
+				_defsLocal.set(root, ok);
+			}
+			if (!ok) return null;
+		}
+		const out = [];
+		for (const sub of branches) {
+			if (sub === true) {
+				out.push(() => true);
+				continue;
+			}
+			if (sub === false) {
+				out.push(() => false);
+				continue;
+			}
+			if (sub === null || typeof sub !== "object" || Array.isArray(sub)) return null;
+			if (!branchRefsLocal(sub, defsKey === null ? "$defs" : defsKey, /* @__PURE__ */ new Set())) return null;
+			const wrapped = Object.assign({}, sub);
+			if (defsKey !== null) wrapped[defsKey] = root[defsKey];
+			if (typeof ctx.rootSchema === "object" && ctx.rootSchema !== null && typeof ctx.rootSchema.$schema === "string") wrapped.$schema = ctx.rootSchema.$schema;
+			let fn = null;
+			try {
+				fn = compileToJSCodegen(wrapped, ctx.schemaMap, ctx.userFormats);
+			} catch (e) {
+				if (e !== DECLINE) throw e;
+			}
+			if (typeof fn !== "function") return null;
+			out.push(fn);
+		}
+		return out;
+	}
+	const GUARD_KEYS = [
+		"oneOf",
+		"anyOf",
+		"allOf",
+		"$ref",
+		"items",
+		"prefixItems",
+		"properties",
+		"patternProperties",
+		"additionalProperties",
+		"not",
+		"if",
+		"contains",
+		"dependentSchemas",
+		"dependencies",
+		"propertyNames",
+		"unevaluatedProperties",
+		"unevaluatedItems"
+	];
+	const GUARD_MAX = 16384;
+	const GUARD_BUDGET = 524288;
+	const weighty = (n) => n !== null && typeof n === "object" && !Array.isArray(n) && GUARD_KEYS.some((k) => n[k] !== void 0);
+	function childrenWeighty(sub) {
+		if (weighty(sub.items)) return true;
+		if (Array.isArray(sub.prefixItems) && sub.prefixItems.some(weighty)) return true;
+		if (weighty(sub.additionalProperties)) return true;
+		if (sub.properties && typeof sub.properties === "object") {
+			for (const k of Object.keys(sub.properties)) if (weighty(sub.properties[k])) return true;
+		}
+		if (sub.patternProperties && typeof sub.patternProperties === "object") {
+			for (const k of Object.keys(sub.patternProperties)) if (weighty(sub.patternProperties[k])) return true;
+		}
+		return false;
+	}
+	const GUARD_INLINE_MAX = 2048;
+	function subtreeGuard(sub, ctx, gv) {
+		if (!ctx.inCombined || !weighty(sub) || childrenWeighty(sub)) return null;
+		if ((ctx.guardChars || 0) >= GUARD_BUDGET) return null;
+		if (!ctx.guardDefFns) ctx.guardDefFns = /* @__PURE__ */ new Map();
+		const saved = snapshotCtx(ctx);
+		const outerDefFns = ctx.defFns;
+		const outerShare = ctx.shareDefs;
+		ctx.defFns = ctx.guardDefFns;
+		ctx.shareDefs = true;
+		try {
+			const bl = [];
+			try {
+				nestedGenCode(sub, gv, bl, ctx);
+			} finally {
+				ctx.defFns = outerDefFns;
+				ctx.shareDefs = outerShare;
+			}
+			if (bl.length === 0) {
+				restoreCtx(ctx, saved);
+				return null;
+			}
+			const body = bl.join(";");
+			const added = ctx.preamble.slice(saved.get("preamble").n).join(";");
+			if (body.length > GUARD_MAX || body.includes(SP_PLACEHOLDER) || /\b(?:_validate|_stk|_sd|_sg|_CYC)\b/.test(body + added)) {
+				restoreCtx(ctx, saved);
+				return null;
+			}
+			ctx.guardChars = (ctx.guardChars || 0) + body.length;
+			if (body.length <= GUARD_INLINE_MAX) return { body };
+			const name = `_vg${ctx.varCounter++}`;
+			ctx.helperCode.push(`const ${name}=function(${gv}){${body};return true}`);
+			return { name };
+		} catch (e) {
+			if (e !== DECLINE) throw e;
+			restoreCtx(ctx, saved);
+			return null;
+		}
+	}
+	function genGuardedC(sub, v, pathExpr, lines, ctx, schemaPrefix) {
+		const gi = ctx.varCounter++;
+		const gv = `_gv${gi}`;
+		const g = subtreeGuard(sub, ctx, gv);
+		if (g === null) {
+			genCodeC(sub, v, pathExpr, lines, ctx, schemaPrefix);
+			return;
+		}
+		if (g.name !== void 0) lines.push(`if(!${g.name}(${v})){`);
+		else lines.push(`{const ${gv}=${v};let _g${gi}=1;g${gi}:{${replaceTopLevel(g.body, `{_g${gi}=0;break g${gi}}`, `break g${gi}`)};_g${gi}=0}if(_g${gi}){`);
+		ctx.guardDepth = (ctx.guardDepth || 0) + 1;
+		try {
+			genCodeC(sub, v, pathExpr, lines, ctx, schemaPrefix);
+		} finally {
+			ctx.guardDepth--;
+		}
+		lines.push(g.name !== void 0 ? "}" : "}}");
+	}
+	function countingBody(body) {
+		while (true) {
+			const b1 = body.indexOf("/*CB*/"), b2 = body.indexOf("/*CU*/");
+			const b = b1 < 0 ? b2 : b2 < 0 ? b1 : Math.min(b1, b2);
+			if (b < 0) break;
+			const unknown = b === b2;
+			let depth = 1;
+			let j = b + 6;
+			while (j < body.length && depth > 0) {
+				if (body.startsWith("/*CB*/", j) || body.startsWith("/*CU*/", j)) {
+					depth++;
+					j += 6;
+					continue;
+				}
+				if (body.startsWith("/*CE*/", j)) {
+					depth--;
+					j += 6;
+					continue;
+				}
+				j++;
+			}
+			if (depth !== 0) return null;
+			body = body.slice(0, b) + (unknown ? "return -1" : "(_n++,_s+=4)") + body.slice(j);
+		}
+		if (/\b(?:_defE\d|__ataCollapse|__ataMulti|_brf\d|_bsf\d)/.test(body)) return null;
+		const SEV = require_branch_collapse().SEVERITY;
+		let out = "";
+		let i = 0;
+		if (!body.startsWith("const _e=[];")) return null;
+		out += "let _n=0,_s=0;";
+		i = 12;
+		while (i < body.length) {
+			const ch = body[i];
+			if (ch === "\"" || ch === "'" || ch === "`") {
+				const j = skipString(body, i);
+				out += body.slice(i, j);
+				i = j;
+				continue;
+			}
+			if (body.startsWith("_e.push(", i)) {
+				let j = i + 8;
+				let depth = 1;
+				while (j < body.length && depth > 0) {
+					const c = body[j];
+					if (c === "\"" || c === "'" || c === "`") {
+						j = skipString(body, j);
+						continue;
+					}
+					if (c === "(" || c === "{" || c === "[") depth++;
+					else if (c === ")" || c === "}" || c === "]") depth--;
+					j++;
+				}
+				if (depth !== 0) return null;
+				const arg = body.slice(i + 8, j - 1);
+				const m = /^\{(?:code:'ATA\d{4}',)?keyword:'([A-Za-z$][\w$]*)',/.exec(arg);
+				if (m === null) return null;
+				out += `(_n++,_s+=${SEV[m[1]] || 4})`;
+				i = j;
+				continue;
+			}
+			if (body.startsWith("return{valid:false,errors:_e}", i)) {
+				out += "return _n*100+_s";
+				i += 29;
+				continue;
+			}
+			if (body.startsWith("return{valid:_e.length===0,errors:_e}", i)) {
+				out += "return _n*100+_s";
+				i += 37;
+				continue;
+			}
+			if (body.startsWith("_e.length", i)) {
+				out += "_n";
+				i += 9;
+				continue;
+			}
+			out += ch;
+			i++;
+		}
+		if (/\b_e\b/.test(out.replace(/'[^']*'|"[^"]*"/g, ""))) return null;
+		return out;
+	}
+	function emitBranchCollapse(branches, keyword, v, pathExpr, lines, ctx, schemaPrefix) {
+		ctx.usesBranchCollapse = true;
+		const fi = ctx.varCounter++;
+		const branchKw = keyword;
+		const branchSp = schemaPrefix + "/" + branchKw;
+		const fns = [];
+		const titles = [];
+		let usesSp = false;
+		for (let i = 0; i < branches.length; i++) {
+			const sub = branches[i];
+			const subLines = [];
+			const subSp = branchSp + "/" + i;
+			if (typeof sub === "object" && sub !== null) {
+				ctx.inBranchFn = (ctx.inBranchFn || 0) + 1;
+				try {
+					genCodeE(sub, "_bv", "_bpth", subLines, ctx, subSp);
+				} finally {
+					ctx.inBranchFn--;
+				}
+			} else if (sub === false) subLines.push(`_e.push({keyword:'not',instancePath:_bpth,schemaPath:'${subSp}'${ordinalField(ctx, `${subSp}`)},params:{},message:'boolean schema is false'})`);
+			const title = sub && typeof sub === "object" && typeof sub.title === "string" ? sub.title : "";
+			titles.push(title);
+			let body = subLines.length === 0 ? "" : `const _e=[];${subLines.join(";")};return{valid:_e.length===0,errors:_e}`;
+			if (body.includes(SP_PLACEHOLDER)) {
+				body = body.split(`'${SP_PLACEHOLDER}`).join(`_sp+'`).split(`"${SP_PLACEHOLDER}`).join(`_sp+"`);
+				if (body.includes(SP_PLACEHOLDER)) throw DECLINE;
+				usesSp = true;
+			}
+			fns.push(body);
+		}
+		const params = usesSp ? "_bv,_bpth,_all,_sp" : "_bv,_bpth,_all";
+		const fnArr = `_brf${fi}`;
+		const resArr = `_brr${fi}`;
+		const titleArr = JSON.stringify(titles);
+		const collapsed = `_brc${fi}`;
+		const pp = pathExpr || "\"\"";
+		ctx.helperCode.push(`const ${fnArr}=[${fns.map((b) => b === "" ? `function(){return{valid:true,errors:[]}}` : `function(${params}){${b}}`).join(",")}];const _bt${fi}=${titleArr}`);
+		const call = `${fnArr}[_bi](${v},_pp${fi},_all${usesSp ? ",_sp" : ""})`;
+		const ord = ctx.noOrdinal ? "null" : (() => {
+			const o = ordinalFor(ctx.rootSchema, unescapeSp(branchSp));
+			return o === null ? "null" : o;
+		})();
+		const report = ctx.inCombined && !ctx.inBranchFn ? `const ${collapsed}=__ataCollapse('${branchKw}',${resArr},_pp${fi},'${branchSp}',${ord},_bt${fi});if(${collapsed})(_e=_ap(_A,_e,${collapsed},${apOrd(ctx, branchSp)}))` : `const ${collapsed}=__ataCollapse('${branchKw}',${resArr},_pp${fi},'${branchSp}',${ord},_bt${fi});if(${collapsed}){_e.push(${collapsed});if(!_all)return{valid:false,errors:_e}}`;
+		let noneReport = null;
+		if (ctx.inCombined && (ctx.noOrdinal ? "null" : "") === "null" && !ctx.noCounting) {
+			const cbs = fns.map((b) => b === "" ? "return 0" : countingBody(b));
+			if (!cbs.some((c) => c === null)) {
+				const sfx = usesSp ? ",_sp" : "";
+				const lit = `{code: '${branchKw === "oneOf" ? "ATA4001" : "ATA4003"}',keyword:'${branchKw}',instancePath:_pp${fi}||'',path:_pp${fi}||'',schemaPath:'${branchSp}',message:'value matched 0 of ${branches.length} ${branchKw} variants',params:{variants:${branches.length},closest:_bi${fi},closestName:_bt${fi}[_bi${fi}]||('variant '+(_bi${fi}+1))},branchErrors:_br${fi}.errors}`;
+				const push = ctx.inBranchFn ? `_e.push(${lit});if(!_all)return{valid:false,errors:_e}` : `(_e=_ap(_A,_e,${lit},${apOrd(ctx, branchSp)}))`;
+				if (cbs.length === 1) noneReport = `{let _bi${fi}=0;const _br${fi}=${fnArr}[0](${v},_pp${fi},_all${sfx});${push}}`;
+				else {
+					ctx.helperCode.push(cbs.map((b, i) => `const _bsf${fi}_${i}=function(${params}){${b}}`).join(";"));
+					noneReport = `{let _bi${fi}=0,_bs${fi}=Infinity,_ng${fi}=0;${cbs.map((_, i) => `{const _s=_bsf${fi}_${i}(${v},_pp${fi},_all${sfx});if(_s<0)_ng${fi}=1;else if(_s<_bs${fi}){_bs${fi}=_s;_bi${fi}=${i}}}`).join("")}if(_ng${fi}){${branchKw === "anyOf" ? `const ${resArr}=[];for(let _bi=0;_bi<${branches.length};_bi++){const _br=${call};${resArr}.push(_br.valid?{valid:false,errors:_br.errors}:_br)}${report}` : `const ${resArr}=[];for(let _bi=0;_bi<${branches.length};_bi++)${resArr}.push(${call});${report}`}}else{const _br${fi}=${fnArr}[_bi${fi}](${v},_pp${fi},_all${sfx});${push}}}`;
+				}
+			}
+		}
+		const countedRaw = ctx.inCombined && ctx.branchCounts ? ctx.branchCounts.get(branches) : void 0;
+		const counted = countedRaw !== void 0 && (!ctx.inBranchFn || countedRaw.factory) ? countedRaw : void 0;
+		const same = counted !== void 0 ? `${v}!==null&&typeof ${v}==='object'&&${counted.of}===${v}` : "";
+		let guard = counted !== void 0 ? keyword === "anyOf" ? `if(!(${same}&&${counted.count}>=1))` : `if(!(${same}&&${counted.count}===1))` : "";
+		if (guard !== "" && keyword === "oneOf" && counted.mask && ctx.inCombined) {
+			const ord0 = ctx.noOrdinal ? "null" : (() => {
+				const o = ordinalFor(ctx.rootSchema, unescapeSp(branchSp));
+				return o === null ? "null" : o;
+			})();
+			const multiC = `__ataMulti(_pi${fi},${branches.length},${pp},'${branchSp}',${ord0})`;
+			const pushC = ctx.inBranchFn ? `_e.push(${multiC});if(!_all)return{valid:false,errors:_e}` : `(_e=_ap(_A,_e,${multiC},${apOrd(ctx, branchSp)}))`;
+			guard = `if(${same}&&${counted.count}>1){/*CB*/const _pi${fi}=[];for(let _k=0;_k<${branches.length};_k++)if((${counted.mask}>>_k)&1)_pi${fi}.push(_k);${pushC}/*CE*/}else if(!(${same}&&${counted.count}===1))`;
+		}
+		let vfArr = null;
+		if (guard === "" && !branches.some((b) => holdsRef(b))) {
+			const saved = snapshotCtx(ctx);
+			try {
+				const vfs = branches.map((sub) => {
+					if (sub === true) return "function(){return true}";
+					if (sub === false) return "function(){return false}";
+					const bl = [];
+					nestedGenCode(sub, "_bv", bl, ctx);
+					return bl.length === 0 ? "function(){return true}" : `function(_bv){${bl.join(";")};return true}`;
+				});
+				if (!vfs.some((b) => b.includes(SP_PLACEHOLDER)) && vfs.reduce((n, b) => n + b.length, 0) <= BRANCH_VERDICT_MAX) {
+					vfArr = `_bvf${fi}`;
+					ctx.helperCode.push(vfs.map((b, i) => `const ${vfArr}_${i}=${b}`).join(";"));
+				} else restoreCtx(ctx, saved);
+			} catch (e) {
+				if (e !== DECLINE) throw e;
+				restoreCtx(ctx, saved);
+			}
+		}
+		if (vfArr === null && guard === "" && ctx.inCombined) {
+			const compiled = compileBranchVerdicts(branches, ctx);
+			if (compiled !== null) {
+				vfArr = `_bvf${fi}`;
+				for (let i = 0; i < compiled.length; i++) {
+					ctx.closureVars.push(`${vfArr}_${i}`);
+					ctx.closureVals.push(compiled[i]);
+				}
+			}
+		}
+		if (vfArr !== null) {
+			const L = branches.length;
+			const top = ctx.inCombined && !ctx.inBranchFn;
+			if (top && !ctx.guardDepth) ctx.unguardedCollapse = true;
+			const tests = branches.map((_, i) => `${vfArr}_${i}(${v})`);
+			if (keyword === "anyOf") {
+				const none = noneReport !== null ? noneReport : `const ${resArr}=[];for(let _bi=0;_bi<${L};_bi++){const _br=${call};${resArr}.push(_br.valid?{valid:false,errors:_br.errors}:_br)}${report}`;
+				lines.push(`{const _pp${fi}=${pp};if(!(${tests.join("||")})){${top ? "" : "/*CB*/"}if(_all===0){_e.push(null);return{valid:false,errors:_e}}${none}${top ? "" : "/*CE*/"}}}`);
+			} else {
+				const mk = L <= 30;
+				const collect = mk ? `const _pi${fi}=[];for(let _k=0;_k<${L};_k++)if((_m${fi}>>_k)&1)_pi${fi}.push(_k);` : "";
+				const multi = `__ataMulti(_pi${fi},${L},_pp${fi},'${branchSp}',${ord})`;
+				const pushMulti = top ? `(_e=_ap(_A,_e,${multi},${apOrd(ctx, branchSp)}))` : `_e.push(${multi});if(!_all)return{valid:false,errors:_e}`;
+				const count = tests.map((t, i) => `if(${t}){_n${fi}++;${mk ? `_m${fi}|=${1 << i}` : `_pi${fi}.push(${i})`}}`).join("");
+				const none = noneReport !== null ? noneReport : `const ${resArr}=[];for(let _bi=0;_bi<${L};_bi++)${resArr}.push(${call});${report}`;
+				lines.push(`{const _pp${fi}=${pp};let _n${fi}=0${mk ? `,_m${fi}=0` : `,_pi${fi}=[]`};${count}if(_n${fi}!==1){${top ? "" : "/*CB*/"}if(_all===0){_e.push(null);return{valid:false,errors:_e}}if(_n${fi}>1){${collect}${pushMulti}}else{${none}}${top ? "" : "/*CE*/"}}}`);
+			}
+			return;
+		}
+		if (guard === "" && ctx.inCombined && !ctx.inBranchFn && !ctx.guardDepth) ctx.unguardedCollapse = true;
+		if (keyword === "anyOf") {
+			const probe = `${fnArr}[_bi](${v},_pp${fi},0${usesSp ? ",_sp" : ""})`;
+			const none = noneReport !== null ? noneReport : `const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++){const _br=${call};${resArr}.push(_br.valid?{valid:false,errors:_br.errors}:_br)}${report}`;
+			const probeOld = `let _bp${fi}=false;for(let _bi=0;_bi<${fnArr}.length;_bi++){if(${probe}.valid){_bp${fi}=true;break}}if(!_bp${fi}){if(_all===0){_e.push(null);return{valid:false,errors:_e}}${none}}`;
+			if (counted !== void 0) lines.push(`${guard}{const _pp${fi}=${pp};if(${same}){/*CB*/if(_all===0){_e.push(null);return{valid:false,errors:_e}}${none}/*CE*/}else{/*CU*/${probeOld}/*CE*/}}`);
+			else lines.push(`${guard}{const _pp${fi}=${pp};${probeOld}}`);
+		} else {
+			const oldO = `const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++)${resArr}.push(${call});if(_all===0){let _n=0;for(const _r of ${resArr})if(_r.valid)_n++;if(_n!==1){_e.push(null);return{valid:false,errors:_e}}}else{${report}}`;
+			const noneO = noneReport !== null ? noneReport : `const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++)${resArr}.push(${call});${report}`;
+			if (counted !== void 0) lines.push(`${guard}{const _pp${fi}=${pp};if(${same}){/*CB*/if(_all===0){_e.push(null);return{valid:false,errors:_e}}${noneO}/*CE*/}else{/*CU*/${oldO}/*CE*/}}`);
+			else lines.push(`${guard}{const _pp${fi}=${pp};${oldO}}`);
+		}
+	}
+	function genCodeE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		return withPlain(schema, v, lines, ctx, () => genCodeENode(schema, v, pathExpr, lines, ctx, schemaPrefix));
+	}
+	function genCodeENode(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		if (!schemaPrefix) schemaPrefix = "#";
+		if (schema === false) {
+			lines.push(`;_e.push({keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}'${ordinalField(ctx, `${schemaPrefix}`)},params:{},message:'boolean schema is false'});if(!_all)return{valid:false,errors:_e}`);
+			return;
+		}
+		if (schema === true) return;
+		if (typeof schema !== "object" || schema === null) return;
+		if (!ctx.regExpMap) ctx.regExpMap = /* @__PURE__ */ new Map();
+		if (schema.$ref && !schema[REF_DONE]) {
+			if (Object.keys(schema).some((k) => !REF_NEUTRAL_SIBLINGS.has(k) && !k.startsWith("x-"))) {
+				genCodeENode({ $ref: schema.$ref }, v, pathExpr, lines, ctx, schemaPrefix);
+				const rest = { ...schema };
+				Object.defineProperty(rest, REF_DONE, { value: true });
+				genCodeENode(rest, v, pathExpr, lines, ctx, schemaPrefix);
+				return;
+			}
+			if (schema.$ref === "#") {
+				if (!ctx.rootE || typeof ctx.rootE !== "object") throw DECLINE;
+				if (!ctx.defFns) ctx.defFns = /* @__PURE__ */ new Map();
+				let fnName = ctx.defFns.get("#");
+				if (!fnName) {
+					fnName = "_defE" + ctx.defFns.size + "_root";
+					ctx.defFns.set("#", fnName);
+					const bodyLines = [];
+					const outerStack = ctx.refStack;
+					ctx.refStack = /* @__PURE__ */ new Set();
+					try {
+						genCodeE(ctx.rootE, "d", "_p", bodyLines, ctx, SP_PLACEHOLDER);
+					} finally {
+						ctx.refStack = outerStack;
+					}
+					let body = bodyLines.join("\n  ");
+					body = body.split(`'${SP_PLACEHOLDER}`).join(`_sp+'`).split(`"${SP_PLACEHOLDER}`).join(`_sp+"`);
+					if (body.includes(SP_PLACEHOLDER)) throw DECLINE;
+					ctx.helperCode.push(`const ${fnName}_s=new Set()\n  function ${fnName}(d,_p,_all,_e,_sp){\n  if(_sg){if(typeof d!=='object'||d===null)return ${fnName}_b(d,_p,_all,_e,_sp);if(${fnName}_s.has(d))return;${fnName}_s.add(d);try{return ${fnName}_b(d,_p,_all,_e,_sp)}finally{${fnName}_s.delete(d)}}\n  if(++_sd>${CYCLE_DEPTH})throw _CYC\n  const _r=${fnName}_b(d,_p,_all,_e,_sp)\n  _sd--\n  return _r\n  }\n  function ${fnName}_b(d,_p,_all,_e,_sp){${body}}`);
+				}
+				lines.push(`${fnName}(${v},${pathExpr || "\"\""},_all,_e,'${schemaPrefix}');if(!_all&&_e.length)return{valid:false,errors:_e}`);
+				return;
+			}
+			const m = schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
+			if (m && ctx.rootDefs && ctx.rootDefs[m[1]]) {
+				const defName = m[1];
+				if (!ctx.cyclicDefs) ctx.cyclicDefs = cyclicDefNames(ctx.rootDefs);
+				if (!ctx.sharedDefs) ctx.sharedDefs = sharedDefNames(ctx.rootSchema, ctx.rootDefs);
+				if (ctx.cyclicDefs.has(defName) || ctx.sharedDefs.has(defName)) {
+					if (!ctx.defFns) ctx.defFns = /* @__PURE__ */ new Map();
+					let fnName = ctx.defFns.get(defName);
+					if (!fnName) {
+						fnName = "_defE" + ctx.defFns.size + "_" + defName.replace(/[^A-Za-z0-9_]/g, "_");
+						ctx.defFns.set(defName, fnName);
+						const bodyLines = [];
+						genCodeE(ctx.rootDefs[defName], "d", "_p", bodyLines, ctx, SP_PLACEHOLDER);
+						let body = bodyLines.join("\n  ");
+						body = body.split(`'${SP_PLACEHOLDER}`).join(`_sp+'`).split(`"${SP_PLACEHOLDER}`).join(`_sp+"`);
+						if (body.includes(SP_PLACEHOLDER)) throw DECLINE;
+						ctx.helperCode.push(`const ${fnName}_s=new Set()\n  function ${fnName}(d,_p,_all,_e,_sp){\n  if(_sg){if(typeof d!=='object'||d===null)return ${fnName}_b(d,_p,_all,_e,_sp);if(${fnName}_s.has(d))return;${fnName}_s.add(d);try{return ${fnName}_b(d,_p,_all,_e,_sp)}finally{${fnName}_s.delete(d)}}\n  if(++_sd>${CYCLE_DEPTH})throw _CYC\n  const _r=${fnName}_b(d,_p,_all,_e,_sp)\n  _sd--\n  return _r\n  }\n  function ${fnName}_b(d,_p,_all,_e,_sp){${body}}`);
+					}
+					lines.push(`${fnName}(${v},${pathExpr || "\"\""},_all,_e,'${schemaPrefix}');if(!_all&&_e.length)return{valid:false,errors:_e}`);
+					return;
+				}
+				if (ctx.refStack.has(schema.$ref)) throw DECLINE;
+				ctx.refStack.add(schema.$ref);
+				genCodeE(ctx.rootDefs[defName], v, pathExpr, lines, ctx, schemaPrefix);
+				ctx.refStack.delete(schema.$ref);
+				return;
+			}
+			if (!m && schema.$ref.startsWith("#") && !schema.$ref.startsWith("#/")) {
+				const entry = ctx.rootDefs && ctx.rootDefs[schema.$ref];
+				const anchorTarget = entry && entry.raw ? entry.raw : ctx.anchors && ctx.anchors[schema.$ref];
+				if (anchorTarget) {
+					if (ctx.refStack.has(schema.$ref)) throw DECLINE;
+					ctx.refStack.add(schema.$ref);
+					genCodeE(anchorTarget, v, pathExpr, lines, ctx, schemaPrefix);
+					ctx.refStack.delete(schema.$ref);
+					return;
+				}
+			}
+			if (ctx.schemaMap && ctx.schemaMap.has(schema.$ref)) {
+				if (ctx.refStack.has(schema.$ref)) throw DECLINE;
+				ctx.refStack.add(schema.$ref);
+				genCodeE(ctx.schemaMap.get(schema.$ref), v, pathExpr, lines, ctx, schemaPrefix);
+				ctx.refStack.delete(schema.$ref);
+				return;
+			}
+			if (ctx.schemaMap && schema.$ref.includes("#") && !schema.$ref.startsWith("#")) {
+				const r = resolveCrossSchemaRef(schema.$ref, ctx.schemaMap);
+				if (r) {
+					if (ctx.refStack.has(schema.$ref)) throw DECLINE;
+					ctx.refStack.add(schema.$ref);
+					genCodeE(r.schema, v, pathExpr, lines, ctx, schemaPrefix);
+					ctx.refStack.delete(schema.$ref);
+					return;
+				}
+			}
+			throw DECLINE;
+		}
+		if (schema.$dynamicRef) genDynamicRefE(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		const types = schema.type ? Array.isArray(schema.type) ? schema.type : [schema.type] : null;
+		if (types) {
+			const conds = types.map((t) => {
+				switch (t) {
+					case "object": return `(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+					case "array": return `Array.isArray(${v})`;
+					case "string": return `typeof ${v}==='string'`;
+					case "number": return `Number.isFinite(${v})`;
+					case "integer": return `Number.isInteger(${v})`;
+					case "boolean": return `typeof ${v}==='boolean'`;
+					case "null": return `${v}===null`;
+					default: return "true";
+				}
+			});
+			const expected = types.join(", ");
+			const expectedParam = !Array.isArray(schema.type) ? `'${types[0]}'` : JSON.stringify(types);
+			{
+				const typeSp = `${schemaPrefix}/type`;
+				const lit = buildErrorLiteral({
+					keyword: "type",
+					schemaPath: typeSp,
+					sourceMap: ctx.sourceMap
+				});
+				lines.push(`if(!(${conds.join("||")})){_e.push({code:'${lit.codeStr}',keyword:'type',instancePath:${pathExpr || "\"\""},schemaPath:'${typeSp}'${ordinalField(ctx, `${typeSp}`)},params:{type:${expectedParam}},message:'must be ${expected}',docUrl:'${lit.docUrl}'${lit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+			}
+		}
+		const isObj = false;
+		const isArr = false;
+		const isStr = false;
+		const fail = (keyword, schemaSuffix, paramsCode, msgCode, fmt) => {
+			const sp = schemaPrefix + "/" + schemaSuffix;
+			const lit = buildErrorLiteral({
+				keyword,
+				format: fmt,
+				schemaPath: sp,
+				sourceMap: ctx.sourceMap
+			});
+			return `_e.push({code:'${lit.codeStr}',keyword:'${keyword}',instancePath:${pathExpr || "\"\""},schemaPath:'${sp}',params:${paramsCode},message:${msgCode},docUrl:'${lit.docUrl}'${lit.frame}${ordinalField(ctx, sp)}});if(!_all)return{valid:false,errors:_e}`;
+		};
+		if (schema.enum) {
+			const ev = enumOperand(ctx, schema.enum, v, lines);
+			lines.push(`if(!(${enumCondition(ctx, schema.enum, ev)})){${fail("enum", "enum", `{allowedValues:${JSON.stringify(schema.enum)}}`, "'must be equal to one of the allowed values'")}}`);
+		}
+		if (schema.const !== void 0) {
+			const cv = schema.const;
+			if (cv === null || typeof cv !== "object") lines.push(`if(${v}!==${JSON.stringify(cv)}){${fail("const", "const", `{allowedValue:${JSON.stringify(schema.const)}}`, "'must be equal to constant'")}}`);
+			else lines.push(`if(!${emitDeq(ctx)}(${v},${emitConstant(ctx, cv)})){${fail("const", "const", `{allowedValue:${emitParamConstant(ctx, schema.const)}}`, "'must be equal to constant'")}}`);
+		}
+		new Set(schema.required || []);
+		if (schema.required) {
+			const reqSp = `${schemaPrefix}/required`;
+			const reqLit = buildErrorLiteral({
+				keyword: "required",
+				schemaPath: reqSp,
+				sourceMap: ctx.sourceMap
+			});
+			for (const key of schema.required) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!${ownKeyExpr(ctx, v, key)}){_e.push({code:'${reqLit.codeStr}',keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${reqSp}'${ordinalField(ctx, `${reqSp}`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'",docUrl:'${reqLit.docUrl}'${reqLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+		}
+		if (schema.minimum !== void 0) {
+			const c = `typeof ${v}==='number'&&${v}<${schema.minimum}`;
+			lines.push(`if(${c}){${fail("minimum", "minimum", `{comparison:'>=',limit:${schema.minimum}}`, `'must be >= ${schema.minimum}'`)}}`);
+		}
+		if (schema.maximum !== void 0) {
+			const c = `typeof ${v}==='number'&&${v}>${schema.maximum}`;
+			lines.push(`if(${c}){${fail("maximum", "maximum", `{comparison:'<=',limit:${schema.maximum}}`, `'must be <= ${schema.maximum}'`)}}`);
+		}
+		if (schema.exclusiveMinimum !== void 0) {
+			const c = `typeof ${v}==='number'&&${v}<=${schema.exclusiveMinimum}`;
+			lines.push(`if(${c}){${fail("exclusiveMinimum", "exclusiveMinimum", `{comparison:'>',limit:${schema.exclusiveMinimum}}`, `'must be > ${schema.exclusiveMinimum}'`)}}`);
+		}
+		if (schema.exclusiveMaximum !== void 0) {
+			const c = `typeof ${v}==='number'&&${v}>=${schema.exclusiveMaximum}`;
+			lines.push(`if(${c}){${fail("exclusiveMaximum", "exclusiveMaximum", `{comparison:'<',limit:${schema.exclusiveMaximum}}`, `'must be < ${schema.exclusiveMaximum}'`)}}`);
+		}
+		if (schema.multipleOf !== void 0) {
+			const m = schema.multipleOf;
+			ctx.varCounter++;
+			lines.push(`{if(typeof ${v}==='number'&&${multipleOfBad(v, m)}){${fail("multipleOf", "multipleOf", `{multipleOf:${m}}`, `'must be multiple of ${m}'`)}}}`);
+		}
+		if (schema.minLength !== void 0) {
+			const M = schema.minLength;
+			const c = `typeof ${v}==='string'&&(${`${v}.length<${M}||(${v}.length<${M * 2}&&_cpLen(${v})<${M})`})`;
+			lines.push(`if(${c}){${fail("minLength", "minLength", `{limit:${M}}`, `'must NOT have fewer than ${M} characters'`)}}`);
+		}
+		if (schema.maxLength !== void 0) {
+			const X = schema.maxLength;
+			const c = `typeof ${v}==='string'&&(${`${v}.length>${X * 2}||(${v}.length>${X}&&_cpLen(${v})>${X})`})`;
+			lines.push(`if(${c}){${fail("maxLength", "maxLength", `{limit:${X}}`, `'must NOT have more than ${X} characters'`)}}`);
+		}
+		if (schema.pattern) {
+			const inlineCheck = compilePatternInline(schema.pattern, v);
+			if (inlineCheck) {
+				const c = `typeof ${v}==='string'&&!(${inlineCheck})`;
+				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, JSON.stringify(`must match pattern "${schema.pattern}"`))}}`);
+			} else {
+				const pattern = JSON.stringify(schema.pattern);
+				if (!ctx.regExpMap.has(pattern)) {
+					const ri = ctx.varCounter++;
+					ctx.regExpMap.set(pattern, ri);
+					if (useSafeEngine(schema.pattern)) {
+						ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+						ctx.usesSafeRe = true;
+					} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern}${reFlagArg(pattern)})`);
+				}
+				const c = `typeof ${v}==='string'&&!_re${ctx.regExpMap.get(pattern)}.test(${v})`;
+				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, JSON.stringify(`must match pattern "${schema.pattern}"`))}}`);
+			}
+		}
+		if (schema.format) {
+			const fc = FORMAT_CODEGEN[schema.format];
+			const fmtSp = `${schemaPrefix}/format`;
+			const fmtLit = buildErrorLiteral({
+				keyword: "format",
+				format: schema.format,
+				schemaPath: fmtSp,
+				sourceMap: ctx.sourceMap
+			});
+			const failPush = `_e.push({code:'${fmtLit.codeStr}',keyword:'format',instancePath:${pathExpr || "\"\""},schemaPath:'${fmtSp}'${ordinalField(ctx, `${fmtSp}`)},params:{format:'${esc(schema.format)}'},message:'must match format "${esc(schema.format)}"',docUrl:'${fmtLit.docUrl}'${fmtLit.frame}});if(!_all)return{valid:false,errors:_e}`;
+			if (fc) {
+				const ri = ctx.varCounter++;
+				const fmtCode = fc(v, isStr, ctx).replace(/return false/g, `{${failPush};break _fmt${ri}}`);
+				lines.push(`_fmt${ri}:{${fmtCode}}`);
+			} else if (ctx.userFormats && typeof ctx.userFormats[schema.format] === "function") {
+				const closureName = `_uf_${schema.format.replace(/[^a-zA-Z0-9_]/g, "_")}`;
+				if (ctx.closureVars && !ctx.closureVars.includes(closureName)) {
+					ctx.closureVars.push(closureName);
+					ctx.closureVals.push(ctx.userFormats[schema.format]);
+				}
+				const guard = `typeof ${v}==='string'&&`;
+				lines.push(`if(${guard}!${closureName}(${v})){${failPush}}`);
+			}
+		}
+		if (schema.minItems !== void 0) {
+			const c = `Array.isArray(${v})&&${v}.length<${schema.minItems}`;
+			lines.push(`if(${c}){${fail("minItems", "minItems", `{limit:${schema.minItems}}`, `'must NOT have fewer than ${schema.minItems} items'`)}}`);
+		}
+		if (schema.maxItems !== void 0) {
+			const c = `Array.isArray(${v})&&${v}.length>${schema.maxItems}`;
+			lines.push(`if(${c}){${fail("maxItems", "maxItems", `{limit:${schema.maxItems}}`, `'must NOT have more than ${schema.maxItems} items'`)}}`);
+		}
+		if (schema.uniqueItems) genUniqueItemsE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isArr);
+		if (schema.minProperties !== void 0) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&Object.keys(${v}).length<${schema.minProperties}){${fail("minProperties", "minProperties", `{limit:${schema.minProperties}}`, `'must NOT have fewer than ${schema.minProperties} properties'`)}}`);
+		if (schema.maxProperties !== void 0) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&Object.keys(${v}).length>${schema.maxProperties}){${fail("maxProperties", "maxProperties", `{limit:${schema.maxProperties}}`, `'must NOT have more than ${schema.maxProperties} properties'`)}}`);
+		if (schema.additionalProperties === false) {
+			const allowed = Object.keys(schema.properties || {}).map((k) => `${JSON.stringify(k)}`).join(",");
+			const ci = ctx.varCounter++;
+			const apSp = `${schemaPrefix}/additionalProperties`;
+			const apLit = buildErrorLiteral({
+				keyword: "additionalProperties",
+				schemaPath: apSp,
+				sourceMap: ctx.sourceMap
+			});
+			const patChecks = [];
+			for (const pat of Object.keys(schema.patternProperties || {})) {
+				const pattern = JSON.stringify(pat);
+				if (!ctx.regExpMap.has(pattern)) {
+					const ri = ctx.varCounter++;
+					ctx.regExpMap.set(pattern, ri);
+					if (useSafeEngine(pat)) {
+						ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+						ctx.usesSafeRe = true;
+					} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern}${reFlagArg(pattern)})`);
+				}
+				patChecks.push(`_re${ctx.regExpMap.get(pattern)}.test(_k${ci}[_i])`);
+			}
+			const isAdditional = patChecks.length ? `!_a${ci}.has(_k${ci}[_i])&&!(${patChecks.join("||")})` : `!_a${ci}.has(_k${ci}[_i])`;
+			const gateChecks = patChecks.map((c) => c.split(`_k${ci}[_i]`).join(`_f${ci}`));
+			const gateTest = gateChecks.length ? `!_a${ci}.has(_f${ci})&&!(${gateChecks.join("||")})` : `!_a${ci}.has(_f${ci})`;
+			const detail = `const _k${ci}=Object.keys(${v});for(let _i=0;_i<_k${ci}.length;_i++){if(${isAdditional}){_e.push({code:'${apLit.codeStr}',keyword:'additionalProperties',instancePath:${pathExpr || "\"\""},schemaPath:'${apSp}'${ordinalField(ctx, `${apSp}`)},params:{additionalProperty:_k${ci}[_i]},message:'must NOT have additional properties',docUrl:'${apLit.docUrl}'${apLit.frame}});if(!_all)return{valid:false,errors:_e}}}`;
+			ctx.helperCode.push(`const _a${ci}=new Set([${allowed}])`);
+			const inner = `let _x${ci}=0;for(const _f${ci} in ${v}){if(${gateTest}){_x${ci}=1;break}}if(_x${ci}){${detail}}`;
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
+		}
+		if (ctx.inCombined && schema.unevaluatedProperties !== void 0 && schema.unevaluatedProperties !== true && !unevalLocalOk(schema, "unevaluatedProperties")) throw DECLINE;
+		if (ctx.inCombined && schema.unevaluatedItems !== void 0 && schema.unevaluatedItems !== true && !unevalLocalOk(schema, "unevaluatedItems")) throw DECLINE;
+		if (schema.unevaluatedProperties === false && schema.additionalProperties === void 0) genUnevaluatedFalseE(schema, v, pathExpr, lines, ctx, schemaPrefix, isObj);
+		if (schema.unevaluatedItems === false) genUnevaluatedItemsFalseE(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		if (schema.dependentRequired) {
+			const drSp = `${schemaPrefix}/dependentRequired`;
+			const drLit = buildErrorLiteral({
+				keyword: "dependentRequired",
+				schemaPath: drSp,
+				sourceMap: ctx.sourceMap
+			});
+			for (const [key, deps] of Object.entries(schema.dependentRequired)) for (const dep of deps) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${ownKeyExpr(ctx, v, key)}&&!${ownKeyExpr(ctx, v, dep)}){_e.push({code:'${drLit.codeStr}',keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${drSp}'${ordinalField(ctx, `${drSp}`)},params:{missingProperty:'${esc(dep)}'},message:"must have required property '${esc(dep)}'",docUrl:'${drLit.docUrl}'${drLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+		}
+		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) {
+			const childPath = childPathExpr(pathExpr, ptrSeg(key));
+			const sp = schemaPrefix + "/properties/" + ptrSeg(key);
+			const from = lines.length;
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${ownKeyExpr(ctx, v, key)}){`);
+			if (!propFnCandidateE(prop, ctx, sp) || !emitPropFnE(prop, `${v}[${JSON.stringify(key)}]`, childPath, lines, ctx, sp)) genCodeE(prop, `${v}[${JSON.stringify(key)}]`, childPath, lines, ctx, sp);
+			lines.push(`}`);
+			countInlineE(lines, from, ctx);
+		}
+		if (schema.patternProperties) genPatternPropertiesE(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		if (typeof schema.additionalProperties === "object" && schema.additionalProperties !== null) genAdditionalSchemaE(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		if (schema.dependentSchemas) genDependentSchemasE(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		if (schema.propertyNames === false) genPropertyNamesFalseE(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		if (schema.propertyNames && typeof schema.propertyNames === "object") genPropertyNamesE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
+		if (schema.items !== void 0 && schema.items !== true) {
+			const startIdx = schema.prefixItems ? schema.prefixItems.length : 0;
+			const idx = `_j${ctx.varCounter}`;
+			const elem = `_ei${ctx.varCounter}`;
+			ctx.varCounter++;
+			const childPath = childPathDynExpr(pathExpr, idx);
+			lines.push(`if(Array.isArray(${v})){for(let ${idx}=${startIdx};${idx}<${v}.length;${idx}++){const ${elem}=${v}[${idx}]`);
+			genCodeE(schema.items, elem, childPath, lines, ctx, schemaPrefix + "/items");
+			lines.push(`}}`);
+		}
+		if (schema.prefixItems) genPrefixItemsE(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		if (schema.contains !== void 0) genContainsE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
+		if (schema.allOf) for (let _ai = 0; _ai < schema.allOf.length; _ai++) genCodeE(schema.allOf[_ai], v, pathExpr, lines, ctx, schemaPrefix + "/allOf/" + _ai);
+		if (schema.anyOf) genAnyOfE(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		if (schema.oneOf) genOneOfE(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		if (schema.not !== void 0) genNotE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
+		if (schema.if !== void 0) genIfE(schema, v, pathExpr, lines, ctx, schemaPrefix);
+	}
+	function genDynamicRefE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		const anchorKey = schema.$dynamicRef.startsWith("#") ? schema.$dynamicRef : "#" + schema.$dynamicRef;
+		if (ctx.anchors && ctx.anchors[anchorKey]) {
+			const target = ctx.anchors[anchorKey];
+			if (target === ctx.rootSchema) {
+				ctx.usesRecursion = true;
+				lines.push(`_validateE(${v},_all,_e)`);
+			} else {
+				const refKey = "$dynamicRef:" + anchorKey;
+				if (!ctx.refStack.has(refKey)) {
+					ctx.refStack.add(refKey);
+					genCodeE(target, v, pathExpr, lines, ctx, schemaPrefix);
+					ctx.refStack.delete(refKey);
+				}
+			}
+		}
+	}
+	function genUniqueItemsE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isArr) {
+		const si = ctx.varCounter++;
+		const failExpr = (iVar, jVar) => fail("uniqueItems", "uniqueItems", `{i:${iVar},j:${jVar}}`, `'must NOT have duplicate items (items ## '+${jVar}+' and '+${iVar}+' are identical)'`);
+		const inner = `const _j${si}=${emitUqp(ctx)}(${v});if(_j${si}>=0){const _i${si}=_uqpI;${failExpr("_i" + si, "_j" + si)}}`;
+		lines.push(isArr ? `{${inner}}` : `if(Array.isArray(${v})){${inner}}`);
+	}
+	function genUnevaluatedFalseE(schema, v, pathExpr, lines, ctx, schemaPrefix, isObj) {
+		const allowedU = Object.keys(schema.properties || {}).map((k) => `${JSON.stringify(k)}`).join(",");
+		const ui = ctx.varCounter++;
+		const upSp = `${schemaPrefix}/unevaluatedProperties`;
+		const upLit = buildErrorLiteral({
+			keyword: "unevaluatedProperties",
+			schemaPath: upSp,
+			sourceMap: ctx.sourceMap
+		});
+		const patChecksU = [];
+		for (const pat of Object.keys(schema.patternProperties || {})) {
+			const pattern = JSON.stringify(pat);
+			if (!ctx.regExpMap.has(pattern)) {
+				const ri = ctx.varCounter++;
+				ctx.regExpMap.set(pattern, ri);
+				if (useSafeEngine(pat)) {
+					ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+					ctx.usesSafeRe = true;
+				} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern}${reFlagArg(pattern)})`);
+			}
+			patChecksU.push(`_re${ctx.regExpMap.get(pattern)}.test(_k${ui}[_i])`);
+		}
+		const isUneval = patChecksU.length ? `!_a${ui}.has(_k${ui}[_i])&&!(${patChecksU.join("||")})` : `!_a${ui}.has(_k${ui}[_i])`;
+		ctx.helperCode.push(`const _a${ui}=new Set([${allowedU}])`);
+		const innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++){if(${isUneval}){_e.push({code:'${upLit.codeStr}',keyword:'unevaluatedProperties',instancePath:${pathExpr || "\"\""},schemaPath:'${upSp}'${ordinalField(ctx, `${upSp}`)},params:{unevaluatedProperty:_k${ui}[_i]},message:'must NOT have unevaluated properties',docUrl:'${upLit.docUrl}'${upLit.frame}});if(!_all)return{valid:false,errors:_e}}}`;
+		lines.push(isObj ? `{${innerU}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${innerU}}`);
+	}
+	function genUnevaluatedItemsFalseE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		const itemsIsPrefix = Array.isArray(schema.items);
+		if (!(schema.items !== void 0 && !itemsIsPrefix)) {
+			const plen = itemsIsPrefix ? schema.items.length : Array.isArray(schema.prefixItems) ? schema.prefixItems.length : 0;
+			const uiSp = `${schemaPrefix}/unevaluatedItems`;
+			const uiLit = buildErrorLiteral({
+				keyword: "unevaluatedItems",
+				schemaPath: uiSp,
+				sourceMap: ctx.sourceMap
+			});
+			lines.push(`if(Array.isArray(${v})&&${v}.length>${plen}){_e.push({code:'${uiLit.codeStr}',keyword:'unevaluatedItems',instancePath:${pathExpr || "\"\""},schemaPath:'${uiSp}'${ordinalField(ctx, `${uiSp}`)},params:{limit:${plen}},message:'must NOT have more than ${plen} items',docUrl:'${uiLit.docUrl}'${uiLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+		}
+	}
+	function genPatternPropertiesE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		for (const [pat, sub] of Object.entries(schema.patternProperties)) {
+			const pattern = JSON.stringify(pat);
+			if (!ctx.regExpMap.has(pattern)) {
+				const ri = ctx.varCounter++;
+				ctx.regExpMap.set(pattern, ri);
+				if (useSafeEngine(pat)) {
+					ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+					ctx.usesSafeRe = true;
+				} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern}${reFlagArg(pattern)})`);
+			}
+			const ri = ctx.regExpMap.get(pattern);
+			const ki = ctx.varCounter++;
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){if(_re${ri}.test(_k${ki})){`);
+			const _peFn = emitPtrEsc(ctx);
+			const p = pathExpr ? `${pathExpr}+'/'+${_peFn}(_k${ki})` : `'/'+${_peFn}(_k${ki})`;
+			genCodeE(sub, `${v}[_k${ki}]`, p, lines, ctx, schemaPrefix + "/patternProperties/" + ptrSeg(pat));
+			lines.push(`}}}`);
+		}
+	}
+	function genAdditionalSchemaE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		const ki = ctx.varCounter++;
+		const known = Object.keys(schema.properties || {});
+		if (known.length) ctx.helperCode.push(`const _ak${ki}=new Set([${known.map((k) => JSON.stringify(k)).join(",")}])`);
+		const guard = "";
+		const patTests = [];
+		for (const pat of Object.keys(schema.patternProperties || {})) {
+			const pattern = JSON.stringify(pat);
+			if (!ctx.regExpMap.has(pattern)) {
+				const ri = ctx.varCounter++;
+				ctx.regExpMap.set(pattern, ri);
+				if (useSafeEngine(pat)) {
+					ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+					ctx.usesSafeRe = true;
+				} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern}${reFlagArg(pattern)})`);
+			}
+			patTests.push(`_re${ctx.regExpMap.get(pattern)}.test(_k${ki})`);
+		}
+		const conds = [];
+		if (known.length) conds.push(`!_ak${ki}.has(_k${ki})`);
+		if (patTests.length) conds.push(`!(${patTests.join("||")})`);
+		const keep = conds.length ? `if(${conds.join("&&")}){` : `{`;
+		lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${guard}for(const _k${ki} in ${v}){${keep}`);
+		const _peFn = emitPtrEsc(ctx);
+		const p = pathExpr ? `${pathExpr}+'/'+${_peFn}(_k${ki})` : `'/'+${_peFn}(_k${ki})`;
+		genCodeE(schema.additionalProperties, `${v}[_k${ki}]`, p, lines, ctx, schemaPrefix + "/additionalProperties");
+		lines.push(`}}}`);
+	}
+	function genDependentSchemasE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		for (const [key, depSchema] of Object.entries(schema.dependentSchemas)) {
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${ownKeyExpr(ctx, v, key)}){`);
+			genCodeE(depSchema, v, pathExpr, lines, ctx, schemaPrefix + "/dependentSchemas/" + ptrSeg(key));
+			lines.push(`}`);
+		}
+	}
+	function genPropertyNamesFalseE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		const ki = ctx.varCounter++;
+		const p = pathExpr || "\"\"";
+		lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){_e.push({keyword:'not',instancePath:${p},schemaPath:'${schemaPrefix}/propertyNames'${ordinalField(ctx, `${schemaPrefix}/propertyNames`)},params:{},message:'boolean schema is false'});if(!_all)return{valid:false,errors:_e}}}`);
+	}
+	function genPropertyNamesE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
+		const pn = schema.propertyNames;
+		const ki = ctx.varCounter++;
+		lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){`);
+		if (!isSimplePN(pn)) {
+			genCodeE(pn, `_k${ki}`, pathExpr, lines, ctx, schemaPrefix + "/propertyNames");
+			lines.push(`}}`);
+			return;
+		}
+		if (pn.minLength !== void 0) lines.push(`if(_k${ki}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
+		if (pn.maxLength !== void 0) lines.push(`if(_k${ki}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
+		if (pn.pattern) {
+			const pattern = JSON.stringify(pn.pattern);
+			if (!ctx.regExpMap.has(pattern)) {
+				const ri = ctx.varCounter++;
+				ctx.regExpMap.set(pattern, ri);
+				if (useSafeEngine(pn.pattern)) {
+					ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
+					ctx.usesSafeRe = true;
+				} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern}${reFlagArg(pattern)})`);
+			}
+			const ri = ctx.regExpMap.get(pattern);
+			lines.push(`if(!_re${ri}.test(_k${ki})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, JSON.stringify(`must match pattern "${pn.pattern}"`))}}`);
+		}
+		if (pn.const !== void 0) lines.push(`if(_k${ki}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
+		if (pn.enum) {
+			const ei = ctx.varCounter++;
+			ctx.helperCode.push(`const _es${ei}=new Set(${JSON.stringify(pn.enum)})`);
+			lines.push(`if(!_es${ei}.has(_k${ki})){${fail("enum", "propertyNames/enum", `{allowedValues:${JSON.stringify(pn.enum)}}`, "'must be equal to one of the allowed values'")}}`);
+		}
+		lines.push(`}}`);
+	}
+	function genPrefixItemsE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		for (let i = 0; i < schema.prefixItems.length; i++) {
+			const childPath = childPathExpr(pathExpr, String(i));
+			lines.push(`if(Array.isArray(${v})&&${v}.length>${i}){`);
+			genCodeE(schema.prefixItems[i], `${v}[${i}]`, childPath, lines, ctx, schemaPrefix + "/prefixItems/" + i);
+			lines.push(`}`);
+		}
+	}
+	function genContainsE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
+		const ci = ctx.varCounter++;
+		const subLines = [];
+		nestedGenCode(schema.contains, `_cv`, subLines, ctx);
+		const fnBody = subLines.length === 0 ? `return true` : `${subLines.join(";")};return true`;
+		const minC = schema.minContains !== void 0 ? schema.minContains : 1;
+		const maxC = schema.maxContains;
+		lines.push(`if(Array.isArray(${v})){const _cf${ci}=function(_cv){${fnBody}};let _cc${ci}=0;for(let _ci${ci}=0;_ci${ci}<${v}.length;_ci${ci}++){if(_cf${ci}(${v}[_ci${ci}]))_cc${ci}++}`);
+		lines.push(`if(_cc${ci}<${minC}){${fail("contains", "contains", `{minContains:${minC}}`, `'must contain at least ${minC} valid item(s)'`)}}`);
+		if (maxC !== void 0) lines.push(`if(_cc${ci}>${maxC}){${fail("contains", "contains", `{minContains:${minC},maxContains:${maxC}}`, `'must NOT contain more than ${maxC} valid item(s)'`)}}`);
+		lines.push(`}`);
+	}
+	function genAnyOfE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		emitBranchCollapse(schema.anyOf, "anyOf", v, pathExpr, lines, ctx, schemaPrefix);
+	}
+	function genOneOfE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		emitBranchCollapse(schema.oneOf, "oneOf", v, pathExpr, lines, ctx, schemaPrefix);
+	}
+	function genNotE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
+		const subLines = [];
+		nestedGenCode(schema.not, "_nv", subLines, ctx);
+		const nfn = subLines.length === 0 ? `function(_nv){return true}` : `function(_nv){${subLines.join(";")};return true}`;
+		const fi = ctx.varCounter++;
+		lines.push(`{const _nf${fi}=${nfn};if(_nf${fi}(${v})){${fail("not", "not", "{}", "'must NOT be valid'")}}}`);
+	}
+	function genIfE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		const ifLines = [];
+		nestedGenCode(schema.if, "_iv", ifLines, ctx);
+		const fi = ctx.varCounter++;
+		const ifFn = ifLines.length === 0 ? `function(_iv){return true}` : `function(_iv){${ifLines.join(";")};return true}`;
+		lines.push(`{const _if${fi}=${ifFn}`);
+		if (schema.then !== void 0) {
+			lines.push(`if(_if${fi}(${v})){`);
+			genCodeE(schema.then, v, pathExpr, lines, ctx, schemaPrefix + "/then");
+			lines.push(`}`);
+		}
+		if (schema.else !== void 0) {
+			lines.push(`${schema.then !== void 0 ? "else" : `if(!_if${fi}(${v}))`}{`);
+			genCodeE(schema.else, v, pathExpr, lines, ctx, schemaPrefix + "/else");
+			lines.push(`}`);
+		}
+		lines.push(`}`);
+	}
+	function sharedErr(lit, rootSchema) {
+		Object.defineProperty(lit, "_s", { value: true });
+		Object.defineProperty(lit, "_t", { value: {} });
+		if (lit._o === void 0) {
+			const o = ordinalFor(rootSchema, lit.schemaPath);
+			if (typeof o === "number") Object.defineProperty(lit, "_o", { value: o });
+		}
+		return Object.freeze(lit);
+	}
+	function apOrd(ctx, sp, coarse) {
+		if (typeof sp === "string" && sp.includes(SP_PLACEHOLDER) && ctx && ctx.inDefC) return "_so";
+		if (typeof sp !== "string" || sp.includes(SP_PLACEHOLDER) || sp.includes("+")) return -1;
+		if (!ctx || !ctx.rootSchema) return -1;
+		const path = unescapeSp(sp);
+		const o = ordinalFor(ctx.rootSchema, path);
+		if (typeof o !== "number") return -1;
+		if (!ctx.ordSites) ctx.ordSites = /* @__PURE__ */ new Map();
+		let site = ctx.ordSites.get(path);
+		if (site === void 0) {
+			site = {
+				i: ctx.ordSites.size,
+				o,
+				r: rankFor(ctx.rootSchema, path),
+				key: -1
+			};
+			ctx.ordSites.set(path, site);
+		}
+		return coarse ? `@@C${site.i}@@` : `@@O${site.i}@@`;
+	}
+	function assignOrdKeys(ctx, src) {
+		if (!ctx.ordSites || ctx.ordSites.size === 0) return src;
+		const sites = [...ctx.ordSites.values()];
+		const cmp = (a, b) => {
+			if (a.o !== b.o) return a.o - b.o;
+			const m = Math.min(a.r.length, b.r.length);
+			for (let k = 0; k < m; k++) if (a.r[k] !== b.r[k]) return a.r[k] - b.r[k];
+			return a.r.length - b.r.length;
+		};
+		const ranked = sites.filter((x) => x.r !== null).sort(cmp);
+		let key = 0;
+		for (let i = 0; i < ranked.length; i++) {
+			if (i > 0 && cmp(ranked[i - 1], ranked[i]) !== 0) key++;
+			ranked[i].key = key;
+		}
+		return src.replace(/@@([OC])(\d+)@@/g, (_, t, i) => {
+			const k = sites[+i].key;
+			return String(t === "O" || k < 0 ? k : -(k + 2));
+		});
+	}
+	const AP_RESET = "_A.mo=true;_A.lo=-1;_A.on=0;";
+	function errPushC(ctx, keyword, sp, pathExpr, paramsCode, msgCode, valueExpr, lean, paramsShared) {
+		if (!ctx.rich) return `(_e=_ap(_A,_e,${lean},${apOrd(ctx, sp)}))`;
+		if (!ctx.richMk) {
+			ctx.richMk = true;
+			const { makeRich } = require_enrich_site();
+			ctx.closureVars.push("_mk");
+			ctx.closureVals.push(makeRich);
+		}
+		let paramsVal;
+		try {
+			paramsVal = Function("return " + paramsCode)();
+		} catch {
+			paramsVal = void 0;
+		}
+		const fmt = keyword === "format" && paramsVal ? paramsVal.format : void 0;
+		const { errorSite } = require_enrich_site();
+		const siteVar = `_S${ctx.varCounter++}`;
+		ctx.closureVars.push(siteVar);
+		const rel = sp.startsWith(SP_PLACEHOLDER);
+		ctx.closureVals.push(errorSite(keyword, unescapeSp(rel ? sp.slice(10) : sp), paramsVal, fmt));
+		return `(_e=_ap(_A,_e,_mk(${siteVar},${pathExpr || "\"\""},${paramsShared || paramsCode},${msgCode},${valueExpr},d${rel ? ",_sp" : ""}),-1))`;
+	}
+	function compileToJSCombined(schema, VALID_RESULT, schemaMap, userFormats, opts) {
+		const inputSchema = schema;
+		schema = prepareForCodegen(schema, schemaMap);
+		if (typeof schema === "object" && schema !== null) JSON.stringify(schema);
+		if (typeof schema === "boolean") {
+			if (!schema && opts && (opts.rich || opts.resultShape)) return null;
+			if (opts && opts.resultShape) return null;
+			return schema ? () => VALID_RESULT : () => ({
+				valid: false,
+				errors: [{
+					keyword: "not",
+					instancePath: "",
+					schemaPath: "#",
+					params: {},
+					message: "boolean schema is false"
+				}]
+			});
+		}
+		if (typeof schema !== "object" || schema === null) return null;
+		if (!sharedCodegenGate(schema, schemaMap)) return null;
+		if (schema.patternProperties) {
+			for (const [pat, sub] of Object.entries(schema.patternProperties)) if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
+		}
+		if (schema.dependentSchemas) {
+			for (const sub of Object.values(schema.dependentSchemas)) if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
+		}
+		if (schema.propertyNames && typeof schema.propertyNames === "object" && !isSimplePN(schema.propertyNames) && !codegenSafe(schema.propertyNames, schemaMap)) return null;
+		const cRootDefs = schema.$defs || schema.definitions || null;
+		const cAnchors = {};
+		if (schema.$dynamicAnchor) cAnchors["#" + schema.$dynamicAnchor] = schema;
+		if (schema.$anchor) cAnchors["#" + schema.$anchor] = schema;
+		if (typeof schema.$id === "string" && schema.$id.startsWith("#")) cAnchors[schema.$id] = schema;
+		if (cRootDefs) {
+			for (const def of Object.values(cRootDefs)) if (def && typeof def === "object") {
+				if (def.$dynamicAnchor) cAnchors["#" + def.$dynamicAnchor] = def;
+				if (def.$anchor) cAnchors["#" + def.$anchor] = def;
+				if (typeof def.$id === "string" && def.$id.startsWith("#")) cAnchors[def.$id] = def;
+			}
+		}
+		if (schemaMap) {
+			for (const ext of schemaMap.values()) if (ext && typeof ext === "object") {
+				if (ext.$dynamicAnchor && !cAnchors["#" + ext.$dynamicAnchor]) cAnchors["#" + ext.$dynamicAnchor] = ext;
+				if (ext.$anchor && !cAnchors["#" + ext.$anchor]) cAnchors["#" + ext.$anchor] = ext;
+				if (typeof ext.$id === "string" && ext.$id.startsWith("#") && !cAnchors[ext.$id]) cAnchors[ext.$id] = ext;
+			}
+		}
+		if (hasUnresolvableRef(schema, cRootDefs, cAnchors, schemaMap, /* @__PURE__ */ new Set())) return null;
+		if (needsBaseTracking(schema, schemaMap, /* @__PURE__ */ new Set())) return null;
+		const ctx = {
+			noCounting: !!(opts && opts.noCounting),
+			noOrdinal: !!(opts && opts.runtimeShape),
+			rich: !!(opts && opts.rich),
+			inCombined: true,
+			hoisted: [],
+			rootC: schema,
+			varCounter: 0,
+			preamble: [],
+			helperCode: [],
+			shared: [],
+			closureVars: [
+				"_cpLen",
+				"_A",
+				"_ap",
+				"_sr",
+				"_srX"
+			],
+			closureVals: [
+				_cpLen,
+				sharedRt().apState(),
+				sharedRt().ap,
+				sharedRt().sr,
+				sharedRt().srX
+			],
+			sharedRuntime: true,
+			rootDefs: cRootDefs,
+			refStack: /* @__PURE__ */ new Set(),
+			schemaMap: schemaMap || null,
+			anchors: cAnchors,
+			rootSchema: inputSchema,
+			userFormats: userFormats || null
+		};
+		const lines = [];
+		try {
+			genCodeC(schema, "d", "", lines, ctx, "#");
+		} catch (e) {
+			if (e === DECLINE) return null;
+			throw e;
+		}
+		if (lines.length === 0) {
+			if (hasConstraints(schema, false)) return null;
+			return () => VALID_RESULT;
+		}
+		if (opts && opts.resultShape) {
+			ctx.closureVars.push("_ER", "_EE", "_SRT", "_FB", "_VF");
+			ctx.closureVals.push(opts.resultShape.Rejection, opts.resultShape.empty, opts.resultShape.sort, opts.resultShape.fallback, opts.resultShape.verdict || null);
+		}
+		if (ctx.usesBranchCollapse) bindRt(ctx, ["__ataCollapse", "__ataMulti"]);
+		const closureNames = ctx.usesSafeRe ? [...ctx.closureVars, "__ataSafeRe"] : ctx.closureVars;
+		const closureArgs = ctx.usesSafeRe ? [...ctx.closureVals, compileSafe] : ctx.closureVals;
+		const closureParams = closureNames.join(",");
+		const guardList = [...ctx.defFns ? ctx.defFns.values() : [], ...ctx.cycFnsC || []];
+		const guardDefs = guardList.length ? guardList : null;
+		if (guardDefs) ctx.helperCode.unshift(emitGuardState());
+		if (ctx.usesBranchCollapse && opts && opts.runtimeShape) {
+			const shape = (src) => src.replace(/code:'ATA\d{4}',/g, "").replace(/,docUrl:'https:\/\/ata-validator\.com\/e\/ATA\d{4}'/g, "");
+			for (let i = 0; i < ctx.helperCode.length; i++) ctx.helperCode[i] = shape(ctx.helperCode[i]);
+			for (let i = 0; i < lines.length; i++) lines[i] = shape(lines[i]);
+		}
+		const rs = opts && opts.resultShape;
+		let hoistDecl = ctx.hoisted.length ? `let ${ctx.hoisted.map((n) => n + "=null").join(",")};` : "";
+		let checks = lines.join("\n  ");
+		let allDecl = ctx.usesBranchCollapse ? "const _all=true;" : "";
+		if (guardDefs) {
+			const clears = ["_stk.clear()"].concat(guardDefs.map((n) => `${n}_s.clear()`)).join(";");
+			ctx.helperCode.push(`function _bodyC(d){${hoistDecl}${allDecl}let _e;\n  ${checks}\n  return _e}`);
+			hoistDecl = "";
+			allDecl = "";
+			checks = `_sd=0;try{_e=_bodyC(d)}catch(_err){if(_err!==_CYC)throw _err;_sg=true;${clears};${AP_RESET}try{_e=_bodyC(d)}finally{_sg=false}}`;
+		}
+		const inner = rs ? `try{${hoistDecl}${ctx.usesBranchCollapse && ctx.unguardedCollapse ? "if(_VF!==null&&_VF(d))return{valid:true,data:d,errors:_EE};" : ""}${allDecl}let _e;${AP_RESET}\n  ` + checks + `\n  return _e?new _ER(_A.mo?_e:${env("ATA_CHECK_SORT") && !(opts && opts.emit) ? "_srX(_A,_e,_SRT)" : "_sr(_A,_e,_SRT)"}):${opts && opts.moduleShape ? "R" : "{valid:true,data:d,errors:_EE}"}}catch(_x){return _FB(d)}` : hoistDecl + allDecl + `let _e;${AP_RESET}\n  ` + checks + `\n  return _e?{valid:false,errors:_e}:R`;
+		const helpers = (ctx.preamble.length ? ctx.preamble.join("\n  ") + "\n  " : "") + (ctx.helperCode.length ? ctx.helperCode.join("\n  ") + "\n  " : "");
+		try {
+			if (env("ATA_DUMP_CODEGEN")) console.log("=== COMBINED CODEGEN ===\n" + helpers + inner + "\n=== CLOSURE VARS: " + ctx.closureVars.length + " ===");
+			if (env("ATA_DUMP_PARTS")) {
+				const cls = (t) => (t.match(/^\s*(?:const|function|let)\s+([A-Za-z_$]+?)(?=\d|\b|_)/) || [, "other"])[1];
+				const acc = {};
+				for (const h of ctx.helperCode) {
+					const k = "helper:" + cls(h);
+					acc[k] = (acc[k] || 0) + h.length;
+				}
+				for (const h of ctx.preamble) {
+					const k = "preamble:" + cls(h);
+					acc[k] = (acc[k] || 0) + h.length;
+				}
+				acc.inner = inner.length;
+				console.log("=== COMBINED PARTS ===", JSON.stringify(Object.entries(acc).sort((a, b) => b[1] - a[1])));
+			}
+			const programSrc = assignOrdKeys(ctx, `${helpers}return function _vC(d){${inner}}`);
+			const made = compileFunction("R" + (closureParams ? "," + closureParams : ""), programSrc)(VALID_RESULT, ...closureArgs);
+			if (opts && opts.emit) {
+				made({});
+				made(null);
+				made(0);
+				return {
+					source: programSrc,
+					names: ["R", ...closureNames],
+					values: [VALID_RESULT, ...closureArgs],
+					usesSafeRe: !!ctx.usesSafeRe
+				};
+			}
+			return made;
+		} catch (e) {
+			if (env("ATA_DEBUG")) console.error("compileToJSCombined error:", e.message, "\n", inner.slice(0, 500));
+			return null;
+		}
+	}
+	const TYPE_KEYWORDS = {
+		object: [
+			"properties",
+			"patternProperties",
+			"additionalProperties",
+			"required",
+			"propertyNames",
+			"minProperties",
+			"maxProperties",
+			"dependentRequired",
+			"dependentSchemas",
+			"dependencies",
+			"unevaluatedProperties"
+		],
+		array: [
+			"items",
+			"prefixItems",
+			"additionalItems",
+			"contains",
+			"minContains",
+			"maxContains",
+			"minItems",
+			"maxItems",
+			"uniqueItems",
+			"unevaluatedItems"
+		],
+		string: [
+			"minLength",
+			"maxLength",
+			"pattern"
+		],
+		number: [
+			"minimum",
+			"maximum",
+			"exclusiveMinimum",
+			"exclusiveMaximum",
+			"multipleOf"
+		]
+	};
+	TYPE_KEYWORDS.integer = TYPE_KEYWORDS.number;
+	const NOT_VALIDATING = /* @__PURE__ */ new Set([
+		"$schema",
+		"$id",
+		"$anchor",
+		"$comment",
+		"$defs",
+		"definitions",
+		"title",
+		"description",
+		"default",
+		"examples",
+		"deprecated",
+		"readOnly",
+		"writeOnly",
+		"$vocabulary"
+	]);
+	function typeMismatchRest(schema, types) {
+		const drop = /* @__PURE__ */ new Set([
+			"type",
+			"enum",
+			"const",
+			"anyOf",
+			"oneOf"
+		]);
+		for (const t of types) for (const k of TYPE_KEYWORDS[t] || []) drop.add(k);
+		let rest = null;
+		for (const k of Object.keys(schema)) {
+			if (drop.has(k)) continue;
+			if (rest === null) rest = {};
+			setOwn(rest, k, schema[k]);
+		}
+		if (rest === null) return null;
+		if (schema[REF_DONE]) Object.defineProperty(rest, REF_DONE, { value: true });
+		for (const k of Object.keys(rest)) if (!NOT_VALIDATING.has(k) && !k.startsWith("x-")) return rest;
+		return null;
+	}
+	function genCodeC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		return withPlain(schema, v, lines, ctx, () => genCodeCNode(schema, v, pathExpr, lines, ctx, schemaPrefix));
+	}
+	const COMBINED_DEF_FN_MIN = 160;
+	const _defOwnChars = /* @__PURE__ */ new WeakMap();
+	function defOwnChars(def) {
+		if (def === null || typeof def !== "object") return 0;
+		let n = _defOwnChars.get(def);
+		if (n === void 0) {
+			n = 0;
+			const walk = (x) => {
+				if (x === null || typeof x !== "object") {
+					n += 6;
+					return;
+				}
+				if (Array.isArray(x)) {
+					for (const y of x) walk(y);
+					return;
+				}
+				for (const k of Object.keys(x)) {
+					if (SIZE_SKIPS.has(k)) continue;
+					n += k.length + 4;
+					walk(x[k]);
+				}
+			};
+			walk(def);
+			_defOwnChars.set(def, n);
+		}
+		return n;
+	}
+	function emitSharedDefC(defName, v, pathExpr, lines, ctx, schemaPrefix) {
+		if (!ctx.cyclicDefs) ctx.cyclicDefs = cyclicDefNames(ctx.rootDefs);
+		if (!ctx.sharedDefs) ctx.sharedDefs = sharedDefNames(ctx.rootSchema, ctx.rootDefs);
+		const cyclic = ctx.cyclicDefs.has(defName);
+		if (!cyclic && !ctx.sharedDefs.has(defName) && !(ctx.inCombined && defOwnChars(ctx.rootDefs[defName]) >= COMBINED_DEF_FN_MIN)) return false;
+		emitDefFnC(defName, ctx.rootDefs[defName], cyclic, v, pathExpr, lines, ctx, schemaPrefix);
+		return true;
+	}
+	function propFnCandidateE(prop, ctx, schemaPrefix) {
+		if (!ctx || ctx.nestedBoolean || ctx.condDepth) return false;
+		if (typeof schemaPrefix !== "string" || schemaPrefix.includes(SP_PLACEHOLDER)) return false;
+		if (!prop || typeof prop !== "object" || Array.isArray(prop)) return false;
+		let size = 0;
+		try {
+			size = JSON.stringify(prop).length;
+		} catch {
+			return false;
+		}
+		return size >= SPLIT_C_SCHEMA || (ctx.fnBytesE || 0) > SPLIT_C_BUDGET && size >= SPLIT_C_SMALL;
+	}
+	function emitPropFnE(prop, v, pathExpr, lines, ctx, schemaPrefix) {
+		const outerBytes = ctx.fnBytesE;
+		ctx.fnBytesE = 0;
+		const bodyLines = [];
+		try {
+			genCodeE(prop, "d", "_p", bodyLines, ctx, schemaPrefix);
+		} finally {
+			ctx.fnBytesE = outerBytes;
+		}
+		if (bodyLines.length === 0) return false;
+		const body = bodyLines.join("\n  ");
+		if (body.includes(SP_PLACEHOLDER)) return false;
+		const fnName = "_pe" + (ctx.propFnsE = (ctx.propFnsE || 0) + 1);
+		ctx.helperCode.push(`function ${fnName}(d,_p,_all,_e){${body}}`);
+		lines.push(`${fnName}(${v},${pathExpr || "\"\""},_all,_e);if(!_all&&_e.length)return{valid:false,errors:_e}`);
+		return true;
+	}
+	function countInlineE(lines, from, ctx) {
+		let n = 0;
+		for (let i = from; i < lines.length; i++) n += lines[i].length;
+		ctx.fnBytesE = (ctx.fnBytesE || 0) + n;
+	}
+	const SPLIT_C_SCHEMA = 1500;
+	const SPLIT_C_SMALL = 160;
+	const SPLIT_C_BUDGET = 16384;
+	function propFnCandidateC(prop, ctx, schemaPrefix) {
+		if (!ctx || ctx.inDefC || ctx.nestedBoolean || ctx.condDepth) return false;
+		if (typeof schemaPrefix !== "string" || schemaPrefix.includes(SP_PLACEHOLDER)) return false;
+		if (!prop || typeof prop !== "object" || Array.isArray(prop)) return false;
+		let size = 0;
+		try {
+			size = JSON.stringify(prop).length;
+		} catch {
+			return false;
+		}
+		return size >= SPLIT_C_SCHEMA || (ctx.fnBytesC || 0) > SPLIT_C_BUDGET && size >= SPLIT_C_SMALL;
+	}
+	function emitPropFnC(prop, v, pathExpr, lines, ctx, schemaPrefix) {
+		const outerHoisted = ctx.hoisted;
+		ctx.hoisted = [];
+		const outerBytes = ctx.fnBytesC;
+		ctx.fnBytesC = 0;
+		const bodyLines = [];
+		let hoisted;
+		try {
+			genGuardedC(prop, "_dv", "_p", bodyLines, ctx, schemaPrefix);
+		} finally {
+			hoisted = ctx.hoisted;
+			ctx.hoisted = outerHoisted;
+			ctx.fnBytesC = outerBytes;
+		}
+		if (bodyLines.length === 0) return false;
+		const body = bodyLines.join("\n  ");
+		if (body.includes(SP_PLACEHOLDER) || /\b_so\b/.test(body)) return false;
+		const decl = hoisted.length ? `let ${hoisted.map((n) => n + "=null").join(",")};` : "";
+		const fnName = "_pc" + (ctx.propFnsC = (ctx.propFnsC || 0) + 1);
+		ctx.helperCode.push(`function ${fnName}(_dv,_p,d){const _all=true;${decl}let _e;\n  ${body}\n  return _e}`);
+		lines.push(`{const _r=${fnName}(${v},${pathExpr || "\"\""},d);if(_r!==undefined){if(_e===undefined)_e=_r;else for(let _i=0;_i<_r.length;_i++)_e.push(_r[_i])}}`);
+		return true;
+	}
+	function countInlineC(lines, from, ctx) {
+		let n = 0;
+		for (let i = from; i < lines.length; i++) n += lines[i].length;
+		ctx.fnBytesC = (ctx.fnBytesC || 0) + n;
+	}
+	function emitDefFnC(key, target, cyclic, v, pathExpr, lines, ctx, schemaPrefix) {
+		if (!ctx.defFnsC) ctx.defFnsC = /* @__PURE__ */ new Map();
+		let fnName = ctx.defFnsC.get(key);
+		if (!fnName) {
+			fnName = "_defC" + ctx.defFnsC.size + "_" + (key === "#" ? "root" : key.replace(/[^A-Za-z0-9_]/g, "_"));
+			ctx.defFnsC.set(key, fnName);
+			const outerHoisted = ctx.hoisted;
+			ctx.hoisted = [];
+			const outerRefs = ctx.refStack;
+			ctx.refStack = /* @__PURE__ */ new Set();
+			const bodyLines = [];
+			let hoisted;
+			try {
+				ctx.inDefC = (ctx.inDefC || 0) + 1;
+				genCodeC(target, "_dv", "_p", bodyLines, ctx, SP_PLACEHOLDER);
+			} finally {
+				ctx.inDefC--;
+				hoisted = ctx.hoisted;
+				ctx.hoisted = outerHoisted;
+				ctx.refStack = outerRefs;
+			}
+			let body = bodyLines.join("\n  ");
+			body = body.split(`'${SP_PLACEHOLDER}`).join(`_sp+'`).split(`"${SP_PLACEHOLDER}`).join(`_sp+"`);
+			if (body.includes(SP_PLACEHOLDER)) throw DECLINE;
+			const decl = hoisted.length ? `let ${hoisted.map((n) => n + "=null").join(",")};` : "";
+			const fn = `function ${cyclic ? fnName + "_b" : fnName}(_dv,_p,_sp,d,_so){const _all=true;${decl}let _e;\n  ${body}\n  return _e}`;
+			if (cyclic) {
+				if (!ctx.cycFnsC) ctx.cycFnsC = [];
+				ctx.cycFnsC.push(fnName);
+				ctx.helperCode.push(`const ${fnName}_s=new Set()\n  function ${fnName}(_dv,_p,_sp,d,_so){\n  if(_sg){if(typeof _dv!=='object'||_dv===null)return ${fnName}_b(_dv,_p,_sp,d,_so);if(${fnName}_s.has(_dv))return;${fnName}_s.add(_dv);try{return ${fnName}_b(_dv,_p,_sp,d,_so)}finally{${fnName}_s.delete(_dv)}}\n  if(++_sd>${CYCLE_DEPTH})throw _CYC\n  const _r=${fnName}_b(_dv,_p,_sp,d,_so)\n  _sd--\n  return _r\n  }\n  ` + fn);
+			} else ctx.helperCode.push(fn);
+		}
+		lines.push(`{const _r=${fnName}(${v},${pathExpr || "\"\""},'${schemaPrefix}',d,${apOrd(ctx, `${schemaPrefix}/$ref`, true)});if(_r!==undefined){if(_e===undefined)_e=_r;else for(let _i=0;_i<_r.length;_i++)_e.push(_r[_i])}}`);
+	}
+	const REF_DONE = Symbol("ata.refDone");
+	function genCodeCNode(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		if (!schemaPrefix) schemaPrefix = "#";
+		let ppHandledPropertyNames = false;
+		if (schema === false) {
+			lines.push(";" + errPushC(ctx, "not", schemaPrefix, pathExpr, "{}", "'boolean schema is false'", v, `{keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}'${ordinalField(ctx, `${schemaPrefix}`)},params:{},message:'boolean schema is false'}`));
+			return;
+		}
+		if (schema === true) return;
+		if (typeof schema !== "object" || schema === null) return;
+		if (schema.$ref && !schema[REF_DONE]) {
+			if (Object.keys(schema).some((k) => !REF_NEUTRAL_SIBLINGS.has(k) && !k.startsWith("x-"))) {
+				if (!ctx.inCombined || ctx.inBranchFn) throw DECLINE;
+				genCodeCNode({ $ref: schema.$ref }, v, pathExpr, lines, ctx, schemaPrefix);
+				const rest = { ...schema };
+				Object.defineProperty(rest, REF_DONE, { value: true });
+				genCodeCNode(rest, v, pathExpr, lines, ctx, schemaPrefix);
+				return;
+			}
+			if (schema.$ref === "#") {
+				if (ctx.inCombined && !ctx.inBranchFn && ctx.rootC) {
+					emitDefFnC("#", ctx.rootC, true, v, pathExpr, lines, ctx, schemaPrefix);
+					return;
+				}
+				throw DECLINE;
+			}
+			const m = schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
+			if (m && ctx.rootDefs && ctx.rootDefs[m[1]]) {
+				if (ctx.inCombined && !ctx.inBranchFn && emitSharedDefC(m[1], v, pathExpr, lines, ctx, schemaPrefix)) return;
+				if (ctx.refStack.has(schema.$ref)) throw DECLINE;
+				ctx.refStack.add(schema.$ref);
+				genCodeC(ctx.rootDefs[m[1]], v, pathExpr, lines, ctx, schemaPrefix);
+				ctx.refStack.delete(schema.$ref);
+				return;
+			}
+			if (!m && schema.$ref.startsWith("#") && !schema.$ref.startsWith("#/")) {
+				const entry = ctx.rootDefs && ctx.rootDefs[schema.$ref];
+				const anchorTarget = entry && entry.raw ? entry.raw : ctx.anchors && ctx.anchors[schema.$ref];
+				if (anchorTarget) {
+					if (ctx.refStack.has(schema.$ref)) throw DECLINE;
+					ctx.refStack.add(schema.$ref);
+					genCodeC(anchorTarget, v, pathExpr, lines, ctx, schemaPrefix);
+					ctx.refStack.delete(schema.$ref);
+					return;
+				}
+			}
+			if (ctx.schemaMap && ctx.schemaMap.has(schema.$ref)) {
+				if (ctx.refStack.has(schema.$ref)) throw DECLINE;
+				ctx.refStack.add(schema.$ref);
+				genCodeC(ctx.schemaMap.get(schema.$ref), v, pathExpr, lines, ctx, schemaPrefix);
+				ctx.refStack.delete(schema.$ref);
+				return;
+			}
+			if (ctx.schemaMap && schema.$ref.includes("#") && !schema.$ref.startsWith("#")) {
+				const r = resolveCrossSchemaRef(schema.$ref, ctx.schemaMap);
+				if (r) {
+					if (ctx.refStack.has(schema.$ref)) throw DECLINE;
+					ctx.refStack.add(schema.$ref);
+					genCodeC(r.schema, v, pathExpr, lines, ctx, schemaPrefix);
+					ctx.refStack.delete(schema.$ref);
+					return;
+				}
+			}
+		}
+		if (schema.$dynamicRef) genDynamicRefC(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		const types = schema.type ? Array.isArray(schema.type) ? schema.type : [schema.type] : null;
+		let isObj = false, isArr = false, isStr = false, isNum = false;
+		const isStaticPath = !pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+");
+		const fail = (keyword, schemaSuffix, paramsCode, msgCode) => {
+			const sp = schemaPrefix + "/" + schemaSuffix;
+			if (ctx.rich) {
+				let shared = null;
+				if (isStaticPath && msgCode.startsWith("'") && !msgCode.includes("+")) {
+					let pv;
+					try {
+						pv = Function("return " + paramsCode)();
+					} catch {
+						pv = void 0;
+					}
+					if (pv !== void 0) {
+						shared = `_P${ctx.varCounter++}`;
+						ctx.closureVars.push(shared);
+						ctx.closureVals.push(Object.freeze(pv));
+					}
+				}
+				return errPushC(ctx, keyword, sp, pathExpr, paramsCode, msgCode, v, null, shared);
+			}
+			if (isStaticPath && !ctx.noOrdinal && msgCode.startsWith("'") && !msgCode.includes("+")) {
+				let paramsVal;
+				try {
+					paramsVal = Function("return " + paramsCode)();
+				} catch {}
+				if (paramsVal !== void 0) {
+					const errVar = `_E${ctx.varCounter++}`;
+					let pathVal, msgVal;
+					try {
+						pathVal = pathExpr ? Function("return " + pathExpr)() : "";
+						msgVal = Function("return " + msgCode)();
+					} catch {
+						pathVal = void 0;
+					}
+					if (pathVal !== void 0) {
+						const spVal = unescapeSp(sp);
+						ctx.closureVars.push(errVar);
+						const o = ctx.noOrdinal ? null : ordinalFor(ctx.rootSchema, spVal);
+						const lit = {
+							keyword,
+							instancePath: pathVal,
+							schemaPath: spVal,
+							params: Object.freeze(paramsVal),
+							message: msgVal
+						};
+						if (o !== null) lit._o = o;
+						ctx.closureVals.push(sharedErr(lit, ctx.rootSchema));
+						return `(_e=_ap(_A,_e,${errVar},${apOrd(ctx, sp)}))`;
+					}
+				}
+			}
+			return `(_e=_ap(_A,_e,{keyword:'${keyword}',instancePath:${pathExpr || "\"\""},schemaPath:'${sp}',params:${paramsCode},message:${msgCode}${ordinalField(ctx, sp)}},${apOrd(ctx, sp)}))`;
+		};
+		const emitEnumConst = () => {
+			if (schema.enum) {
+				const ev = enumOperand(ctx, schema.enum, v, lines);
+				lines.push(`if(!(${enumCondition(ctx, schema.enum, ev)})){${fail("enum", "enum", `{allowedValues:${JSON.stringify(schema.enum)}}`, "'must be equal to one of the allowed values'")}}`);
+			}
+			if (schema.const !== void 0) {
+				const cv = schema.const;
+				if (cv === null || typeof cv !== "object") lines.push(`if(${v}!==${JSON.stringify(cv)}){${fail("const", "const", `{allowedValue:${JSON.stringify(schema.const)}}`, "'must be equal to constant'")}}`);
+				else lines.push(`if(!${emitDeq(ctx)}(${v},${emitConstant(ctx, cv)})){${fail("const", "const", `{allowedValue:${emitParamConstant(ctx, schema.const)}}`, "'must be equal to constant'")}}`);
+			}
+		};
+		if (types) {
+			const conds = types.map((t) => {
+				switch (t) {
+					case "object": return `(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+					case "array": return `Array.isArray(${v})`;
+					case "string": return `typeof ${v}==='string'`;
+					case "number": return `Number.isFinite(${v})`;
+					case "integer": return `Number.isInteger(${v})`;
+					case "boolean": return `typeof ${v}==='boolean'`;
+					case "null": return `${v}===null`;
+					default: return "true";
+				}
+			});
+			const expected = types.join(", ");
+			const expectedParam = !Array.isArray(schema.type) ? `'${types[0]}'` : JSON.stringify(types);
+			const typeOk = `_tok${ctx.varCounter++}`;
+			lines.push(`const ${typeOk}=${conds.join("||")}`);
+			lines.push(`if(!${typeOk}){${fail("type", "type", `{type:${expectedParam}}`, `'must be ${expected}'`)}}`);
+			if (types.length === 1) {
+				isObj = types[0] === "object";
+				isArr = types[0] === "array";
+				isStr = types[0] === "string";
+				isNum = types[0] === "number" || types[0] === "integer";
+			}
+			emitEnumConst();
+			const numberToo = types.includes("integer") && !types.includes("number");
+			lines.push(numberToo ? `if(${typeOk}||typeof ${v}==='number'){` : `if(${typeOk}){`);
+		} else emitEnumConst();
+		const requiredSet = new Set(schema.required || []);
+		const hoisted = {};
+		if (schema.required && schema.properties && isObj) {
+			const destructKeys = [];
+			for (const key of schema.required) if (schema.properties[key]) {
+				const lv = `_h${ctx.varCounter++}`;
+				hoisted[key] = lv;
+				destructKeys.push(`${JSON.stringify(key)}:${lv}`);
+			}
+			if (destructKeys.length > 0) {
+				lines.push(`let{${destructKeys.join(",")}}=${v}`);
+				for (const key of schema.required) if (hoisted[key]) lines.push(`if(${hoisted[key]}!==undefined&&!${ownGuard(ctx, v, key)})${hoisted[key]}=undefined`);
+			}
+			for (const key of schema.required) {
+				const check = hoisted[key] ? `${hoisted[key]}===undefined` : `!${ownKeyExpr(ctx, v, key)}`;
+				if (isStaticPath && !ctx.rich && !ctx.noOrdinal) {
+					const errVar = `_E${ctx.varCounter++}`;
+					const pathVal = pathExpr ? literalValue(pathExpr) : "";
+					ctx.closureVars.push(errVar);
+					ctx.closureVals.push(sharedErr({
+						keyword: "required",
+						instancePath: pathVal,
+						schemaPath: unescapeSp(`${schemaPrefix}/required`),
+						params: Object.freeze({ missingProperty: key }),
+						message: `must have required property '${key}'`
+					}, ctx.rootSchema));
+					lines.push(`if(${check}){(_e=_ap(_A,_e,${errVar},${apOrd(ctx, `${schemaPrefix}/required`)}))}`);
+				} else lines.push(`if(${check}){${errPushC(ctx, "required", `${schemaPrefix}/required`, pathExpr, `{missingProperty:'${esc(key)}'}`, `"must have required property '${esc(key)}'"`, v, `{keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required'${ordinalField(ctx, `${schemaPrefix}/required`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"}`)}}`);
+			}
+		} else if (schema.required) for (const key of schema.required) if ((!pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+")) && !ctx.rich && !ctx.noOrdinal) {
+			const errVar = `_E${ctx.varCounter++}`;
+			const pathVal = pathExpr ? literalValue(pathExpr) : "";
+			ctx.closureVars.push(errVar);
+			ctx.closureVals.push(sharedErr({
+				keyword: "required",
+				instancePath: pathVal,
+				schemaPath: unescapeSp(`${schemaPrefix}/required`),
+				params: Object.freeze({ missingProperty: key }),
+				message: `must have required property '${key}'`
+			}, ctx.rootSchema));
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!${ownKeyExpr(ctx, v, key)}){(_e=_ap(_A,_e,${errVar},${apOrd(ctx, `${schemaPrefix}/required`)}))}`);
+		} else lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!${ownKeyExpr(ctx, v, key)}){${errPushC(ctx, "required", `${schemaPrefix}/required`, pathExpr, `{missingProperty:'${esc(key)}'}`, `"must have required property '${esc(key)}'"`, v, `{keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required'${ordinalField(ctx, `${schemaPrefix}/required`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"}`)}}`);
+		if (schema.minimum !== void 0) {
+			const c = isNum ? `${v}<${schema.minimum}` : `typeof ${v}==='number'&&${v}<${schema.minimum}`;
+			lines.push(`if(${c}){${fail("minimum", "minimum", `{comparison:'>=',limit:${schema.minimum}}`, `'must be >= ${schema.minimum}'`)}}`);
+		}
+		if (schema.maximum !== void 0) {
+			const c = isNum ? `${v}>${schema.maximum}` : `typeof ${v}==='number'&&${v}>${schema.maximum}`;
+			lines.push(`if(${c}){${fail("maximum", "maximum", `{comparison:'<=',limit:${schema.maximum}}`, `'must be <= ${schema.maximum}'`)}}`);
+		}
+		if (schema.exclusiveMinimum !== void 0) {
+			const c = isNum ? `${v}<=${schema.exclusiveMinimum}` : `typeof ${v}==='number'&&${v}<=${schema.exclusiveMinimum}`;
+			lines.push(`if(${c}){${fail("exclusiveMinimum", "exclusiveMinimum", `{comparison:'>',limit:${schema.exclusiveMinimum}}`, `'must be > ${schema.exclusiveMinimum}'`)}}`);
+		}
+		if (schema.exclusiveMaximum !== void 0) {
+			const c = isNum ? `${v}>=${schema.exclusiveMaximum}` : `typeof ${v}==='number'&&${v}>=${schema.exclusiveMaximum}`;
+			lines.push(`if(${c}){${fail("exclusiveMaximum", "exclusiveMaximum", `{comparison:'<',limit:${schema.exclusiveMaximum}}`, `'must be < ${schema.exclusiveMaximum}'`)}}`);
+		}
+		if (schema.multipleOf !== void 0) {
+			const m = schema.multipleOf;
+			ctx.varCounter++;
+			lines.push(`{if(typeof ${v}==='number'&&${multipleOfBad(v, m)}){${fail("multipleOf", "multipleOf", `{multipleOf:${m}}`, `'must be multiple of ${m}'`)}}}`);
+		}
+		if (schema.minLength !== void 0) {
+			const M = schema.minLength;
+			const inner = `${v}.length<${M}||(${v}.length<${M * 2}&&_cpLen(${v})<${M})`;
+			const c = isStr ? inner : `typeof ${v}==='string'&&(${inner})`;
+			lines.push(`if(${c}){${fail("minLength", "minLength", `{limit:${M}}`, `'must NOT have fewer than ${M} characters'`)}}`);
+		}
+		if (schema.maxLength !== void 0) {
+			const X = schema.maxLength;
+			const inner = `${v}.length>${X * 2}||(${v}.length>${X}&&_cpLen(${v})>${X})`;
+			const c = isStr ? inner : `typeof ${v}==='string'&&(${inner})`;
+			lines.push(`if(${c}){${fail("maxLength", "maxLength", `{limit:${X}}`, `'must NOT have more than ${X} characters'`)}}`);
+		}
+		if (schema.pattern) {
+			const inlineCheck = compilePatternInline(schema.pattern, v);
+			if (inlineCheck) {
+				const c = isStr ? `!(${inlineCheck})` : `typeof ${v}==='string'&&!(${inlineCheck})`;
+				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, JSON.stringify(`must match pattern "${schema.pattern}"`))}}`);
+			} else {
+				const reVar = `_re${ctx.varCounter++}`;
+				ctx.closureVars.push(reVar);
+				ctx.closureVals.push(useSafeEngine(schema.pattern) ? compileSafe(schema.pattern) : new RegExp(schema.pattern, reFlags(schema.pattern)));
+				const c = isStr ? `!${reVar}.test(${v})` : `typeof ${v}==='string'&&!${reVar}.test(${v})`;
+				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, JSON.stringify(`must match pattern "${schema.pattern}"`))}}`);
+			}
+		}
+		if (schema.format) {
+			const fc = FORMAT_CODEGEN[schema.format];
+			if (fc) {
+				const ri = ctx.varCounter++;
+				const code = fc(v, isStr, ctx).replace(/return false/g, `{${fail("format", "format", `{format:'${esc(schema.format)}'}`, `'must match format "${esc(schema.format)}"'`)};break _fmt${ri}}`);
+				lines.push(`_fmt${ri}:{${code}}`);
+			} else if (ctx.userFormats && typeof ctx.userFormats[schema.format] === "function") {
+				const closureName = `_uf_${schema.format.replace(/[^a-zA-Z0-9_]/g, "_")}`;
+				if (!ctx.closureVars.includes(closureName)) {
+					ctx.closureVars.push(closureName);
+					ctx.closureVals.push(ctx.userFormats[schema.format]);
+				}
+				const guard = isStr ? "" : `typeof ${v}==='string'&&`;
+				lines.push(`if(${guard}!${closureName}(${v})){${fail("format", "format", `{format:'${esc(schema.format)}'}`, `'must match format "${esc(schema.format)}"'`)}}`);
+			}
+		}
+		if (schema.minItems !== void 0) {
+			const c = isArr ? `${v}.length<${schema.minItems}` : `Array.isArray(${v})&&${v}.length<${schema.minItems}`;
+			lines.push(`if(${c}){${fail("minItems", "minItems", `{limit:${schema.minItems}}`, `'must NOT have fewer than ${schema.minItems} items'`)}}`);
+		}
+		if (schema.maxItems !== void 0) {
+			const c = isArr ? `${v}.length>${schema.maxItems}` : `Array.isArray(${v})&&${v}.length>${schema.maxItems}`;
+			lines.push(`if(${c}){${fail("maxItems", "maxItems", `{limit:${schema.maxItems}}`, `'must NOT have more than ${schema.maxItems} items'`)}}`);
+		}
+		if (schema.uniqueItems) genUniqueItemsC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isArr);
+		if (schema.minProperties !== void 0) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&Object.keys(${v}).length<${schema.minProperties}){${fail("minProperties", "minProperties", `{limit:${schema.minProperties}}`, `'must NOT have fewer than ${schema.minProperties} properties'`)}}`);
+		if (schema.maxProperties !== void 0) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&Object.keys(${v}).length>${schema.maxProperties}){${fail("maxProperties", "maxProperties", `{limit:${schema.maxProperties}}`, `'must NOT have more than ${schema.maxProperties} properties'`)}}`);
+		if (schema.additionalProperties === false && !schema.patternProperties) {
+			const propKeys = Object.keys(schema.properties || {});
+			const ci = ctx.varCounter++;
+			const detail = (test) => `const _k${ci}=Object.keys(${v});for(let _i=0;_i<_k${ci}.length;_i++)if(${test}){${fail("additionalProperties", "additionalProperties", `{additionalProperty:_k${ci}[_i]}`, "'must NOT have additional properties'")}}`;
+			let body;
+			if (propKeys.length <= 8) body = `let _x${ci}=0;for(const _f${ci} in ${v}){if(${propKeys.map((k) => `_f${ci}!==${JSON.stringify(k)}`).join("&&") || "true"}){_x${ci}=1;break}}if(_x${ci}){${detail(propKeys.map((k) => `_k${ci}[_i]!==${JSON.stringify(k)}`).join("&&") || "true")}}`;
+			else {
+				ctx.closureVars.push(`_a${ci}`);
+				ctx.closureVals.push(new Set(propKeys));
+				body = `let _x${ci}=0;for(const _f${ci} in ${v}){if(!_a${ci}.has(_f${ci})){_x${ci}=1;break}}if(_x${ci}){${detail(`!_a${ci}.has(_k${ci}[_i])`)}}`;
+			}
+			const req = new Set(Array.isArray(schema.required) ? schema.required : []);
+			if (propKeys.length > 0 && propKeys.every((k) => req.has(k) && !PROTO_NAMES.has(k))) {
+				const present = propKeys.map((k) => `${JSON.stringify(k)} in ${v}`).join("&&");
+				body = `let _n${ci}=0;for(const _f${ci} in ${v})_n${ci}++;if(_n${ci}!==${propKeys.length}||!(${present})){${body}}`;
+			}
+			lines.push(isObj ? `{${body}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${body}}`);
+		}
+		if (schema.unevaluatedProperties !== void 0 && schema.unevaluatedProperties !== true) {
+			if (unevalLocalOk(schema, "unevaluatedProperties")) {
+				if (schema.additionalProperties === void 0 && !schema.patternProperties) genUnevaluatedFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj);
+			} else genUnevaluatedDynamicC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj);
+		}
+		if (schema.unevaluatedItems !== void 0 && schema.unevaluatedItems !== true) {
+			if (unevalLocalOk(schema, "unevaluatedItems")) genUnevaluatedItemsFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
+			else genUnevaluatedItemsDynamicC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
+		}
+		if (schema.dependentRequired) for (const [key, deps] of Object.entries(schema.dependentRequired)) for (const dep of deps) if ((!pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+")) && !ctx.rich && !ctx.noOrdinal) {
+			const errVar = `_E${ctx.varCounter++}`;
+			const pathVal = pathExpr ? literalValue(pathExpr) : "";
+			ctx.closureVars.push(errVar);
+			ctx.closureVals.push(sharedErr({
+				keyword: "required",
+				instancePath: pathVal,
+				schemaPath: unescapeSp(`${schemaPrefix}/dependentRequired`),
+				params: Object.freeze({ missingProperty: dep }),
+				message: `must have required property '${dep}'`
+			}, ctx.rootSchema));
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${ownKeyExpr(ctx, v, key)}&&!${ownKeyExpr(ctx, v, dep)}){(_e=_ap(_A,_e,${errVar},-1))}`);
+		} else lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${ownKeyExpr(ctx, v, key)}&&!${ownKeyExpr(ctx, v, dep)}){${errPushC(ctx, "required", `${schemaPrefix}/dependentRequired`, pathExpr, `{missingProperty:'${esc(dep)}'}`, `"must have required property '${esc(dep)}'"`, v, `{keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/dependentRequired'${ordinalField(ctx, `${schemaPrefix}/dependentRequired`)},params:{missingProperty:'${esc(dep)}'},message:"must have required property '${esc(dep)}'"}`)}}`);
+		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) {
+			const pv = hoisted[key] || `${v}[${JSON.stringify(key)}]`;
+			const childPath = childPathExpr(pathExpr, ptrSeg(key));
+			const sp = schemaPrefix + "/properties/" + ptrSeg(key);
+			const from = lines.length;
+			const split = propFnCandidateC(prop, ctx, sp);
+			const sub = (pvExpr) => {
+				if (!split || !emitPropFnC(prop, pvExpr, childPath, lines, ctx, sp)) genGuardedC(prop, pvExpr, childPath, lines, ctx, sp);
+			};
+			if (requiredSet.has(key) && isObj) {
+				lines.push(`if(${pv}!==undefined${hoisted[key] ? "" : "&&" + ownGuard(ctx, v, key)}){`);
+				sub(pv);
+				lines.push(`}`);
+			} else if (isObj) {
+				const oi = ctx.varCounter++;
+				lines.push(`{const _o${oi}=${v}[${JSON.stringify(key)}];if(_o${oi}!==undefined&&${ownGuard(ctx, v, key)}){`);
+				sub(`_o${oi}`);
+				lines.push(`}}`);
+			} else {
+				lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${ownKeyExpr(ctx, v, key)}){`);
+				sub(`${v}[${JSON.stringify(key)}]`);
+				lines.push(`}`);
+			}
+			countInlineC(lines, from, ctx);
+		}
+		if (schema.patternProperties) {
+			if (genPatternPropertiesC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj)) ppHandledPropertyNames = true;
+		}
+		if (typeof schema.additionalProperties === "object" && schema.additionalProperties !== null) genAdditionalSchemaC(schema, v, pathExpr, lines, ctx, schemaPrefix, isObj);
+		if (schema.dependentSchemas) genDependentSchemasC(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		if (schema.propertyNames === false) genPropertyNamesFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		if (schema.propertyNames && typeof schema.propertyNames === "object" && !ppHandledPropertyNames) genPropertyNamesC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
+		if (schema.items !== void 0 && schema.items !== true) {
+			const startIdx = schema.prefixItems ? schema.prefixItems.length : 0;
+			const idx = `_j${ctx.varCounter}`, elem = `_ei${ctx.varCounter}`;
+			ctx.varCounter++;
+			const childPath = childPathDynExpr(pathExpr, idx);
+			lines.push(`if(Array.isArray(${v})){for(let ${idx}=${startIdx};${idx}<${v}.length;${idx}++){const ${elem}=${v}[${idx}]`);
+			genGuardedC(schema.items, elem, childPath, lines, ctx, schemaPrefix + "/items");
+			lines.push(`}}`);
+		}
+		if (schema.prefixItems) genPrefixItemsC(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		if (schema.contains !== void 0) genContainsC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
+		if (schema.allOf) for (let _ai = 0; _ai < schema.allOf.length; _ai++) genCodeC(schema.allOf[_ai], v, pathExpr, lines, ctx, schemaPrefix + "/allOf/" + _ai);
+		if (schema.anyOf && !ctx.inCombined) genAnyOfC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
+		if (schema.oneOf && !ctx.inCombined) genOneOfC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
+		if (schema.not !== void 0) genNotC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
+		if (schema.if !== void 0) genIfC(schema, v, pathExpr, lines, ctx, schemaPrefix);
+		if (types) {
+			lines.push(`}`);
+			const rest = typeMismatchRest(schema, types);
+			if (rest !== null) {
+				lines.push(`else{`);
+				genCodeC(rest, v, pathExpr, lines, ctx, schemaPrefix);
+				lines.push(`}`);
+			}
+		}
+		if (schema.anyOf && ctx.inCombined) genAnyOfC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
+		if (schema.oneOf && ctx.inCombined) genOneOfC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
+	}
+	function genDynamicRefC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		const anchorKey = schema.$dynamicRef.startsWith("#") ? schema.$dynamicRef : "#" + schema.$dynamicRef;
+		if (ctx.anchors && ctx.anchors[anchorKey]) {
+			const target = ctx.anchors[anchorKey];
+			if (target === ctx.rootSchema) throw DECLINE;
+			const refKey = "$dynamicRef:" + anchorKey;
+			if (ctx.refStack.has(refKey)) throw DECLINE;
+			ctx.refStack.add(refKey);
+			genCodeC(target, v, pathExpr, lines, ctx, schemaPrefix);
+			ctx.refStack.delete(refKey);
+		}
+	}
+	function genUniqueItemsC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isArr) {
+		const si = ctx.varCounter++;
+		const failExpr = (iVar, jVar) => fail("uniqueItems", "uniqueItems", `{i:${iVar},j:${jVar}}`, `'must NOT have duplicate items (items ## '+${jVar}+' and '+${iVar}+' are identical)'`);
+		const inner = `const _j${si}=${emitUqp(ctx)}(${v});if(_j${si}>=0){const _i${si}=_uqpI;${failExpr("_i" + si, "_j" + si)}}`;
+		lines.push(isArr ? `{${inner}}` : `if(Array.isArray(${v})){${inner}}`);
+	}
+	const ANNOT_INLINE_MAX = 8192;
+	const ANNOT_NAME_MAX = 30;
+	const ANNOT_BLOCKERS = [
+		"unevaluatedItems",
+		"$dynamicRef",
+		"$recursiveRef",
+		"dependencies"
+	];
+	const ALL_BIT_KEY = "\0all";
+	function annotSubs(node, ctx) {
+		const subs = [];
+		for (const b of node.allOf || []) subs.push(b);
+		for (const b of node.anyOf || []) subs.push(b);
+		for (const b of node.oneOf || []) subs.push(b);
+		if (node.if !== void 0) subs.push(node.if);
+		if (node.then !== void 0) subs.push(node.then);
+		if (node.else !== void 0) subs.push(node.else);
+		if (node.dependentSchemas && typeof node.dependentSchemas === "object") for (const ds of Object.values(node.dependentSchemas)) subs.push(ds);
+		if (typeof node.$ref === "string") subs.push(refTargetFor(node.$ref, ctx));
+		return subs;
+	}
+	function annotNames(node, ctx, names, seen, top) {
+		if (node === true || node === false) return true;
+		if (node === null || typeof node !== "object" || Array.isArray(node)) return false;
+		if (seen.has(node)) return false;
+		seen.add(node);
+		try {
+			for (const k of ANNOT_BLOCKERS) if (node[k] !== void 0) return false;
+			if (!top && node.unevaluatedProperties !== void 0 && node.unevaluatedProperties !== true) return false;
+			const add = (key) => {
+				if (!names.has(key)) {
+					if (names.size >= ANNOT_NAME_MAX) return false;
+					names.set(key, names.size);
+				}
+				return true;
+			};
+			if (node.properties && typeof node.properties === "object") {
+				for (const k of Object.keys(node.properties)) if (!add(k)) return false;
+			}
+			if (node.patternProperties && typeof node.patternProperties === "object") {
+				for (const pat of Object.keys(node.patternProperties)) if (!add("/" + pat)) return false;
+			}
+			if (!top && node.additionalProperties !== void 0 || !top && node.unevaluatedProperties === true) {
+				if (!add(ALL_BIT_KEY)) return false;
+			}
+			let subs;
+			try {
+				subs = annotSubs(node, ctx);
+			} catch {
+				return false;
+			}
+			for (const b of subs) if (!annotNames(b, ctx, names, seen, false)) return false;
+			return true;
+		} finally {
+			seen.delete(node);
+		}
+	}
+	function ownBits(sub, v, names, ctx, t, top) {
+		const out = [];
+		for (const k of Object.keys(sub.properties || {})) out.push(`if(${ownKeyExpr(ctx, v, k)})${t}|=${1 << names.get(k)}`);
+		let fixed = 0;
+		for (const pat of Object.keys(sub.patternProperties || {})) fixed |= 1 << names.get("/" + pat);
+		if (!top && (sub.additionalProperties !== void 0 || sub.unevaluatedProperties === true)) fixed |= 1 << names.get(ALL_BIT_KEY);
+		if (fixed !== 0) out.push(`${t}|=${fixed}`);
+		return out;
+	}
+	function patternKeyTest(ctx, pat, kv) {
+		const fast = fastPrefixCheck(pat, kv);
+		if (fast) return fast;
+		const ri = ctx.varCounter++;
+		ctx.closureVars.push(`_re${ri}`);
+		ctx.closureVals.push(safeReClosure(ctx, pat));
+		return `_re${ri}.test(${kv})`;
+	}
+	function factoryCount(ctx, arr, withMask) {
+		if (!ctx.inCombined) return null;
+		if (!ctx.branchCounts) ctx.branchCounts = /* @__PURE__ */ new Map();
+		const hit = ctx.branchCounts.get(arr);
+		if (hit !== void 0) return hit.factory ? hit : null;
+		const id = ctx.varCounter++;
+		const fc = {
+			of: `_fa${id}`,
+			count: `_fn${id}`,
+			mask: withMask ? `_fm${id}` : null,
+			factory: true
+		};
+		ctx.helperCode.push(`let ${fc.of}=null,${fc.count}=0${withMask ? `,${fc.mask}=0` : ""}`);
+		ctx.branchCounts.set(arr, fc);
+		return fc;
+	}
+	function emitAnnotInline(sub, v, names, ctx, out, ok, tv) {
+		if (sub === true) {
+			out.push(`${ok}=1`);
+			return;
+		}
+		if (sub === false) {
+			out.push(`${ok}=0`);
+			return;
+		}
+		const id = ctx.varCounter++;
+		const t = `_t${id}`;
+		const local = {};
+		for (const k of Object.keys(sub)) if (!ANNOT_APPLICATORS.has(k)) setOwn(local, k, sub[k]);
+		const vl = [];
+		ctx.nestedBoolean = (ctx.nestedBoolean || 0) + 1;
+		try {
+			genCode(local, v, vl, ctx, local.type === void 0 || local.type === "object" ? "object" : void 0);
+		} finally {
+			ctx.nestedBoolean--;
+		}
+		assertEmitted(local, vl.length, local.type === void 0 || local.type === "object");
+		out.push(`let ${t}=0;${ok}=1`);
+		if (vl.length) out.push(`a${id}:{${replaceTopLevel(vl.join(";"), `break a${id}`, `{${ok}=0;break a${id}}`)}}`);
+		if (sub.not !== void 0) {
+			const nl = [];
+			nestedGenCode(sub.not, v, nl, ctx);
+			if (nl.length) out.push(`if(${ok}){let _nk${id}=1;n${id}:{${replaceTopLevel(nl.join(";"), `break n${id}`, `{_nk${id}=0;break n${id}}`)}};if(_nk${id})${ok}=0}`);
+			else out.push(`${ok}=0`);
+		}
+		const own = ownBits(sub, v, names, ctx, t, false);
+		if (own.length) out.push(`if(${ok}){${own.join(";")}}`);
+		let bi = 0;
+		const child = (b) => {
+			const o = `_ok${id}_${bi}`, tb = `_tb${id}_${bi}`;
+			bi++;
+			out.push(`let ${o}=1,${tb}=0`);
+			emitAnnotInline(b, v, names, ctx, out, o, tb);
+			return [o, tb];
+		};
+		for (const b of sub.allOf || []) {
+			const [o, tb] = child(b);
+			out.push(`if(!${o})${ok}=0;else ${t}|=${tb}`);
+		}
+		if (Array.isArray(sub.anyOf)) {
+			const na = `_na${id}`;
+			const fc = factoryCount(ctx, sub.anyOf, false);
+			out.push(`let ${na}=0${fc ? `;${fc.of}=${v};${fc.count}=0` : ""}`);
+			for (const b of sub.anyOf) {
+				const [o, tb] = child(b);
+				out.push(`if(${o}){${na}++;${t}|=${tb}${fc ? `;${fc.count}++` : ""}}`);
+			}
+			out.push(`if(${na}===0)${ok}=0`);
+		}
+		if (Array.isArray(sub.oneOf)) {
+			const nc = `_nc${id}`, tc = `_tc${id}`;
+			const fc = factoryCount(ctx, sub.oneOf, sub.oneOf.length <= 30);
+			out.push(`let ${nc}=0,${tc}=0${fc ? `;${fc.of}=${v};${fc.count}=0${fc.mask ? `;${fc.mask}=0` : ""}` : ""}`);
+			sub.oneOf.forEach((b, i) => {
+				const [o, tb] = child(b);
+				out.push(`if(${o}){${nc}++;${tc}=${tb}${fc ? `;${fc.count}++${fc.mask ? `;${fc.mask}|=${1 << i}` : ""}` : ""}}`);
+			});
+			out.push(`if(${nc}===1)${t}|=${tc};else ${ok}=0`);
+		}
+		if (sub.if !== void 0) {
+			const [oi, ti] = child(sub.if);
+			const thenPart = [];
+			if (sub.then !== void 0) {
+				const saved = out.length;
+				const [ot, tt] = child(sub.then);
+				thenPart.push(...out.splice(saved));
+				thenPart.push(`if(!${ot})${ok}=0;else ${t}|=${tt}`);
+			}
+			const elsePart = [];
+			if (sub.else !== void 0) {
+				const saved = out.length;
+				const [oe, te] = child(sub.else);
+				elsePart.push(...out.splice(saved));
+				elsePart.push(`if(!${oe})${ok}=0;else ${t}|=${te}`);
+			}
+			out.push(`if(${oi}){${t}|=${ti};${thenPart.join(";")}}else{${elsePart.join(";")}}`);
+		}
+		if (sub.dependentSchemas && typeof sub.dependentSchemas === "object") for (const [k, ds] of Object.entries(sub.dependentSchemas)) {
+			const saved = out.length;
+			const [o, tb] = child(ds);
+			const body = out.splice(saved);
+			out.push(`if(${ownKeyExpr(ctx, v, k)}){${body.join(";")};if(!${o})${ok}=0;else ${t}|=${tb}}`);
+		}
+		if (typeof sub.$ref === "string") {
+			const [o, tb] = child(refTargetFor(sub.$ref, ctx));
+			out.push(`if(!${o})${ok}=0;else ${t}|=${tb}`);
+		}
+		out.push(`if(${ok})${tv}|=${t}`);
+	}
+	function inlineUnevalBlock(schema, v, pathExpr, ctx, schemaPrefix, fail, counts) {
+		const names = /* @__PURE__ */ new Map();
+		if (!annotNames(schema, ctx, names, /* @__PURE__ */ new Set(), true)) return null;
+		const saved = snapshotCtx(ctx);
+		try {
+			const id = ctx.varCounter++;
+			const m = `_m${id}`;
+			const out = [`let ${m}=0`];
+			if (!ctx.plainOf) ctx.plainOf = /* @__PURE__ */ new Map();
+			const prevPk = ctx.plainOf.get(v);
+			const pk = prevPk !== void 0 ? prevPk : `_pk${id}`;
+			const prevReuse = ctx.plainReuse;
+			if (prevPk === void 0) {
+				out.push(`const ${pk}=${protoIs(ctx, v)}`);
+				ctx.plainOf.set(v, pk);
+				(ctx.plainUsed || (ctx.plainUsed = /* @__PURE__ */ new Set())).add(pk);
+			}
+			ctx.plainReuse = v;
+			out.push(...ownBits(schema, v, names, ctx, m, true));
+			let bi = 0;
+			const child = (b) => {
+				const o = `_ok${id}_${bi}`, tb = `_tb${id}_${bi}`;
+				bi++;
+				out.push(`let ${o}=1,${tb}=0`);
+				emitAnnotInline(b, v, names, ctx, out, o, tb);
+				return [o, tb];
+			};
+			for (const b of schema.allOf || []) {
+				const [, tb] = child(b);
+				out.push(`${m}|=${tb}`);
+			}
+			if (Array.isArray(schema.anyOf)) {
+				const na = counts ? counts.anyOf : `_na${id}`;
+				out.push(counts ? `${na}=0` : `let ${na}=0`);
+				for (const b of schema.anyOf) {
+					const [o, tb] = child(b);
+					out.push(`if(${o}){${na}++;${m}|=${tb}}`);
+				}
+			}
+			if (Array.isArray(schema.oneOf)) {
+				const nc = counts ? counts.oneOf : `_nc${id}`, tc = `_tc${id}`;
+				out.push(counts ? `${nc}=0;let ${tc}=0` : `let ${nc}=0,${tc}=0`);
+				schema.oneOf.forEach((b, i) => {
+					const [o, tb] = child(b);
+					out.push(`if(${o}){${nc}++;${tc}=${tb};${counts && counts.oneOfMask && schema.oneOf.length <= 30 ? `${counts.oneOfMask}|=${1 << i};` : ""}}`);
+				});
+				out.push(`if(${nc}===1)${m}|=${tc}`);
+			}
+			if (schema.if !== void 0) {
+				const [oi, ti] = child(schema.if);
+				const thenPart = [];
+				if (schema.then !== void 0) {
+					const sv = out.length;
+					const [ot, tt] = child(schema.then);
+					thenPart.push(...out.splice(sv));
+					thenPart.push(`if(${ot})${m}|=${tt}`);
+				}
+				const elsePart = [];
+				if (schema.else !== void 0) {
+					const sv = out.length;
+					const [oe, te] = child(schema.else);
+					elsePart.push(...out.splice(sv));
+					elsePart.push(`if(${oe})${m}|=${te}`);
+				}
+				out.push(`if(${oi}){${m}|=${ti};${thenPart.join(";")}}else{${elsePart.join(";")}}`);
+			}
+			if (schema.dependentSchemas && typeof schema.dependentSchemas === "object") for (const [k, ds] of Object.entries(schema.dependentSchemas)) {
+				const sv = out.length;
+				const [o, tb] = child(ds);
+				const body = out.splice(sv);
+				out.push(`if(${ownKeyExpr(ctx, v, k)}){${body.join(";")};if(${o})${m}|=${tb}}`);
+			}
+			if (typeof schema.$ref === "string") {
+				const [o, tb] = child(refTargetFor(schema.$ref, ctx));
+				out.push(`if(${o})${m}|=${tb}`);
+			}
+			const kVar = `_uk${id}`;
+			const cases = [...names].filter(([k]) => k !== ALL_BIT_KEY && k[0] !== "/").map(([k, i]) => `case ${JSON.stringify(k)}:_ub${id}=${1 << i};break`).join(";");
+			const allBit = names.has(ALL_BIT_KEY) ? `if((${m}&${1 << names.get(ALL_BIT_KEY)})!==0)continue;` : "";
+			const patBits = [...names].filter(([k]) => k[0] === "/").map(([k, i]) => `if((${m}&${1 << i})!==0&&${patternKeyTest(ctx, k.slice(1), `_uk${id}`)})continue;`).join("");
+			const up = schema.unevaluatedProperties;
+			let body;
+			if (up === false) body = fail("unevaluatedProperties", "unevaluatedProperties", `{unevaluatedProperty:${kVar}}`, "'must NOT have unevaluated properties'");
+			else if (typeof up === "object" && up !== null) {
+				const pe = emitPtrEsc(ctx);
+				const p = pathExpr ? `${pathExpr}+'/'+${pe}(${kVar})` : `'/'+${pe}(${kVar})`;
+				const sub = [];
+				genCodeC(up, `${v}[${kVar}]`, p, sub, ctx, schemaPrefix + "/unevaluatedProperties");
+				body = sub.join("\n  ");
+			} else throw DECLINE;
+			if (body) out.push(`for(const ${kVar} in ${v}){if(!${ownKeyExpr(ctx, v, kVar).split(JSON.stringify(kVar)).join(kVar)})continue;let _ub${id}=0;switch(${kVar}){${cases}}if(_ub${id}!==0&&(${m}&_ub${id})!==0)continue;${allBit}${patBits}${body}}`);
+			const text = out.join(";");
+			ctx.plainReuse = prevReuse;
+			if (prevPk === void 0) ctx.plainOf.delete(v);
+			if (text.length > ANNOT_INLINE_MAX || /\b(?:_validate|_stk|_sd|_sg|_CYC)\b/.test(text)) {
+				restoreCtx(ctx, saved);
+				return null;
+			}
+			return text;
+		} catch (e) {
+			if (e !== DECLINE) throw e;
+			restoreCtx(ctx, saved);
+			return null;
+		}
+	}
+	function genUnevaluatedDynamicC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj) {
+		if (schema.additionalProperties !== void 0) return;
+		const ui = ctx.varCounter++;
+		const S = `_ev${ui}`;
+		const body = [`const ${S}=[]`];
+		addLocalAnnotations(schema, v, S, body, ctx);
+		const share = ctx.inCombined && !ctx.inBranchFn && ctx.hoisted !== void 0 && (Array.isArray(schema.anyOf) || Array.isArray(schema.oneOf));
+		const counts = share ? {
+			anyOf: `_ac${ui}`,
+			oneOf: `_oc${ui}`,
+			oneOfMask: `_om${ui}`,
+			of: `_ao${ui}`
+		} : null;
+		if (share) {
+			ctx.hoisted.push(counts.anyOf, counts.oneOf, counts.oneOfMask, counts.of);
+			body.push(`${counts.of}=${v};${counts.oneOfMask}=0`);
+			if (!ctx.branchCounts) ctx.branchCounts = /* @__PURE__ */ new Map();
+			if (Array.isArray(schema.anyOf)) ctx.branchCounts.set(schema.anyOf, {
+				of: counts.of,
+				count: counts.anyOf,
+				mask: null
+			});
+			if (Array.isArray(schema.oneOf)) ctx.branchCounts.set(schema.oneOf, {
+				of: counts.of,
+				count: counts.oneOf,
+				mask: schema.oneOf.length <= 30 ? counts.oneOfMask : null
+			});
+		}
+		const inline = inlineUnevalBlock(schema, v, pathExpr, ctx, schemaPrefix, fail, counts);
+		if (inline !== null) {
+			const pre = share ? `${counts.of}=${v};${counts.oneOfMask}=0;` : "";
+			lines.push(isObj ? `{${pre}${inline}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${pre}${inline}}`);
+			return;
+		}
+		addTopApplicatorAnnotations(schema, v, S, body, ctx, counts);
+		const kVar = `_uk${ui}`;
+		const up = schema.unevaluatedProperties;
+		if (up === false) body.push(`for(const ${kVar} of Object.keys(${v}))if(!${S}.includes(${kVar})){${fail("unevaluatedProperties", "unevaluatedProperties", `{unevaluatedProperty:${kVar}}`, "'must NOT have unevaluated properties'")}}`);
+		else if (typeof up === "object" && up !== null) {
+			const pe = emitPtrEsc(ctx);
+			const p = pathExpr ? `${pathExpr}+'/'+${pe}(${kVar})` : `'/'+${pe}(${kVar})`;
+			const sub = [];
+			genCodeC(up, `${v}[${kVar}]`, p, sub, ctx, schemaPrefix + "/unevaluatedProperties");
+			if (sub.length) body.push(`for(const ${kVar} of Object.keys(${v}))if(!${S}.includes(${kVar})){${sub.join("\n  ")}\n  }`);
+		} else throw DECLINE;
+		lines.push(isObj ? `{${body.join(";")}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${body.join(";")}}`);
+	}
+	const ANNOT_I_BLOCKERS = [
+		"contains",
+		"additionalItems",
+		"$dynamicRef",
+		"$recursiveRef",
+		"dependencies"
+	];
+	function annotItemsFit(node, ctx, seen, top) {
+		if (node === true || node === false) return true;
+		if (node === null || typeof node !== "object" || Array.isArray(node)) return false;
+		if (seen.has(node)) return false;
+		seen.add(node);
+		try {
+			for (const k of ANNOT_I_BLOCKERS) if (node[k] !== void 0) return false;
+			if (Array.isArray(node.items)) return false;
+			if (!top && node.unevaluatedItems !== void 0 && node.unevaluatedItems !== true) return false;
+			if (node.unevaluatedProperties !== void 0 && node.unevaluatedProperties !== true) return false;
+			let subs;
+			try {
+				subs = annotSubs(node, ctx);
+			} catch {
+				return false;
+			}
+			for (const b of subs) if (!annotItemsFit(b, ctx, seen, false)) return false;
+			return true;
+		} finally {
+			seen.delete(node);
+		}
+	}
+	function ownPrefix(node, len, top) {
+		if (node.items !== void 0) return len;
+		if (!top && node.unevaluatedItems === true) return len;
+		if (Array.isArray(node.prefixItems) && node.prefixItems.length) return `(${len}<${node.prefixItems.length}?${len}:${node.prefixItems.length})`;
+		return null;
+	}
+	function emitAnnotInlineI(sub, v, len, ctx, out, ok, tn) {
+		if (sub === true) {
+			out.push(`${ok}=1`);
+			return;
+		}
+		if (sub === false) {
+			out.push(`${ok}=0`);
+			return;
+		}
+		const id = ctx.varCounter++;
+		const t = `_t${id}`;
+		const local = {};
+		for (const k of Object.keys(sub)) if (!ANNOT_ITEM_APPLICATORS.has(k)) setOwn(local, k, sub[k]);
+		const vl = [];
+		ctx.nestedBoolean = (ctx.nestedBoolean || 0) + 1;
+		try {
+			genCode(local, v, vl, ctx, local.type === void 0 || local.type === "array" ? "array" : void 0);
+		} finally {
+			ctx.nestedBoolean--;
+		}
+		assertEmitted(local, vl.length, local.type === void 0 || local.type === "array");
+		out.push(`let ${t}=0;${ok}=1`);
+		if (vl.length) out.push(`a${id}:{${replaceTopLevel(vl.join(";"), `break a${id}`, `{${ok}=0;break a${id}}`)}}`);
+		if (sub.not !== void 0) {
+			const nl = [];
+			nestedGenCode(sub.not, v, nl, ctx);
+			if (nl.length) out.push(`if(${ok}){let _nk${id}=1;n${id}:{${replaceTopLevel(nl.join(";"), `break n${id}`, `{_nk${id}=0;break n${id}}`)}};if(_nk${id})${ok}=0}`);
+			else out.push(`${ok}=0`);
+		}
+		const own = ownPrefix(sub, len, false);
+		if (own !== null) out.push(`if(${ok})${t}=${own}`);
+		let bi = 0;
+		const child = (b) => {
+			const o = `_ok${id}_${bi}`, tb = `_tb${id}_${bi}`;
+			bi++;
+			out.push(`let ${o}=1,${tb}=0`);
+			emitAnnotInlineI(b, v, len, ctx, out, o, tb);
+			return [o, tb];
+		};
+		const raise = (tb) => `if(${tb}>${t})${t}=${tb}`;
+		for (const b of sub.allOf || []) {
+			const [o, tb] = child(b);
+			out.push(`if(!${o})${ok}=0;else ${raise(tb)}`);
+		}
+		if (Array.isArray(sub.anyOf)) {
+			const na = `_na${id}`;
+			const fc = factoryCount(ctx, sub.anyOf, false);
+			out.push(`let ${na}=0${fc ? `;${fc.of}=${v};${fc.count}=0` : ""}`);
+			for (const b of sub.anyOf) {
+				const [o, tb] = child(b);
+				out.push(`if(${o}){${na}++;${raise(tb)}${fc ? `;${fc.count}++` : ""}}`);
+			}
+			out.push(`if(${na}===0)${ok}=0`);
+		}
+		if (Array.isArray(sub.oneOf)) {
+			const nc = `_nc${id}`, tc = `_tc${id}`;
+			const fc = factoryCount(ctx, sub.oneOf, sub.oneOf.length <= 30);
+			out.push(`let ${nc}=0,${tc}=0${fc ? `;${fc.of}=${v};${fc.count}=0${fc.mask ? `;${fc.mask}=0` : ""}` : ""}`);
+			sub.oneOf.forEach((b, i) => {
+				const [o, tb] = child(b);
+				out.push(`if(${o}){${nc}++;${tc}=${tb}${fc ? `;${fc.count}++${fc.mask ? `;${fc.mask}|=${1 << i}` : ""}` : ""}}`);
+			});
+			out.push(`if(${nc}===1){${raise(tc)}}else ${ok}=0`);
+		}
+		if (sub.if !== void 0) {
+			const [oi, ti] = child(sub.if);
+			const thenPart = [];
+			if (sub.then !== void 0) {
+				const sv = out.length;
+				const [ot, tt] = child(sub.then);
+				thenPart.push(...out.splice(sv));
+				thenPart.push(`if(!${ot})${ok}=0;else ${raise(tt)}`);
+			}
+			const elsePart = [];
+			if (sub.else !== void 0) {
+				const sv = out.length;
+				const [oe, te] = child(sub.else);
+				elsePart.push(...out.splice(sv));
+				elsePart.push(`if(!${oe})${ok}=0;else ${raise(te)}`);
+			}
+			out.push(`if(${oi}){${raise(ti)};${thenPart.join(";")}}else{${elsePart.join(";")}}`);
+		}
+		if (typeof sub.$ref === "string") {
+			const [o, tb] = child(refTargetFor(sub.$ref, ctx));
+			out.push(`if(!${o})${ok}=0;else ${raise(tb)}`);
+		}
+		out.push(`if(${ok}&&${t}>${tn})${tn}=${t}`);
+	}
+	function inlineUnevalItemsBlock(schema, v, pathExpr, ctx, schemaPrefix, fail) {
+		if (!ctx.inCombined || !annotItemsFit(schema, ctx, /* @__PURE__ */ new Set(), true)) return null;
+		const saved = snapshotCtx(ctx);
+		try {
+			const id = ctx.varCounter++;
+			const n = `_un${id}`, len = `_ul${id}`;
+			const out = [`const ${len}=${v}.length;let ${n}=0`];
+			const own = ownPrefix(schema, len, true);
+			if (own !== null) out.push(`${n}=${own}`);
+			let bi = 0;
+			const child = (b) => {
+				const o = `_ok${id}_${bi}`, tb = `_tb${id}_${bi}`;
+				bi++;
+				out.push(`let ${o}=1,${tb}=0`);
+				emitAnnotInlineI(b, v, len, ctx, out, o, tb);
+				return [o, tb];
+			};
+			const raise = (tb) => `if(${tb}>${n})${n}=${tb}`;
+			for (const b of schema.allOf || []) {
+				const [, tb] = child(b);
+				out.push(raise(tb));
+			}
+			if (Array.isArray(schema.anyOf)) {
+				const fc = factoryCount(ctx, schema.anyOf, false);
+				if (fc) out.push(`${fc.of}=${v};${fc.count}=0`);
+				for (const b of schema.anyOf) {
+					const [o, tb] = child(b);
+					out.push(`if(${o}){${raise(tb)}${fc ? `;${fc.count}++` : ""}}`);
+				}
+			}
+			if (Array.isArray(schema.oneOf)) {
+				const fc = factoryCount(ctx, schema.oneOf, schema.oneOf.length <= 30);
+				const nc = `_nc${id}`, tc = `_tc${id}`;
+				out.push(`let ${nc}=0,${tc}=0${fc ? `;${fc.of}=${v};${fc.count}=0${fc.mask ? `;${fc.mask}=0` : ""}` : ""}`);
+				schema.oneOf.forEach((b, i) => {
+					const [o, tb] = child(b);
+					out.push(`if(${o}){${nc}++;${tc}=${tb}${fc ? `;${fc.count}++${fc.mask ? `;${fc.mask}|=${1 << i}` : ""}` : ""}}`);
+				});
+				out.push(`if(${nc}===1)${raise(tc)}`);
+			}
+			if (schema.if !== void 0) {
+				const [oi, ti] = child(schema.if);
+				const thenPart = [];
+				if (schema.then !== void 0) {
+					const sv = out.length;
+					const [ot, tt] = child(schema.then);
+					thenPart.push(...out.splice(sv));
+					thenPart.push(`if(${ot})${raise(tt)}`);
+				}
+				const elsePart = [];
+				if (schema.else !== void 0) {
+					const sv = out.length;
+					const [oe, te] = child(schema.else);
+					elsePart.push(...out.splice(sv));
+					elsePart.push(`if(${oe})${raise(te)}`);
+				}
+				out.push(`if(${oi}){${raise(ti)};${thenPart.join(";")}}else{${elsePart.join(";")}}`);
+			}
+			if (typeof schema.$ref === "string") {
+				const [o, tb] = child(refTargetFor(schema.$ref, ctx));
+				out.push(`if(${o})${raise(tb)}`);
+			}
+			const iv = `_ix${id}`;
+			const ui2 = schema.unevaluatedItems;
+			if (ui2 === false) out.push(`if(${n}<${len}){const ${iv}=${n};${fail("unevaluatedItems", "unevaluatedItems", `{limit:${iv}}`, `'must NOT have more than '+${iv}+' items'`)}}`);
+			else if (typeof ui2 === "object" && ui2 !== null) {
+				const pe = pathExpr ? `${pathExpr}+'/'+${iv}` : `'/'+${iv}`;
+				const sub = [];
+				genCodeC(ui2, `${v}[${iv}]`, pe, sub, ctx, schemaPrefix + "/unevaluatedItems");
+				if (sub.length) out.push(`for(let ${iv}=${n};${iv}<${len};${iv}++){${sub.join("\n  ")}\n  }`);
+			} else throw DECLINE;
+			const text = out.join(";");
+			if (text.length > ANNOT_INLINE_MAX || /\b(?:_validate|_stk|_sd|_sg|_CYC)\b/.test(text)) {
+				restoreCtx(ctx, saved);
+				return null;
+			}
+			return text;
+		} catch (e) {
+			if (e !== DECLINE) throw e;
+			restoreCtx(ctx, saved);
+			return null;
+		}
+	}
+	function genUnevaluatedItemsDynamicC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
+		if (schema.$dynamicRef !== void 0 || schema.$recursiveRef !== void 0) throw DECLINE;
+		if (Array.isArray(schema.items) || schema.additionalItems !== void 0) throw DECLINE;
+		const inline = inlineUnevalItemsBlock(schema, v, pathExpr, ctx, schemaPrefix, fail);
+		if (inline !== null) {
+			lines.push(`if(Array.isArray(${v})){${inline}}`);
+			return;
+		}
+		annItemHelpers(ctx);
+		const ui = ctx.varCounter++;
+		const S = `_es${ui}`;
+		const body = [`const ${S}={n:0,x:null}`];
+		addLocalItemAnnotations(schema, v, S, body, ctx);
+		for (const b of schema.allOf || []) body.push(`${emitAnnotI(b, ctx)}(${v},${S})`);
+		if (Array.isArray(schema.anyOf)) for (const b of schema.anyOf) body.push(`${emitAnnotI(b, ctx)}(${v},${S})`);
+		if (Array.isArray(schema.oneOf)) body.push(`{const _n0=${S}.n,_x0=${S}.x===null?0:${S}.x.length;let _c=0;${schema.oneOf.map((b) => `if(${emitAnnotI(b, ctx)}(${v},${S}))_c++;`).join("")}if(_c!==1)_rbI(${S},_n0,_x0)}`);
+		if (schema.if !== void 0) {
+			const thenCall = schema.then !== void 0 ? `${emitAnnotI(schema.then, ctx)}(${v},${S})` : "";
+			const elseCall = schema.else !== void 0 ? `${emitAnnotI(schema.else, ctx)}(${v},${S})` : "";
+			body.push(`if(${emitAnnotI(schema.if, ctx)}(${v},${S})){${thenCall}}else{${elseCall}}`);
+		}
+		if (typeof schema.$ref === "string") body.push(`${emitAnnotI(refTargetFor(schema.$ref, ctx), ctx)}(${v},${S})`);
+		const iv = `_ix${ui}`;
+		const ui2 = schema.unevaluatedItems;
+		if (ui2 === false) {
+			const failI = fail("unevaluatedItems", "unevaluatedItems", `{limit:${iv}}`, `'must NOT have more than '+${iv}+' items'`);
+			body.push(`for(let ${iv}=0;${iv}<${v}.length;${iv}++){if(_hI(${S},${iv}))continue;${failI};break}`);
+		} else if (typeof ui2 === "object" && ui2 !== null) {
+			const pe = pathExpr ? `${pathExpr}+'/'+${iv}` : `'/'+${iv}`;
+			const sub = [];
+			genCodeC(ui2, `${v}[${iv}]`, pe, sub, ctx, schemaPrefix + "/unevaluatedItems");
+			if (sub.length) body.push(`for(let ${iv}=0;${iv}<${v}.length;${iv}++){if(_hI(${S},${iv}))continue;${sub.join("\n  ")}\n  }`);
+		} else throw DECLINE;
+		lines.push(`if(Array.isArray(${v})){${body.join(";")}}`);
+	}
+	function annItemHelpers(ctx) {
+		if (ctx.annItemHelpers) return;
+		ctx.annItemHelpers = true;
+		(ctx.preamble || ctx.helperCode).push("function _aI(S,i){if(i<S.n)return;if(i===S.n){S.n=i+1;return}(S.x||(S.x=[])).push(i)}function _mrI(S,f,t){if(f>=t)return;if(f<=S.n){if(t>S.n)S.n=t;return}const x=S.x||(S.x=[]);for(let i=f;i<t;i++)x.push(i)}function _hI(S,i){if(i<S.n)return true;const x=S.x;if(x===null)return false;for(let j=0;j<x.length;j++)if(x[j]===i)return true;return false}function _rbI(S,n,l){S.n=n;if(S.x!==null)S.x.length=l}function _anIT(){return true}function _anIF(){return false}");
+	}
+	function addLocalItemAnnotations(node, v, S, out, ctx) {
+		if (Array.isArray(node.items) || node.additionalItems !== void 0) throw DECLINE;
+		const prefix = Array.isArray(node.prefixItems) ? node.prefixItems.length : 0;
+		if (prefix) out.push(`_mrI(${S},0,Math.min(${v}.length,${prefix}))`);
+		if (node.items !== void 0) out.push(`_mrI(${S},${prefix},${v}.length)`);
+		if (node.contains !== void 0) {
+			const cl = [];
+			nestedGenCode(node.contains, "_cv", cl, ctx);
+			const ci = ctx.varCounter++;
+			(ctx.preamble || ctx.helperCode).push(`function _cI${ci}(_cv){${cl.join("\n  ")}\n  return true}`);
+			out.push(`for(let _i=0;_i<${v}.length;_i++)if(_cI${ci}(${v}[_i]))_aI(${S},_i)`);
+		}
+	}
+	const ANNOT_ITEM_APPLICATORS = /* @__PURE__ */ new Set([
+		"allOf",
+		"anyOf",
+		"oneOf",
+		"if",
+		"then",
+		"else",
+		"$ref",
+		"not",
+		"unevaluatedItems"
+	]);
+	function emitAnnotI(sub, ctx) {
+		if (sub === true) return "_anIT";
+		if (sub === false) return "_anIF";
+		if (sub === null || typeof sub !== "object") throw DECLINE;
+		if (!ctx.annFnsI) ctx.annFnsI = /* @__PURE__ */ new Map();
+		const hit = ctx.annFnsI.get(sub);
+		if (hit !== void 0) {
+			if (hit === null) throw DECLINE;
+			return hit;
+		}
+		if (sub.$dynamicRef !== void 0 || sub.$recursiveRef !== void 0) throw DECLINE;
+		if (Array.isArray(sub.items) || sub.additionalItems !== void 0) throw DECLINE;
+		if (sub.unevaluatedProperties !== void 0 && sub.unevaluatedProperties !== true) throw DECLINE;
+		ctx.annFnsI.set(sub, null);
+		annItemHelpers(ctx);
+		const name = `_ai${ctx.varCounter++}`;
+		const local = {};
+		for (const k of Object.keys(sub)) if (!ANNOT_ITEM_APPLICATORS.has(k)) setOwn(local, k, sub[k]);
+		const vl = [];
+		nestedGenCode(local, "_av", vl, ctx);
+		const decls = [`function ${name}_v(_av){${vl.join("\n  ")}\n  return true}`];
+		const body = [`if(!${name}_v(d))return false`];
+		if (sub.not !== void 0) {
+			const nl = [];
+			nestedGenCode(sub.not, "_nv", nl, ctx);
+			decls.push(`function ${name}_n(_nv){${nl.join("\n  ")}\n  return true}`);
+			body.push(`if(${name}_n(d))return false`);
+		}
+		const own = sub.unevaluatedItems !== void 0 && sub.unevaluatedItems !== true;
+		const R = own ? "_R" : "S";
+		body.push(own ? `const _R={n:0,x:null}` : `const _n0=S.n,_x0=S.x===null?0:S.x.length`);
+		const failOut = own ? "return false" : "{_rbI(S,_n0,_x0);return false}";
+		const locals = [];
+		addLocalItemAnnotations(sub, "d", R, locals, ctx);
+		if (locals.length) body.push(`if(Array.isArray(d)){${locals.join(";")}}`);
+		for (const b of sub.allOf || []) body.push(`if(!${emitAnnotI(b, ctx)}(d,${R}))${failOut}`);
+		if (Array.isArray(sub.anyOf)) body.push(`{let _a=false;${sub.anyOf.map((b) => `if(${emitAnnotI(b, ctx)}(d,${R}))_a=true;`).join("")}if(!_a)${failOut}}`);
+		if (Array.isArray(sub.oneOf)) body.push(`{let _c=0;${sub.oneOf.map((b) => `if(${emitAnnotI(b, ctx)}(d,${R})&&++_c>1)${failOut}`).join("")}if(_c!==1)${failOut}}`);
+		if (sub.if !== void 0) {
+			const thenCheck = sub.then !== void 0 ? `if(!${emitAnnotI(sub.then, ctx)}(d,${R}))${failOut}` : "";
+			const elseCheck = sub.else !== void 0 ? `if(!${emitAnnotI(sub.else, ctx)}(d,${R}))${failOut}` : "";
+			body.push(`if(${emitAnnotI(sub.if, ctx)}(d,${R})){${thenCheck}}else{${elseCheck}}`);
+		}
+		if (typeof sub.$ref === "string") body.push(`if(!${emitAnnotI(refTargetFor(sub.$ref, ctx), ctx)}(d,${R}))${failOut}`);
+		if (own) {
+			const u = sub.unevaluatedItems;
+			if (u === false) body.push(`if(Array.isArray(d)){for(let _i=0;_i<d.length;_i++)if(!_hI(_R,_i))return false}`);
+			else if (typeof u === "object" && u !== null) {
+				const ul = [];
+				nestedGenCode(u, "_uv", ul, ctx);
+				decls.push(`function ${name}_u(_uv){${ul.join("\n  ")}\n  return true}`);
+				body.push(`if(Array.isArray(d)){for(let _i=0;_i<d.length;_i++)if(!_hI(_R,_i)&&!${name}_u(d[_i]))return false}`);
+			} else throw DECLINE;
+			body.push(`if(Array.isArray(d))_mrI(S,0,d.length)`);
+		}
+		if (sub.unevaluatedItems === true) body.push(`if(Array.isArray(d))_mrI(S,0,d.length)`);
+		decls.push(`function ${name}(d,S){${body.join(";")};return true}`);
+		(ctx.preamble || ctx.helperCode).push(decls.join(""));
+		ctx.annFnsI.set(sub, name);
+		return name;
+	}
+	function genUnevaluatedFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj) {
+		const propKeysU = Object.keys(schema.properties || {});
+		const ui = ctx.varCounter++;
+		const failU = fail("unevaluatedProperties", "unevaluatedProperties", `{unevaluatedProperty:_k${ui}[_i]}`, "'must NOT have unevaluated properties'");
+		let innerU;
+		if (propKeysU.length === 0) innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++){${failU}}`;
+		else if (propKeysU.length <= 8) innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++)if(${propKeysU.map((k) => `_k${ui}[_i]!==${JSON.stringify(k)}`).join("&&")}){${failU}}`;
+		else {
+			ctx.closureVars.push(`_a${ui}`);
+			ctx.closureVals.push(new Set(propKeysU));
+			innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++)if(!_a${ui}.has(_k${ui}[_i])){${failU}}`;
+		}
+		lines.push(isObj ? `{${innerU}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${innerU}}`);
+	}
+	function genUnevaluatedItemsFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
+		const itemsIsPrefixC = Array.isArray(schema.items);
+		if (!(schema.items !== void 0 && !itemsIsPrefixC)) {
+			const plenC = itemsIsPrefixC ? schema.items.length : Array.isArray(schema.prefixItems) ? schema.prefixItems.length : 0;
+			const failI = fail("unevaluatedItems", "unevaluatedItems", `{limit:${plenC}}`, `'must NOT have more than ${plenC} items'`);
+			lines.push(`if(Array.isArray(${v})&&${v}.length>${plenC}){${failI}}`);
+		}
+	}
+	function genAdditionalSchemaC(schema, v, pathExpr, lines, ctx, schemaPrefix, isObj) {
+		const ki = ctx.varCounter++;
+		const kVar = `_ak${ki}`;
+		const known = Object.keys(schema.properties || {});
+		const conds = [];
+		if (known.length) {
+			const set = `_akn${ki}`;
+			ctx.closureVars.push(set);
+			ctx.closureVals.push(new Set(known));
+			conds.push(`!${set}.has(${kVar})`);
+		}
+		const pats = [];
+		for (const pat of Object.keys(schema.patternProperties || {})) {
+			const fast = fastPrefixCheck(pat, kVar);
+			if (fast) {
+				pats.push(fast);
+				continue;
+			}
+			const ri = ctx.varCounter++;
+			ctx.closureVars.push(`_re${ri}`);
+			ctx.closureVals.push(safeReClosure(ctx, pat));
+			pats.push(`_re${ri}.test(${kVar})`);
+		}
+		if (pats.length) conds.push(`!(${pats.join("||")})`);
+		const guard = isObj ? "" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+		const keep = conds.length ? `if(${conds.join("&&")})` : "";
+		const pe = emitPtrEsc(ctx);
+		const p = pathExpr ? `${pathExpr}+'/'+${pe}(${kVar})` : `'/'+${pe}(${kVar})`;
+		const sub = [];
+		genCodeC(schema.additionalProperties, `${v}[${kVar}]`, p, sub, ctx, schemaPrefix + "/additionalProperties");
+		if (sub.length === 0) return;
+		lines.push(`${guard}{for(const ${kVar} in ${v}){${keep}{${sub.join("\n  ")}\n  }}}`);
+	}
+	function genPatternPropertiesC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj) {
+		let handledPropertyNames = false;
+		const ppEntries = Object.entries(schema.patternProperties);
+		const pn = isSimplePN(schema.propertyNames) ? schema.propertyNames : null;
+		const pi = ctx.varCounter++;
+		const matchers = [];
+		for (const [pat] of ppEntries) {
+			const kVar = `_k${pi}`;
+			const fast = fastPrefixCheck(pat, kVar);
+			if (fast) matchers.push({ check: fast });
+			else {
+				const ri = ctx.varCounter++;
+				ctx.closureVars.push(`_re${ri}`);
+				ctx.closureVals.push(safeReClosure(ctx, pat));
+				matchers.push({ check: `_re${ri}.test(_k${pi})` });
+			}
+		}
+		const guard = isObj ? "" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
+		const kVar = `_k${pi}`;
+		if (schema.additionalProperties === false) {
+			handledPropertyNames = !!pn;
+			const propKeys = Object.keys(schema.properties || {});
+			const keyCheck = propKeys.length <= 8 ? propKeys.map((k) => `${kVar}===${JSON.stringify(k)}`).join("||") : null;
+			if (!keyCheck) {
+				const allowedSet = `_as${pi}`;
+				ctx.closureVars.push(allowedSet);
+				ctx.closureVals.push(new Set(propKeys));
+			}
+			lines.push(`${guard}{for(const ${kVar} in ${v}){`);
+			if (pn) {
+				if (pn.minLength !== void 0) lines.push(`if(${kVar}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
+				if (pn.maxLength !== void 0) lines.push(`if(${kVar}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
+				if (pn.pattern) {
+					const fast = fastPrefixCheck(pn.pattern, kVar);
+					if (fast) lines.push(`if(!(${fast})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, JSON.stringify(`must match pattern "${pn.pattern}"`))}}`);
+					else {
+						const ri = ctx.varCounter++;
+						ctx.closureVars.push(`_re${ri}`);
+						ctx.closureVals.push(safeReClosure(ctx, pn.pattern));
+						lines.push(`if(!_re${ri}.test(${kVar})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, JSON.stringify(`must match pattern "${pn.pattern}"`))}}`);
+					}
+				}
+				if (pn.const !== void 0) lines.push(`if(${kVar}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
+				if (pn.enum) {
+					const ei = ctx.varCounter++;
+					ctx.closureVars.push(`_es${ei}`);
+					ctx.closureVals.push(new Set(pn.enum));
+					lines.push(`if(!_es${ei}.has(${kVar})){${fail("enum", "propertyNames/enum", `{allowedValues:${JSON.stringify(pn.enum)}}`, "'must be equal to one of the allowed values'")}}`);
+				}
+			}
+			const matchExpr = keyCheck || `_as${pi}.has(${kVar})`;
+			lines.push(`let _m${pi}=${matchExpr}`);
+			for (let i = 0; i < ppEntries.length; i++) {
+				lines.push(`if(${matchers[i].check}){_m${pi}=true;{const _ppv${pi}_${i}=${v}[${kVar}]`);
+				genCodeC(ppEntries[i][1], `_ppv${pi}_${i}`, childPathDynExpr(pathExpr, `${emitPtrEsc(ctx)}(${kVar})`), lines, ctx, schemaPrefix + "/patternProperties/" + ptrSeg(ppEntries[i][0]));
+				lines.push(`}}`);
+			}
+			lines.push(`if(!_m${pi}){${fail("additionalProperties", "additionalProperties", `{additionalProperty:${kVar}}`, "'must NOT have additional properties'")}}`);
+			lines.push(`}}`);
+		} else {
+			handledPropertyNames = !!pn;
+			lines.push(`${guard}{for(const ${kVar} in ${v}){`);
+			if (pn) {
+				if (pn.minLength !== void 0) lines.push(`if(${kVar}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
+				if (pn.maxLength !== void 0) lines.push(`if(${kVar}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
+				if (pn.pattern) {
+					const fast = fastPrefixCheck(pn.pattern, kVar);
+					if (fast) lines.push(`if(!(${fast})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, JSON.stringify(`must match pattern "${pn.pattern}"`))}}`);
+					else {
+						const ri = ctx.varCounter++;
+						ctx.closureVars.push(`_re${ri}`);
+						ctx.closureVals.push(safeReClosure(ctx, pn.pattern));
+						lines.push(`if(!_re${ri}.test(${kVar})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, JSON.stringify(`must match pattern "${pn.pattern}"`))}}`);
+					}
+				}
+				if (pn.const !== void 0) lines.push(`if(${kVar}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
+				if (pn.enum) {
+					const ei = ctx.varCounter++;
+					ctx.closureVars.push(`_es${ei}`);
+					ctx.closureVals.push(new Set(pn.enum));
+					lines.push(`if(!_es${ei}.has(${kVar})){${fail("enum", "propertyNames/enum", `{allowedValues:${JSON.stringify(pn.enum)}}`, "'must be equal to one of the allowed values'")}}`);
+				}
+			}
+			for (let i = 0; i < ppEntries.length; i++) {
+				lines.push(`if(${matchers[i].check}){const _ppv${pi}_${i}=${v}[${kVar}]`);
+				genCodeC(ppEntries[i][1], `_ppv${pi}_${i}`, childPathDynExpr(pathExpr, `${emitPtrEsc(ctx)}(${kVar})`), lines, ctx, schemaPrefix + "/patternProperties/" + ptrSeg(ppEntries[i][0]));
+				lines.push(`}`);
+			}
+			lines.push(`}}`);
+		}
+		return handledPropertyNames;
+	}
+	function genDependentSchemasC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		for (const [key, depSchema] of Object.entries(schema.dependentSchemas)) {
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${ownKeyExpr(ctx, v, key)}){`);
+			genCodeC(depSchema, v, pathExpr, lines, ctx, schemaPrefix + "/dependentSchemas/" + ptrSeg(key));
+			lines.push(`}`);
+		}
+	}
+	function genPropertyNamesFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		const ki = ctx.varCounter++;
+		const p = pathExpr || "\"\"";
+		lines.push(`;if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){${errPushC(ctx, "not", `${schemaPrefix}/propertyNames`, pathExpr, "{}", "'boolean schema is false'", v, `{keyword:'not',instancePath:${p},schemaPath:'${schemaPrefix}/propertyNames'${ordinalField(ctx, `${schemaPrefix}/propertyNames`)},params:{},message:'boolean schema is false'}`)}}}`);
+	}
+	function genPropertyNamesC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
+		const pn = schema.propertyNames;
+		const ki = ctx.varCounter++;
+		if (!isSimplePN(pn) && ctx.rich) throw DECLINE;
+		lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){`);
+		if (!isSimplePN(pn)) {
+			genCodeC(pn, `_k${ki}`, pathExpr, lines, ctx, schemaPrefix + "/propertyNames");
+			lines.push(`}}`);
+			return;
+		}
+		if (pn.minLength !== void 0) lines.push(`if(_k${ki}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
+		if (pn.maxLength !== void 0) lines.push(`if(_k${ki}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
+		if (pn.pattern) {
+			const ri = ctx.varCounter++;
+			ctx.closureVars.push(`_re${ri}`);
+			ctx.closureVals.push(safeReClosure(ctx, pn.pattern));
+			lines.push(`if(!_re${ri}.test(_k${ki})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, JSON.stringify(`must match pattern "${pn.pattern}"`))}}`);
+		}
+		if (pn.const !== void 0) lines.push(`if(_k${ki}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
+		if (pn.enum) {
+			const ei = ctx.varCounter++;
+			ctx.closureVars.push(`_es${ei}`);
+			ctx.closureVals.push(new Set(pn.enum));
+			lines.push(`if(!_es${ei}.has(_k${ki})){${fail("enum", "propertyNames/enum", `{allowedValues:${JSON.stringify(pn.enum)}}`, "'must be equal to one of the allowed values'")}}`);
+		}
+		lines.push(`}}`);
+	}
+	function genPrefixItemsC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		for (let i = 0; i < schema.prefixItems.length; i++) {
+			const childPath = childPathExpr(pathExpr, String(i));
+			lines.push(`if(Array.isArray(${v})&&${v}.length>${i}){`);
+			genCodeC(schema.prefixItems[i], `${v}[${i}]`, childPath, lines, ctx, schemaPrefix + "/prefixItems/" + i);
+			lines.push(`}`);
+		}
+	}
+	function genContainsC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
+		const ci = ctx.varCounter++;
+		const subLines = [];
+		nestedGenCode(schema.contains, `_cv`, subLines, ctx);
+		const fnBody = subLines.length === 0 ? `return true` : `${subLines.join(";")};return true`;
+		const minC = schema.minContains !== void 0 ? schema.minContains : 1;
+		const maxC = schema.maxContains;
+		lines.push(`if(Array.isArray(${v})){const _cf${ci}=function(_cv){${fnBody}};let _cc${ci}=0;for(let _ci${ci}=0;_ci${ci}<${v}.length;_ci${ci}++){if(_cf${ci}(${v}[_ci${ci}]))_cc${ci}++}`);
+		lines.push(`if(_cc${ci}<${minC}){${fail("contains", "contains", `{minContains:${minC}}`, `'must contain at least ${minC} valid item(s)'`)}}`);
+		if (maxC !== void 0) lines.push(`if(_cc${ci}>${maxC}){${fail("contains", "contains", `{minContains:${minC},maxContains:${maxC}}`, `'must NOT contain more than ${maxC} valid item(s)'`)}}`);
+		lines.push(`}`);
+	}
+	function genAnyOfC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
+		if (ctx.inCombined) return emitBranchCollapse(schema.anyOf, "anyOf", v, pathExpr, lines, ctx, schemaPrefix);
+		const fi = ctx.varCounter++;
+		const fns = schema.anyOf.map((sub) => {
+			const sl = [];
+			nestedGenCode(sub, "_av", sl, ctx);
+			return sl.length === 0 ? `function(_av){return true}` : `function(_av){${sl.join(";")};return true}`;
+		});
+		lines.push(`{const _af${fi}=[${fns.join(",")}];let _am=false;for(let _ai=0;_ai<_af${fi}.length;_ai++){if(_af${fi}[_ai](${v})){_am=true;break}}if(!_am){${fail("anyOf", "anyOf", "{}", "'must match a schema in anyOf'")}}}`);
+	}
+	function genOneOfC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
+		if (ctx.inCombined) return emitBranchCollapse(schema.oneOf, "oneOf", v, pathExpr, lines, ctx, schemaPrefix);
+		const fi = ctx.varCounter++;
+		const fns = schema.oneOf.map((sub) => {
+			const sl = [];
+			nestedGenCode(sub, "_ov", sl, ctx);
+			return sl.length === 0 ? `function(_ov){return true}` : `function(_ov){${sl.join(";")};return true}`;
+		});
+		lines.push(`{const _of${fi}=[${fns.join(",")}];let _oc=0;for(let _oi=0;_oi<_of${fi}.length;_oi++){if(_of${fi}[_oi](${v}))_oc++;if(_oc>1)break}if(_oc!==1){${fail("oneOf", "oneOf", "{}", "'must match exactly one schema in oneOf'")}}}`);
+	}
+	function genNotC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
+		const sl = [];
+		nestedGenCode(schema.not, "_nv", sl, ctx);
+		const nfn = sl.length === 0 ? `function(_nv){return true}` : `function(_nv){${sl.join(";")};return true}`;
+		const fi = ctx.varCounter++;
+		lines.push(`{const _nf${fi}=${nfn};if(_nf${fi}(${v})){${fail("not", "not", "{}", "'must NOT be valid'")}}}`);
+	}
+	function genIfC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
+		const sl = [];
+		nestedGenCode(schema.if, "_iv", sl, ctx);
+		const fi = ctx.varCounter++;
+		const ifFn = sl.length === 0 ? `function(_iv){return true}` : `function(_iv){${sl.join(";")};return true}`;
+		lines.push(`{const _if${fi}=${ifFn}`);
+		if (schema.then !== void 0) {
+			lines.push(`if(_if${fi}(${v})){`);
+			genCodeC(schema.then, v, pathExpr, lines, ctx, schemaPrefix + "/then");
+			lines.push(`}`);
+		}
+		if (schema.else !== void 0) {
+			lines.push(`${schema.then !== void 0 ? "else" : `if(!_if${fi}(${v}))`}{`);
+			genCodeC(schema.else, v, pathExpr, lines, ctx, schemaPrefix + "/else");
+			lines.push(`}`);
+		}
+		lines.push(`}`);
+	}
+	module.exports = {
+		compileToJSCodegenWithErrors,
+		compileToJSCombined
+	};
+}));
+//#endregion
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { compileFunction } = require_compile_fn();
 	const DEQ_HELPER = "function _deq(a,b){if(a===b)return true;if(a===null||b===null||typeof a!=='object'||typeof b!=='object')return false;var aa=Array.isArray(a);if(aa!==Array.isArray(b))return false;var i;if(aa){if(a.length!==b.length)return false;for(i=0;i<a.length;i++)if(!_deq(a[i],b[i]))return false;return true}var ka=Object.keys(a);if(ka.length!==Object.keys(b).length)return false;for(i=0;i<ka.length;i++){var k=ka[i];if(!Object.prototype.hasOwnProperty.call(b,k)||!_deq(a[k],b[k]))return false}return true}";
 	let _uqSources = null;
 	function uqSources() {
@@ -10177,26 +14115,10 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return "_deq";
 	}
 	const PTR_ESC_HELPER = "function _pe(s){for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);if(c===126||c===47)return s.replace(/~/g,'~0').replace(/\\//g,'~1')}return s}";
-	function emitPtrEsc(ctx) {
-		hoistOnce(ctx, "_peHoisted", PTR_ESC_HELPER);
-		return "_pe";
-	}
 	function emitUq(ctx) {
 		emitDeq(ctx);
 		hoistOnce(ctx, "_uqHoisted", uqSources().uq);
 		return "_uq";
-	}
-	function emitUqp(ctx) {
-		emitUq(ctx);
-		hoistOnce(ctx, "_uqpHoisted", uqSources().uqp);
-		return "_uqp";
-	}
-	function emitParamConstant(ctx, value) {
-		const name = `_pc${ctx.varCounter++}`;
-		const decl = `const ${name}=JSON.parse(${JSON.stringify(JSON.stringify(value))})`;
-		if (ctx.preamble) ctx.preamble.push(decl);
-		else ctx.helperCode.push(decl);
-		return name;
 	}
 	function emitConstant(ctx, value) {
 		if (!ctx._constPool) ctx._constPool = /* @__PURE__ */ new Map();
@@ -10211,6 +14133,13 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		return name;
 	}
+	const IDENT_RE = /^[A-Za-z_$][\w$]*$/;
+	function enumOperand(ctx, vals, v, lines) {
+		if (IDENT_RE.test(v) || vals.length < 2) return v;
+		const name = `_ev${ctx.varCounter++}`;
+		lines.push(`const ${name}=${v}`);
+		return name;
+	}
 	function enumCondition(ctx, vals, v) {
 		const parts = [];
 		const prims = vals.filter((x) => x === null || typeof x !== "object");
@@ -10222,9 +14151,14 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		return parts.filter(Boolean).join("||") || "false";
 	}
-	const { codeFor } = require_error_codes();
-	const { ordinalFor, rankFor } = require_schema_order();
-	const { compileSafe, patternIsSafe } = require_safe_regex();
+	let _safeRe = null;
+	const safeRe = () => _safeRe || (_safeRe = require_safe_regex());
+	function compileSafe(src) {
+		return safeRe().compileSafe(src);
+	}
+	function patternIsSafe(src) {
+		return safeRe().patternIsSafe(src);
+	}
 	let _nativeIsLinear = null;
 	const PROP_ESCAPE = /\\[pP]\{/;
 	function reFlags(src) {
@@ -10257,59 +14191,6 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			return compileSafe(src);
 		}
 		return new RegExp(src, reFlags(src));
-	}
-	const DOC_BASE = "https://ata-validator.com/e/";
-	function ordinalField(ctx, schemaPath) {
-		if (ctx && ctx.noOrdinal) return "";
-		const o = ctx && ctx.rootSchema ? ordinalFor(ctx.rootSchema, unescapeSp(schemaPath)) : null;
-		return o === null ? "" : `,_o:${o}`;
-	}
-	function literalValue(lit) {
-		try {
-			return Function("return " + lit)();
-		} catch {
-			throw DECLINE;
-		}
-	}
-	function unescapeSp(sp) {
-		return sp.indexOf("\\") === -1 ? sp : sp.replace(/\\u([0-9a-fA-F]{4})|\\(.)/g, (m, h, c) => h !== void 0 ? String.fromCharCode(parseInt(h, 16)) : c);
-	}
-	const FRAME_INLINE_MAX = 120;
-	function buildErrorLiteral(opts) {
-		const { keyword, format, schemaPath, sourceMap } = opts;
-		let code = keyword === "format" && format ? codeFor("format", format) : codeFor(keyword);
-		if (!code) code = "ATA9001";
-		const docUrl = DOC_BASE + code;
-		let frame = "";
-		if (sourceMap && sourceMap.file && sourceMap.map) {
-			const ptr = schemaPath && schemaPath.charAt(0) === "#" ? schemaPath.slice(1) : schemaPath || "";
-			let hit = sourceMap.map[ptr + "#key"];
-			if (!hit) hit = sourceMap.map[ptr];
-			if (hit) {
-				const line = Array.isArray(hit) ? hit[0] : hit.line;
-				const col = Array.isArray(hit) ? hit[1] : hit.col;
-				const text = Array.isArray(hit) ? hit[2] : hit.text;
-				if (sourceMap.frames && text.length > FRAME_INLINE_MAX) {
-					const key = line + ":" + col;
-					let f = sourceMap.frames.get(key);
-					if (!f) {
-						f = {
-							line,
-							col,
-							text,
-							index: sourceMap.frames.size
-						};
-						sourceMap.frames.set(key, f);
-					}
-					frame = ",schemaSource:__ataSS[" + f.index + "]";
-				} else frame = ",schemaSource:Object.freeze({file:" + JSON.stringify(sourceMap.file) + ",line:" + line + ",col:" + col + ",text:" + JSON.stringify(text) + "})";
-			}
-		}
-		return {
-			codeStr: code,
-			docUrl,
-			frame
-		};
 	}
 	function _cpLen(s) {
 		const len = s.length;
@@ -10747,28 +14628,32 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (Array.isArray(x)) return "[" + x.map(_canonical).join(",") + "]";
 		return "{" + Object.keys(x).sort().map((k) => JSON.stringify(k) + ":" + _canonical(x[k])).join(",") + "}";
 	}
-	const _formats = {
-		...require_formats(),
-		...require_formats_source()
-	};
+	let _formatsCache = null;
+	function getFormats() {
+		return _formatsCache || (_formatsCache = {
+			...require_formats(),
+			...require_formats_source()
+		});
+	}
+	const _fmtFns = require_formats();
 	const FORMAT_CHECKS = {
-		email: _formats.email,
-		"idn-email": _formats.idnEmail,
-		date: _formats.date,
-		"date-time": _formats.dateTime,
-		time: _formats.time,
-		duration: _formats.duration,
-		uuid: _formats.uuid,
-		uri: _formats.uri,
-		"uri-reference": _formats.uriReference,
-		"uri-template": _formats.uriTemplate,
-		iri: _formats.iri,
-		"iri-reference": _formats.iriReference,
-		ipv4: _formats.ipv4,
-		ipv6: _formats.ipv6,
-		hostname: _formats.hostname,
-		"json-pointer": _formats.jsonPointer,
-		"relative-json-pointer": _formats.relativeJsonPointer,
+		email: _fmtFns.email,
+		"idn-email": _fmtFns.idnEmail,
+		date: _fmtFns.date,
+		"date-time": _fmtFns.dateTime,
+		time: _fmtFns.time,
+		duration: _fmtFns.duration,
+		uuid: _fmtFns.uuid,
+		uri: _fmtFns.uri,
+		"uri-reference": _fmtFns.uriReference,
+		"uri-template": _fmtFns.uriTemplate,
+		iri: _fmtFns.iri,
+		"iri-reference": _fmtFns.iriReference,
+		ipv4: _fmtFns.ipv4,
+		ipv6: _fmtFns.ipv6,
+		hostname: _fmtFns.hostname,
+		"json-pointer": _fmtFns.jsonPointer,
+		"relative-json-pointer": _fmtFns.relativeJsonPointer,
 		regex: (s) => {
 			try {
 				new RegExp(s, "u");
@@ -10952,13 +14837,150 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function _setCodeBudget(n) {
 		codeBudget = n === void 0 ? CODE_BUDGET : n;
 	}
+	const SPLIT_PROP_SCHEMA = 2e3;
+	const SPLIT_PROP_SMALL = 220;
+	const SPLIT_FN_BUDGET = 24576;
+	function propSchemaSize(prop) {
+		try {
+			return JSON.stringify(prop).length;
+		} catch {
+			return 0;
+		}
+	}
+	function propFnCandidate(prop, ctx) {
+		if (!ctx.preamble || ctx.nestedBoolean || ctx.condDepth) return false;
+		if (!prop || typeof prop !== "object" || Array.isArray(prop)) return false;
+		const size = propSchemaSize(prop);
+		return size >= SPLIT_PROP_SCHEMA || (ctx.fnBytes || 0) > SPLIT_FN_BUDGET && size >= SPLIT_PROP_SMALL;
+	}
+	function emitPropFn(prop, ctx) {
+		const bodyLines = [];
+		const outerDeferred = ctx.deferredChecks;
+		ctx.deferredChecks = null;
+		const outerReuse = ctx.plainReuse;
+		ctx.plainReuse = void 0;
+		const outerBytes = ctx.fnBytes;
+		ctx.fnBytes = 0;
+		try {
+			genCode(prop, "d", bodyLines, ctx);
+		} finally {
+			ctx.plainReuse = outerReuse;
+			ctx.fnBytes = outerBytes;
+		}
+		if (ctx.deferredChecks) for (const dc of ctx.deferredChecks) bodyLines.push(dc);
+		ctx.deferredChecks = outerDeferred;
+		if (bodyLines.length === 0 || bodyLines.some((l) => /\b_validate\b/.test(l))) return null;
+		const fnName = "_pf" + (ctx.propFns = (ctx.propFns || 0) + 1);
+		hoist(ctx, `function ${fnName}(d){${bodyLines.join("\n  ")}\n  return true}`);
+		return fnName;
+	}
+	function countInline(lines, from, ctx) {
+		let n = 0;
+		for (let i = from; i < lines.length; i++) n += lines[i].length;
+		ctx.fnBytes = (ctx.fnBytes || 0) + n;
+	}
 	function nestedGenCode(schema, v, lines, ctx) {
 		ctx.nestedBoolean = (ctx.nestedBoolean || 0) + 1;
+		const before = lines.length;
 		try {
 			genCode(schema, v, lines, ctx);
 		} finally {
 			ctx.nestedBoolean--;
 		}
+		assertEmitted(schema, lines.length - before, false);
+	}
+	const HC_SUBSCHEMA_KEYS = [
+		"additionalProperties",
+		"items",
+		"unevaluatedProperties",
+		"unevaluatedItems",
+		"additionalItems",
+		"propertyNames",
+		"contains",
+		"not"
+	];
+	const HC_SUBSCHEMA_MAPS = [
+		"properties",
+		"patternProperties",
+		"dependentSchemas"
+	];
+	const HC_SUBSCHEMA_LISTS = [
+		"allOf",
+		"anyOf",
+		"oneOf",
+		"prefixItems"
+	];
+	const HC_ALWAYS = /* @__PURE__ */ new Set([
+		"enum",
+		"const",
+		"multipleOf",
+		"maximum",
+		"exclusiveMaximum",
+		"minimum",
+		"exclusiveMinimum",
+		"maxLength",
+		"pattern",
+		"maxItems",
+		"maxProperties",
+		"$ref",
+		"$dynamicRef",
+		"$recursiveRef"
+	]);
+	function hasConstraints(sub, ignoreType) {
+		if (sub === false) return true;
+		if (sub === true || sub === null || typeof sub !== "object" || Array.isArray(sub)) return false;
+		for (const k of Object.keys(sub)) {
+			const v = sub[k];
+			if (HC_ALWAYS.has(k)) return true;
+			if (k === "type") {
+				if (!ignoreType) return true;
+				continue;
+			}
+			if (k === "required" || k === "dependentRequired") {
+				if (Array.isArray(v) ? v.length > 0 : v && typeof v === "object" && Object.values(v).some((a) => Array.isArray(a) && a.length)) return true;
+				continue;
+			}
+			if (k === "dependencies") {
+				if (v && typeof v === "object" && Object.values(v).some((a) => Array.isArray(a) ? a.length > 0 : hasConstraints(a, false))) return true;
+				continue;
+			}
+			if (k === "uniqueItems") {
+				if (v === true) return true;
+				continue;
+			}
+			if (k === "minItems" || k === "minProperties" || k === "minLength" || k === "minContains") {
+				if (v > 0 && (k !== "minContains" || sub.contains !== void 0)) return true;
+				continue;
+			}
+			if (k === "maxContains") {
+				if (sub.contains !== void 0) return true;
+				continue;
+			}
+			if (k === "if") {
+				if (sub.then !== void 0 && hasConstraints(sub.then, false) || sub.else !== void 0 && hasConstraints(sub.else, false)) return true;
+				continue;
+			}
+			if (HC_SUBSCHEMA_KEYS.includes(k)) {
+				if (hasConstraints(v, false)) return true;
+				continue;
+			}
+			if (HC_SUBSCHEMA_MAPS.includes(k)) {
+				if (v && typeof v === "object" && Object.values(v).some((x) => hasConstraints(x, false))) return true;
+				continue;
+			}
+			if (HC_SUBSCHEMA_LISTS.includes(k)) {
+				if (Array.isArray(v) && v.some((x) => hasConstraints(x, false))) return true;
+				continue;
+			}
+			if (k === "items" && Array.isArray(v)) {
+				if (v.some((x) => hasConstraints(x, false))) return true;
+				continue;
+			}
+		}
+		return false;
+	}
+	function assertEmitted(sub, emitted, ignoreType) {
+		if (emitted === 0 && hasConstraints(sub, ignoreType)) throw DECLINE;
 	}
 	const CYCLE_DEPTH = 512;
 	function emitGuardState() {
@@ -11059,7 +15081,6 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		"doNotSuggest",
 		"suggestSortText"
 	]);
-	const SP_PLACEHOLDER = "@@ata-sp@@";
 	function aliasChainEnds(def, defs) {
 		const seen = /* @__PURE__ */ new Set();
 		let node = def;
@@ -11523,8 +15544,30 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		_gateOk = ok;
 		return ok;
 	}
+	function unevaluatedBesideRootRef(schema) {
+		const text = JSON.stringify(schema);
+		if (!text.includes("\"$ref\":\"#\"") || !/"unevaluated(?:Properties|Items)"/.test(text)) return false;
+		let found = false;
+		const seen = /* @__PURE__ */ new Set();
+		const walk = (n) => {
+			if (found || n === null || typeof n !== "object" || seen.has(n)) return;
+			seen.add(n);
+			if (Array.isArray(n)) {
+				for (const x of n) walk(x);
+				return;
+			}
+			if (n.$ref === "#" && (n.unevaluatedProperties !== void 0 || n.unevaluatedItems !== void 0)) {
+				found = true;
+				return;
+			}
+			for (const [k, v] of Object.entries(n)) if (k !== "enum" && k !== "const" && k !== "default" && k !== "examples") walk(v);
+		};
+		walk(schema);
+		return found;
+	}
 	function sharedCodegenGateUncached(schema, schemaMap) {
 		if (bothDefsContainers(schema)) return false;
+		if (unevaluatedBesideRootRef(schema)) return false;
 		if (hasSameInstanceRefCycle(schema)) return false;
 		if (!codegenSafe(schema, schemaMap)) return false;
 		if (needsBaseTracking(schema, schemaMap, /* @__PURE__ */ new Set())) return false;
@@ -12214,7 +16257,10 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			for (const node of keywordNodes(schema, schemaMap, ctx.keywords)) if (!ctx.kwEmitted.has(node)) return null;
 		}
 		if (ctx.deferredChecks) for (const dc of ctx.deferredChecks) lines.push(dc);
-		if (lines.length === 0) return () => true;
+		if (lines.length === 0) {
+			if (hasConstraints(schema, false)) return null;
+			return () => true;
+		}
 		const checkStr = lines.join("\n  ");
 		const closureNames = ctx.closureVars;
 		const closureValues = ctx.closureVals;
@@ -12259,80 +16305,133 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const preambleStr = guardStr + (ctx.preamble && ctx.preamble.length ? ctx.preamble.join("\n  ") + "\n  " : "");
 		try {
 			let boolFn;
-			if (closureNames.length > 0) boolFn = new Function(...closureNames, `${preambleStr}return function(d){${body}}`)(...closureValues);
-			else if (preambleStr) boolFn = new Function(`${preambleStr}return function(d){${body}}`)();
-			else boolFn = new Function("d", body);
-			let hybridFactory;
-			boolFn._hybridFactory = (R, E) => {
-				if (hybridFactory === void 0) try {
-					hybridFactory = new Function(...closureNames, "R", "E", `${preambleStr}return function(d){${hybridBody()}}`);
-				} catch {
-					hybridFactory = null;
-				}
-				return hybridFactory === null ? null : hybridFactory(...closureValues, R, E);
-			};
-			let resultFactory;
-			boolFn._resultFactory = (LR, B, W, EE) => {
-				if (resultFactory === void 0) try {
-					resultFactory = new Function(...closureNames, "__ataLR", "__ataB", "__ataW", "__ataEE", `${preambleStr}return function(d){${resultThunk()}}`);
-				} catch {
-					resultFactory = null;
-				}
-				return resultFactory === null ? null : resultFactory(...closureValues, LR, B, W, EE);
-			};
-			let tailFactory;
-			boolFn._withTail = (tail) => {
-				if (tailFactory === void 0) try {
-					tailFactory = new Function(...closureNames, "__ataTail", `${preambleStr}return function(d){${tailThunk()}}`);
-				} catch {
-					tailFactory = null;
-				}
-				return tailFactory === null ? null : tailFactory(...closureValues, tail);
-			};
-			const emitHelpers = ctx.helperCode.filter((c) => !/^const _re\d+=(?:__ataSafeRe|new RegExp)\(/.test(c));
-			const helperStr = emitHelpers.length ? emitHelpers.join("\n  ") + "\n  " : "";
-			boolFn._source = helperStr + body;
-			boolFn._preambleSource = preambleStr;
-			boolFn._preambleGuard = guardStr;
-			boolFn._preambleParts = ctx.preamble ? ctx.preamble.slice() : [];
-			boolFn._sharedHelpers = ctx.shared ? ctx.shared.slice() : [];
-			Object.defineProperty(boolFn, "_hybridSource", {
-				get: () => helperStr + hybridBody(),
-				configurable: true,
-				enumerable: false
+			if (closureNames.length > 0) boolFn = compileFunction(...closureNames, `${preambleStr}return function(d){${body}}`)(...closureValues);
+			else if (preambleStr) boolFn = compileFunction(`${preambleStr}return function(d){${body}}`)();
+			else boolFn = compileFunction("d", body);
+			if (!(opts && opts.full) && !(opts && opts.keywords)) {
+				attachLazyHeavy(boolFn, inputSchema, schemaMap, userFormats, opts, !!ctx.usesSafeRe);
+				return boolFn;
+			}
+			attachHeavy(boolFn, {
+				ctx,
+				closureNames,
+				closureValues,
+				preambleStr,
+				guardStr,
+				hybridBody,
+				resultThunk,
+				tailThunk,
+				body
 			});
-			boolFn._usesSafeRe = !!ctx.usesSafeRe;
-			if (ctx.userFormats) {
-				const fmtEntries = [];
-				for (let i = 0; i < closureNames.length; i++) if (closureNames[i].startsWith("_uf_")) {
-					let format = null;
-					for (const key of Object.keys(ctx.userFormats)) if (ctx.userFormats[key] === closureValues[i]) {
-						format = key;
-						break;
-					}
-					fmtEntries.push({
-						name: closureNames[i],
-						fn: closureValues[i],
-						format
-					});
-				}
-				if (fmtEntries.length) boolFn._formatClosures = fmtEntries;
-			}
-			{
-				const entries = [];
-				for (let i = 0; i < closureNames.length; i++) {
-					const name = closureNames[i];
-					if (name === "_cpLen" || name.startsWith("_uf_")) continue;
-					entries.push({
-						name,
-						val: closureValues[i]
-					});
-				}
-				if (entries.length) boolFn._closures = entries;
-			}
 			return boolFn;
 		} catch {
 			return null;
+		}
+	}
+	const HEAVY_DATA = [
+		"_source",
+		"_preambleSource",
+		"_preambleGuard",
+		"_preambleParts",
+		"_sharedHelpers",
+		"_hybridSource",
+		"_formatClosures",
+		"_closures"
+	];
+	function attachLazyHeavy(boolFn, schema, schemaMap, userFormats, opts, usesSafeRe) {
+		boolFn._usesSafeRe = usesSafeRe;
+		let fullFn;
+		const full = () => fullFn || (fullFn = compileToJSCodegen(schema, schemaMap, userFormats, Object.assign({}, opts || {}, { full: true })));
+		boolFn._hybridFactory = (R, E) => {
+			const f = full();
+			return f && f._hybridFactory ? f._hybridFactory(R, E) : null;
+		};
+		boolFn._resultFactory = (LR, B, W, EE) => {
+			const f = full();
+			return f && f._resultFactory ? f._resultFactory(LR, B, W, EE) : null;
+		};
+		boolFn._withTail = (tail) => {
+			const f = full();
+			return f && f._withTail ? f._withTail(tail) : null;
+		};
+		for (const k of HEAVY_DATA) Object.defineProperty(boolFn, k, {
+			get() {
+				const f = full();
+				return f ? f[k] : void 0;
+			},
+			configurable: true,
+			enumerable: false
+		});
+	}
+	function attachHeavy(boolFn, P) {
+		const { ctx, closureNames, closureValues, preambleStr, guardStr, hybridBody, resultThunk, tailThunk, body } = P;
+		let hybridFactory;
+		boolFn._hybridFactory = (R, E) => {
+			if (hybridFactory === void 0) try {
+				hybridFactory = compileFunction(...closureNames, "R", "E", `${preambleStr}return function(d){${hybridBody()}}`);
+			} catch {
+				hybridFactory = null;
+			}
+			return hybridFactory === null ? null : hybridFactory(...closureValues, R, E);
+		};
+		let resultFactory;
+		boolFn._resultFactory = (LR, B, W, EE) => {
+			if (resultFactory === void 0) try {
+				resultFactory = compileFunction(...closureNames, "__ataLR", "__ataB", "__ataW", "__ataEE", `${preambleStr}return function(d){${resultThunk()}}`);
+			} catch {
+				resultFactory = null;
+			}
+			return resultFactory === null ? null : resultFactory(...closureValues, LR, B, W, EE);
+		};
+		let tailFactory;
+		boolFn._withTail = (tail) => {
+			if (tailFactory === void 0) try {
+				tailFactory = compileFunction(...closureNames, "__ataTail", `${preambleStr}return function(d){${tailThunk()}}`);
+			} catch {
+				tailFactory = null;
+			}
+			return tailFactory === null ? null : tailFactory(...closureValues, tail);
+		};
+		const emitHelpers = ctx.helperCode.filter((c) => !/^const _re\d+=(?:__ataSafeRe|new RegExp)\(/.test(c));
+		const helperStr = emitHelpers.length ? emitHelpers.join("\n  ") + "\n  " : "";
+		boolFn._source = helperStr + body;
+		boolFn._preambleSource = preambleStr;
+		boolFn._preambleGuard = guardStr;
+		boolFn._preambleParts = ctx.preamble ? ctx.preamble.slice() : [];
+		boolFn._sharedHelpers = ctx.shared ? ctx.shared.slice() : [];
+		Object.defineProperty(boolFn, "_hybridSource", {
+			get: () => helperStr + hybridBody(),
+			configurable: true,
+			enumerable: false
+		});
+		boolFn._usesSafeRe = !!ctx.usesSafeRe;
+		if (ctx.userFormats) {
+			const fmtEntries = [];
+			for (let i = 0; i < closureNames.length; i++) if (closureNames[i].startsWith("_uf_")) {
+				let format = null;
+				for (const key of Object.keys(ctx.userFormats)) if (ctx.userFormats[key] === closureValues[i]) {
+					format = key;
+					break;
+				}
+				fmtEntries.push({
+					name: closureNames[i],
+					fn: closureValues[i],
+					format
+				});
+			}
+			if (fmtEntries.length) boolFn._formatClosures = fmtEntries;
+		}
+		{
+			const entries = [];
+			for (let i = 0; i < closureNames.length; i++) {
+				const name = closureNames[i];
+				if (name === "_cpLen" || name.startsWith("_uf_")) continue;
+				entries.push({
+					name,
+					val: closureValues[i]
+				});
+			}
+			if (entries.length) boolFn._closures = entries;
 		}
 	}
 	const RESULT_TRUE = "{valid:true,data:d,errors:__ataEE}";
@@ -12663,7 +16762,10 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const isNum = effectiveType === "number" || effectiveType === "integer";
 		const objGuard = isObj ? "" : `typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&`;
 		isObj || `${v}${v}`;
-		if (schema.enum) lines.push(`if(!(${enumCondition(ctx, schema.enum, v)}))return false`);
+		if (schema.enum) {
+			const ev = enumOperand(ctx, schema.enum, v, lines);
+			lines.push(`if(!(${enumCondition(ctx, schema.enum, ev)}))return false`);
+		}
 		if (schema.const !== void 0) {
 			const cv = schema.const;
 			if (cv === null || typeof cv !== "object") lines.push(`if(${v}!==${JSON.stringify(cv)})return false`);
@@ -12794,27 +16896,35 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (schema.dependentSchemas) genDependentSchemasNode(schema, v, lines, ctx, knownType, effectiveType, isObj);
 		if (schema.propertyNames === false) lines.push(isObj ? `for(const _k in ${v})return false` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k in ${v})return false}`);
 		if (schema.propertyNames && typeof schema.propertyNames === "object" && !ppHandledPropertyNames) genPropertyNamesNode(schema, v, lines, ctx, knownType, isObj);
-		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) if (requiredSet.has(key) && isObj) {
-			const access = hoisted[key] || `${v}[${JSON.stringify(key)}]`;
-			const combined = tryGenCombined(prop, access, ctx);
-			if (combined) lines.push(combined);
-			else if (needsLocal(prop) || isPlainContainer(prop)) {
-				const local = `_r${ctx.varCounter++}`;
-				lines.push(`{const ${local}=${access}`);
-				genCode(prop, local, lines, ctx);
+		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) {
+			const from = lines.length;
+			const fn = propFnCandidate(prop, ctx) ? emitPropFn(prop, ctx) : null;
+			if (requiredSet.has(key) && isObj) {
+				const access = hoisted[key] || `${v}[${JSON.stringify(key)}]`;
+				const combined = fn ? null : tryGenCombined(prop, access, ctx);
+				if (fn) lines.push(`if(!${fn}(${access}))return false`);
+				else if (combined) lines.push(combined);
+				else if (needsLocal(prop) || isPlainContainer(prop)) {
+					const local = `_r${ctx.varCounter++}`;
+					lines.push(`{const ${local}=${access}`);
+					genCode(prop, local, lines, ctx);
+					lines.push(`}`);
+				} else genCode(prop, access, lines, ctx);
+			} else if (isObj) {
+				const local = `_o${ctx.varCounter++}`;
+				lines.push(`{const ${local}=${v}[${JSON.stringify(key)}];if(${local}!==undefined&&${ownGuard(ctx, v, key)}){`);
+				const combined = fn ? null : tryGenCombined(prop, local, ctx);
+				if (fn) lines.push(`if(!${fn}(${local}))return false`);
+				else if (combined) lines.push(combined);
+				else genCode(prop, local, lines, ctx);
+				lines.push(`}}`);
+			} else {
+				lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${ownKeyExpr(ctx, v, key)}){`);
+				if (fn) lines.push(`if(!${fn}(${v}[${JSON.stringify(key)}]))return false`);
+				else genCode(prop, `${v}[${JSON.stringify(key)}]`, lines, ctx);
 				lines.push(`}`);
-			} else genCode(prop, access, lines, ctx);
-		} else if (isObj) {
-			const local = `_o${ctx.varCounter++}`;
-			lines.push(`{const ${local}=${v}[${JSON.stringify(key)}];if(${local}!==undefined&&${ownGuard(ctx, v, key)}){`);
-			const combined = tryGenCombined(prop, local, ctx);
-			if (combined) lines.push(combined);
-			else genCode(prop, local, lines, ctx);
-			lines.push(`}}`);
-		} else {
-			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${ownKeyExpr(ctx, v, key)}){`);
-			genCode(prop, `${v}[${JSON.stringify(key)}]`, lines, ctx);
-			lines.push(`}`);
+			}
+			countInline(lines, from, ctx);
 		}
 		if (schema.items !== void 0 && schema.items !== true) {
 			const idx = `_j${ctx.varCounter}`;
@@ -13650,59 +17760,48 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			}
 		}
 	}
-	const EMAIL_HELPER = `function _em(_s){${_formats.emailSource("_s", true)}return true}`;
-	const URI_HELPER = _formats.uriHelperSource("_uri");
+	const emailHelper = () => `function _em(_s){${getFormats().emailSource("_s", true)}return true}`;
+	const uriHelper = () => getFormats().uriHelperSource("_uri");
 	const FORMAT_CODEGEN = {
 		email: (v, isStr, ctx) => {
-			if (!ctx) return _formats.emailSource(v, isStr);
-			hoistOnce(ctx, "_emHoisted", EMAIL_HELPER);
+			if (!ctx) return getFormats().emailSource(v, isStr);
+			hoistOnce(ctx, "_emHoisted", emailHelper());
 			return isStr ? `if(!_em(${v}))return false` : `if(typeof ${v}==='string'&&!_em(${v}))return false`;
 		},
-		"json-pointer": _formats.jsonPointerSource,
-		"relative-json-pointer": _formats.relativeJsonPointerSource,
-		"uri-template": _formats.uriTemplateSource,
-		iri: _formats.iriSource,
-		"iri-reference": _formats.iriReferenceSource,
-		"idn-email": _formats.idnEmailSource,
+		"json-pointer": (...a) => getFormats().jsonPointerSource(...a),
+		"relative-json-pointer": (...a) => getFormats().relativeJsonPointerSource(...a),
+		"uri-template": (...a) => getFormats().uriTemplateSource(...a),
+		iri: (...a) => getFormats().iriSource(...a),
+		"iri-reference": (...a) => getFormats().iriReferenceSource(...a),
+		"idn-email": (...a) => getFormats().idnEmailSource(...a),
 		regex: (v, isStr) => {
 			const inner = `try{new RegExp(${v},'u')}catch(_er){return false}`;
 			return isStr ? `{${inner}}` : `if(typeof ${v}==='string'){${inner}}`;
 		},
-		date: _formats.dateSource,
-		uuid: _formats.uuidSource,
-		"date-time": _formats.dateTimeSource,
-		time: _formats.timeSource,
-		duration: _formats.durationSource,
+		date: (...a) => getFormats().dateSource(...a),
+		uuid: (...a) => getFormats().uuidSource(...a),
+		"date-time": (...a) => getFormats().dateTimeSource(...a),
+		time: (...a) => getFormats().timeSource(...a),
+		duration: (...a) => getFormats().durationSource(...a),
 		uri: (v, isStr, ctx) => {
-			if (!ctx) return _formats.uriSource(v, isStr);
-			hoistOnce(ctx, "_uriHoisted", URI_HELPER);
+			if (!ctx) return getFormats().uriSource(v, isStr);
+			hoistOnce(ctx, "_uriHoisted", uriHelper());
 			return isStr ? `if(!_uri(${v}))return false` : `if(typeof ${v}==='string'&&!_uri(${v}))return false`;
 		},
-		"uri-reference": (v, isStr) => isStr ? `{${_formats.uriCharsSource(v, "0")}}` : `if(typeof ${v}==='string'){${_formats.uriCharsSource(v, "0")}}`,
+		"uri-reference": (v, isStr) => isStr ? `{${getFormats().uriCharsSource(v, "0")}}` : `if(typeof ${v}==='string'){${getFormats().uriCharsSource(v, "0")}}`,
 		ipv4: (v, isStr, ctx) => {
-			if (!ctx) return _formats.ipv4Source(v, isStr);
-			hoistOnce(ctx, "_ip4Hoisted", "const _ip4=/" + _formats.IPV4.source + "/");
+			if (!ctx) return getFormats().ipv4Source(v, isStr);
+			hoistOnce(ctx, "_ip4Hoisted", "const _ip4=/" + getFormats().IPV4.source + "/");
 			return isStr ? `if(!_ip4.test(${v}))return false` : `if(typeof ${v}==='string'&&!_ip4.test(${v}))return false`;
 		},
 		ipv6: (v, isStr, ctx) => {
-			if (!ctx) return _formats.ipv6Source(v, isStr);
-			hoistOnce(ctx, "_ip6Hoisted", "const _ip6f=/" + _formats.IPV6_FULL.source + "/");
-			const body = `_ip6:{if(${v}.length>=15&&_ip6f.test(${v}))break _ip6;${_formats.ipv6Source(v, true).replace(/^\{|\}$/g, "")}}`;
+			if (!ctx) return getFormats().ipv6Source(v, isStr);
+			hoistOnce(ctx, "_ip6Hoisted", "const _ip6f=/" + getFormats().IPV6_FULL.source + "/");
+			const body = `_ip6:{if(${v}.length>=15&&_ip6f.test(${v}))break _ip6;${getFormats().ipv6Source(v, true).replace(/^\{|\}$/g, "")}}`;
 			return isStr ? body : `if(typeof ${v}==='string'){${body}}`;
 		},
-		hostname: _formats.hostnameSource
+		hostname: (...a) => getFormats().hostnameSource(...a)
 	};
-	function esc(s) {
-		return JSON.stringify(s).slice(1, -1).replace(/'/g, "\\'");
-	}
-	function ptrSeg(s) {
-		return s.replace(/~/g, "~0").replace(/\//g, "~1").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/[\u0000-\u001f\u2028\u2029]/g, (c) => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"));
-	}
-	function childPathExpr(parentExpr, suffix) {
-		if (!parentExpr) return `'/${suffix}'`;
-		if (parentExpr.startsWith("'") && !parentExpr.includes("+")) return `'${parentExpr.slice(1, -1)}/${suffix}'`;
-		return `${parentExpr}+'/${suffix}'`;
-	}
 	function compilePatternInline(pattern, varName) {
 		let m = pattern.match(/^\^(\[[\w\-]+\])\{(\d+)\}\$$/);
 		if (m) {
@@ -13797,10 +17896,6 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (ranges.length === 0) return null;
 		return `(${ranges.map(([lo, hi]) => lo === hi ? `${codeExpr}===${lo}` : `(${codeExpr}>=${lo}&&${codeExpr}<=${hi})`).join("||")})`;
 	}
-	function childPathDynExpr(parentExpr, indexExpr) {
-		if (!parentExpr) return `'/'+${indexExpr}`;
-		return `${parentExpr}+'/'+${indexExpr}`;
-	}
 	function unevalContributions(sub, kind, names, state, depth) {
 		if (depth > 24) return false;
 		if (sub === true || sub === false) return true;
@@ -13835,52 +17930,6 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		]) if (sub[k] !== void 0 && !unevalContributions(sub[k], kind, names, state, depth + 1)) return false;
 		return true;
 	}
-	function unevalLocalOk(node, key) {
-		if (node[key] !== false) return false;
-		if (node.$ref !== void 0 || node.$dynamicRef !== void 0 || node.$recursiveRef !== void 0) return false;
-		if (node.dependentSchemas !== void 0 || node.dependencies !== void 0) return false;
-		const kind = key === "unevaluatedProperties" ? "props" : "items";
-		if (kind === "props" && node.patternProperties !== void 0) return false;
-		if (kind === "items" && node.contains !== void 0) return false;
-		const names = /* @__PURE__ */ new Set();
-		const state = { prefix: 0 };
-		for (const k of [
-			"allOf",
-			"anyOf",
-			"oneOf"
-		]) if (node[k] !== void 0) {
-			if (!Array.isArray(node[k])) return false;
-			for (const b of node[k]) if (!unevalContributions(b, kind, names, state, 0)) return false;
-		}
-		for (const k of [
-			"if",
-			"then",
-			"else"
-		]) if (node[k] !== void 0 && !unevalContributions(node[k], kind, names, state, 0)) return false;
-		if (kind === "props") {
-			const own = node.properties && typeof node.properties === "object" ? node.properties : {};
-			for (const n of names) if (!Object.prototype.hasOwnProperty.call(own, n)) return false;
-		} else {
-			const ownPrefix = Array.isArray(node.prefixItems) ? node.prefixItems.length : Array.isArray(node.items) ? node.items.length : 0;
-			if (node.items !== void 0 && !Array.isArray(node.items)) {} else if (state.prefix > ownPrefix) return false;
-		}
-		return true;
-	}
-	function unevalAllProvablyLocal(root, only) {
-		const seen = /* @__PURE__ */ new Set();
-		const stack = [root];
-		while (stack.length) {
-			const n = stack.pop();
-			if (n === null || typeof n !== "object" || seen.has(n)) continue;
-			seen.add(n);
-			if (!Array.isArray(n)) {
-				if (only !== "items" && n.unevaluatedProperties !== void 0 && !unevalLocalOk(n, "unevaluatedProperties")) return false;
-				if (n.unevaluatedItems !== void 0 && !unevalLocalOk(n, "unevaluatedItems")) return false;
-			}
-			for (const k of Array.isArray(n) ? n : Object.values(n)) stack.push(k);
-		}
-		return true;
-	}
 	function fastPrefixCheck(pattern, keyVar) {
 		const m = pattern.match(/^\^([a-zA-Z0-9_\-./]+)$/);
 		if (!m) return null;
@@ -13905,1822 +17954,6 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			cases += `case ${cc}:if(${cond})continue;break;`;
 		}
 		return `for(var _k in ${v}){switch(_k.charCodeAt(0)){${cases}default:break}return false}`;
-	}
-	function compileToJSCodegenWithErrors(schema, schemaMap, userFormats, sourceOpts) {
-		const inputSchema = schema;
-		schema = prepareForCodegen(schema, schemaMap);
-		if (typeof schema === "object" && schema !== null) {
-			const s = JSON.stringify(schema);
-			if ((s.includes("unevaluatedProperties") || s.includes("unevaluatedItems")) && !unevalAllProvablyLocal(schema)) return null;
-		}
-		if (typeof schema === "boolean") return schema ? () => ({
-			valid: true,
-			errors: []
-		}) : () => ({
-			valid: false,
-			errors: [{
-				keyword: "not",
-				instancePath: "",
-				schemaPath: "#",
-				params: {},
-				message: "boolean schema is false"
-			}]
-		});
-		if (typeof schema !== "object" || schema === null) return null;
-		if (!sharedCodegenGate(schema, schemaMap)) return null;
-		if (schema.patternProperties) {
-			for (const [pat, sub] of Object.entries(schema.patternProperties)) if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
-		}
-		if (schema.dependentSchemas) {
-			for (const sub of Object.values(schema.dependentSchemas)) if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
-		}
-		if (schema.propertyNames && typeof schema.propertyNames === "object" && !isSimplePN(schema.propertyNames) && !codegenSafe(schema.propertyNames, schemaMap)) return null;
-		const eRootDefs = schema.$defs || schema.definitions || null;
-		const eAnchors = {};
-		if (schema.$dynamicAnchor) eAnchors["#" + schema.$dynamicAnchor] = schema;
-		if (schema.$anchor) eAnchors["#" + schema.$anchor] = schema;
-		if (typeof schema.$id === "string" && schema.$id.startsWith("#")) eAnchors[schema.$id] = schema;
-		if (eRootDefs) {
-			for (const def of Object.values(eRootDefs)) if (def && typeof def === "object") {
-				if (def.$dynamicAnchor) eAnchors["#" + def.$dynamicAnchor] = def;
-				if (def.$anchor) eAnchors["#" + def.$anchor] = def;
-				if (typeof def.$id === "string" && def.$id.startsWith("#")) eAnchors[def.$id] = def;
-			}
-		}
-		if (schemaMap) {
-			for (const ext of schemaMap.values()) if (ext && typeof ext === "object") {
-				if (ext.$dynamicAnchor && !eAnchors["#" + ext.$dynamicAnchor]) eAnchors["#" + ext.$dynamicAnchor] = ext;
-				if (ext.$anchor && !eAnchors["#" + ext.$anchor]) eAnchors["#" + ext.$anchor] = ext;
-				if (typeof ext.$id === "string" && ext.$id.startsWith("#") && !eAnchors[ext.$id]) eAnchors[ext.$id] = ext;
-			}
-		}
-		if (hasUnresolvableRef(schema, eRootDefs, eAnchors, schemaMap, /* @__PURE__ */ new Set())) return null;
-		if (needsBaseTracking(schema, schemaMap, /* @__PURE__ */ new Set())) return null;
-		const ctx = {
-			varCounter: 0,
-			helperCode: [],
-			rootDefs: eRootDefs,
-			shared: [],
-			refStack: /* @__PURE__ */ new Set(),
-			schemaMap: schemaMap || null,
-			anchors: eAnchors,
-			rootE: schema,
-			rootSchema: inputSchema,
-			userFormats: userFormats || null,
-			closureVars: [],
-			closureVals: [],
-			sourceMap: sourceOpts && sourceOpts.sourceMap && sourceOpts.schemaFile ? {
-				file: sourceOpts.schemaFile,
-				map: sourceOpts.sourceMap,
-				frames: sourceOpts.frames || null
-			} : null
-		};
-		ctx.helperCode.push("const _cpLen=s=>{let n=0;for(const _ of s)n++;return n}");
-		const lines = [];
-		try {
-			genCodeE(schema, "d", "", lines, ctx, "#");
-		} catch (e) {
-			if (e === DECLINE) return null;
-			throw e;
-		}
-		if (ctx.usesBranchCollapse) ctx.helperCode.push(require_branch_collapse().embedSource());
-		if (lines.length === 0) return (d) => ({
-			valid: true,
-			errors: []
-		});
-		const checkStr = lines.join("\n  ");
-		const defSetsE = ctx.defFns ? Array.from(ctx.defFns.values()) : [];
-		const needsGuardE = ctx.usesRecursion || defSetsE.length > 0;
-		const guardStrE = needsGuardE ? emitGuardState() : "";
-		const helpersE = ctx.helperCode.length ? ctx.helperCode.join("\n  ") + "\n  " : "";
-		let body;
-		if (ctx.usesRecursion) body = `const _e=[];\n  ` + guardStrE + helpersE + emitRootGuard("_validateE", "d,_all,_e", "") + `function _validateE_b(d,_all,_e){\n  ${checkStr}\n  }\n  ` + emitGuardedRun("_validateE(d,_all,_e)", "_e.length=0;", defSetsE) + `return{valid:_e.length===0,errors:_e}`;
-		else if (defSetsE.length > 0) body = `const _e=[];\n  ` + guardStrE + helpersE + `function _bodyE(d,_all,_e){\n  ${checkStr}\n  }\n  ` + emitGuardedRun("_bodyE(d,_all,_e)", "_e.length=0;", defSetsE) + `return{valid:_e.length===0,errors:_e}`;
-		else body = `const _e=[];\n  ` + helpersE + checkStr + `\n  return{valid:_e.length===0,errors:_e}`;
-		try {
-			let fn;
-			const cvars = ctx.closureVars;
-			const cvals = ctx.closureVals;
-			let factoryBody;
-			if (needsGuardE) {
-				const attempt = ctx.usesRecursion ? "_validateE(d,_all,_e)" : "_bodyE(d,_all,_e)";
-				const runner = ctx.usesRecursion ? emitRootGuard("_validateE", "d,_all,_e", "") + `function _validateE_b(d,_all,_e){\n  ${checkStr}\n  }\n  ` : `function _bodyE(d,_all,_e){\n  ${checkStr}\n  }\n  `;
-				factoryBody = guardStrE + helpersE + runner + `return function(d,_all){const _e=[];\n  ` + emitGuardedRun(attempt, "_e.length=0;", defSetsE) + `return{valid:_e.length===0,errors:_e}}`;
-			} else factoryBody = helpersE + "return function(d,_all){const _e=[];\n  " + checkStr + "\n  return{valid:_e.length===0,errors:_e}}";
-			if (sourceOpts && sourceOpts.runtimeShape) {
-				const shape = (src) => src.replace(/code:'ATA\d{4}',/g, "").replace(/,docUrl:'https:\/\/ata-validator\.com\/e\/ATA\d{4}'/g, "").replace(/,_o:\d+/g, "");
-				body = shape(body);
-				factoryBody = shape(factoryBody);
-			}
-			if (!ctx.usesRecursion && defSetsE.length === 0 && helpersE !== "" || needsGuardE) {
-				const params = [...cvars, "__ataSafeRe"];
-				const args = [...cvals, compileSafe];
-				const make = new Function(...params, factoryBody);
-				const main = make(...args);
-				if (needsGuardE) {
-					let busy = false;
-					fn = (d, _all) => {
-						if (busy) return make(...args)(d, _all);
-						busy = true;
-						try {
-							return main(d, _all);
-						} finally {
-							busy = false;
-						}
-					};
-				} else fn = main;
-			} else if (ctx.usesSafeRe) {
-				const built = new Function(...cvars, "__ataSafeRe", "d", "_all", body);
-				fn = cvars.length ? (d, _all) => built(...cvals, compileSafe, d, _all) : (d, _all) => built(compileSafe, d, _all);
-			} else if (cvars.length) {
-				const built = new Function(...cvars, "d", "_all", body);
-				fn = (d, _all) => built(...cvals, d, _all);
-			} else fn = new Function("d", "_all", body);
-			fn._errSource = body;
-			fn._errFactory = factoryBody;
-			fn._errGuarded = needsGuardE;
-			fn._sharedHelpers = ctx.shared ? ctx.shared.slice() : [];
-			fn._usesSafeRe = !!ctx.usesSafeRe;
-			if (cvars.length) fn._formatClosures = cvars.map((name, i) => {
-				let format = null;
-				for (const key of Object.keys(ctx.userFormats)) if (ctx.userFormats[key] === cvals[i]) {
-					format = key;
-					break;
-				}
-				return {
-					name,
-					fn: cvals[i],
-					format
-				};
-			});
-			return fn;
-		} catch (e) {
-			if (process.env.ATA_DEBUG_ERRGEN) console.error("error codegen declined:", e.message);
-			return null;
-		}
-	}
-	const BRANCH_VERDICT_MAX = 4096;
-	function snapshotCtx(ctx) {
-		const out = /* @__PURE__ */ new Map();
-		for (const k of Object.keys(ctx)) {
-			const x = ctx[k];
-			if (Array.isArray(x)) out.set(k, {
-				kind: "a",
-				ref: x,
-				n: x.length
-			});
-			else if (x instanceof Map || x instanceof Set) out.set(k, {
-				kind: "c",
-				ref: x,
-				n: x.size
-			});
-			else out.set(k, {
-				kind: "v",
-				ref: x
-			});
-		}
-		return out;
-	}
-	function restoreCtx(ctx, saved) {
-		for (const k of Object.keys(ctx)) if (!saved.has(k)) delete ctx[k];
-		for (const [k, e] of saved) if (e.kind === "a") {
-			e.ref.length = Math.min(e.ref.length, e.n);
-			ctx[k] = e.ref;
-		} else if (e.kind === "c") {
-			if (e.ref.size - e.n > 0) {
-				const added = [];
-				let i = 0;
-				for (const key of e.ref.keys()) if (i++ >= e.n) added.push(key);
-				for (const key of added) e.ref.delete(key);
-			}
-			ctx[k] = e.ref;
-		} else ctx[k] = e.ref;
-	}
-	function holdsRef(node, seen = /* @__PURE__ */ new Set()) {
-		if (node === null || typeof node !== "object" || seen.has(node)) return false;
-		seen.add(node);
-		if (typeof node.$ref === "string" || typeof node.$dynamicRef === "string") return true;
-		for (const k of Object.keys(node)) if (holdsRef(node[k], seen)) return true;
-		return false;
-	}
-	const BRANCH_SCOPE_KEYS = /* @__PURE__ */ new Set([
-		"$id",
-		"$anchor",
-		"$dynamicAnchor",
-		"$dynamicRef",
-		"$defs",
-		"definitions",
-		"$schema"
-	]);
-	function branchRefsLocal(node, defsKey, seen) {
-		if (node === null || typeof node !== "object") return true;
-		if (seen.has(node)) return true;
-		seen.add(node);
-		if (Array.isArray(node)) {
-			for (const x of node) if (!branchRefsLocal(x, defsKey, seen)) return false;
-			return true;
-		}
-		for (const k of Object.keys(node)) {
-			if (SKIP_VALUE_KEYS.has(k)) continue;
-			if (BRANCH_SCOPE_KEYS.has(k)) return false;
-			const v = node[k];
-			if (k === "$ref") {
-				if (typeof v !== "string" || !v.startsWith("#/" + defsKey + "/")) return false;
-				continue;
-			}
-			if (!branchRefsLocal(v, defsKey, seen)) return false;
-		}
-		return true;
-	}
-	const _defsLocal = /* @__PURE__ */ new WeakMap();
-	function compileBranchVerdicts(branches, ctx) {
-		const root = ctx.rootC;
-		if (root === null || typeof root !== "object") return null;
-		const defsKey = root.$defs && typeof root.$defs === "object" ? "$defs" : root.definitions && typeof root.definitions === "object" ? "definitions" : null;
-		if (defsKey !== null) {
-			let ok = _defsLocal.get(root);
-			if (ok === void 0) {
-				ok = branchRefsLocal(root[defsKey], defsKey, /* @__PURE__ */ new Set());
-				_defsLocal.set(root, ok);
-			}
-			if (!ok) return null;
-		}
-		const out = [];
-		for (const sub of branches) {
-			if (sub === true) {
-				out.push(() => true);
-				continue;
-			}
-			if (sub === false) {
-				out.push(() => false);
-				continue;
-			}
-			if (sub === null || typeof sub !== "object" || Array.isArray(sub)) return null;
-			if (!branchRefsLocal(sub, defsKey === null ? "$defs" : defsKey, /* @__PURE__ */ new Set())) return null;
-			const wrapped = Object.assign({}, sub);
-			if (defsKey !== null) wrapped[defsKey] = root[defsKey];
-			if (typeof ctx.rootSchema === "object" && ctx.rootSchema !== null && typeof ctx.rootSchema.$schema === "string") wrapped.$schema = ctx.rootSchema.$schema;
-			let fn = null;
-			try {
-				fn = compileToJSCodegen(wrapped, ctx.schemaMap, ctx.userFormats);
-			} catch (e) {
-				if (e !== DECLINE) throw e;
-			}
-			if (typeof fn !== "function") return null;
-			out.push(fn);
-		}
-		return out;
-	}
-	const GUARD_KEYS = [
-		"oneOf",
-		"anyOf",
-		"allOf",
-		"$ref",
-		"items",
-		"prefixItems",
-		"properties",
-		"patternProperties",
-		"additionalProperties",
-		"not",
-		"if",
-		"contains",
-		"dependentSchemas",
-		"dependencies",
-		"propertyNames",
-		"unevaluatedProperties",
-		"unevaluatedItems"
-	];
-	const GUARD_MAX = 16384;
-	const GUARD_BUDGET = 524288;
-	const weighty = (n) => n !== null && typeof n === "object" && !Array.isArray(n) && GUARD_KEYS.some((k) => n[k] !== void 0);
-	function childrenWeighty(sub) {
-		if (weighty(sub.items)) return true;
-		if (Array.isArray(sub.prefixItems) && sub.prefixItems.some(weighty)) return true;
-		if (weighty(sub.additionalProperties)) return true;
-		if (sub.properties && typeof sub.properties === "object") {
-			for (const k of Object.keys(sub.properties)) if (weighty(sub.properties[k])) return true;
-		}
-		if (sub.patternProperties && typeof sub.patternProperties === "object") {
-			for (const k of Object.keys(sub.patternProperties)) if (weighty(sub.patternProperties[k])) return true;
-		}
-		return false;
-	}
-	const GUARD_INLINE_MAX = 2048;
-	function subtreeGuard(sub, ctx, gv) {
-		if (!ctx.inCombined || !weighty(sub) || childrenWeighty(sub)) return null;
-		if ((ctx.guardChars || 0) >= GUARD_BUDGET) return null;
-		if (!ctx.guardDefFns) ctx.guardDefFns = /* @__PURE__ */ new Map();
-		const saved = snapshotCtx(ctx);
-		const outerDefFns = ctx.defFns;
-		const outerShare = ctx.shareDefs;
-		ctx.defFns = ctx.guardDefFns;
-		ctx.shareDefs = true;
-		try {
-			const bl = [];
-			try {
-				nestedGenCode(sub, gv, bl, ctx);
-			} finally {
-				ctx.defFns = outerDefFns;
-				ctx.shareDefs = outerShare;
-			}
-			if (bl.length === 0) {
-				restoreCtx(ctx, saved);
-				return null;
-			}
-			const body = bl.join(";");
-			const added = ctx.preamble.slice(saved.get("preamble").n).join(";");
-			if (body.length > GUARD_MAX || body.includes(SP_PLACEHOLDER) || /\b(?:_validate|_stk|_sd|_sg|_CYC)\b/.test(body + added)) {
-				restoreCtx(ctx, saved);
-				return null;
-			}
-			ctx.guardChars = (ctx.guardChars || 0) + body.length;
-			if (body.length <= GUARD_INLINE_MAX) return { body };
-			const name = `_vg${ctx.varCounter++}`;
-			ctx.helperCode.push(`const ${name}=function(${gv}){${body};return true}`);
-			return { name };
-		} catch (e) {
-			if (e !== DECLINE) throw e;
-			restoreCtx(ctx, saved);
-			return null;
-		}
-	}
-	function genGuardedC(sub, v, pathExpr, lines, ctx, schemaPrefix) {
-		const gi = ctx.varCounter++;
-		const gv = `_gv${gi}`;
-		const g = subtreeGuard(sub, ctx, gv);
-		if (g === null) {
-			genCodeC(sub, v, pathExpr, lines, ctx, schemaPrefix);
-			return;
-		}
-		if (g.name !== void 0) lines.push(`if(!${g.name}(${v})){`);
-		else lines.push(`{const ${gv}=${v};let _g${gi}=1;g${gi}:{${replaceTopLevel(g.body, `{_g${gi}=0;break g${gi}}`, `break g${gi}`)};_g${gi}=0}if(_g${gi}){`);
-		ctx.guardDepth = (ctx.guardDepth || 0) + 1;
-		try {
-			genCodeC(sub, v, pathExpr, lines, ctx, schemaPrefix);
-		} finally {
-			ctx.guardDepth--;
-		}
-		lines.push(g.name !== void 0 ? "}" : "}}");
-	}
-	function countingBody(body) {
-		while (true) {
-			const b1 = body.indexOf("/*CB*/"), b2 = body.indexOf("/*CU*/");
-			const b = b1 < 0 ? b2 : b2 < 0 ? b1 : Math.min(b1, b2);
-			if (b < 0) break;
-			const unknown = b === b2;
-			let depth = 1;
-			let j = b + 6;
-			while (j < body.length && depth > 0) {
-				if (body.startsWith("/*CB*/", j) || body.startsWith("/*CU*/", j)) {
-					depth++;
-					j += 6;
-					continue;
-				}
-				if (body.startsWith("/*CE*/", j)) {
-					depth--;
-					j += 6;
-					continue;
-				}
-				j++;
-			}
-			if (depth !== 0) return null;
-			body = body.slice(0, b) + (unknown ? "return -1" : "(_n++,_s+=4)") + body.slice(j);
-		}
-		if (/\b(?:_defE\d|__ataCollapse|__ataMulti|_brf\d|_bsf\d)/.test(body)) return null;
-		const SEV = require_branch_collapse().SEVERITY;
-		let out = "";
-		let i = 0;
-		if (!body.startsWith("const _e=[];")) return null;
-		out += "let _n=0,_s=0;";
-		i = 12;
-		while (i < body.length) {
-			const ch = body[i];
-			if (ch === "\"" || ch === "'" || ch === "`") {
-				const j = skipString(body, i);
-				out += body.slice(i, j);
-				i = j;
-				continue;
-			}
-			if (body.startsWith("_e.push(", i)) {
-				let j = i + 8;
-				let depth = 1;
-				while (j < body.length && depth > 0) {
-					const c = body[j];
-					if (c === "\"" || c === "'" || c === "`") {
-						j = skipString(body, j);
-						continue;
-					}
-					if (c === "(" || c === "{" || c === "[") depth++;
-					else if (c === ")" || c === "}" || c === "]") depth--;
-					j++;
-				}
-				if (depth !== 0) return null;
-				const arg = body.slice(i + 8, j - 1);
-				const m = /^\{(?:code:'ATA\d{4}',)?keyword:'([A-Za-z$][\w$]*)',/.exec(arg);
-				if (m === null) return null;
-				out += `(_n++,_s+=${SEV[m[1]] || 4})`;
-				i = j;
-				continue;
-			}
-			if (body.startsWith("return{valid:false,errors:_e}", i)) {
-				out += "return _n*100+_s";
-				i += 29;
-				continue;
-			}
-			if (body.startsWith("return{valid:_e.length===0,errors:_e}", i)) {
-				out += "return _n*100+_s";
-				i += 37;
-				continue;
-			}
-			if (body.startsWith("_e.length", i)) {
-				out += "_n";
-				i += 9;
-				continue;
-			}
-			out += ch;
-			i++;
-		}
-		if (/\b_e\b/.test(out.replace(/'[^']*'|"[^"]*"/g, ""))) return null;
-		return out;
-	}
-	function emitBranchCollapse(branches, keyword, v, pathExpr, lines, ctx, schemaPrefix) {
-		ctx.usesBranchCollapse = true;
-		const fi = ctx.varCounter++;
-		const branchKw = keyword;
-		const branchSp = schemaPrefix + "/" + branchKw;
-		const fns = [];
-		const titles = [];
-		let usesSp = false;
-		for (let i = 0; i < branches.length; i++) {
-			const sub = branches[i];
-			const subLines = [];
-			const subSp = branchSp + "/" + i;
-			if (typeof sub === "object" && sub !== null) {
-				ctx.inBranchFn = (ctx.inBranchFn || 0) + 1;
-				try {
-					genCodeE(sub, "_bv", "_bpth", subLines, ctx, subSp);
-				} finally {
-					ctx.inBranchFn--;
-				}
-			} else if (sub === false) subLines.push(`_e.push({keyword:'not',instancePath:_bpth,schemaPath:'${subSp}'${ordinalField(ctx, `${subSp}`)},params:{},message:'boolean schema is false'})`);
-			const title = sub && typeof sub === "object" && typeof sub.title === "string" ? sub.title : "";
-			titles.push(title);
-			let body = subLines.length === 0 ? "" : `const _e=[];${subLines.join(";")};return{valid:_e.length===0,errors:_e}`;
-			if (body.includes(SP_PLACEHOLDER)) {
-				body = body.split(`'${SP_PLACEHOLDER}`).join(`_sp+'`).split(`"${SP_PLACEHOLDER}`).join(`_sp+"`);
-				if (body.includes(SP_PLACEHOLDER)) throw DECLINE;
-				usesSp = true;
-			}
-			fns.push(body);
-		}
-		const params = usesSp ? "_bv,_bpth,_all,_sp" : "_bv,_bpth,_all";
-		const fnArr = `_brf${fi}`;
-		const resArr = `_brr${fi}`;
-		const titleArr = JSON.stringify(titles);
-		const collapsed = `_brc${fi}`;
-		const pp = pathExpr || "\"\"";
-		ctx.helperCode.push(`const ${fnArr}=[${fns.map((b) => b === "" ? `function(){return{valid:true,errors:[]}}` : `function(${params}){${b}}`).join(",")}];const _bt${fi}=${titleArr}`);
-		const call = `${fnArr}[_bi](${v},_pp${fi},_all${usesSp ? ",_sp" : ""})`;
-		const ord = ctx.noOrdinal ? "null" : (() => {
-			const o = ordinalFor(ctx.rootSchema, unescapeSp(branchSp));
-			return o === null ? "null" : o;
-		})();
-		const report = ctx.inCombined && !ctx.inBranchFn ? `const ${collapsed}=__ataCollapse('${branchKw}',${resArr},_pp${fi},'${branchSp}',${ord},_bt${fi});if(${collapsed})(_e=_ap(_A,_e,${collapsed},${apOrd(ctx, branchSp)}))` : `const ${collapsed}=__ataCollapse('${branchKw}',${resArr},_pp${fi},'${branchSp}',${ord},_bt${fi});if(${collapsed}){_e.push(${collapsed});if(!_all)return{valid:false,errors:_e}}`;
-		let noneReport = null;
-		if (ctx.inCombined && (ctx.noOrdinal ? "null" : "") === "null") {
-			const cbs = fns.map((b) => b === "" ? "return 0" : countingBody(b));
-			if (!cbs.some((c) => c === null)) {
-				const sfx = usesSp ? ",_sp" : "";
-				const lit = `{code: '${branchKw === "oneOf" ? "ATA4001" : "ATA4003"}',keyword:'${branchKw}',instancePath:_pp${fi}||'',path:_pp${fi}||'',schemaPath:'${branchSp}',message:'value matched 0 of ${branches.length} ${branchKw} variants',params:{variants:${branches.length},closest:_bi${fi},closestName:_bt${fi}[_bi${fi}]||('variant '+(_bi${fi}+1))},branchErrors:_br${fi}.errors}`;
-				const push = ctx.inBranchFn ? `_e.push(${lit});if(!_all)return{valid:false,errors:_e}` : `(_e=_ap(_A,_e,${lit},${apOrd(ctx, branchSp)}))`;
-				if (cbs.length === 1) noneReport = `{let _bi${fi}=0;const _br${fi}=${fnArr}[0](${v},_pp${fi},_all${sfx});${push}}`;
-				else {
-					ctx.helperCode.push(cbs.map((b, i) => `const _bsf${fi}_${i}=function(${params}){${b}}`).join(";"));
-					noneReport = `{let _bi${fi}=0,_bs${fi}=Infinity,_ng${fi}=0;${cbs.map((_, i) => `{const _s=_bsf${fi}_${i}(${v},_pp${fi},_all${sfx});if(_s<0)_ng${fi}=1;else if(_s<_bs${fi}){_bs${fi}=_s;_bi${fi}=${i}}}`).join("")}if(_ng${fi}){${branchKw === "anyOf" ? `const ${resArr}=[];for(let _bi=0;_bi<${branches.length};_bi++){const _br=${call};${resArr}.push(_br.valid?{valid:false,errors:_br.errors}:_br)}${report}` : `const ${resArr}=[];for(let _bi=0;_bi<${branches.length};_bi++)${resArr}.push(${call});${report}`}}else{const _br${fi}=${fnArr}[_bi${fi}](${v},_pp${fi},_all${sfx});${push}}}`;
-				}
-			}
-		}
-		const countedRaw = ctx.inCombined && ctx.branchCounts ? ctx.branchCounts.get(branches) : void 0;
-		const counted = countedRaw !== void 0 && (!ctx.inBranchFn || countedRaw.factory) ? countedRaw : void 0;
-		const same = counted !== void 0 ? `${v}!==null&&typeof ${v}==='object'&&${counted.of}===${v}` : "";
-		let guard = counted !== void 0 ? keyword === "anyOf" ? `if(!(${same}&&${counted.count}>=1))` : `if(!(${same}&&${counted.count}===1))` : "";
-		if (guard !== "" && keyword === "oneOf" && counted.mask && ctx.inCombined) {
-			const ord0 = ctx.noOrdinal ? "null" : (() => {
-				const o = ordinalFor(ctx.rootSchema, unescapeSp(branchSp));
-				return o === null ? "null" : o;
-			})();
-			const multiC = `__ataMulti(_pi${fi},${branches.length},${pp},'${branchSp}',${ord0})`;
-			const pushC = ctx.inBranchFn ? `_e.push(${multiC});if(!_all)return{valid:false,errors:_e}` : `(_e=_ap(_A,_e,${multiC},${apOrd(ctx, branchSp)}))`;
-			guard = `if(${same}&&${counted.count}>1){/*CB*/const _pi${fi}=[];for(let _k=0;_k<${branches.length};_k++)if((${counted.mask}>>_k)&1)_pi${fi}.push(_k);${pushC}/*CE*/}else if(!(${same}&&${counted.count}===1))`;
-		}
-		let vfArr = null;
-		if (guard === "" && !branches.some((b) => holdsRef(b))) {
-			const saved = snapshotCtx(ctx);
-			try {
-				const vfs = branches.map((sub) => {
-					if (sub === true) return "function(){return true}";
-					if (sub === false) return "function(){return false}";
-					const bl = [];
-					nestedGenCode(sub, "_bv", bl, ctx);
-					return bl.length === 0 ? "function(){return true}" : `function(_bv){${bl.join(";")};return true}`;
-				});
-				if (!vfs.some((b) => b.includes(SP_PLACEHOLDER)) && vfs.reduce((n, b) => n + b.length, 0) <= BRANCH_VERDICT_MAX) {
-					vfArr = `_bvf${fi}`;
-					ctx.helperCode.push(vfs.map((b, i) => `const ${vfArr}_${i}=${b}`).join(";"));
-				} else restoreCtx(ctx, saved);
-			} catch (e) {
-				if (e !== DECLINE) throw e;
-				restoreCtx(ctx, saved);
-			}
-		}
-		if (vfArr === null && guard === "" && ctx.inCombined) {
-			const compiled = compileBranchVerdicts(branches, ctx);
-			if (compiled !== null) {
-				vfArr = `_bvf${fi}`;
-				for (let i = 0; i < compiled.length; i++) {
-					ctx.closureVars.push(`${vfArr}_${i}`);
-					ctx.closureVals.push(compiled[i]);
-				}
-			}
-		}
-		if (vfArr !== null) {
-			const L = branches.length;
-			const top = ctx.inCombined && !ctx.inBranchFn;
-			if (top && !ctx.guardDepth) ctx.unguardedCollapse = true;
-			const tests = branches.map((_, i) => `${vfArr}_${i}(${v})`);
-			if (keyword === "anyOf") {
-				const none = noneReport !== null ? noneReport : `const ${resArr}=[];for(let _bi=0;_bi<${L};_bi++){const _br=${call};${resArr}.push(_br.valid?{valid:false,errors:_br.errors}:_br)}${report}`;
-				lines.push(`{const _pp${fi}=${pp};if(!(${tests.join("||")})){${top ? "" : "/*CB*/"}if(_all===0){_e.push(null);return{valid:false,errors:_e}}${none}${top ? "" : "/*CE*/"}}}`);
-			} else {
-				const mk = L <= 30;
-				const collect = mk ? `const _pi${fi}=[];for(let _k=0;_k<${L};_k++)if((_m${fi}>>_k)&1)_pi${fi}.push(_k);` : "";
-				const multi = `__ataMulti(_pi${fi},${L},_pp${fi},'${branchSp}',${ord})`;
-				const pushMulti = top ? `(_e=_ap(_A,_e,${multi},${apOrd(ctx, branchSp)}))` : `_e.push(${multi});if(!_all)return{valid:false,errors:_e}`;
-				const count = tests.map((t, i) => `if(${t}){_n${fi}++;${mk ? `_m${fi}|=${1 << i}` : `_pi${fi}.push(${i})`}}`).join("");
-				const none = noneReport !== null ? noneReport : `const ${resArr}=[];for(let _bi=0;_bi<${L};_bi++)${resArr}.push(${call});${report}`;
-				lines.push(`{const _pp${fi}=${pp};let _n${fi}=0${mk ? `,_m${fi}=0` : `,_pi${fi}=[]`};${count}if(_n${fi}!==1){${top ? "" : "/*CB*/"}if(_all===0){_e.push(null);return{valid:false,errors:_e}}if(_n${fi}>1){${collect}${pushMulti}}else{${none}}${top ? "" : "/*CE*/"}}}`);
-			}
-			return;
-		}
-		if (guard === "" && ctx.inCombined && !ctx.inBranchFn && !ctx.guardDepth) ctx.unguardedCollapse = true;
-		if (keyword === "anyOf") {
-			const probe = `${fnArr}[_bi](${v},_pp${fi},0${usesSp ? ",_sp" : ""})`;
-			const none = noneReport !== null ? noneReport : `const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++){const _br=${call};${resArr}.push(_br.valid?{valid:false,errors:_br.errors}:_br)}${report}`;
-			const probeOld = `let _bp${fi}=false;for(let _bi=0;_bi<${fnArr}.length;_bi++){if(${probe}.valid){_bp${fi}=true;break}}if(!_bp${fi}){if(_all===0){_e.push(null);return{valid:false,errors:_e}}${none}}`;
-			if (counted !== void 0) lines.push(`${guard}{const _pp${fi}=${pp};if(${same}){/*CB*/if(_all===0){_e.push(null);return{valid:false,errors:_e}}${none}/*CE*/}else{/*CU*/${probeOld}/*CE*/}}`);
-			else lines.push(`${guard}{const _pp${fi}=${pp};${probeOld}}`);
-		} else {
-			const oldO = `const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++)${resArr}.push(${call});if(_all===0){let _n=0;for(const _r of ${resArr})if(_r.valid)_n++;if(_n!==1){_e.push(null);return{valid:false,errors:_e}}}else{${report}}`;
-			const noneO = noneReport !== null ? noneReport : `const ${resArr}=[];for(let _bi=0;_bi<${fnArr}.length;_bi++)${resArr}.push(${call});${report}`;
-			if (counted !== void 0) lines.push(`${guard}{const _pp${fi}=${pp};if(${same}){/*CB*/if(_all===0){_e.push(null);return{valid:false,errors:_e}}${noneO}/*CE*/}else{/*CU*/${oldO}/*CE*/}}`);
-			else lines.push(`${guard}{const _pp${fi}=${pp};${oldO}}`);
-		}
-	}
-	function genCodeE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		return withPlain(schema, v, lines, ctx, () => genCodeENode(schema, v, pathExpr, lines, ctx, schemaPrefix));
-	}
-	function genCodeENode(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		if (!schemaPrefix) schemaPrefix = "#";
-		if (schema === false) {
-			lines.push(`;_e.push({keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}'${ordinalField(ctx, `${schemaPrefix}`)},params:{},message:'boolean schema is false'});if(!_all)return{valid:false,errors:_e}`);
-			return;
-		}
-		if (schema === true) return;
-		if (typeof schema !== "object" || schema === null) return;
-		if (!ctx.regExpMap) ctx.regExpMap = /* @__PURE__ */ new Map();
-		if (schema.$ref && !schema[REF_DONE]) {
-			if (Object.keys(schema).some((k) => !REF_NEUTRAL_SIBLINGS.has(k) && !k.startsWith("x-"))) {
-				genCodeENode({ $ref: schema.$ref }, v, pathExpr, lines, ctx, schemaPrefix);
-				const rest = { ...schema };
-				Object.defineProperty(rest, REF_DONE, { value: true });
-				genCodeENode(rest, v, pathExpr, lines, ctx, schemaPrefix);
-				return;
-			}
-			if (schema.$ref === "#") {
-				if (!ctx.rootE || typeof ctx.rootE !== "object") throw DECLINE;
-				if (!ctx.defFns) ctx.defFns = /* @__PURE__ */ new Map();
-				let fnName = ctx.defFns.get("#");
-				if (!fnName) {
-					fnName = "_defE" + ctx.defFns.size + "_root";
-					ctx.defFns.set("#", fnName);
-					const bodyLines = [];
-					const outerStack = ctx.refStack;
-					ctx.refStack = /* @__PURE__ */ new Set();
-					try {
-						genCodeE(ctx.rootE, "d", "_p", bodyLines, ctx, SP_PLACEHOLDER);
-					} finally {
-						ctx.refStack = outerStack;
-					}
-					let body = bodyLines.join("\n  ");
-					body = body.split(`'${SP_PLACEHOLDER}`).join(`_sp+'`).split(`"${SP_PLACEHOLDER}`).join(`_sp+"`);
-					if (body.includes(SP_PLACEHOLDER)) throw DECLINE;
-					ctx.helperCode.push(`const ${fnName}_s=new Set()\n  function ${fnName}(d,_p,_all,_e,_sp){\n  if(_sg){if(typeof d!=='object'||d===null)return ${fnName}_b(d,_p,_all,_e,_sp);if(${fnName}_s.has(d))return;${fnName}_s.add(d);try{return ${fnName}_b(d,_p,_all,_e,_sp)}finally{${fnName}_s.delete(d)}}\n  if(++_sd>${CYCLE_DEPTH})throw _CYC\n  const _r=${fnName}_b(d,_p,_all,_e,_sp)\n  _sd--\n  return _r\n  }\n  function ${fnName}_b(d,_p,_all,_e,_sp){${body}}`);
-				}
-				lines.push(`${fnName}(${v},${pathExpr || "\"\""},_all,_e,'${schemaPrefix}');if(!_all&&_e.length)return{valid:false,errors:_e}`);
-				return;
-			}
-			const m = schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
-			if (m && ctx.rootDefs && ctx.rootDefs[m[1]]) {
-				const defName = m[1];
-				if (!ctx.cyclicDefs) ctx.cyclicDefs = cyclicDefNames(ctx.rootDefs);
-				if (!ctx.sharedDefs) ctx.sharedDefs = sharedDefNames(ctx.rootSchema, ctx.rootDefs);
-				if (ctx.cyclicDefs.has(defName) || ctx.sharedDefs.has(defName)) {
-					if (!ctx.defFns) ctx.defFns = /* @__PURE__ */ new Map();
-					let fnName = ctx.defFns.get(defName);
-					if (!fnName) {
-						fnName = "_defE" + ctx.defFns.size + "_" + defName.replace(/[^A-Za-z0-9_]/g, "_");
-						ctx.defFns.set(defName, fnName);
-						const bodyLines = [];
-						genCodeE(ctx.rootDefs[defName], "d", "_p", bodyLines, ctx, SP_PLACEHOLDER);
-						let body = bodyLines.join("\n  ");
-						body = body.split(`'${SP_PLACEHOLDER}`).join(`_sp+'`).split(`"${SP_PLACEHOLDER}`).join(`_sp+"`);
-						if (body.includes(SP_PLACEHOLDER)) throw DECLINE;
-						ctx.helperCode.push(`const ${fnName}_s=new Set()\n  function ${fnName}(d,_p,_all,_e,_sp){\n  if(_sg){if(typeof d!=='object'||d===null)return ${fnName}_b(d,_p,_all,_e,_sp);if(${fnName}_s.has(d))return;${fnName}_s.add(d);try{return ${fnName}_b(d,_p,_all,_e,_sp)}finally{${fnName}_s.delete(d)}}\n  if(++_sd>${CYCLE_DEPTH})throw _CYC\n  const _r=${fnName}_b(d,_p,_all,_e,_sp)\n  _sd--\n  return _r\n  }\n  function ${fnName}_b(d,_p,_all,_e,_sp){${body}}`);
-					}
-					lines.push(`${fnName}(${v},${pathExpr || "\"\""},_all,_e,'${schemaPrefix}');if(!_all&&_e.length)return{valid:false,errors:_e}`);
-					return;
-				}
-				if (ctx.refStack.has(schema.$ref)) throw DECLINE;
-				ctx.refStack.add(schema.$ref);
-				genCodeE(ctx.rootDefs[defName], v, pathExpr, lines, ctx, schemaPrefix);
-				ctx.refStack.delete(schema.$ref);
-				return;
-			}
-			if (!m && schema.$ref.startsWith("#") && !schema.$ref.startsWith("#/")) {
-				const entry = ctx.rootDefs && ctx.rootDefs[schema.$ref];
-				const anchorTarget = entry && entry.raw ? entry.raw : ctx.anchors && ctx.anchors[schema.$ref];
-				if (anchorTarget) {
-					if (ctx.refStack.has(schema.$ref)) throw DECLINE;
-					ctx.refStack.add(schema.$ref);
-					genCodeE(anchorTarget, v, pathExpr, lines, ctx, schemaPrefix);
-					ctx.refStack.delete(schema.$ref);
-					return;
-				}
-			}
-			if (ctx.schemaMap && ctx.schemaMap.has(schema.$ref)) {
-				if (ctx.refStack.has(schema.$ref)) throw DECLINE;
-				ctx.refStack.add(schema.$ref);
-				genCodeE(ctx.schemaMap.get(schema.$ref), v, pathExpr, lines, ctx, schemaPrefix);
-				ctx.refStack.delete(schema.$ref);
-				return;
-			}
-			if (ctx.schemaMap && schema.$ref.includes("#") && !schema.$ref.startsWith("#")) {
-				const r = resolveCrossSchemaRef(schema.$ref, ctx.schemaMap);
-				if (r) {
-					if (ctx.refStack.has(schema.$ref)) throw DECLINE;
-					ctx.refStack.add(schema.$ref);
-					genCodeE(r.schema, v, pathExpr, lines, ctx, schemaPrefix);
-					ctx.refStack.delete(schema.$ref);
-					return;
-				}
-			}
-			throw DECLINE;
-		}
-		if (schema.$dynamicRef) genDynamicRefE(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		const types = schema.type ? Array.isArray(schema.type) ? schema.type : [schema.type] : null;
-		if (types) {
-			const conds = types.map((t) => {
-				switch (t) {
-					case "object": return `(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
-					case "array": return `Array.isArray(${v})`;
-					case "string": return `typeof ${v}==='string'`;
-					case "number": return `Number.isFinite(${v})`;
-					case "integer": return `Number.isInteger(${v})`;
-					case "boolean": return `typeof ${v}==='boolean'`;
-					case "null": return `${v}===null`;
-					default: return "true";
-				}
-			});
-			const expected = types.join(", ");
-			const expectedParam = !Array.isArray(schema.type) ? `'${types[0]}'` : JSON.stringify(types);
-			{
-				const typeSp = `${schemaPrefix}/type`;
-				const lit = buildErrorLiteral({
-					keyword: "type",
-					schemaPath: typeSp,
-					sourceMap: ctx.sourceMap
-				});
-				lines.push(`if(!(${conds.join("||")})){_e.push({code:'${lit.codeStr}',keyword:'type',instancePath:${pathExpr || "\"\""},schemaPath:'${typeSp}'${ordinalField(ctx, `${typeSp}`)},params:{type:${expectedParam}},message:'must be ${expected}',docUrl:'${lit.docUrl}'${lit.frame}});if(!_all)return{valid:false,errors:_e}}`);
-			}
-		}
-		const isObj = false;
-		const isArr = false;
-		const isStr = false;
-		const fail = (keyword, schemaSuffix, paramsCode, msgCode, fmt) => {
-			const sp = schemaPrefix + "/" + schemaSuffix;
-			const lit = buildErrorLiteral({
-				keyword,
-				format: fmt,
-				schemaPath: sp,
-				sourceMap: ctx.sourceMap
-			});
-			return `_e.push({code:'${lit.codeStr}',keyword:'${keyword}',instancePath:${pathExpr || "\"\""},schemaPath:'${sp}',params:${paramsCode},message:${msgCode},docUrl:'${lit.docUrl}'${lit.frame}${ordinalField(ctx, sp)}});if(!_all)return{valid:false,errors:_e}`;
-		};
-		if (schema.enum) lines.push(`if(!(${enumCondition(ctx, schema.enum, v)})){${fail("enum", "enum", `{allowedValues:${JSON.stringify(schema.enum)}}`, "'must be equal to one of the allowed values'")}}`);
-		if (schema.const !== void 0) {
-			const cv = schema.const;
-			if (cv === null || typeof cv !== "object") lines.push(`if(${v}!==${JSON.stringify(cv)}){${fail("const", "const", `{allowedValue:${JSON.stringify(schema.const)}}`, "'must be equal to constant'")}}`);
-			else lines.push(`if(!${emitDeq(ctx)}(${v},${emitConstant(ctx, cv)})){${fail("const", "const", `{allowedValue:${emitParamConstant(ctx, schema.const)}}`, "'must be equal to constant'")}}`);
-		}
-		new Set(schema.required || []);
-		if (schema.required) {
-			const reqSp = `${schemaPrefix}/required`;
-			const reqLit = buildErrorLiteral({
-				keyword: "required",
-				schemaPath: reqSp,
-				sourceMap: ctx.sourceMap
-			});
-			for (const key of schema.required) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!${ownKeyExpr(ctx, v, key)}){_e.push({code:'${reqLit.codeStr}',keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${reqSp}'${ordinalField(ctx, `${reqSp}`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'",docUrl:'${reqLit.docUrl}'${reqLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
-		}
-		if (schema.minimum !== void 0) {
-			const c = `typeof ${v}==='number'&&${v}<${schema.minimum}`;
-			lines.push(`if(${c}){${fail("minimum", "minimum", `{comparison:'>=',limit:${schema.minimum}}`, `'must be >= ${schema.minimum}'`)}}`);
-		}
-		if (schema.maximum !== void 0) {
-			const c = `typeof ${v}==='number'&&${v}>${schema.maximum}`;
-			lines.push(`if(${c}){${fail("maximum", "maximum", `{comparison:'<=',limit:${schema.maximum}}`, `'must be <= ${schema.maximum}'`)}}`);
-		}
-		if (schema.exclusiveMinimum !== void 0) {
-			const c = `typeof ${v}==='number'&&${v}<=${schema.exclusiveMinimum}`;
-			lines.push(`if(${c}){${fail("exclusiveMinimum", "exclusiveMinimum", `{comparison:'>',limit:${schema.exclusiveMinimum}}`, `'must be > ${schema.exclusiveMinimum}'`)}}`);
-		}
-		if (schema.exclusiveMaximum !== void 0) {
-			const c = `typeof ${v}==='number'&&${v}>=${schema.exclusiveMaximum}`;
-			lines.push(`if(${c}){${fail("exclusiveMaximum", "exclusiveMaximum", `{comparison:'<',limit:${schema.exclusiveMaximum}}`, `'must be < ${schema.exclusiveMaximum}'`)}}`);
-		}
-		if (schema.multipleOf !== void 0) {
-			const m = schema.multipleOf;
-			ctx.varCounter++;
-			lines.push(`{if(typeof ${v}==='number'&&${multipleOfBad(v, m)}){${fail("multipleOf", "multipleOf", `{multipleOf:${m}}`, `'must be multiple of ${m}'`)}}}`);
-		}
-		if (schema.minLength !== void 0) {
-			const M = schema.minLength;
-			const c = `typeof ${v}==='string'&&(${`${v}.length<${M}||(${v}.length<${M * 2}&&_cpLen(${v})<${M})`})`;
-			lines.push(`if(${c}){${fail("minLength", "minLength", `{limit:${M}}`, `'must NOT have fewer than ${M} characters'`)}}`);
-		}
-		if (schema.maxLength !== void 0) {
-			const X = schema.maxLength;
-			const c = `typeof ${v}==='string'&&(${`${v}.length>${X * 2}||(${v}.length>${X}&&_cpLen(${v})>${X})`})`;
-			lines.push(`if(${c}){${fail("maxLength", "maxLength", `{limit:${X}}`, `'must NOT have more than ${X} characters'`)}}`);
-		}
-		if (schema.pattern) {
-			const inlineCheck = compilePatternInline(schema.pattern, v);
-			if (inlineCheck) {
-				const c = `typeof ${v}==='string'&&!(${inlineCheck})`;
-				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, JSON.stringify(`must match pattern "${schema.pattern}"`))}}`);
-			} else {
-				const pattern = JSON.stringify(schema.pattern);
-				if (!ctx.regExpMap.has(pattern)) {
-					const ri = ctx.varCounter++;
-					ctx.regExpMap.set(pattern, ri);
-					if (useSafeEngine(schema.pattern)) {
-						ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
-						ctx.usesSafeRe = true;
-					} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern}${reFlagArg(pattern)})`);
-				}
-				const c = `typeof ${v}==='string'&&!_re${ctx.regExpMap.get(pattern)}.test(${v})`;
-				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, JSON.stringify(`must match pattern "${schema.pattern}"`))}}`);
-			}
-		}
-		if (schema.format) {
-			const fc = FORMAT_CODEGEN[schema.format];
-			const fmtSp = `${schemaPrefix}/format`;
-			const fmtLit = buildErrorLiteral({
-				keyword: "format",
-				format: schema.format,
-				schemaPath: fmtSp,
-				sourceMap: ctx.sourceMap
-			});
-			const failPush = `_e.push({code:'${fmtLit.codeStr}',keyword:'format',instancePath:${pathExpr || "\"\""},schemaPath:'${fmtSp}'${ordinalField(ctx, `${fmtSp}`)},params:{format:'${esc(schema.format)}'},message:'must match format "${esc(schema.format)}"',docUrl:'${fmtLit.docUrl}'${fmtLit.frame}});if(!_all)return{valid:false,errors:_e}`;
-			if (fc) {
-				const ri = ctx.varCounter++;
-				const fmtCode = fc(v, isStr, ctx).replace(/return false/g, `{${failPush};break _fmt${ri}}`);
-				lines.push(`_fmt${ri}:{${fmtCode}}`);
-			} else if (ctx.userFormats && typeof ctx.userFormats[schema.format] === "function") {
-				const closureName = `_uf_${schema.format.replace(/[^a-zA-Z0-9_]/g, "_")}`;
-				if (ctx.closureVars && !ctx.closureVars.includes(closureName)) {
-					ctx.closureVars.push(closureName);
-					ctx.closureVals.push(ctx.userFormats[schema.format]);
-				}
-				const guard = `typeof ${v}==='string'&&`;
-				lines.push(`if(${guard}!${closureName}(${v})){${failPush}}`);
-			}
-		}
-		if (schema.minItems !== void 0) {
-			const c = `Array.isArray(${v})&&${v}.length<${schema.minItems}`;
-			lines.push(`if(${c}){${fail("minItems", "minItems", `{limit:${schema.minItems}}`, `'must NOT have fewer than ${schema.minItems} items'`)}}`);
-		}
-		if (schema.maxItems !== void 0) {
-			const c = `Array.isArray(${v})&&${v}.length>${schema.maxItems}`;
-			lines.push(`if(${c}){${fail("maxItems", "maxItems", `{limit:${schema.maxItems}}`, `'must NOT have more than ${schema.maxItems} items'`)}}`);
-		}
-		if (schema.uniqueItems) genUniqueItemsE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isArr);
-		if (schema.minProperties !== void 0) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&Object.keys(${v}).length<${schema.minProperties}){${fail("minProperties", "minProperties", `{limit:${schema.minProperties}}`, `'must NOT have fewer than ${schema.minProperties} properties'`)}}`);
-		if (schema.maxProperties !== void 0) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&Object.keys(${v}).length>${schema.maxProperties}){${fail("maxProperties", "maxProperties", `{limit:${schema.maxProperties}}`, `'must NOT have more than ${schema.maxProperties} properties'`)}}`);
-		if (schema.additionalProperties === false) {
-			const allowed = Object.keys(schema.properties || {}).map((k) => `${JSON.stringify(k)}`).join(",");
-			const ci = ctx.varCounter++;
-			const apSp = `${schemaPrefix}/additionalProperties`;
-			const apLit = buildErrorLiteral({
-				keyword: "additionalProperties",
-				schemaPath: apSp,
-				sourceMap: ctx.sourceMap
-			});
-			const patChecks = [];
-			for (const pat of Object.keys(schema.patternProperties || {})) {
-				const pattern = JSON.stringify(pat);
-				if (!ctx.regExpMap.has(pattern)) {
-					const ri = ctx.varCounter++;
-					ctx.regExpMap.set(pattern, ri);
-					if (useSafeEngine(pat)) {
-						ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
-						ctx.usesSafeRe = true;
-					} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern}${reFlagArg(pattern)})`);
-				}
-				patChecks.push(`_re${ctx.regExpMap.get(pattern)}.test(_k${ci}[_i])`);
-			}
-			const isAdditional = patChecks.length ? `!_a${ci}.has(_k${ci}[_i])&&!(${patChecks.join("||")})` : `!_a${ci}.has(_k${ci}[_i])`;
-			const gateChecks = patChecks.map((c) => c.split(`_k${ci}[_i]`).join(`_f${ci}`));
-			const gateTest = gateChecks.length ? `!_a${ci}.has(_f${ci})&&!(${gateChecks.join("||")})` : `!_a${ci}.has(_f${ci})`;
-			const detail = `const _k${ci}=Object.keys(${v});for(let _i=0;_i<_k${ci}.length;_i++){if(${isAdditional}){_e.push({code:'${apLit.codeStr}',keyword:'additionalProperties',instancePath:${pathExpr || "\"\""},schemaPath:'${apSp}'${ordinalField(ctx, `${apSp}`)},params:{additionalProperty:_k${ci}[_i]},message:'must NOT have additional properties',docUrl:'${apLit.docUrl}'${apLit.frame}});if(!_all)return{valid:false,errors:_e}}}`;
-			ctx.helperCode.push(`const _a${ci}=new Set([${allowed}])`);
-			const inner = `let _x${ci}=0;for(const _f${ci} in ${v}){if(${gateTest}){_x${ci}=1;break}}if(_x${ci}){${detail}}`;
-			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
-		}
-		if (ctx.inCombined && schema.unevaluatedProperties !== void 0 && schema.unevaluatedProperties !== true && !unevalLocalOk(schema, "unevaluatedProperties")) throw DECLINE;
-		if (ctx.inCombined && schema.unevaluatedItems !== void 0 && schema.unevaluatedItems !== true && !unevalLocalOk(schema, "unevaluatedItems")) throw DECLINE;
-		if (schema.unevaluatedProperties === false && schema.additionalProperties === void 0) genUnevaluatedFalseE(schema, v, pathExpr, lines, ctx, schemaPrefix, isObj);
-		if (schema.unevaluatedItems === false) genUnevaluatedItemsFalseE(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		if (schema.dependentRequired) {
-			const drSp = `${schemaPrefix}/dependentRequired`;
-			const drLit = buildErrorLiteral({
-				keyword: "dependentRequired",
-				schemaPath: drSp,
-				sourceMap: ctx.sourceMap
-			});
-			for (const [key, deps] of Object.entries(schema.dependentRequired)) for (const dep of deps) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${ownKeyExpr(ctx, v, key)}&&!${ownKeyExpr(ctx, v, dep)}){_e.push({code:'${drLit.codeStr}',keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${drSp}'${ordinalField(ctx, `${drSp}`)},params:{missingProperty:'${esc(dep)}'},message:"must have required property '${esc(dep)}'",docUrl:'${drLit.docUrl}'${drLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
-		}
-		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) {
-			const childPath = childPathExpr(pathExpr, ptrSeg(key));
-			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${ownKeyExpr(ctx, v, key)}){`);
-			genCodeE(prop, `${v}[${JSON.stringify(key)}]`, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
-			lines.push(`}`);
-		}
-		if (schema.patternProperties) genPatternPropertiesE(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		if (typeof schema.additionalProperties === "object" && schema.additionalProperties !== null) genAdditionalSchemaE(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		if (schema.dependentSchemas) genDependentSchemasE(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		if (schema.propertyNames === false) genPropertyNamesFalseE(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		if (schema.propertyNames && typeof schema.propertyNames === "object") genPropertyNamesE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
-		if (schema.items !== void 0 && schema.items !== true) {
-			const startIdx = schema.prefixItems ? schema.prefixItems.length : 0;
-			const idx = `_j${ctx.varCounter}`;
-			const elem = `_ei${ctx.varCounter}`;
-			ctx.varCounter++;
-			const childPath = childPathDynExpr(pathExpr, idx);
-			lines.push(`if(Array.isArray(${v})){for(let ${idx}=${startIdx};${idx}<${v}.length;${idx}++){const ${elem}=${v}[${idx}]`);
-			genCodeE(schema.items, elem, childPath, lines, ctx, schemaPrefix + "/items");
-			lines.push(`}}`);
-		}
-		if (schema.prefixItems) genPrefixItemsE(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		if (schema.contains !== void 0) genContainsE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
-		if (schema.allOf) for (let _ai = 0; _ai < schema.allOf.length; _ai++) genCodeE(schema.allOf[_ai], v, pathExpr, lines, ctx, schemaPrefix + "/allOf/" + _ai);
-		if (schema.anyOf) genAnyOfE(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		if (schema.oneOf) genOneOfE(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		if (schema.not !== void 0) genNotE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
-		if (schema.if !== void 0) genIfE(schema, v, pathExpr, lines, ctx, schemaPrefix);
-	}
-	function genDynamicRefE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		const anchorKey = schema.$dynamicRef.startsWith("#") ? schema.$dynamicRef : "#" + schema.$dynamicRef;
-		if (ctx.anchors && ctx.anchors[anchorKey]) {
-			const target = ctx.anchors[anchorKey];
-			if (target === ctx.rootSchema) {
-				ctx.usesRecursion = true;
-				lines.push(`_validateE(${v},_all,_e)`);
-			} else {
-				const refKey = "$dynamicRef:" + anchorKey;
-				if (!ctx.refStack.has(refKey)) {
-					ctx.refStack.add(refKey);
-					genCodeE(target, v, pathExpr, lines, ctx, schemaPrefix);
-					ctx.refStack.delete(refKey);
-				}
-			}
-		}
-	}
-	function genUniqueItemsE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isArr) {
-		const si = ctx.varCounter++;
-		const failExpr = (iVar, jVar) => fail("uniqueItems", "uniqueItems", `{i:${iVar},j:${jVar}}`, `'must NOT have duplicate items (items ## '+${jVar}+' and '+${iVar}+' are identical)'`);
-		const inner = `const _j${si}=${emitUqp(ctx)}(${v});if(_j${si}>=0){const _i${si}=_uqpI;${failExpr("_i" + si, "_j" + si)}}`;
-		lines.push(isArr ? `{${inner}}` : `if(Array.isArray(${v})){${inner}}`);
-	}
-	function genUnevaluatedFalseE(schema, v, pathExpr, lines, ctx, schemaPrefix, isObj) {
-		const allowedU = Object.keys(schema.properties || {}).map((k) => `${JSON.stringify(k)}`).join(",");
-		const ui = ctx.varCounter++;
-		const upSp = `${schemaPrefix}/unevaluatedProperties`;
-		const upLit = buildErrorLiteral({
-			keyword: "unevaluatedProperties",
-			schemaPath: upSp,
-			sourceMap: ctx.sourceMap
-		});
-		const patChecksU = [];
-		for (const pat of Object.keys(schema.patternProperties || {})) {
-			const pattern = JSON.stringify(pat);
-			if (!ctx.regExpMap.has(pattern)) {
-				const ri = ctx.varCounter++;
-				ctx.regExpMap.set(pattern, ri);
-				if (useSafeEngine(pat)) {
-					ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
-					ctx.usesSafeRe = true;
-				} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern}${reFlagArg(pattern)})`);
-			}
-			patChecksU.push(`_re${ctx.regExpMap.get(pattern)}.test(_k${ui}[_i])`);
-		}
-		const isUneval = patChecksU.length ? `!_a${ui}.has(_k${ui}[_i])&&!(${patChecksU.join("||")})` : `!_a${ui}.has(_k${ui}[_i])`;
-		ctx.helperCode.push(`const _a${ui}=new Set([${allowedU}])`);
-		const innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++){if(${isUneval}){_e.push({code:'${upLit.codeStr}',keyword:'unevaluatedProperties',instancePath:${pathExpr || "\"\""},schemaPath:'${upSp}'${ordinalField(ctx, `${upSp}`)},params:{unevaluatedProperty:_k${ui}[_i]},message:'must NOT have unevaluated properties',docUrl:'${upLit.docUrl}'${upLit.frame}});if(!_all)return{valid:false,errors:_e}}}`;
-		lines.push(isObj ? `{${innerU}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${innerU}}`);
-	}
-	function genUnevaluatedItemsFalseE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		const itemsIsPrefix = Array.isArray(schema.items);
-		if (!(schema.items !== void 0 && !itemsIsPrefix)) {
-			const plen = itemsIsPrefix ? schema.items.length : Array.isArray(schema.prefixItems) ? schema.prefixItems.length : 0;
-			const uiSp = `${schemaPrefix}/unevaluatedItems`;
-			const uiLit = buildErrorLiteral({
-				keyword: "unevaluatedItems",
-				schemaPath: uiSp,
-				sourceMap: ctx.sourceMap
-			});
-			lines.push(`if(Array.isArray(${v})&&${v}.length>${plen}){_e.push({code:'${uiLit.codeStr}',keyword:'unevaluatedItems',instancePath:${pathExpr || "\"\""},schemaPath:'${uiSp}'${ordinalField(ctx, `${uiSp}`)},params:{limit:${plen}},message:'must NOT have more than ${plen} items',docUrl:'${uiLit.docUrl}'${uiLit.frame}});if(!_all)return{valid:false,errors:_e}}`);
-		}
-	}
-	function genPatternPropertiesE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		for (const [pat, sub] of Object.entries(schema.patternProperties)) {
-			const pattern = JSON.stringify(pat);
-			if (!ctx.regExpMap.has(pattern)) {
-				const ri = ctx.varCounter++;
-				ctx.regExpMap.set(pattern, ri);
-				if (useSafeEngine(pat)) {
-					ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
-					ctx.usesSafeRe = true;
-				} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern}${reFlagArg(pattern)})`);
-			}
-			const ri = ctx.regExpMap.get(pattern);
-			const ki = ctx.varCounter++;
-			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){if(_re${ri}.test(_k${ki})){`);
-			const _peFn = emitPtrEsc(ctx);
-			const p = pathExpr ? `${pathExpr}+'/'+${_peFn}(_k${ki})` : `'/'+${_peFn}(_k${ki})`;
-			genCodeE(sub, `${v}[_k${ki}]`, p, lines, ctx, schemaPrefix + "/patternProperties/" + ptrSeg(pat));
-			lines.push(`}}}`);
-		}
-	}
-	function genAdditionalSchemaE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		const ki = ctx.varCounter++;
-		const known = Object.keys(schema.properties || {});
-		if (known.length) ctx.helperCode.push(`const _ak${ki}=new Set([${known.map((k) => JSON.stringify(k)).join(",")}])`);
-		const guard = "";
-		const patTests = [];
-		for (const pat of Object.keys(schema.patternProperties || {})) {
-			const pattern = JSON.stringify(pat);
-			if (!ctx.regExpMap.has(pattern)) {
-				const ri = ctx.varCounter++;
-				ctx.regExpMap.set(pattern, ri);
-				if (useSafeEngine(pat)) {
-					ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
-					ctx.usesSafeRe = true;
-				} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern}${reFlagArg(pattern)})`);
-			}
-			patTests.push(`_re${ctx.regExpMap.get(pattern)}.test(_k${ki})`);
-		}
-		const conds = [];
-		if (known.length) conds.push(`!_ak${ki}.has(_k${ki})`);
-		if (patTests.length) conds.push(`!(${patTests.join("||")})`);
-		const keep = conds.length ? `if(${conds.join("&&")}){` : `{`;
-		lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${guard}for(const _k${ki} in ${v}){${keep}`);
-		const _peFn = emitPtrEsc(ctx);
-		const p = pathExpr ? `${pathExpr}+'/'+${_peFn}(_k${ki})` : `'/'+${_peFn}(_k${ki})`;
-		genCodeE(schema.additionalProperties, `${v}[_k${ki}]`, p, lines, ctx, schemaPrefix + "/additionalProperties");
-		lines.push(`}}}`);
-	}
-	function genDependentSchemasE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		for (const [key, depSchema] of Object.entries(schema.dependentSchemas)) {
-			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${ownKeyExpr(ctx, v, key)}){`);
-			genCodeE(depSchema, v, pathExpr, lines, ctx, schemaPrefix + "/dependentSchemas/" + ptrSeg(key));
-			lines.push(`}`);
-		}
-	}
-	function genPropertyNamesFalseE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		const ki = ctx.varCounter++;
-		const p = pathExpr || "\"\"";
-		lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){_e.push({keyword:'not',instancePath:${p},schemaPath:'${schemaPrefix}/propertyNames'${ordinalField(ctx, `${schemaPrefix}/propertyNames`)},params:{},message:'boolean schema is false'});if(!_all)return{valid:false,errors:_e}}}`);
-	}
-	function genPropertyNamesE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
-		const pn = schema.propertyNames;
-		const ki = ctx.varCounter++;
-		lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){`);
-		if (!isSimplePN(pn)) {
-			genCodeE(pn, `_k${ki}`, pathExpr, lines, ctx, schemaPrefix + "/propertyNames");
-			lines.push(`}}`);
-			return;
-		}
-		if (pn.minLength !== void 0) lines.push(`if(_k${ki}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
-		if (pn.maxLength !== void 0) lines.push(`if(_k${ki}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
-		if (pn.pattern) {
-			const pattern = JSON.stringify(pn.pattern);
-			if (!ctx.regExpMap.has(pattern)) {
-				const ri = ctx.varCounter++;
-				ctx.regExpMap.set(pattern, ri);
-				if (useSafeEngine(pn.pattern)) {
-					ctx.helperCode.push(`const _re${ri}=__ataSafeRe(${pattern})`);
-					ctx.usesSafeRe = true;
-				} else ctx.helperCode.push(`const _re${ri}=new RegExp(${pattern}${reFlagArg(pattern)})`);
-			}
-			const ri = ctx.regExpMap.get(pattern);
-			lines.push(`if(!_re${ri}.test(_k${ki})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, JSON.stringify(`must match pattern "${pn.pattern}"`))}}`);
-		}
-		if (pn.const !== void 0) lines.push(`if(_k${ki}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
-		if (pn.enum) {
-			const ei = ctx.varCounter++;
-			ctx.helperCode.push(`const _es${ei}=new Set(${JSON.stringify(pn.enum)})`);
-			lines.push(`if(!_es${ei}.has(_k${ki})){${fail("enum", "propertyNames/enum", `{allowedValues:${JSON.stringify(pn.enum)}}`, "'must be equal to one of the allowed values'")}}`);
-		}
-		lines.push(`}}`);
-	}
-	function genPrefixItemsE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		for (let i = 0; i < schema.prefixItems.length; i++) {
-			const childPath = childPathExpr(pathExpr, String(i));
-			lines.push(`if(Array.isArray(${v})&&${v}.length>${i}){`);
-			genCodeE(schema.prefixItems[i], `${v}[${i}]`, childPath, lines, ctx, schemaPrefix + "/prefixItems/" + i);
-			lines.push(`}`);
-		}
-	}
-	function genContainsE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
-		const ci = ctx.varCounter++;
-		const subLines = [];
-		nestedGenCode(schema.contains, `_cv`, subLines, ctx);
-		const fnBody = subLines.length === 0 ? `return true` : `${subLines.join(";")};return true`;
-		const minC = schema.minContains !== void 0 ? schema.minContains : 1;
-		const maxC = schema.maxContains;
-		lines.push(`if(Array.isArray(${v})){const _cf${ci}=function(_cv){${fnBody}};let _cc${ci}=0;for(let _ci${ci}=0;_ci${ci}<${v}.length;_ci${ci}++){if(_cf${ci}(${v}[_ci${ci}]))_cc${ci}++}`);
-		lines.push(`if(_cc${ci}<${minC}){${fail("contains", "contains", `{minContains:${minC}}`, `'must contain at least ${minC} valid item(s)'`)}}`);
-		if (maxC !== void 0) lines.push(`if(_cc${ci}>${maxC}){${fail("contains", "contains", `{minContains:${minC},maxContains:${maxC}}`, `'must NOT contain more than ${maxC} valid item(s)'`)}}`);
-		lines.push(`}`);
-	}
-	function genAnyOfE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		emitBranchCollapse(schema.anyOf, "anyOf", v, pathExpr, lines, ctx, schemaPrefix);
-	}
-	function genOneOfE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		emitBranchCollapse(schema.oneOf, "oneOf", v, pathExpr, lines, ctx, schemaPrefix);
-	}
-	function genNotE(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
-		const subLines = [];
-		nestedGenCode(schema.not, "_nv", subLines, ctx);
-		const nfn = subLines.length === 0 ? `function(_nv){return true}` : `function(_nv){${subLines.join(";")};return true}`;
-		const fi = ctx.varCounter++;
-		lines.push(`{const _nf${fi}=${nfn};if(_nf${fi}(${v})){${fail("not", "not", "{}", "'must NOT be valid'")}}}`);
-	}
-	function genIfE(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		const ifLines = [];
-		nestedGenCode(schema.if, "_iv", ifLines, ctx);
-		const fi = ctx.varCounter++;
-		const ifFn = ifLines.length === 0 ? `function(_iv){return true}` : `function(_iv){${ifLines.join(";")};return true}`;
-		lines.push(`{const _if${fi}=${ifFn}`);
-		if (schema.then !== void 0) {
-			lines.push(`if(_if${fi}(${v})){`);
-			genCodeE(schema.then, v, pathExpr, lines, ctx, schemaPrefix + "/then");
-			lines.push(`}`);
-		}
-		if (schema.else !== void 0) {
-			lines.push(`${schema.then !== void 0 ? "else" : `if(!_if${fi}(${v}))`}{`);
-			genCodeE(schema.else, v, pathExpr, lines, ctx, schemaPrefix + "/else");
-			lines.push(`}`);
-		}
-		lines.push(`}`);
-	}
-	function sharedErr(lit, rootSchema) {
-		Object.defineProperty(lit, "_s", { value: true });
-		Object.defineProperty(lit, "_t", { value: {} });
-		if (lit._o === void 0) {
-			const o = ordinalFor(rootSchema, lit.schemaPath);
-			if (typeof o === "number") Object.defineProperty(lit, "_o", { value: o });
-		}
-		return Object.freeze(lit);
-	}
-	function apOrd(ctx, sp, coarse) {
-		if (typeof sp === "string" && sp.includes(SP_PLACEHOLDER) && ctx && ctx.inDefC) return "_so";
-		if (typeof sp !== "string" || sp.includes(SP_PLACEHOLDER) || sp.includes("+")) return -1;
-		if (!ctx || !ctx.rootSchema) return -1;
-		const path = unescapeSp(sp);
-		const o = ordinalFor(ctx.rootSchema, path);
-		if (typeof o !== "number") return -1;
-		if (!ctx.ordSites) ctx.ordSites = /* @__PURE__ */ new Map();
-		let site = ctx.ordSites.get(path);
-		if (site === void 0) {
-			site = {
-				i: ctx.ordSites.size,
-				o,
-				r: rankFor(ctx.rootSchema, path),
-				key: -1
-			};
-			ctx.ordSites.set(path, site);
-		}
-		return coarse ? `@@C${site.i}@@` : `@@O${site.i}@@`;
-	}
-	function assignOrdKeys(ctx, src) {
-		if (!ctx.ordSites || ctx.ordSites.size === 0) return src;
-		const sites = [...ctx.ordSites.values()];
-		const cmp = (a, b) => {
-			if (a.o !== b.o) return a.o - b.o;
-			const m = Math.min(a.r.length, b.r.length);
-			for (let k = 0; k < m; k++) if (a.r[k] !== b.r[k]) return a.r[k] - b.r[k];
-			return a.r.length - b.r.length;
-		};
-		const ranked = sites.filter((x) => x.r !== null).sort(cmp);
-		let key = 0;
-		for (let i = 0; i < ranked.length; i++) {
-			if (i > 0 && cmp(ranked[i - 1], ranked[i]) !== 0) key++;
-			ranked[i].key = key;
-		}
-		return src.replace(/@@([OC])(\d+)@@/g, (_, t, i) => {
-			const k = sites[+i].key;
-			return String(t === "O" || k < 0 ? k : -(k + 2));
-		});
-	}
-	const AP_RESET = "_A.mo=true;_A.lo=-1;_A.on=0;";
-	function errPushC(ctx, keyword, sp, pathExpr, paramsCode, msgCode, valueExpr, lean, paramsShared) {
-		if (!ctx.rich) return `(_e=_ap(_A,_e,${lean},${apOrd(ctx, sp)}))`;
-		if (!ctx.richMk) {
-			ctx.richMk = true;
-			const { makeRich } = require_enrich_site();
-			ctx.closureVars.push("_mk");
-			ctx.closureVals.push(makeRich);
-		}
-		let paramsVal;
-		try {
-			paramsVal = Function("return " + paramsCode)();
-		} catch {
-			paramsVal = void 0;
-		}
-		const fmt = keyword === "format" && paramsVal ? paramsVal.format : void 0;
-		const { errorSite } = require_enrich_site();
-		const siteVar = `_S${ctx.varCounter++}`;
-		ctx.closureVars.push(siteVar);
-		const rel = sp.startsWith(SP_PLACEHOLDER);
-		ctx.closureVals.push(errorSite(keyword, unescapeSp(rel ? sp.slice(10) : sp), paramsVal, fmt));
-		return `(_e=_ap(_A,_e,_mk(${siteVar},${pathExpr || "\"\""},${paramsShared || paramsCode},${msgCode},${valueExpr},d${rel ? ",_sp" : ""}),-1))`;
-	}
-	function compileToJSCombined(schema, VALID_RESULT, schemaMap, userFormats, opts) {
-		const inputSchema = schema;
-		schema = prepareForCodegen(schema, schemaMap);
-		if (typeof schema === "object" && schema !== null) JSON.stringify(schema);
-		if (typeof schema === "boolean") {
-			if (!schema && opts && (opts.rich || opts.resultShape)) return null;
-			if (opts && opts.resultShape) return null;
-			return schema ? () => VALID_RESULT : () => ({
-				valid: false,
-				errors: [{
-					keyword: "not",
-					instancePath: "",
-					schemaPath: "#",
-					params: {},
-					message: "boolean schema is false"
-				}]
-			});
-		}
-		if (typeof schema !== "object" || schema === null) return null;
-		if (!sharedCodegenGate(schema, schemaMap)) return null;
-		if (schema.patternProperties) {
-			for (const [pat, sub] of Object.entries(schema.patternProperties)) if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
-		}
-		if (schema.dependentSchemas) {
-			for (const sub of Object.values(schema.dependentSchemas)) if (typeof sub === "object" && sub !== null && !codegenSafe(sub, schemaMap)) return null;
-		}
-		if (schema.propertyNames && typeof schema.propertyNames === "object" && !isSimplePN(schema.propertyNames) && !codegenSafe(schema.propertyNames, schemaMap)) return null;
-		const cRootDefs = schema.$defs || schema.definitions || null;
-		const cAnchors = {};
-		if (schema.$dynamicAnchor) cAnchors["#" + schema.$dynamicAnchor] = schema;
-		if (schema.$anchor) cAnchors["#" + schema.$anchor] = schema;
-		if (typeof schema.$id === "string" && schema.$id.startsWith("#")) cAnchors[schema.$id] = schema;
-		if (cRootDefs) {
-			for (const def of Object.values(cRootDefs)) if (def && typeof def === "object") {
-				if (def.$dynamicAnchor) cAnchors["#" + def.$dynamicAnchor] = def;
-				if (def.$anchor) cAnchors["#" + def.$anchor] = def;
-				if (typeof def.$id === "string" && def.$id.startsWith("#")) cAnchors[def.$id] = def;
-			}
-		}
-		if (schemaMap) {
-			for (const ext of schemaMap.values()) if (ext && typeof ext === "object") {
-				if (ext.$dynamicAnchor && !cAnchors["#" + ext.$dynamicAnchor]) cAnchors["#" + ext.$dynamicAnchor] = ext;
-				if (ext.$anchor && !cAnchors["#" + ext.$anchor]) cAnchors["#" + ext.$anchor] = ext;
-				if (typeof ext.$id === "string" && ext.$id.startsWith("#") && !cAnchors[ext.$id]) cAnchors[ext.$id] = ext;
-			}
-		}
-		if (hasUnresolvableRef(schema, cRootDefs, cAnchors, schemaMap, /* @__PURE__ */ new Set())) return null;
-		if (needsBaseTracking(schema, schemaMap, /* @__PURE__ */ new Set())) return null;
-		const ctx = {
-			noOrdinal: !!(opts && opts.runtimeShape),
-			rich: !!(opts && opts.rich),
-			inCombined: true,
-			hoisted: [],
-			rootC: schema,
-			varCounter: 0,
-			preamble: [],
-			helperCode: [],
-			shared: [],
-			closureVars: [
-				"_cpLen",
-				"_A",
-				"_ap",
-				"_sr",
-				"_srX"
-			],
-			closureVals: [
-				_cpLen,
-				sharedRt().apState(),
-				sharedRt().ap,
-				sharedRt().sr,
-				sharedRt().srX
-			],
-			sharedRuntime: true,
-			rootDefs: cRootDefs,
-			refStack: /* @__PURE__ */ new Set(),
-			schemaMap: schemaMap || null,
-			anchors: cAnchors,
-			rootSchema: inputSchema,
-			userFormats: userFormats || null
-		};
-		const lines = [];
-		try {
-			genCodeC(schema, "d", "", lines, ctx, "#");
-		} catch (e) {
-			if (e === DECLINE) return null;
-			throw e;
-		}
-		if (lines.length === 0) return () => VALID_RESULT;
-		if (opts && opts.resultShape) {
-			ctx.closureVars.push("_ER", "_EE", "_SRT", "_FB", "_VF");
-			ctx.closureVals.push(opts.resultShape.Rejection, opts.resultShape.empty, opts.resultShape.sort, opts.resultShape.fallback, opts.resultShape.verdict || null);
-		}
-		if (ctx.usesBranchCollapse) bindRt(ctx, ["__ataCollapse", "__ataMulti"]);
-		const closureNames = ctx.usesSafeRe ? [...ctx.closureVars, "__ataSafeRe"] : ctx.closureVars;
-		const closureArgs = ctx.usesSafeRe ? [...ctx.closureVals, compileSafe] : ctx.closureVals;
-		const closureParams = closureNames.join(",");
-		const guardList = [...ctx.defFns ? ctx.defFns.values() : [], ...ctx.cycFnsC || []];
-		const guardDefs = guardList.length ? guardList : null;
-		if (guardDefs) ctx.helperCode.unshift(emitGuardState());
-		if (ctx.usesBranchCollapse && opts && opts.runtimeShape) {
-			const shape = (src) => src.replace(/code:'ATA\d{4}',/g, "").replace(/,docUrl:'https:\/\/ata-validator\.com\/e\/ATA\d{4}'/g, "");
-			for (let i = 0; i < ctx.helperCode.length; i++) ctx.helperCode[i] = shape(ctx.helperCode[i]);
-			for (let i = 0; i < lines.length; i++) lines[i] = shape(lines[i]);
-		}
-		const rs = opts && opts.resultShape;
-		let hoistDecl = ctx.hoisted.length ? `let ${ctx.hoisted.map((n) => n + "=null").join(",")};` : "";
-		let checks = lines.join("\n  ");
-		let allDecl = ctx.usesBranchCollapse ? "const _all=true;" : "";
-		if (guardDefs) {
-			const clears = ["_stk.clear()"].concat(guardDefs.map((n) => `${n}_s.clear()`)).join(";");
-			ctx.helperCode.push(`function _bodyC(d){${hoistDecl}${allDecl}let _e;\n  ${checks}\n  return _e}`);
-			hoistDecl = "";
-			allDecl = "";
-			checks = `_sd=0;try{_e=_bodyC(d)}catch(_err){if(_err!==_CYC)throw _err;_sg=true;${clears};${AP_RESET}try{_e=_bodyC(d)}finally{_sg=false}}`;
-		}
-		const inner = rs ? `try{${hoistDecl}${ctx.usesBranchCollapse && ctx.unguardedCollapse ? "if(_VF!==null&&_VF(d))return{valid:true,data:d,errors:_EE};" : ""}${allDecl}let _e;${AP_RESET}\n  ` + checks + `\n  return _e?new _ER(_A.mo?_e:${process.env.ATA_CHECK_SORT ? "_srX(_A,_e,_SRT)" : "_sr(_A,_e,_SRT)"}):{valid:true,data:d,errors:_EE}}catch(_x){return _FB(d)}` : hoistDecl + allDecl + `let _e;${AP_RESET}\n  ` + checks + `\n  return _e?{valid:false,errors:_e}:R`;
-		const helpers = (ctx.preamble.length ? ctx.preamble.join("\n  ") + "\n  " : "") + (ctx.helperCode.length ? ctx.helperCode.join("\n  ") + "\n  " : "");
-		try {
-			if (typeof process !== "undefined" && process.env && process.env.ATA_DUMP_CODEGEN) console.log("=== COMBINED CODEGEN ===\n" + helpers + inner + "\n=== CLOSURE VARS: " + ctx.closureVars.length + " ===");
-			return new Function("R" + (closureParams ? "," + closureParams : ""), assignOrdKeys(ctx, `${helpers}return function _vC(d){${inner}}`))(VALID_RESULT, ...closureArgs);
-		} catch (e) {
-			if (typeof process !== "undefined" && process.env && process.env.ATA_DEBUG) console.error("compileToJSCombined error:", e.message, "\n", inner.slice(0, 500));
-			return null;
-		}
-	}
-	const TYPE_KEYWORDS = {
-		object: [
-			"properties",
-			"patternProperties",
-			"additionalProperties",
-			"required",
-			"propertyNames",
-			"minProperties",
-			"maxProperties",
-			"dependentRequired",
-			"dependentSchemas",
-			"dependencies",
-			"unevaluatedProperties"
-		],
-		array: [
-			"items",
-			"prefixItems",
-			"additionalItems",
-			"contains",
-			"minContains",
-			"maxContains",
-			"minItems",
-			"maxItems",
-			"uniqueItems",
-			"unevaluatedItems"
-		],
-		string: [
-			"minLength",
-			"maxLength",
-			"pattern"
-		],
-		number: [
-			"minimum",
-			"maximum",
-			"exclusiveMinimum",
-			"exclusiveMaximum",
-			"multipleOf"
-		]
-	};
-	TYPE_KEYWORDS.integer = TYPE_KEYWORDS.number;
-	const NOT_VALIDATING = /* @__PURE__ */ new Set([
-		"$schema",
-		"$id",
-		"$anchor",
-		"$comment",
-		"$defs",
-		"definitions",
-		"title",
-		"description",
-		"default",
-		"examples",
-		"deprecated",
-		"readOnly",
-		"writeOnly",
-		"$vocabulary"
-	]);
-	function typeMismatchRest(schema, types) {
-		const drop = /* @__PURE__ */ new Set([
-			"type",
-			"enum",
-			"const",
-			"anyOf",
-			"oneOf"
-		]);
-		for (const t of types) for (const k of TYPE_KEYWORDS[t] || []) drop.add(k);
-		let rest = null;
-		for (const k of Object.keys(schema)) {
-			if (drop.has(k)) continue;
-			if (rest === null) rest = {};
-			setOwn(rest, k, schema[k]);
-		}
-		if (rest === null) return null;
-		if (schema[REF_DONE]) Object.defineProperty(rest, REF_DONE, { value: true });
-		for (const k of Object.keys(rest)) if (!NOT_VALIDATING.has(k) && !k.startsWith("x-")) return rest;
-		return null;
-	}
-	function genCodeC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		return withPlain(schema, v, lines, ctx, () => genCodeCNode(schema, v, pathExpr, lines, ctx, schemaPrefix));
-	}
-	const COMBINED_DEF_FN_MIN = 160;
-	const _defOwnChars = /* @__PURE__ */ new WeakMap();
-	function defOwnChars(def) {
-		if (def === null || typeof def !== "object") return 0;
-		let n = _defOwnChars.get(def);
-		if (n === void 0) {
-			n = 0;
-			const walk = (x) => {
-				if (x === null || typeof x !== "object") {
-					n += 6;
-					return;
-				}
-				if (Array.isArray(x)) {
-					for (const y of x) walk(y);
-					return;
-				}
-				for (const k of Object.keys(x)) {
-					if (SIZE_SKIPS.has(k)) continue;
-					n += k.length + 4;
-					walk(x[k]);
-				}
-			};
-			walk(def);
-			_defOwnChars.set(def, n);
-		}
-		return n;
-	}
-	function emitSharedDefC(defName, v, pathExpr, lines, ctx, schemaPrefix) {
-		if (!ctx.cyclicDefs) ctx.cyclicDefs = cyclicDefNames(ctx.rootDefs);
-		if (!ctx.sharedDefs) ctx.sharedDefs = sharedDefNames(ctx.rootSchema, ctx.rootDefs);
-		const cyclic = ctx.cyclicDefs.has(defName);
-		if (!cyclic && !ctx.sharedDefs.has(defName) && !(ctx.inCombined && defOwnChars(ctx.rootDefs[defName]) >= COMBINED_DEF_FN_MIN)) return false;
-		emitDefFnC(defName, ctx.rootDefs[defName], cyclic, v, pathExpr, lines, ctx, schemaPrefix);
-		return true;
-	}
-	function emitDefFnC(key, target, cyclic, v, pathExpr, lines, ctx, schemaPrefix) {
-		if (!ctx.defFnsC) ctx.defFnsC = /* @__PURE__ */ new Map();
-		let fnName = ctx.defFnsC.get(key);
-		if (!fnName) {
-			fnName = "_defC" + ctx.defFnsC.size + "_" + (key === "#" ? "root" : key.replace(/[^A-Za-z0-9_]/g, "_"));
-			ctx.defFnsC.set(key, fnName);
-			const outerHoisted = ctx.hoisted;
-			ctx.hoisted = [];
-			const outerRefs = ctx.refStack;
-			ctx.refStack = /* @__PURE__ */ new Set();
-			const bodyLines = [];
-			let hoisted;
-			try {
-				ctx.inDefC = (ctx.inDefC || 0) + 1;
-				genCodeC(target, "_dv", "_p", bodyLines, ctx, SP_PLACEHOLDER);
-			} finally {
-				ctx.inDefC--;
-				hoisted = ctx.hoisted;
-				ctx.hoisted = outerHoisted;
-				ctx.refStack = outerRefs;
-			}
-			let body = bodyLines.join("\n  ");
-			body = body.split(`'${SP_PLACEHOLDER}`).join(`_sp+'`).split(`"${SP_PLACEHOLDER}`).join(`_sp+"`);
-			if (body.includes(SP_PLACEHOLDER)) throw DECLINE;
-			const decl = hoisted.length ? `let ${hoisted.map((n) => n + "=null").join(",")};` : "";
-			const fn = `function ${cyclic ? fnName + "_b" : fnName}(_dv,_p,_sp,d,_so){const _all=true;${decl}let _e;\n  ${body}\n  return _e}`;
-			if (cyclic) {
-				if (!ctx.cycFnsC) ctx.cycFnsC = [];
-				ctx.cycFnsC.push(fnName);
-				ctx.helperCode.push(`const ${fnName}_s=new Set()\n  function ${fnName}(_dv,_p,_sp,d,_so){\n  if(_sg){if(typeof _dv!=='object'||_dv===null)return ${fnName}_b(_dv,_p,_sp,d,_so);if(${fnName}_s.has(_dv))return;${fnName}_s.add(_dv);try{return ${fnName}_b(_dv,_p,_sp,d,_so)}finally{${fnName}_s.delete(_dv)}}\n  if(++_sd>${CYCLE_DEPTH})throw _CYC\n  const _r=${fnName}_b(_dv,_p,_sp,d,_so)\n  _sd--\n  return _r\n  }\n  ` + fn);
-			} else ctx.helperCode.push(fn);
-		}
-		lines.push(`{const _r=${fnName}(${v},${pathExpr || "\"\""},'${schemaPrefix}',d,${apOrd(ctx, `${schemaPrefix}/$ref`, true)});if(_r!==undefined){if(_e===undefined)_e=_r;else for(let _i=0;_i<_r.length;_i++)_e.push(_r[_i])}}`);
-	}
-	const REF_DONE = Symbol("ata.refDone");
-	function genCodeCNode(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		if (!schemaPrefix) schemaPrefix = "#";
-		let ppHandledPropertyNames = false;
-		if (schema === false) {
-			lines.push(";" + errPushC(ctx, "not", schemaPrefix, pathExpr, "{}", "'boolean schema is false'", v, `{keyword:'not',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}'${ordinalField(ctx, `${schemaPrefix}`)},params:{},message:'boolean schema is false'}`));
-			return;
-		}
-		if (schema === true) return;
-		if (typeof schema !== "object" || schema === null) return;
-		if (schema.$ref && !schema[REF_DONE]) {
-			if (Object.keys(schema).some((k) => !REF_NEUTRAL_SIBLINGS.has(k) && !k.startsWith("x-"))) {
-				if (!ctx.inCombined || ctx.inBranchFn) throw DECLINE;
-				genCodeCNode({ $ref: schema.$ref }, v, pathExpr, lines, ctx, schemaPrefix);
-				const rest = { ...schema };
-				Object.defineProperty(rest, REF_DONE, { value: true });
-				genCodeCNode(rest, v, pathExpr, lines, ctx, schemaPrefix);
-				return;
-			}
-			if (schema.$ref === "#") {
-				if (ctx.inCombined && !ctx.inBranchFn && ctx.rootC) {
-					emitDefFnC("#", ctx.rootC, true, v, pathExpr, lines, ctx, schemaPrefix);
-					return;
-				}
-				throw DECLINE;
-			}
-			const m = schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
-			if (m && ctx.rootDefs && ctx.rootDefs[m[1]]) {
-				if (ctx.inCombined && !ctx.inBranchFn && emitSharedDefC(m[1], v, pathExpr, lines, ctx, schemaPrefix)) return;
-				if (ctx.refStack.has(schema.$ref)) throw DECLINE;
-				ctx.refStack.add(schema.$ref);
-				genCodeC(ctx.rootDefs[m[1]], v, pathExpr, lines, ctx, schemaPrefix);
-				ctx.refStack.delete(schema.$ref);
-				return;
-			}
-			if (!m && schema.$ref.startsWith("#") && !schema.$ref.startsWith("#/")) {
-				const entry = ctx.rootDefs && ctx.rootDefs[schema.$ref];
-				const anchorTarget = entry && entry.raw ? entry.raw : ctx.anchors && ctx.anchors[schema.$ref];
-				if (anchorTarget) {
-					if (ctx.refStack.has(schema.$ref)) throw DECLINE;
-					ctx.refStack.add(schema.$ref);
-					genCodeC(anchorTarget, v, pathExpr, lines, ctx, schemaPrefix);
-					ctx.refStack.delete(schema.$ref);
-					return;
-				}
-			}
-			if (ctx.schemaMap && ctx.schemaMap.has(schema.$ref)) {
-				if (ctx.refStack.has(schema.$ref)) throw DECLINE;
-				ctx.refStack.add(schema.$ref);
-				genCodeC(ctx.schemaMap.get(schema.$ref), v, pathExpr, lines, ctx, schemaPrefix);
-				ctx.refStack.delete(schema.$ref);
-				return;
-			}
-			if (ctx.schemaMap && schema.$ref.includes("#") && !schema.$ref.startsWith("#")) {
-				const r = resolveCrossSchemaRef(schema.$ref, ctx.schemaMap);
-				if (r) {
-					if (ctx.refStack.has(schema.$ref)) throw DECLINE;
-					ctx.refStack.add(schema.$ref);
-					genCodeC(r.schema, v, pathExpr, lines, ctx, schemaPrefix);
-					ctx.refStack.delete(schema.$ref);
-					return;
-				}
-			}
-		}
-		if (schema.$dynamicRef) genDynamicRefC(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		const types = schema.type ? Array.isArray(schema.type) ? schema.type : [schema.type] : null;
-		let isObj = false, isArr = false, isStr = false, isNum = false;
-		const isStaticPath = !pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+");
-		const fail = (keyword, schemaSuffix, paramsCode, msgCode) => {
-			const sp = schemaPrefix + "/" + schemaSuffix;
-			if (ctx.rich) {
-				let shared = null;
-				if (isStaticPath && msgCode.startsWith("'") && !msgCode.includes("+")) {
-					let pv;
-					try {
-						pv = Function("return " + paramsCode)();
-					} catch {
-						pv = void 0;
-					}
-					if (pv !== void 0) {
-						shared = `_P${ctx.varCounter++}`;
-						ctx.closureVars.push(shared);
-						ctx.closureVals.push(Object.freeze(pv));
-					}
-				}
-				return errPushC(ctx, keyword, sp, pathExpr, paramsCode, msgCode, v, null, shared);
-			}
-			if (isStaticPath && !ctx.noOrdinal && msgCode.startsWith("'") && !msgCode.includes("+")) {
-				let paramsVal;
-				try {
-					paramsVal = Function("return " + paramsCode)();
-				} catch {}
-				if (paramsVal !== void 0) {
-					const errVar = `_E${ctx.varCounter++}`;
-					let pathVal, msgVal;
-					try {
-						pathVal = pathExpr ? Function("return " + pathExpr)() : "";
-						msgVal = Function("return " + msgCode)();
-					} catch {
-						pathVal = void 0;
-					}
-					if (pathVal !== void 0) {
-						const spVal = unescapeSp(sp);
-						ctx.closureVars.push(errVar);
-						const o = ctx.noOrdinal ? null : ordinalFor(ctx.rootSchema, spVal);
-						const lit = {
-							keyword,
-							instancePath: pathVal,
-							schemaPath: spVal,
-							params: Object.freeze(paramsVal),
-							message: msgVal
-						};
-						if (o !== null) lit._o = o;
-						ctx.closureVals.push(sharedErr(lit, ctx.rootSchema));
-						return `(_e=_ap(_A,_e,${errVar},${apOrd(ctx, sp)}))`;
-					}
-				}
-			}
-			return `(_e=_ap(_A,_e,{keyword:'${keyword}',instancePath:${pathExpr || "\"\""},schemaPath:'${sp}',params:${paramsCode},message:${msgCode}${ordinalField(ctx, sp)}},${apOrd(ctx, sp)}))`;
-		};
-		const emitEnumConst = () => {
-			if (schema.enum) lines.push(`if(!(${enumCondition(ctx, schema.enum, v)})){${fail("enum", "enum", `{allowedValues:${JSON.stringify(schema.enum)}}`, "'must be equal to one of the allowed values'")}}`);
-			if (schema.const !== void 0) {
-				const cv = schema.const;
-				if (cv === null || typeof cv !== "object") lines.push(`if(${v}!==${JSON.stringify(cv)}){${fail("const", "const", `{allowedValue:${JSON.stringify(schema.const)}}`, "'must be equal to constant'")}}`);
-				else lines.push(`if(!${emitDeq(ctx)}(${v},${emitConstant(ctx, cv)})){${fail("const", "const", `{allowedValue:${emitParamConstant(ctx, schema.const)}}`, "'must be equal to constant'")}}`);
-			}
-		};
-		if (types) {
-			const conds = types.map((t) => {
-				switch (t) {
-					case "object": return `(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
-					case "array": return `Array.isArray(${v})`;
-					case "string": return `typeof ${v}==='string'`;
-					case "number": return `Number.isFinite(${v})`;
-					case "integer": return `Number.isInteger(${v})`;
-					case "boolean": return `typeof ${v}==='boolean'`;
-					case "null": return `${v}===null`;
-					default: return "true";
-				}
-			});
-			const expected = types.join(", ");
-			const expectedParam = !Array.isArray(schema.type) ? `'${types[0]}'` : JSON.stringify(types);
-			const typeOk = `_tok${ctx.varCounter++}`;
-			lines.push(`const ${typeOk}=${conds.join("||")}`);
-			lines.push(`if(!${typeOk}){${fail("type", "type", `{type:${expectedParam}}`, `'must be ${expected}'`)}}`);
-			if (types.length === 1) {
-				isObj = types[0] === "object";
-				isArr = types[0] === "array";
-				isStr = types[0] === "string";
-				isNum = types[0] === "number" || types[0] === "integer";
-			}
-			emitEnumConst();
-			const numberToo = types.includes("integer") && !types.includes("number");
-			lines.push(numberToo ? `if(${typeOk}||typeof ${v}==='number'){` : `if(${typeOk}){`);
-		} else emitEnumConst();
-		const requiredSet = new Set(schema.required || []);
-		const hoisted = {};
-		if (schema.required && schema.properties && isObj) {
-			const destructKeys = [];
-			for (const key of schema.required) if (schema.properties[key]) {
-				const lv = `_h${ctx.varCounter++}`;
-				hoisted[key] = lv;
-				destructKeys.push(`${JSON.stringify(key)}:${lv}`);
-			}
-			if (destructKeys.length > 0) {
-				lines.push(`let{${destructKeys.join(",")}}=${v}`);
-				for (const key of schema.required) if (hoisted[key]) lines.push(`if(${hoisted[key]}!==undefined&&!${ownGuard(ctx, v, key)})${hoisted[key]}=undefined`);
-			}
-			for (const key of schema.required) {
-				const check = hoisted[key] ? `${hoisted[key]}===undefined` : `!${ownKeyExpr(ctx, v, key)}`;
-				if (isStaticPath && !ctx.rich && !ctx.noOrdinal) {
-					const errVar = `_E${ctx.varCounter++}`;
-					const pathVal = pathExpr ? literalValue(pathExpr) : "";
-					ctx.closureVars.push(errVar);
-					ctx.closureVals.push(sharedErr({
-						keyword: "required",
-						instancePath: pathVal,
-						schemaPath: unescapeSp(`${schemaPrefix}/required`),
-						params: Object.freeze({ missingProperty: key }),
-						message: `must have required property '${key}'`
-					}, ctx.rootSchema));
-					lines.push(`if(${check}){(_e=_ap(_A,_e,${errVar},${apOrd(ctx, `${schemaPrefix}/required`)}))}`);
-				} else lines.push(`if(${check}){${errPushC(ctx, "required", `${schemaPrefix}/required`, pathExpr, `{missingProperty:'${esc(key)}'}`, `"must have required property '${esc(key)}'"`, v, `{keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required'${ordinalField(ctx, `${schemaPrefix}/required`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"}`)}}`);
-			}
-		} else if (schema.required) for (const key of schema.required) if ((!pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+")) && !ctx.rich && !ctx.noOrdinal) {
-			const errVar = `_E${ctx.varCounter++}`;
-			const pathVal = pathExpr ? literalValue(pathExpr) : "";
-			ctx.closureVars.push(errVar);
-			ctx.closureVals.push(sharedErr({
-				keyword: "required",
-				instancePath: pathVal,
-				schemaPath: unescapeSp(`${schemaPrefix}/required`),
-				params: Object.freeze({ missingProperty: key }),
-				message: `must have required property '${key}'`
-			}, ctx.rootSchema));
-			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!${ownKeyExpr(ctx, v, key)}){(_e=_ap(_A,_e,${errVar},${apOrd(ctx, `${schemaPrefix}/required`)}))}`);
-		} else lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&!${ownKeyExpr(ctx, v, key)}){${errPushC(ctx, "required", `${schemaPrefix}/required`, pathExpr, `{missingProperty:'${esc(key)}'}`, `"must have required property '${esc(key)}'"`, v, `{keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/required'${ordinalField(ctx, `${schemaPrefix}/required`)},params:{missingProperty:'${esc(key)}'},message:"must have required property '${esc(key)}'"}`)}}`);
-		if (schema.minimum !== void 0) {
-			const c = isNum ? `${v}<${schema.minimum}` : `typeof ${v}==='number'&&${v}<${schema.minimum}`;
-			lines.push(`if(${c}){${fail("minimum", "minimum", `{comparison:'>=',limit:${schema.minimum}}`, `'must be >= ${schema.minimum}'`)}}`);
-		}
-		if (schema.maximum !== void 0) {
-			const c = isNum ? `${v}>${schema.maximum}` : `typeof ${v}==='number'&&${v}>${schema.maximum}`;
-			lines.push(`if(${c}){${fail("maximum", "maximum", `{comparison:'<=',limit:${schema.maximum}}`, `'must be <= ${schema.maximum}'`)}}`);
-		}
-		if (schema.exclusiveMinimum !== void 0) {
-			const c = isNum ? `${v}<=${schema.exclusiveMinimum}` : `typeof ${v}==='number'&&${v}<=${schema.exclusiveMinimum}`;
-			lines.push(`if(${c}){${fail("exclusiveMinimum", "exclusiveMinimum", `{comparison:'>',limit:${schema.exclusiveMinimum}}`, `'must be > ${schema.exclusiveMinimum}'`)}}`);
-		}
-		if (schema.exclusiveMaximum !== void 0) {
-			const c = isNum ? `${v}>=${schema.exclusiveMaximum}` : `typeof ${v}==='number'&&${v}>=${schema.exclusiveMaximum}`;
-			lines.push(`if(${c}){${fail("exclusiveMaximum", "exclusiveMaximum", `{comparison:'<',limit:${schema.exclusiveMaximum}}`, `'must be < ${schema.exclusiveMaximum}'`)}}`);
-		}
-		if (schema.multipleOf !== void 0) {
-			const m = schema.multipleOf;
-			ctx.varCounter++;
-			lines.push(`{if(typeof ${v}==='number'&&${multipleOfBad(v, m)}){${fail("multipleOf", "multipleOf", `{multipleOf:${m}}`, `'must be multiple of ${m}'`)}}}`);
-		}
-		if (schema.minLength !== void 0) {
-			const M = schema.minLength;
-			const inner = `${v}.length<${M}||(${v}.length<${M * 2}&&_cpLen(${v})<${M})`;
-			const c = isStr ? inner : `typeof ${v}==='string'&&(${inner})`;
-			lines.push(`if(${c}){${fail("minLength", "minLength", `{limit:${M}}`, `'must NOT have fewer than ${M} characters'`)}}`);
-		}
-		if (schema.maxLength !== void 0) {
-			const X = schema.maxLength;
-			const inner = `${v}.length>${X * 2}||(${v}.length>${X}&&_cpLen(${v})>${X})`;
-			const c = isStr ? inner : `typeof ${v}==='string'&&(${inner})`;
-			lines.push(`if(${c}){${fail("maxLength", "maxLength", `{limit:${X}}`, `'must NOT have more than ${X} characters'`)}}`);
-		}
-		if (schema.pattern) {
-			const inlineCheck = compilePatternInline(schema.pattern, v);
-			if (inlineCheck) {
-				const c = isStr ? `!(${inlineCheck})` : `typeof ${v}==='string'&&!(${inlineCheck})`;
-				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, JSON.stringify(`must match pattern "${schema.pattern}"`))}}`);
-			} else {
-				const reVar = `_re${ctx.varCounter++}`;
-				ctx.closureVars.push(reVar);
-				ctx.closureVals.push(useSafeEngine(schema.pattern) ? compileSafe(schema.pattern) : new RegExp(schema.pattern, reFlags(schema.pattern)));
-				const c = isStr ? `!${reVar}.test(${v})` : `typeof ${v}==='string'&&!${reVar}.test(${v})`;
-				lines.push(`if(${c}){${fail("pattern", "pattern", `{pattern:${JSON.stringify(schema.pattern)}}`, JSON.stringify(`must match pattern "${schema.pattern}"`))}}`);
-			}
-		}
-		if (schema.format) {
-			const fc = FORMAT_CODEGEN[schema.format];
-			if (fc) {
-				const ri = ctx.varCounter++;
-				const code = fc(v, isStr, ctx).replace(/return false/g, `{${fail("format", "format", `{format:'${esc(schema.format)}'}`, `'must match format "${esc(schema.format)}"'`)};break _fmt${ri}}`);
-				lines.push(`_fmt${ri}:{${code}}`);
-			} else if (ctx.userFormats && typeof ctx.userFormats[schema.format] === "function") {
-				const closureName = `_uf_${schema.format.replace(/[^a-zA-Z0-9_]/g, "_")}`;
-				if (!ctx.closureVars.includes(closureName)) {
-					ctx.closureVars.push(closureName);
-					ctx.closureVals.push(ctx.userFormats[schema.format]);
-				}
-				const guard = isStr ? "" : `typeof ${v}==='string'&&`;
-				lines.push(`if(${guard}!${closureName}(${v})){${fail("format", "format", `{format:'${esc(schema.format)}'}`, `'must match format "${esc(schema.format)}"'`)}}`);
-			}
-		}
-		if (schema.minItems !== void 0) {
-			const c = isArr ? `${v}.length<${schema.minItems}` : `Array.isArray(${v})&&${v}.length<${schema.minItems}`;
-			lines.push(`if(${c}){${fail("minItems", "minItems", `{limit:${schema.minItems}}`, `'must NOT have fewer than ${schema.minItems} items'`)}}`);
-		}
-		if (schema.maxItems !== void 0) {
-			const c = isArr ? `${v}.length>${schema.maxItems}` : `Array.isArray(${v})&&${v}.length>${schema.maxItems}`;
-			lines.push(`if(${c}){${fail("maxItems", "maxItems", `{limit:${schema.maxItems}}`, `'must NOT have more than ${schema.maxItems} items'`)}}`);
-		}
-		if (schema.uniqueItems) genUniqueItemsC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isArr);
-		if (schema.minProperties !== void 0) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&Object.keys(${v}).length<${schema.minProperties}){${fail("minProperties", "minProperties", `{limit:${schema.minProperties}}`, `'must NOT have fewer than ${schema.minProperties} properties'`)}}`);
-		if (schema.maxProperties !== void 0) lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&Object.keys(${v}).length>${schema.maxProperties}){${fail("maxProperties", "maxProperties", `{limit:${schema.maxProperties}}`, `'must NOT have more than ${schema.maxProperties} properties'`)}}`);
-		if (schema.additionalProperties === false && !schema.patternProperties) {
-			const propKeys = Object.keys(schema.properties || {});
-			const ci = ctx.varCounter++;
-			const detail = (test) => `const _k${ci}=Object.keys(${v});for(let _i=0;_i<_k${ci}.length;_i++)if(${test}){${fail("additionalProperties", "additionalProperties", `{additionalProperty:_k${ci}[_i]}`, "'must NOT have additional properties'")}}`;
-			let body;
-			if (propKeys.length <= 8) body = `let _x${ci}=0;for(const _f${ci} in ${v}){if(${propKeys.map((k) => `_f${ci}!==${JSON.stringify(k)}`).join("&&") || "true"}){_x${ci}=1;break}}if(_x${ci}){${detail(propKeys.map((k) => `_k${ci}[_i]!==${JSON.stringify(k)}`).join("&&") || "true")}}`;
-			else {
-				ctx.closureVars.push(`_a${ci}`);
-				ctx.closureVals.push(new Set(propKeys));
-				body = `let _x${ci}=0;for(const _f${ci} in ${v}){if(!_a${ci}.has(_f${ci})){_x${ci}=1;break}}if(_x${ci}){${detail(`!_a${ci}.has(_k${ci}[_i])`)}}`;
-			}
-			const req = new Set(Array.isArray(schema.required) ? schema.required : []);
-			if (propKeys.length > 0 && propKeys.every((k) => req.has(k) && !PROTO_NAMES.has(k))) {
-				const present = propKeys.map((k) => `${JSON.stringify(k)} in ${v}`).join("&&");
-				body = `let _n${ci}=0;for(const _f${ci} in ${v})_n${ci}++;if(_n${ci}!==${propKeys.length}||!(${present})){${body}}`;
-			}
-			lines.push(isObj ? `{${body}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${body}}`);
-		}
-		if (schema.unevaluatedProperties !== void 0 && schema.unevaluatedProperties !== true) {
-			if (unevalLocalOk(schema, "unevaluatedProperties")) {
-				if (schema.additionalProperties === void 0 && !schema.patternProperties) genUnevaluatedFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj);
-			} else genUnevaluatedDynamicC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj);
-		}
-		if (schema.unevaluatedItems !== void 0 && schema.unevaluatedItems !== true) {
-			if (unevalLocalOk(schema, "unevaluatedItems")) genUnevaluatedItemsFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
-			else genUnevaluatedItemsDynamicC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
-		}
-		if (schema.dependentRequired) for (const [key, deps] of Object.entries(schema.dependentRequired)) for (const dep of deps) if ((!pathExpr || pathExpr.startsWith("'") && !pathExpr.includes("+")) && !ctx.rich && !ctx.noOrdinal) {
-			const errVar = `_E${ctx.varCounter++}`;
-			const pathVal = pathExpr ? literalValue(pathExpr) : "";
-			ctx.closureVars.push(errVar);
-			ctx.closureVals.push(sharedErr({
-				keyword: "required",
-				instancePath: pathVal,
-				schemaPath: unescapeSp(`${schemaPrefix}/dependentRequired`),
-				params: Object.freeze({ missingProperty: dep }),
-				message: `must have required property '${dep}'`
-			}, ctx.rootSchema));
-			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${ownKeyExpr(ctx, v, key)}&&!${ownKeyExpr(ctx, v, dep)}){(_e=_ap(_A,_e,${errVar},-1))}`);
-		} else lines.push(`if(typeof ${v}==='object'&&${v}!==null&&${ownKeyExpr(ctx, v, key)}&&!${ownKeyExpr(ctx, v, dep)}){${errPushC(ctx, "required", `${schemaPrefix}/dependentRequired`, pathExpr, `{missingProperty:'${esc(dep)}'}`, `"must have required property '${esc(dep)}'"`, v, `{keyword:'required',instancePath:${pathExpr || "\"\""},schemaPath:'${schemaPrefix}/dependentRequired'${ordinalField(ctx, `${schemaPrefix}/dependentRequired`)},params:{missingProperty:'${esc(dep)}'},message:"must have required property '${esc(dep)}'"}`)}}`);
-		if (schema.properties) for (const [key, prop] of Object.entries(schema.properties)) {
-			const pv = hoisted[key] || `${v}[${JSON.stringify(key)}]`;
-			const childPath = childPathExpr(pathExpr, ptrSeg(key));
-			if (requiredSet.has(key) && isObj) {
-				lines.push(`if(${pv}!==undefined${hoisted[key] ? "" : "&&" + ownGuard(ctx, v, key)}){`);
-				genGuardedC(prop, pv, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
-				lines.push(`}`);
-			} else if (isObj) {
-				const oi = ctx.varCounter++;
-				lines.push(`{const _o${oi}=${v}[${JSON.stringify(key)}];if(_o${oi}!==undefined&&${ownGuard(ctx, v, key)}){`);
-				genGuardedC(prop, `_o${oi}`, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
-				lines.push(`}}`);
-			} else {
-				lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${ownKeyExpr(ctx, v, key)}){`);
-				genGuardedC(prop, `${v}[${JSON.stringify(key)}]`, childPath, lines, ctx, schemaPrefix + "/properties/" + ptrSeg(key));
-				lines.push(`}`);
-			}
-		}
-		if (schema.patternProperties) {
-			if (genPatternPropertiesC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj)) ppHandledPropertyNames = true;
-		}
-		if (typeof schema.additionalProperties === "object" && schema.additionalProperties !== null) genAdditionalSchemaC(schema, v, pathExpr, lines, ctx, schemaPrefix, isObj);
-		if (schema.dependentSchemas) genDependentSchemasC(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		if (schema.propertyNames === false) genPropertyNamesFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		if (schema.propertyNames && typeof schema.propertyNames === "object" && !ppHandledPropertyNames) genPropertyNamesC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
-		if (schema.items !== void 0 && schema.items !== true) {
-			const startIdx = schema.prefixItems ? schema.prefixItems.length : 0;
-			const idx = `_j${ctx.varCounter}`, elem = `_ei${ctx.varCounter}`;
-			ctx.varCounter++;
-			const childPath = childPathDynExpr(pathExpr, idx);
-			lines.push(`if(Array.isArray(${v})){for(let ${idx}=${startIdx};${idx}<${v}.length;${idx}++){const ${elem}=${v}[${idx}]`);
-			genGuardedC(schema.items, elem, childPath, lines, ctx, schemaPrefix + "/items");
-			lines.push(`}}`);
-		}
-		if (schema.prefixItems) genPrefixItemsC(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		if (schema.contains !== void 0) genContainsC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
-		if (schema.allOf) for (let _ai = 0; _ai < schema.allOf.length; _ai++) genCodeC(schema.allOf[_ai], v, pathExpr, lines, ctx, schemaPrefix + "/allOf/" + _ai);
-		if (schema.anyOf && !ctx.inCombined) genAnyOfC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
-		if (schema.oneOf && !ctx.inCombined) genOneOfC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
-		if (schema.not !== void 0) genNotC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
-		if (schema.if !== void 0) genIfC(schema, v, pathExpr, lines, ctx, schemaPrefix);
-		if (types) {
-			lines.push(`}`);
-			const rest = typeMismatchRest(schema, types);
-			if (rest !== null) {
-				lines.push(`else{`);
-				genCodeC(rest, v, pathExpr, lines, ctx, schemaPrefix);
-				lines.push(`}`);
-			}
-		}
-		if (schema.anyOf && ctx.inCombined) genAnyOfC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
-		if (schema.oneOf && ctx.inCombined) genOneOfC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail);
-	}
-	function genDynamicRefC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		const anchorKey = schema.$dynamicRef.startsWith("#") ? schema.$dynamicRef : "#" + schema.$dynamicRef;
-		if (ctx.anchors && ctx.anchors[anchorKey]) {
-			const target = ctx.anchors[anchorKey];
-			if (target === ctx.rootSchema) throw DECLINE;
-			const refKey = "$dynamicRef:" + anchorKey;
-			if (ctx.refStack.has(refKey)) throw DECLINE;
-			ctx.refStack.add(refKey);
-			genCodeC(target, v, pathExpr, lines, ctx, schemaPrefix);
-			ctx.refStack.delete(refKey);
-		}
-	}
-	function genUniqueItemsC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isArr) {
-		const si = ctx.varCounter++;
-		const failExpr = (iVar, jVar) => fail("uniqueItems", "uniqueItems", `{i:${iVar},j:${jVar}}`, `'must NOT have duplicate items (items ## '+${jVar}+' and '+${iVar}+' are identical)'`);
-		const inner = `const _j${si}=${emitUqp(ctx)}(${v});if(_j${si}>=0){const _i${si}=_uqpI;${failExpr("_i" + si, "_j" + si)}}`;
-		lines.push(isArr ? `{${inner}}` : `if(Array.isArray(${v})){${inner}}`);
 	}
 	function genUnevalDynamicVerdict(schema, v, lines, ctx, isObj, nonObjApplicators) {
 		if (schema.additionalProperties !== void 0) {
@@ -15754,340 +17987,6 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		} else throw DECLINE;
 		const other = nonObjApplicators && nonObjApplicators.length && !isObj ? `else{${nonObjApplicators.join("\n  ")}}` : "";
 		lines.push(isObj ? `{${body.join(";")}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${body.join(";")}}${other}`);
-	}
-	const ANNOT_INLINE_MAX = 8192;
-	const ANNOT_NAME_MAX = 30;
-	const ANNOT_BLOCKERS = [
-		"unevaluatedItems",
-		"$dynamicRef",
-		"$recursiveRef",
-		"dependencies"
-	];
-	const ALL_BIT_KEY = "\0all";
-	function annotSubs(node, ctx) {
-		const subs = [];
-		for (const b of node.allOf || []) subs.push(b);
-		for (const b of node.anyOf || []) subs.push(b);
-		for (const b of node.oneOf || []) subs.push(b);
-		if (node.if !== void 0) subs.push(node.if);
-		if (node.then !== void 0) subs.push(node.then);
-		if (node.else !== void 0) subs.push(node.else);
-		if (node.dependentSchemas && typeof node.dependentSchemas === "object") for (const ds of Object.values(node.dependentSchemas)) subs.push(ds);
-		if (typeof node.$ref === "string") subs.push(refTargetFor(node.$ref, ctx));
-		return subs;
-	}
-	function annotNames(node, ctx, names, seen, top) {
-		if (node === true || node === false) return true;
-		if (node === null || typeof node !== "object" || Array.isArray(node)) return false;
-		if (seen.has(node)) return false;
-		seen.add(node);
-		try {
-			for (const k of ANNOT_BLOCKERS) if (node[k] !== void 0) return false;
-			if (!top && node.unevaluatedProperties !== void 0 && node.unevaluatedProperties !== true) return false;
-			const add = (key) => {
-				if (!names.has(key)) {
-					if (names.size >= ANNOT_NAME_MAX) return false;
-					names.set(key, names.size);
-				}
-				return true;
-			};
-			if (node.properties && typeof node.properties === "object") {
-				for (const k of Object.keys(node.properties)) if (!add(k)) return false;
-			}
-			if (node.patternProperties && typeof node.patternProperties === "object") {
-				for (const pat of Object.keys(node.patternProperties)) if (!add("/" + pat)) return false;
-			}
-			if (!top && node.additionalProperties !== void 0 || !top && node.unevaluatedProperties === true) {
-				if (!add(ALL_BIT_KEY)) return false;
-			}
-			let subs;
-			try {
-				subs = annotSubs(node, ctx);
-			} catch {
-				return false;
-			}
-			for (const b of subs) if (!annotNames(b, ctx, names, seen, false)) return false;
-			return true;
-		} finally {
-			seen.delete(node);
-		}
-	}
-	function ownBits(sub, v, names, ctx, t, top) {
-		const out = [];
-		for (const k of Object.keys(sub.properties || {})) out.push(`if(${ownKeyExpr(ctx, v, k)})${t}|=${1 << names.get(k)}`);
-		let fixed = 0;
-		for (const pat of Object.keys(sub.patternProperties || {})) fixed |= 1 << names.get("/" + pat);
-		if (!top && (sub.additionalProperties !== void 0 || sub.unevaluatedProperties === true)) fixed |= 1 << names.get(ALL_BIT_KEY);
-		if (fixed !== 0) out.push(`${t}|=${fixed}`);
-		return out;
-	}
-	function patternKeyTest(ctx, pat, kv) {
-		const fast = fastPrefixCheck(pat, kv);
-		if (fast) return fast;
-		const ri = ctx.varCounter++;
-		ctx.closureVars.push(`_re${ri}`);
-		ctx.closureVals.push(safeReClosure(ctx, pat));
-		return `_re${ri}.test(${kv})`;
-	}
-	function factoryCount(ctx, arr, withMask) {
-		if (!ctx.inCombined) return null;
-		if (!ctx.branchCounts) ctx.branchCounts = /* @__PURE__ */ new Map();
-		const hit = ctx.branchCounts.get(arr);
-		if (hit !== void 0) return hit.factory ? hit : null;
-		const id = ctx.varCounter++;
-		const fc = {
-			of: `_fa${id}`,
-			count: `_fn${id}`,
-			mask: withMask ? `_fm${id}` : null,
-			factory: true
-		};
-		ctx.helperCode.push(`let ${fc.of}=null,${fc.count}=0${withMask ? `,${fc.mask}=0` : ""}`);
-		ctx.branchCounts.set(arr, fc);
-		return fc;
-	}
-	function emitAnnotInline(sub, v, names, ctx, out, ok, tv) {
-		if (sub === true) {
-			out.push(`${ok}=1`);
-			return;
-		}
-		if (sub === false) {
-			out.push(`${ok}=0`);
-			return;
-		}
-		const id = ctx.varCounter++;
-		const t = `_t${id}`;
-		const local = {};
-		for (const k of Object.keys(sub)) if (!ANNOT_APPLICATORS.has(k)) setOwn(local, k, sub[k]);
-		const vl = [];
-		ctx.nestedBoolean = (ctx.nestedBoolean || 0) + 1;
-		try {
-			genCode(local, v, vl, ctx, local.type === void 0 || local.type === "object" ? "object" : void 0);
-		} finally {
-			ctx.nestedBoolean--;
-		}
-		out.push(`let ${t}=0;${ok}=1`);
-		if (vl.length) out.push(`a${id}:{${replaceTopLevel(vl.join(";"), `break a${id}`, `{${ok}=0;break a${id}}`)}}`);
-		if (sub.not !== void 0) {
-			const nl = [];
-			nestedGenCode(sub.not, v, nl, ctx);
-			if (nl.length) out.push(`if(${ok}){let _nk${id}=1;n${id}:{${replaceTopLevel(nl.join(";"), `break n${id}`, `{_nk${id}=0;break n${id}}`)}};if(_nk${id})${ok}=0}`);
-			else out.push(`${ok}=0`);
-		}
-		const own = ownBits(sub, v, names, ctx, t, false);
-		if (own.length) out.push(`if(${ok}){${own.join(";")}}`);
-		let bi = 0;
-		const child = (b) => {
-			const o = `_ok${id}_${bi}`, tb = `_tb${id}_${bi}`;
-			bi++;
-			out.push(`let ${o}=1,${tb}=0`);
-			emitAnnotInline(b, v, names, ctx, out, o, tb);
-			return [o, tb];
-		};
-		for (const b of sub.allOf || []) {
-			const [o, tb] = child(b);
-			out.push(`if(!${o})${ok}=0;else ${t}|=${tb}`);
-		}
-		if (Array.isArray(sub.anyOf)) {
-			const na = `_na${id}`;
-			const fc = factoryCount(ctx, sub.anyOf, false);
-			out.push(`let ${na}=0${fc ? `;${fc.of}=${v};${fc.count}=0` : ""}`);
-			for (const b of sub.anyOf) {
-				const [o, tb] = child(b);
-				out.push(`if(${o}){${na}++;${t}|=${tb}${fc ? `;${fc.count}++` : ""}}`);
-			}
-			out.push(`if(${na}===0)${ok}=0`);
-		}
-		if (Array.isArray(sub.oneOf)) {
-			const nc = `_nc${id}`, tc = `_tc${id}`;
-			const fc = factoryCount(ctx, sub.oneOf, sub.oneOf.length <= 30);
-			out.push(`let ${nc}=0,${tc}=0${fc ? `;${fc.of}=${v};${fc.count}=0${fc.mask ? `;${fc.mask}=0` : ""}` : ""}`);
-			sub.oneOf.forEach((b, i) => {
-				const [o, tb] = child(b);
-				out.push(`if(${o}){${nc}++;${tc}=${tb}${fc ? `;${fc.count}++${fc.mask ? `;${fc.mask}|=${1 << i}` : ""}` : ""}}`);
-			});
-			out.push(`if(${nc}===1)${t}|=${tc};else ${ok}=0`);
-		}
-		if (sub.if !== void 0) {
-			const [oi, ti] = child(sub.if);
-			const thenPart = [];
-			if (sub.then !== void 0) {
-				const saved = out.length;
-				const [ot, tt] = child(sub.then);
-				thenPart.push(...out.splice(saved));
-				thenPart.push(`if(!${ot})${ok}=0;else ${t}|=${tt}`);
-			}
-			const elsePart = [];
-			if (sub.else !== void 0) {
-				const saved = out.length;
-				const [oe, te] = child(sub.else);
-				elsePart.push(...out.splice(saved));
-				elsePart.push(`if(!${oe})${ok}=0;else ${t}|=${te}`);
-			}
-			out.push(`if(${oi}){${t}|=${ti};${thenPart.join(";")}}else{${elsePart.join(";")}}`);
-		}
-		if (sub.dependentSchemas && typeof sub.dependentSchemas === "object") for (const [k, ds] of Object.entries(sub.dependentSchemas)) {
-			const saved = out.length;
-			const [o, tb] = child(ds);
-			const body = out.splice(saved);
-			out.push(`if(${ownKeyExpr(ctx, v, k)}){${body.join(";")};if(!${o})${ok}=0;else ${t}|=${tb}}`);
-		}
-		if (typeof sub.$ref === "string") {
-			const [o, tb] = child(refTargetFor(sub.$ref, ctx));
-			out.push(`if(!${o})${ok}=0;else ${t}|=${tb}`);
-		}
-		out.push(`if(${ok})${tv}|=${t}`);
-	}
-	function inlineUnevalBlock(schema, v, pathExpr, ctx, schemaPrefix, fail, counts) {
-		const names = /* @__PURE__ */ new Map();
-		if (!annotNames(schema, ctx, names, /* @__PURE__ */ new Set(), true)) return null;
-		const saved = snapshotCtx(ctx);
-		try {
-			const id = ctx.varCounter++;
-			const m = `_m${id}`;
-			const out = [`let ${m}=0`];
-			if (!ctx.plainOf) ctx.plainOf = /* @__PURE__ */ new Map();
-			const prevPk = ctx.plainOf.get(v);
-			const pk = prevPk !== void 0 ? prevPk : `_pk${id}`;
-			const prevReuse = ctx.plainReuse;
-			if (prevPk === void 0) {
-				out.push(`const ${pk}=${protoIs(ctx, v)}`);
-				ctx.plainOf.set(v, pk);
-				(ctx.plainUsed || (ctx.plainUsed = /* @__PURE__ */ new Set())).add(pk);
-			}
-			ctx.plainReuse = v;
-			out.push(...ownBits(schema, v, names, ctx, m, true));
-			let bi = 0;
-			const child = (b) => {
-				const o = `_ok${id}_${bi}`, tb = `_tb${id}_${bi}`;
-				bi++;
-				out.push(`let ${o}=1,${tb}=0`);
-				emitAnnotInline(b, v, names, ctx, out, o, tb);
-				return [o, tb];
-			};
-			for (const b of schema.allOf || []) {
-				const [, tb] = child(b);
-				out.push(`${m}|=${tb}`);
-			}
-			if (Array.isArray(schema.anyOf)) {
-				const na = counts ? counts.anyOf : `_na${id}`;
-				out.push(counts ? `${na}=0` : `let ${na}=0`);
-				for (const b of schema.anyOf) {
-					const [o, tb] = child(b);
-					out.push(`if(${o}){${na}++;${m}|=${tb}}`);
-				}
-			}
-			if (Array.isArray(schema.oneOf)) {
-				const nc = counts ? counts.oneOf : `_nc${id}`, tc = `_tc${id}`;
-				out.push(counts ? `${nc}=0;let ${tc}=0` : `let ${nc}=0,${tc}=0`);
-				schema.oneOf.forEach((b, i) => {
-					const [o, tb] = child(b);
-					out.push(`if(${o}){${nc}++;${tc}=${tb};${counts && counts.oneOfMask && schema.oneOf.length <= 30 ? `${counts.oneOfMask}|=${1 << i};` : ""}}`);
-				});
-				out.push(`if(${nc}===1)${m}|=${tc}`);
-			}
-			if (schema.if !== void 0) {
-				const [oi, ti] = child(schema.if);
-				const thenPart = [];
-				if (schema.then !== void 0) {
-					const sv = out.length;
-					const [ot, tt] = child(schema.then);
-					thenPart.push(...out.splice(sv));
-					thenPart.push(`if(${ot})${m}|=${tt}`);
-				}
-				const elsePart = [];
-				if (schema.else !== void 0) {
-					const sv = out.length;
-					const [oe, te] = child(schema.else);
-					elsePart.push(...out.splice(sv));
-					elsePart.push(`if(${oe})${m}|=${te}`);
-				}
-				out.push(`if(${oi}){${m}|=${ti};${thenPart.join(";")}}else{${elsePart.join(";")}}`);
-			}
-			if (schema.dependentSchemas && typeof schema.dependentSchemas === "object") for (const [k, ds] of Object.entries(schema.dependentSchemas)) {
-				const sv = out.length;
-				const [o, tb] = child(ds);
-				const body = out.splice(sv);
-				out.push(`if(${ownKeyExpr(ctx, v, k)}){${body.join(";")};if(${o})${m}|=${tb}}`);
-			}
-			if (typeof schema.$ref === "string") {
-				const [o, tb] = child(refTargetFor(schema.$ref, ctx));
-				out.push(`if(${o})${m}|=${tb}`);
-			}
-			const kVar = `_uk${id}`;
-			const cases = [...names].filter(([k]) => k !== ALL_BIT_KEY && k[0] !== "/").map(([k, i]) => `case ${JSON.stringify(k)}:_ub${id}=${1 << i};break`).join(";");
-			const allBit = names.has(ALL_BIT_KEY) ? `if((${m}&${1 << names.get(ALL_BIT_KEY)})!==0)continue;` : "";
-			const patBits = [...names].filter(([k]) => k[0] === "/").map(([k, i]) => `if((${m}&${1 << i})!==0&&${patternKeyTest(ctx, k.slice(1), `_uk${id}`)})continue;`).join("");
-			const up = schema.unevaluatedProperties;
-			let body;
-			if (up === false) body = fail("unevaluatedProperties", "unevaluatedProperties", `{unevaluatedProperty:${kVar}}`, "'must NOT have unevaluated properties'");
-			else if (typeof up === "object" && up !== null) {
-				const pe = emitPtrEsc(ctx);
-				const p = pathExpr ? `${pathExpr}+'/'+${pe}(${kVar})` : `'/'+${pe}(${kVar})`;
-				const sub = [];
-				genCodeC(up, `${v}[${kVar}]`, p, sub, ctx, schemaPrefix + "/unevaluatedProperties");
-				body = sub.join("\n  ");
-			} else throw DECLINE;
-			if (body) out.push(`for(const ${kVar} in ${v}){if(!${ownKeyExpr(ctx, v, kVar).split(JSON.stringify(kVar)).join(kVar)})continue;let _ub${id}=0;switch(${kVar}){${cases}}if(_ub${id}!==0&&(${m}&_ub${id})!==0)continue;${allBit}${patBits}${body}}`);
-			const text = out.join(";");
-			ctx.plainReuse = prevReuse;
-			if (prevPk === void 0) ctx.plainOf.delete(v);
-			if (text.length > ANNOT_INLINE_MAX || /\b(?:_validate|_stk|_sd|_sg|_CYC)\b/.test(text)) {
-				restoreCtx(ctx, saved);
-				return null;
-			}
-			return text;
-		} catch (e) {
-			if (e !== DECLINE) throw e;
-			restoreCtx(ctx, saved);
-			return null;
-		}
-	}
-	function genUnevaluatedDynamicC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj) {
-		if (schema.additionalProperties !== void 0) return;
-		const ui = ctx.varCounter++;
-		const S = `_ev${ui}`;
-		const body = [`const ${S}=[]`];
-		addLocalAnnotations(schema, v, S, body, ctx);
-		const share = ctx.inCombined && !ctx.inBranchFn && ctx.hoisted !== void 0 && (Array.isArray(schema.anyOf) || Array.isArray(schema.oneOf));
-		const counts = share ? {
-			anyOf: `_ac${ui}`,
-			oneOf: `_oc${ui}`,
-			oneOfMask: `_om${ui}`,
-			of: `_ao${ui}`
-		} : null;
-		if (share) {
-			ctx.hoisted.push(counts.anyOf, counts.oneOf, counts.oneOfMask, counts.of);
-			body.push(`${counts.of}=${v};${counts.oneOfMask}=0`);
-			if (!ctx.branchCounts) ctx.branchCounts = /* @__PURE__ */ new Map();
-			if (Array.isArray(schema.anyOf)) ctx.branchCounts.set(schema.anyOf, {
-				of: counts.of,
-				count: counts.anyOf,
-				mask: null
-			});
-			if (Array.isArray(schema.oneOf)) ctx.branchCounts.set(schema.oneOf, {
-				of: counts.of,
-				count: counts.oneOf,
-				mask: schema.oneOf.length <= 30 ? counts.oneOfMask : null
-			});
-		}
-		const inline = inlineUnevalBlock(schema, v, pathExpr, ctx, schemaPrefix, fail, counts);
-		if (inline !== null) {
-			const pre = share ? `${counts.of}=${v};${counts.oneOfMask}=0;` : "";
-			lines.push(isObj ? `{${pre}${inline}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${pre}${inline}}`);
-			return;
-		}
-		addTopApplicatorAnnotations(schema, v, S, body, ctx, counts);
-		const kVar = `_uk${ui}`;
-		const up = schema.unevaluatedProperties;
-		if (up === false) body.push(`for(const ${kVar} of Object.keys(${v}))if(!${S}.includes(${kVar})){${fail("unevaluatedProperties", "unevaluatedProperties", `{unevaluatedProperty:${kVar}}`, "'must NOT have unevaluated properties'")}}`);
-		else if (typeof up === "object" && up !== null) {
-			const pe = emitPtrEsc(ctx);
-			const p = pathExpr ? `${pathExpr}+'/'+${pe}(${kVar})` : `'/'+${pe}(${kVar})`;
-			const sub = [];
-			genCodeC(up, `${v}[${kVar}]`, p, sub, ctx, schemaPrefix + "/unevaluatedProperties");
-			if (sub.length) body.push(`for(const ${kVar} of Object.keys(${v}))if(!${S}.includes(${kVar})){${sub.join("\n  ")}\n  }`);
-		} else throw DECLINE;
-		lines.push(isObj ? `{${body.join(";")}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${body.join(";")}}`);
 	}
 	function addLocalAnnotations(node, v, S, out, ctx) {
 		if (node.additionalProperties !== void 0) {
@@ -16217,586 +18116,6 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		ctx.annFns.set(sub, name);
 		return name;
 	}
-	const ANNOT_I_BLOCKERS = [
-		"contains",
-		"additionalItems",
-		"$dynamicRef",
-		"$recursiveRef",
-		"dependencies"
-	];
-	function annotItemsFit(node, ctx, seen, top) {
-		if (node === true || node === false) return true;
-		if (node === null || typeof node !== "object" || Array.isArray(node)) return false;
-		if (seen.has(node)) return false;
-		seen.add(node);
-		try {
-			for (const k of ANNOT_I_BLOCKERS) if (node[k] !== void 0) return false;
-			if (Array.isArray(node.items)) return false;
-			if (!top && node.unevaluatedItems !== void 0 && node.unevaluatedItems !== true) return false;
-			if (node.unevaluatedProperties !== void 0 && node.unevaluatedProperties !== true) return false;
-			let subs;
-			try {
-				subs = annotSubs(node, ctx);
-			} catch {
-				return false;
-			}
-			for (const b of subs) if (!annotItemsFit(b, ctx, seen, false)) return false;
-			return true;
-		} finally {
-			seen.delete(node);
-		}
-	}
-	function ownPrefix(node, len, top) {
-		if (node.items !== void 0) return len;
-		if (!top && node.unevaluatedItems === true) return len;
-		if (Array.isArray(node.prefixItems) && node.prefixItems.length) return `(${len}<${node.prefixItems.length}?${len}:${node.prefixItems.length})`;
-		return null;
-	}
-	function emitAnnotInlineI(sub, v, len, ctx, out, ok, tn) {
-		if (sub === true) {
-			out.push(`${ok}=1`);
-			return;
-		}
-		if (sub === false) {
-			out.push(`${ok}=0`);
-			return;
-		}
-		const id = ctx.varCounter++;
-		const t = `_t${id}`;
-		const local = {};
-		for (const k of Object.keys(sub)) if (!ANNOT_ITEM_APPLICATORS.has(k)) setOwn(local, k, sub[k]);
-		const vl = [];
-		ctx.nestedBoolean = (ctx.nestedBoolean || 0) + 1;
-		try {
-			genCode(local, v, vl, ctx, local.type === void 0 || local.type === "array" ? "array" : void 0);
-		} finally {
-			ctx.nestedBoolean--;
-		}
-		out.push(`let ${t}=0;${ok}=1`);
-		if (vl.length) out.push(`a${id}:{${replaceTopLevel(vl.join(";"), `break a${id}`, `{${ok}=0;break a${id}}`)}}`);
-		if (sub.not !== void 0) {
-			const nl = [];
-			nestedGenCode(sub.not, v, nl, ctx);
-			if (nl.length) out.push(`if(${ok}){let _nk${id}=1;n${id}:{${replaceTopLevel(nl.join(";"), `break n${id}`, `{_nk${id}=0;break n${id}}`)}};if(_nk${id})${ok}=0}`);
-			else out.push(`${ok}=0`);
-		}
-		const own = ownPrefix(sub, len, false);
-		if (own !== null) out.push(`if(${ok})${t}=${own}`);
-		let bi = 0;
-		const child = (b) => {
-			const o = `_ok${id}_${bi}`, tb = `_tb${id}_${bi}`;
-			bi++;
-			out.push(`let ${o}=1,${tb}=0`);
-			emitAnnotInlineI(b, v, len, ctx, out, o, tb);
-			return [o, tb];
-		};
-		const raise = (tb) => `if(${tb}>${t})${t}=${tb}`;
-		for (const b of sub.allOf || []) {
-			const [o, tb] = child(b);
-			out.push(`if(!${o})${ok}=0;else ${raise(tb)}`);
-		}
-		if (Array.isArray(sub.anyOf)) {
-			const na = `_na${id}`;
-			const fc = factoryCount(ctx, sub.anyOf, false);
-			out.push(`let ${na}=0${fc ? `;${fc.of}=${v};${fc.count}=0` : ""}`);
-			for (const b of sub.anyOf) {
-				const [o, tb] = child(b);
-				out.push(`if(${o}){${na}++;${raise(tb)}${fc ? `;${fc.count}++` : ""}}`);
-			}
-			out.push(`if(${na}===0)${ok}=0`);
-		}
-		if (Array.isArray(sub.oneOf)) {
-			const nc = `_nc${id}`, tc = `_tc${id}`;
-			const fc = factoryCount(ctx, sub.oneOf, sub.oneOf.length <= 30);
-			out.push(`let ${nc}=0,${tc}=0${fc ? `;${fc.of}=${v};${fc.count}=0${fc.mask ? `;${fc.mask}=0` : ""}` : ""}`);
-			sub.oneOf.forEach((b, i) => {
-				const [o, tb] = child(b);
-				out.push(`if(${o}){${nc}++;${tc}=${tb}${fc ? `;${fc.count}++${fc.mask ? `;${fc.mask}|=${1 << i}` : ""}` : ""}}`);
-			});
-			out.push(`if(${nc}===1){${raise(tc)}}else ${ok}=0`);
-		}
-		if (sub.if !== void 0) {
-			const [oi, ti] = child(sub.if);
-			const thenPart = [];
-			if (sub.then !== void 0) {
-				const sv = out.length;
-				const [ot, tt] = child(sub.then);
-				thenPart.push(...out.splice(sv));
-				thenPart.push(`if(!${ot})${ok}=0;else ${raise(tt)}`);
-			}
-			const elsePart = [];
-			if (sub.else !== void 0) {
-				const sv = out.length;
-				const [oe, te] = child(sub.else);
-				elsePart.push(...out.splice(sv));
-				elsePart.push(`if(!${oe})${ok}=0;else ${raise(te)}`);
-			}
-			out.push(`if(${oi}){${raise(ti)};${thenPart.join(";")}}else{${elsePart.join(";")}}`);
-		}
-		if (typeof sub.$ref === "string") {
-			const [o, tb] = child(refTargetFor(sub.$ref, ctx));
-			out.push(`if(!${o})${ok}=0;else ${raise(tb)}`);
-		}
-		out.push(`if(${ok}&&${t}>${tn})${tn}=${t}`);
-	}
-	function inlineUnevalItemsBlock(schema, v, pathExpr, ctx, schemaPrefix, fail) {
-		if (!ctx.inCombined || !annotItemsFit(schema, ctx, /* @__PURE__ */ new Set(), true)) return null;
-		const saved = snapshotCtx(ctx);
-		try {
-			const id = ctx.varCounter++;
-			const n = `_un${id}`, len = `_ul${id}`;
-			const out = [`const ${len}=${v}.length;let ${n}=0`];
-			const own = ownPrefix(schema, len, true);
-			if (own !== null) out.push(`${n}=${own}`);
-			let bi = 0;
-			const child = (b) => {
-				const o = `_ok${id}_${bi}`, tb = `_tb${id}_${bi}`;
-				bi++;
-				out.push(`let ${o}=1,${tb}=0`);
-				emitAnnotInlineI(b, v, len, ctx, out, o, tb);
-				return [o, tb];
-			};
-			const raise = (tb) => `if(${tb}>${n})${n}=${tb}`;
-			for (const b of schema.allOf || []) {
-				const [, tb] = child(b);
-				out.push(raise(tb));
-			}
-			if (Array.isArray(schema.anyOf)) {
-				const fc = factoryCount(ctx, schema.anyOf, false);
-				if (fc) out.push(`${fc.of}=${v};${fc.count}=0`);
-				for (const b of schema.anyOf) {
-					const [o, tb] = child(b);
-					out.push(`if(${o}){${raise(tb)}${fc ? `;${fc.count}++` : ""}}`);
-				}
-			}
-			if (Array.isArray(schema.oneOf)) {
-				const fc = factoryCount(ctx, schema.oneOf, schema.oneOf.length <= 30);
-				const nc = `_nc${id}`, tc = `_tc${id}`;
-				out.push(`let ${nc}=0,${tc}=0${fc ? `;${fc.of}=${v};${fc.count}=0${fc.mask ? `;${fc.mask}=0` : ""}` : ""}`);
-				schema.oneOf.forEach((b, i) => {
-					const [o, tb] = child(b);
-					out.push(`if(${o}){${nc}++;${tc}=${tb}${fc ? `;${fc.count}++${fc.mask ? `;${fc.mask}|=${1 << i}` : ""}` : ""}}`);
-				});
-				out.push(`if(${nc}===1)${raise(tc)}`);
-			}
-			if (schema.if !== void 0) {
-				const [oi, ti] = child(schema.if);
-				const thenPart = [];
-				if (schema.then !== void 0) {
-					const sv = out.length;
-					const [ot, tt] = child(schema.then);
-					thenPart.push(...out.splice(sv));
-					thenPart.push(`if(${ot})${raise(tt)}`);
-				}
-				const elsePart = [];
-				if (schema.else !== void 0) {
-					const sv = out.length;
-					const [oe, te] = child(schema.else);
-					elsePart.push(...out.splice(sv));
-					elsePart.push(`if(${oe})${raise(te)}`);
-				}
-				out.push(`if(${oi}){${raise(ti)};${thenPart.join(";")}}else{${elsePart.join(";")}}`);
-			}
-			if (typeof schema.$ref === "string") {
-				const [o, tb] = child(refTargetFor(schema.$ref, ctx));
-				out.push(`if(${o})${raise(tb)}`);
-			}
-			const iv = `_ix${id}`;
-			const ui2 = schema.unevaluatedItems;
-			if (ui2 === false) out.push(`if(${n}<${len}){const ${iv}=${n};${fail("unevaluatedItems", "unevaluatedItems", `{limit:${iv}}`, `'must NOT have more than '+${iv}+' items'`)}}`);
-			else if (typeof ui2 === "object" && ui2 !== null) {
-				const pe = pathExpr ? `${pathExpr}+'/'+${iv}` : `'/'+${iv}`;
-				const sub = [];
-				genCodeC(ui2, `${v}[${iv}]`, pe, sub, ctx, schemaPrefix + "/unevaluatedItems");
-				if (sub.length) out.push(`for(let ${iv}=${n};${iv}<${len};${iv}++){${sub.join("\n  ")}\n  }`);
-			} else throw DECLINE;
-			const text = out.join(";");
-			if (text.length > ANNOT_INLINE_MAX || /\b(?:_validate|_stk|_sd|_sg|_CYC)\b/.test(text)) {
-				restoreCtx(ctx, saved);
-				return null;
-			}
-			return text;
-		} catch (e) {
-			if (e !== DECLINE) throw e;
-			restoreCtx(ctx, saved);
-			return null;
-		}
-	}
-	function genUnevaluatedItemsDynamicC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
-		if (schema.$dynamicRef !== void 0 || schema.$recursiveRef !== void 0) throw DECLINE;
-		if (Array.isArray(schema.items) || schema.additionalItems !== void 0) throw DECLINE;
-		const inline = inlineUnevalItemsBlock(schema, v, pathExpr, ctx, schemaPrefix, fail);
-		if (inline !== null) {
-			lines.push(`if(Array.isArray(${v})){${inline}}`);
-			return;
-		}
-		annItemHelpers(ctx);
-		const ui = ctx.varCounter++;
-		const S = `_es${ui}`;
-		const body = [`const ${S}={n:0,x:null}`];
-		addLocalItemAnnotations(schema, v, S, body, ctx);
-		for (const b of schema.allOf || []) body.push(`${emitAnnotI(b, ctx)}(${v},${S})`);
-		if (Array.isArray(schema.anyOf)) for (const b of schema.anyOf) body.push(`${emitAnnotI(b, ctx)}(${v},${S})`);
-		if (Array.isArray(schema.oneOf)) body.push(`{const _n0=${S}.n,_x0=${S}.x===null?0:${S}.x.length;let _c=0;${schema.oneOf.map((b) => `if(${emitAnnotI(b, ctx)}(${v},${S}))_c++;`).join("")}if(_c!==1)_rbI(${S},_n0,_x0)}`);
-		if (schema.if !== void 0) {
-			const thenCall = schema.then !== void 0 ? `${emitAnnotI(schema.then, ctx)}(${v},${S})` : "";
-			const elseCall = schema.else !== void 0 ? `${emitAnnotI(schema.else, ctx)}(${v},${S})` : "";
-			body.push(`if(${emitAnnotI(schema.if, ctx)}(${v},${S})){${thenCall}}else{${elseCall}}`);
-		}
-		if (typeof schema.$ref === "string") body.push(`${emitAnnotI(refTargetFor(schema.$ref, ctx), ctx)}(${v},${S})`);
-		const iv = `_ix${ui}`;
-		const ui2 = schema.unevaluatedItems;
-		if (ui2 === false) {
-			const failI = fail("unevaluatedItems", "unevaluatedItems", `{limit:${iv}}`, `'must NOT have more than '+${iv}+' items'`);
-			body.push(`for(let ${iv}=0;${iv}<${v}.length;${iv}++){if(_hI(${S},${iv}))continue;${failI};break}`);
-		} else if (typeof ui2 === "object" && ui2 !== null) {
-			const pe = pathExpr ? `${pathExpr}+'/'+${iv}` : `'/'+${iv}`;
-			const sub = [];
-			genCodeC(ui2, `${v}[${iv}]`, pe, sub, ctx, schemaPrefix + "/unevaluatedItems");
-			if (sub.length) body.push(`for(let ${iv}=0;${iv}<${v}.length;${iv}++){if(_hI(${S},${iv}))continue;${sub.join("\n  ")}\n  }`);
-		} else throw DECLINE;
-		lines.push(`if(Array.isArray(${v})){${body.join(";")}}`);
-	}
-	function annItemHelpers(ctx) {
-		if (ctx.annItemHelpers) return;
-		ctx.annItemHelpers = true;
-		(ctx.preamble || ctx.helperCode).push("function _aI(S,i){if(i<S.n)return;if(i===S.n){S.n=i+1;return}(S.x||(S.x=[])).push(i)}function _mrI(S,f,t){if(f>=t)return;if(f<=S.n){if(t>S.n)S.n=t;return}const x=S.x||(S.x=[]);for(let i=f;i<t;i++)x.push(i)}function _hI(S,i){if(i<S.n)return true;const x=S.x;if(x===null)return false;for(let j=0;j<x.length;j++)if(x[j]===i)return true;return false}function _rbI(S,n,l){S.n=n;if(S.x!==null)S.x.length=l}function _anIT(){return true}function _anIF(){return false}");
-	}
-	function addLocalItemAnnotations(node, v, S, out, ctx) {
-		if (Array.isArray(node.items) || node.additionalItems !== void 0) throw DECLINE;
-		const prefix = Array.isArray(node.prefixItems) ? node.prefixItems.length : 0;
-		if (prefix) out.push(`_mrI(${S},0,Math.min(${v}.length,${prefix}))`);
-		if (node.items !== void 0) out.push(`_mrI(${S},${prefix},${v}.length)`);
-		if (node.contains !== void 0) {
-			const cl = [];
-			nestedGenCode(node.contains, "_cv", cl, ctx);
-			const ci = ctx.varCounter++;
-			(ctx.preamble || ctx.helperCode).push(`function _cI${ci}(_cv){${cl.join("\n  ")}\n  return true}`);
-			out.push(`for(let _i=0;_i<${v}.length;_i++)if(_cI${ci}(${v}[_i]))_aI(${S},_i)`);
-		}
-	}
-	const ANNOT_ITEM_APPLICATORS = /* @__PURE__ */ new Set([
-		"allOf",
-		"anyOf",
-		"oneOf",
-		"if",
-		"then",
-		"else",
-		"$ref",
-		"not",
-		"unevaluatedItems"
-	]);
-	function emitAnnotI(sub, ctx) {
-		if (sub === true) return "_anIT";
-		if (sub === false) return "_anIF";
-		if (sub === null || typeof sub !== "object") throw DECLINE;
-		if (!ctx.annFnsI) ctx.annFnsI = /* @__PURE__ */ new Map();
-		const hit = ctx.annFnsI.get(sub);
-		if (hit !== void 0) {
-			if (hit === null) throw DECLINE;
-			return hit;
-		}
-		if (sub.$dynamicRef !== void 0 || sub.$recursiveRef !== void 0) throw DECLINE;
-		if (Array.isArray(sub.items) || sub.additionalItems !== void 0) throw DECLINE;
-		if (sub.unevaluatedProperties !== void 0 && sub.unevaluatedProperties !== true) throw DECLINE;
-		ctx.annFnsI.set(sub, null);
-		annItemHelpers(ctx);
-		const name = `_ai${ctx.varCounter++}`;
-		const local = {};
-		for (const k of Object.keys(sub)) if (!ANNOT_ITEM_APPLICATORS.has(k)) setOwn(local, k, sub[k]);
-		const vl = [];
-		nestedGenCode(local, "_av", vl, ctx);
-		const decls = [`function ${name}_v(_av){${vl.join("\n  ")}\n  return true}`];
-		const body = [`if(!${name}_v(d))return false`];
-		if (sub.not !== void 0) {
-			const nl = [];
-			nestedGenCode(sub.not, "_nv", nl, ctx);
-			decls.push(`function ${name}_n(_nv){${nl.join("\n  ")}\n  return true}`);
-			body.push(`if(${name}_n(d))return false`);
-		}
-		const own = sub.unevaluatedItems !== void 0 && sub.unevaluatedItems !== true;
-		const R = own ? "_R" : "S";
-		body.push(own ? `const _R={n:0,x:null}` : `const _n0=S.n,_x0=S.x===null?0:S.x.length`);
-		const failOut = own ? "return false" : "{_rbI(S,_n0,_x0);return false}";
-		const locals = [];
-		addLocalItemAnnotations(sub, "d", R, locals, ctx);
-		if (locals.length) body.push(`if(Array.isArray(d)){${locals.join(";")}}`);
-		for (const b of sub.allOf || []) body.push(`if(!${emitAnnotI(b, ctx)}(d,${R}))${failOut}`);
-		if (Array.isArray(sub.anyOf)) body.push(`{let _a=false;${sub.anyOf.map((b) => `if(${emitAnnotI(b, ctx)}(d,${R}))_a=true;`).join("")}if(!_a)${failOut}}`);
-		if (Array.isArray(sub.oneOf)) body.push(`{let _c=0;${sub.oneOf.map((b) => `if(${emitAnnotI(b, ctx)}(d,${R})&&++_c>1)${failOut}`).join("")}if(_c!==1)${failOut}}`);
-		if (sub.if !== void 0) {
-			const thenCheck = sub.then !== void 0 ? `if(!${emitAnnotI(sub.then, ctx)}(d,${R}))${failOut}` : "";
-			const elseCheck = sub.else !== void 0 ? `if(!${emitAnnotI(sub.else, ctx)}(d,${R}))${failOut}` : "";
-			body.push(`if(${emitAnnotI(sub.if, ctx)}(d,${R})){${thenCheck}}else{${elseCheck}}`);
-		}
-		if (typeof sub.$ref === "string") body.push(`if(!${emitAnnotI(refTargetFor(sub.$ref, ctx), ctx)}(d,${R}))${failOut}`);
-		if (own) {
-			const u = sub.unevaluatedItems;
-			if (u === false) body.push(`if(Array.isArray(d)){for(let _i=0;_i<d.length;_i++)if(!_hI(_R,_i))return false}`);
-			else if (typeof u === "object" && u !== null) {
-				const ul = [];
-				nestedGenCode(u, "_uv", ul, ctx);
-				decls.push(`function ${name}_u(_uv){${ul.join("\n  ")}\n  return true}`);
-				body.push(`if(Array.isArray(d)){for(let _i=0;_i<d.length;_i++)if(!_hI(_R,_i)&&!${name}_u(d[_i]))return false}`);
-			} else throw DECLINE;
-			body.push(`if(Array.isArray(d))_mrI(S,0,d.length)`);
-		}
-		if (sub.unevaluatedItems === true) body.push(`if(Array.isArray(d))_mrI(S,0,d.length)`);
-		decls.push(`function ${name}(d,S){${body.join(";")};return true}`);
-		(ctx.preamble || ctx.helperCode).push(decls.join(""));
-		ctx.annFnsI.set(sub, name);
-		return name;
-	}
-	function genUnevaluatedFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj) {
-		const propKeysU = Object.keys(schema.properties || {});
-		const ui = ctx.varCounter++;
-		const failU = fail("unevaluatedProperties", "unevaluatedProperties", `{unevaluatedProperty:_k${ui}[_i]}`, "'must NOT have unevaluated properties'");
-		let innerU;
-		if (propKeysU.length === 0) innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++){${failU}}`;
-		else if (propKeysU.length <= 8) innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++)if(${propKeysU.map((k) => `_k${ui}[_i]!==${JSON.stringify(k)}`).join("&&")}){${failU}}`;
-		else {
-			ctx.closureVars.push(`_a${ui}`);
-			ctx.closureVals.push(new Set(propKeysU));
-			innerU = `const _k${ui}=Object.keys(${v});for(let _i=0;_i<_k${ui}.length;_i++)if(!_a${ui}.has(_k${ui}[_i])){${failU}}`;
-		}
-		lines.push(isObj ? `{${innerU}}` : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${innerU}}`);
-	}
-	function genUnevaluatedItemsFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
-		const itemsIsPrefixC = Array.isArray(schema.items);
-		if (!(schema.items !== void 0 && !itemsIsPrefixC)) {
-			const plenC = itemsIsPrefixC ? schema.items.length : Array.isArray(schema.prefixItems) ? schema.prefixItems.length : 0;
-			const failI = fail("unevaluatedItems", "unevaluatedItems", `{limit:${plenC}}`, `'must NOT have more than ${plenC} items'`);
-			lines.push(`if(Array.isArray(${v})&&${v}.length>${plenC}){${failI}}`);
-		}
-	}
-	function genAdditionalSchemaC(schema, v, pathExpr, lines, ctx, schemaPrefix, isObj) {
-		const ki = ctx.varCounter++;
-		const kVar = `_ak${ki}`;
-		const known = Object.keys(schema.properties || {});
-		const conds = [];
-		if (known.length) {
-			const set = `_akn${ki}`;
-			ctx.closureVars.push(set);
-			ctx.closureVals.push(new Set(known));
-			conds.push(`!${set}.has(${kVar})`);
-		}
-		const pats = [];
-		for (const pat of Object.keys(schema.patternProperties || {})) {
-			const fast = fastPrefixCheck(pat, kVar);
-			if (fast) {
-				pats.push(fast);
-				continue;
-			}
-			const ri = ctx.varCounter++;
-			ctx.closureVars.push(`_re${ri}`);
-			ctx.closureVals.push(safeReClosure(ctx, pat));
-			pats.push(`_re${ri}.test(${kVar})`);
-		}
-		if (pats.length) conds.push(`!(${pats.join("||")})`);
-		const guard = isObj ? "" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
-		const keep = conds.length ? `if(${conds.join("&&")})` : "";
-		const pe = emitPtrEsc(ctx);
-		const p = pathExpr ? `${pathExpr}+'/'+${pe}(${kVar})` : `'/'+${pe}(${kVar})`;
-		const sub = [];
-		genCodeC(schema.additionalProperties, `${v}[${kVar}]`, p, sub, ctx, schemaPrefix + "/additionalProperties");
-		if (sub.length === 0) return;
-		lines.push(`${guard}{for(const ${kVar} in ${v}){${keep}{${sub.join("\n  ")}\n  }}}`);
-	}
-	function genPatternPropertiesC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail, isObj) {
-		let handledPropertyNames = false;
-		const ppEntries = Object.entries(schema.patternProperties);
-		const pn = isSimplePN(schema.propertyNames) ? schema.propertyNames : null;
-		const pi = ctx.varCounter++;
-		const matchers = [];
-		for (const [pat] of ppEntries) {
-			const fast = fastPrefixCheck(pat, `_k${pi}`);
-			if (fast) matchers.push({ check: fast });
-			else {
-				const ri = ctx.varCounter++;
-				ctx.closureVars.push(`_re${ri}`);
-				ctx.closureVals.push(safeReClosure(ctx, pat));
-				matchers.push({ check: `_re${ri}.test(_k${pi})` });
-			}
-		}
-		const guard = isObj ? "" : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v}))`;
-		const kVar = `_k${pi}`;
-		if (schema.additionalProperties === false) {
-			handledPropertyNames = !!pn;
-			const propKeys = Object.keys(schema.properties || {});
-			const keyCheck = propKeys.length <= 8 ? propKeys.map((k) => `${kVar}===${JSON.stringify(k)}`).join("||") : null;
-			if (!keyCheck) {
-				const allowedSet = `_as${pi}`;
-				ctx.closureVars.push(allowedSet);
-				ctx.closureVals.push(new Set(propKeys));
-			}
-			lines.push(`${guard}{for(const ${kVar} in ${v}){`);
-			if (pn) {
-				if (pn.minLength !== void 0) lines.push(`if(${kVar}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
-				if (pn.maxLength !== void 0) lines.push(`if(${kVar}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
-				if (pn.pattern) {
-					const fast = fastPrefixCheck(pn.pattern, kVar);
-					if (fast) lines.push(`if(!(${fast})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, JSON.stringify(`must match pattern "${pn.pattern}"`))}}`);
-					else {
-						const ri = ctx.varCounter++;
-						ctx.closureVars.push(`_re${ri}`);
-						ctx.closureVals.push(safeReClosure(ctx, pn.pattern));
-						lines.push(`if(!_re${ri}.test(${kVar})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, JSON.stringify(`must match pattern "${pn.pattern}"`))}}`);
-					}
-				}
-				if (pn.const !== void 0) lines.push(`if(${kVar}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
-				if (pn.enum) {
-					const ei = ctx.varCounter++;
-					ctx.closureVars.push(`_es${ei}`);
-					ctx.closureVals.push(new Set(pn.enum));
-					lines.push(`if(!_es${ei}.has(${kVar})){${fail("enum", "propertyNames/enum", `{allowedValues:${JSON.stringify(pn.enum)}}`, "'must be equal to one of the allowed values'")}}`);
-				}
-			}
-			const matchExpr = keyCheck || `_as${pi}.has(${kVar})`;
-			lines.push(`let _m${pi}=${matchExpr}`);
-			for (let i = 0; i < ppEntries.length; i++) {
-				lines.push(`if(${matchers[i].check}){_m${pi}=true;{const _ppv${pi}_${i}=${v}[${kVar}]`);
-				genCodeC(ppEntries[i][1], `_ppv${pi}_${i}`, childPathDynExpr(pathExpr, `${emitPtrEsc(ctx)}(${kVar})`), lines, ctx, schemaPrefix + "/patternProperties/" + ptrSeg(ppEntries[i][0]));
-				lines.push(`}}`);
-			}
-			lines.push(`if(!_m${pi}){${fail("additionalProperties", "additionalProperties", `{additionalProperty:${kVar}}`, "'must NOT have additional properties'")}}`);
-			lines.push(`}}`);
-		} else {
-			handledPropertyNames = !!pn;
-			lines.push(`${guard}{for(const ${kVar} in ${v}){`);
-			if (pn) {
-				if (pn.minLength !== void 0) lines.push(`if(${kVar}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
-				if (pn.maxLength !== void 0) lines.push(`if(${kVar}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
-				if (pn.pattern) {
-					const fast = fastPrefixCheck(pn.pattern, kVar);
-					if (fast) lines.push(`if(!(${fast})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, JSON.stringify(`must match pattern "${pn.pattern}"`))}}`);
-					else {
-						const ri = ctx.varCounter++;
-						ctx.closureVars.push(`_re${ri}`);
-						ctx.closureVals.push(safeReClosure(ctx, pn.pattern));
-						lines.push(`if(!_re${ri}.test(${kVar})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, JSON.stringify(`must match pattern "${pn.pattern}"`))}}`);
-					}
-				}
-				if (pn.const !== void 0) lines.push(`if(${kVar}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
-				if (pn.enum) {
-					const ei = ctx.varCounter++;
-					ctx.closureVars.push(`_es${ei}`);
-					ctx.closureVals.push(new Set(pn.enum));
-					lines.push(`if(!_es${ei}.has(${kVar})){${fail("enum", "propertyNames/enum", `{allowedValues:${JSON.stringify(pn.enum)}}`, "'must be equal to one of the allowed values'")}}`);
-				}
-			}
-			for (let i = 0; i < ppEntries.length; i++) {
-				lines.push(`if(${matchers[i].check}){const _ppv${pi}_${i}=${v}[${kVar}]`);
-				genCodeC(ppEntries[i][1], `_ppv${pi}_${i}`, childPathDynExpr(pathExpr, `${emitPtrEsc(ctx)}(${kVar})`), lines, ctx, schemaPrefix + "/patternProperties/" + ptrSeg(ppEntries[i][0]));
-				lines.push(`}`);
-			}
-			lines.push(`}}`);
-		}
-		return handledPropertyNames;
-	}
-	function genDependentSchemasC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		for (const [key, depSchema] of Object.entries(schema.dependentSchemas)) {
-			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${ownKeyExpr(ctx, v, key)}){`);
-			genCodeC(depSchema, v, pathExpr, lines, ctx, schemaPrefix + "/dependentSchemas/" + ptrSeg(key));
-			lines.push(`}`);
-		}
-	}
-	function genPropertyNamesFalseC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		const ki = ctx.varCounter++;
-		const p = pathExpr || "\"\"";
-		lines.push(`;if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){${errPushC(ctx, "not", `${schemaPrefix}/propertyNames`, pathExpr, "{}", "'boolean schema is false'", v, `{keyword:'not',instancePath:${p},schemaPath:'${schemaPrefix}/propertyNames'${ordinalField(ctx, `${schemaPrefix}/propertyNames`)},params:{},message:'boolean schema is false'}`)}}}`);
-	}
-	function genPropertyNamesC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
-		const pn = schema.propertyNames;
-		const ki = ctx.varCounter++;
-		if (!isSimplePN(pn) && ctx.rich) throw DECLINE;
-		lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){for(const _k${ki} in ${v}){`);
-		if (!isSimplePN(pn)) {
-			genCodeC(pn, `_k${ki}`, pathExpr, lines, ctx, schemaPrefix + "/propertyNames");
-			lines.push(`}}`);
-			return;
-		}
-		if (pn.minLength !== void 0) lines.push(`if(_k${ki}.length<${pn.minLength}){${fail("minLength", "propertyNames/minLength", `{limit:${pn.minLength}}`, `'must NOT have fewer than ${pn.minLength} characters'`)}}`);
-		if (pn.maxLength !== void 0) lines.push(`if(_k${ki}.length>${pn.maxLength}){${fail("maxLength", "propertyNames/maxLength", `{limit:${pn.maxLength}}`, `'must NOT have more than ${pn.maxLength} characters'`)}}`);
-		if (pn.pattern) {
-			const ri = ctx.varCounter++;
-			ctx.closureVars.push(`_re${ri}`);
-			ctx.closureVals.push(safeReClosure(ctx, pn.pattern));
-			lines.push(`if(!_re${ri}.test(_k${ki})){${fail("pattern", "propertyNames/pattern", `{pattern:${JSON.stringify(pn.pattern)}}`, JSON.stringify(`must match pattern "${pn.pattern}"`))}}`);
-		}
-		if (pn.const !== void 0) lines.push(`if(_k${ki}!==${JSON.stringify(pn.const)}){${fail("const", "propertyNames/const", `{allowedValue:${JSON.stringify(pn.const)}}`, "'must be equal to constant'")}}`);
-		if (pn.enum) {
-			const ei = ctx.varCounter++;
-			ctx.closureVars.push(`_es${ei}`);
-			ctx.closureVals.push(new Set(pn.enum));
-			lines.push(`if(!_es${ei}.has(_k${ki})){${fail("enum", "propertyNames/enum", `{allowedValues:${JSON.stringify(pn.enum)}}`, "'must be equal to one of the allowed values'")}}`);
-		}
-		lines.push(`}}`);
-	}
-	function genPrefixItemsC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		for (let i = 0; i < schema.prefixItems.length; i++) {
-			const childPath = childPathExpr(pathExpr, String(i));
-			lines.push(`if(Array.isArray(${v})&&${v}.length>${i}){`);
-			genCodeC(schema.prefixItems[i], `${v}[${i}]`, childPath, lines, ctx, schemaPrefix + "/prefixItems/" + i);
-			lines.push(`}`);
-		}
-	}
-	function genContainsC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
-		const ci = ctx.varCounter++;
-		const subLines = [];
-		nestedGenCode(schema.contains, `_cv`, subLines, ctx);
-		const fnBody = subLines.length === 0 ? `return true` : `${subLines.join(";")};return true`;
-		const minC = schema.minContains !== void 0 ? schema.minContains : 1;
-		const maxC = schema.maxContains;
-		lines.push(`if(Array.isArray(${v})){const _cf${ci}=function(_cv){${fnBody}};let _cc${ci}=0;for(let _ci${ci}=0;_ci${ci}<${v}.length;_ci${ci}++){if(_cf${ci}(${v}[_ci${ci}]))_cc${ci}++}`);
-		lines.push(`if(_cc${ci}<${minC}){${fail("contains", "contains", `{minContains:${minC}}`, `'must contain at least ${minC} valid item(s)'`)}}`);
-		if (maxC !== void 0) lines.push(`if(_cc${ci}>${maxC}){${fail("contains", "contains", `{minContains:${minC},maxContains:${maxC}}`, `'must NOT contain more than ${maxC} valid item(s)'`)}}`);
-		lines.push(`}`);
-	}
-	function genAnyOfC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
-		if (ctx.inCombined) return emitBranchCollapse(schema.anyOf, "anyOf", v, pathExpr, lines, ctx, schemaPrefix);
-		const fi = ctx.varCounter++;
-		const fns = schema.anyOf.map((sub) => {
-			const sl = [];
-			nestedGenCode(sub, "_av", sl, ctx);
-			return sl.length === 0 ? `function(_av){return true}` : `function(_av){${sl.join(";")};return true}`;
-		});
-		lines.push(`{const _af${fi}=[${fns.join(",")}];let _am=false;for(let _ai=0;_ai<_af${fi}.length;_ai++){if(_af${fi}[_ai](${v})){_am=true;break}}if(!_am){${fail("anyOf", "anyOf", "{}", "'must match a schema in anyOf'")}}}`);
-	}
-	function genOneOfC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
-		if (ctx.inCombined) return emitBranchCollapse(schema.oneOf, "oneOf", v, pathExpr, lines, ctx, schemaPrefix);
-		const fi = ctx.varCounter++;
-		const fns = schema.oneOf.map((sub) => {
-			const sl = [];
-			nestedGenCode(sub, "_ov", sl, ctx);
-			return sl.length === 0 ? `function(_ov){return true}` : `function(_ov){${sl.join(";")};return true}`;
-		});
-		lines.push(`{const _of${fi}=[${fns.join(",")}];let _oc=0;for(let _oi=0;_oi<_of${fi}.length;_oi++){if(_of${fi}[_oi](${v}))_oc++;if(_oc>1)break}if(_oc!==1){${fail("oneOf", "oneOf", "{}", "'must match exactly one schema in oneOf'")}}}`);
-	}
-	function genNotC(schema, v, pathExpr, lines, ctx, schemaPrefix, fail) {
-		const sl = [];
-		nestedGenCode(schema.not, "_nv", sl, ctx);
-		const nfn = sl.length === 0 ? `function(_nv){return true}` : `function(_nv){${sl.join(";")};return true}`;
-		const fi = ctx.varCounter++;
-		lines.push(`{const _nf${fi}=${nfn};if(_nf${fi}(${v})){${fail("not", "not", "{}", "'must NOT be valid'")}}}`);
-	}
-	function genIfC(schema, v, pathExpr, lines, ctx, schemaPrefix) {
-		const sl = [];
-		nestedGenCode(schema.if, "_iv", sl, ctx);
-		const fi = ctx.varCounter++;
-		const ifFn = sl.length === 0 ? `function(_iv){return true}` : `function(_iv){${sl.join(";")};return true}`;
-		lines.push(`{const _if${fi}=${ifFn}`);
-		if (schema.then !== void 0) {
-			lines.push(`if(_if${fi}(${v})){`);
-			genCodeC(schema.then, v, pathExpr, lines, ctx, schemaPrefix + "/then");
-			lines.push(`}`);
-		}
-		if (schema.else !== void 0) {
-			lines.push(`${schema.then !== void 0 ? "else" : `if(!_if${fi}(${v}))`}{`);
-			genCodeC(schema.else, v, pathExpr, lines, ctx, schemaPrefix + "/else");
-			lines.push(`}`);
-		}
-		lines.push(`}`);
-	}
 	function collectEvaluated(schema, schemaMap, rootDefs) {
 		if (typeof schema !== "object" || schema === null) return {
 			props: [],
@@ -16886,6 +18205,16 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			for (const sub of Object.values(schema.dependentSchemas)) _collectEval(sub, result, defs, schemaMap, refStack);
 		}
 	}
+	let _errorsModule = null;
+	function errorsModule() {
+		return _errorsModule || (_errorsModule = require_js_compiler_errors());
+	}
+	function compileToJSCodegenWithErrors(schema, schemaMap, userFormats, sourceOpts) {
+		return errorsModule().compileToJSCodegenWithErrors(schema, schemaMap, userFormats, sourceOpts);
+	}
+	function compileToJSCombined(schema, VALID_RESULT, schemaMap, userFormats, opts) {
+		return errorsModule().compileToJSCombined(schema, VALID_RESULT, schemaMap, userFormats, opts);
+	}
 	module.exports = {
 		compileToJS,
 		compileToJSCodegen,
@@ -16895,7 +18224,12 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		unevalContributions,
 		expandedChars,
 		AJV_MESSAGES,
-		_setCodeBudget
+		_setCodeBudget,
+		_helperSources: {
+			DEQ_HELPER,
+			PTR_ESC_HELPER,
+			OWN_HELPER_CODE
+		}
 	};
 	Object.defineProperty(module.exports, "_expandDynamicScopes", {
 		value: expandDynamicScopes,
@@ -16909,9 +18243,66 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		},
 		enumerable: false
 	});
+	module.exports._internal = {
+		hasConstraints,
+		assertEmitted,
+		prepareForCodegen,
+		sharedCodegenGate,
+		codegenSafe,
+		isSimplePN,
+		hasUnresolvableRef,
+		needsBaseTracking,
+		_cpLen,
+		sharedRt,
+		DECLINE,
+		bindRt,
+		compileSafe,
+		emitGuardState,
+		withPlain,
+		REF_NEUTRAL_SIBLINGS,
+		resolveCrossSchemaRef,
+		enumCondition,
+		enumOperand,
+		emitDeq,
+		emitConstant,
+		ownGuard,
+		ownKeyExpr,
+		multipleOfBad,
+		compilePatternInline,
+		useSafeEngine,
+		reFlags,
+		FORMAT_CODEGEN,
+		PROTO_NAMES,
+		setOwn,
+		nestedGenCode,
+		compileToJSCodegen,
+		SKIP_VALUE_KEYS,
+		skipString,
+		CYCLE_DEPTH,
+		cyclicDefNames,
+		sharedDefNames,
+		reFlagArg,
+		hoistOnce,
+		PTR_ESC_HELPER,
+		unevalContributions,
+		emitUq,
+		uqSources,
+		safeReClosure,
+		fastPrefixCheck,
+		replaceTopLevel,
+		refTargetFor,
+		genCode,
+		addLocalAnnotations,
+		addTopApplicatorAnnotations,
+		protoIs,
+		ANNOT_APPLICATORS,
+		SIZE_SKIPS,
+		emitRootGuard,
+		emitGuardedRun
+	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/scan-runtime.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/scan-runtime.js
 var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function hex4(s, i) {
 		for (let k = i; k < i + 4; k++) {
@@ -17069,8 +18460,9 @@ var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/scan-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/scan-compiler.js
 var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { compileFunction } = require_compile_fn();
 	const { compileToJSCodegen } = require_js_compiler();
 	const VALID = 1;
 	const INVALID = 0;
@@ -17401,7 +18793,7 @@ var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		const { ctx, body } = built;
 		let fn;
 		try {
-			fn = new Function("_h", "_r", ctx.subSource.join("\n") + "\nreturn function scan(s){\n" + body + "\n}")(ctx.helpers, require_scan_runtime());
+			fn = compileFunction("_h", "_r", ctx.subSource.join("\n") + "\nreturn function scan(s){\n" + body + "\n}")(ctx.helpers, require_scan_runtime());
 		} catch {
 			return null;
 		}
@@ -17764,7 +19156,7 @@ var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			if (wantCount) out.push("if(_n" + n + "<" + schema.minItems + ")return 0;");
 		}
 	}
-	function emitMember(sub, ctx, out, depth, objId) {
+	function emitMember(sub, ctx, out, depth, objId, kn) {
 		let lines = [];
 		emitValue(sub, ctx, lines, depth + 1);
 		const size = lines.join("\n").length;
@@ -17785,7 +19177,8 @@ var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		out.push(label + ":{");
 		out.push(body.split("return 0;").join("{_f" + objId + "=2;break " + label + ";}"));
 		out.push("}");
-		out.push("if(_f" + objId + "===2){_f" + objId + "=1;i=_r.skipValue(s,_vs" + label + ");if(i<0)return 0;c=s.charCodeAt(i);}");
+		out.push("if(_f" + objId + "===2){if(s.indexOf(s.slice(_p" + kn + "-1,_e" + kn + "+1),i)<0&&s.indexOf(\"\\\\\",i)<0)return 0;");
+		out.push("_f" + objId + "=1;i=_r.skipValue(s,_vs" + label + ");if(i<0)return 0;c=s.charCodeAt(i);}");
 	}
 	function emitObject(schema, ctx, out, depth) {
 		const n = ctx.uid++;
@@ -17930,7 +19323,7 @@ var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 				const cond = gi === bounds.length - 1 ? "" : "if(_kid" + kn + "<" + g.end + ")";
 				out.push((gi === 0 ? "" : "else ") + cond + "{");
 				if (g.sub === void 0) out.push(addH);
-				else emitMember(g.sub, ctx, out, depth, n);
+				else emitMember(g.sub, ctx, out, depth, n, kn);
 				out.push("}");
 				g.end;
 			});
@@ -17971,7 +19364,7 @@ var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 					out.push("_s" + n + "_" + slot.w + "|=" + slot.b + ";");
 					const sub = props && Object.prototype.hasOwnProperty.call(props, name) ? props[name] : void 0;
 					if (sub === void 0) out.push(additional.join("\n"));
-					else emitMember(sub, ctx, out, depth, n);
+					else emitMember(sub, ctx, out, depth, n, kn);
 					out.push("}");
 				}
 				out.push("else{" + additional.join("\n") + "}");
@@ -18003,7 +19396,7 @@ var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/clone-emit.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/clone-emit.js
 var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileToJSCodegen, unevalContributions } = require_js_compiler();
 	function resolveLocalPointer(root, ref) {
@@ -18224,7 +19617,7 @@ var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/native-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/native-positions.js
 var require_native_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const NATIVE_MIN = 32768;
 	let _native;
@@ -18340,7 +19733,7 @@ var require_native_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	module.exports = { nativeTargeted };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/aot.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/aot.browser.js
 var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function unavailable(name) {
 		return function() {
@@ -18363,937 +19756,9 @@ var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/ts-gen.js
-var require_ts_gen = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const ATA_VERSION = require_version();
-	function renderValueType(schema, defs, depth = 0) {
-		if (depth > 32) return "unknown";
-		if (schema === true) return "unknown";
-		if (schema === false) return "never";
-		if (typeof schema !== "object" || schema === null) return "unknown";
-		if (schema.$ref) {
-			const m = schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
-			if (m && defs && defs[m[1]]) return toTypeName(m[1]);
-			return "unknown";
-		}
-		if (schema.const !== void 0) return renderLiteral(schema.const);
-		if (Array.isArray(schema.enum)) return schema.enum.map(renderLiteral).join(" | ") || "never";
-		if (Array.isArray(schema.oneOf)) return schema.oneOf.map((s) => renderValueType(s, defs, depth + 1)).join(" | ") || "unknown";
-		if (Array.isArray(schema.anyOf)) return schema.anyOf.map((s) => renderValueType(s, defs, depth + 1)).join(" | ") || "unknown";
-		const t = schema.type;
-		if (Array.isArray(t)) return t.map((tt) => renderValueType({
-			...schema,
-			type: tt
-		}, defs, depth + 1)).join(" | ");
-		if (t === "string") return "string";
-		if (t === "number" || t === "integer") return "number";
-		if (t === "boolean") return "boolean";
-		if (t === "null") return "null";
-		if (t === "array") {
-			const items = schema.items;
-			const prefix = Array.isArray(schema.prefixItems) ? schema.prefixItems : null;
-			if (prefix) {
-				const prefixTypes = prefix.map((s) => renderValueType(s, defs, depth + 1));
-				const minItems = typeof schema.minItems === "number" ? schema.minItems : 0;
-				const elements = prefixTypes.map((t, i) => i < minItems ? t : `${t}?`);
-				if (items === false) return `[${elements.join(", ")}]`;
-				if (items === void 0 || items === true) return `[${elements.join(", ")}, ...unknown[]]`;
-				if (typeof items === "object" && items !== null) {
-					const rest = renderValueType(items, defs, depth + 1);
-					const restType = rest.includes(" | ") ? `(${rest})` : rest;
-					return `[${elements.join(", ")}, ...${restType}[]]`;
-				}
-			}
-			if (items === false) return "never[]";
-			if (items === void 0 || items === true) return "unknown[]";
-			const inner = renderValueType(items, defs, depth + 1);
-			return inner.includes(" | ") ? `Array<${inner}>` : `${inner}[]`;
-		}
-		if (t === "object" || !t && schema.properties) return renderObject(schema, defs, depth + 1);
-		return "unknown";
-	}
-	function renderObject(schema, defs, depth) {
-		const props = schema.properties || {};
-		const required = new Set(schema.required || []);
-		const keys = Object.keys(props);
-		if (keys.length === 0) {
-			if (schema.additionalProperties === false) return "Record<string, never>";
-			const ap = schema.additionalProperties;
-			if (ap && typeof ap === "object") return `Record<string, ${renderValueType(ap, defs, depth + 1)}>`;
-			return "Record<string, unknown>";
-		}
-		const lines = keys.map((k) => {
-			const t = renderValueType(props[k], defs, depth + 1);
-			const opt = required.has(k) ? "" : "?";
-			const safeKey = /^[A-Za-z_$][\w$]*$/.test(k) ? k : JSON.stringify(k);
-			return `${renderJsDoc(props[k], "  ")}  ${safeKey}${opt}: ${t};`;
-		});
-		const extra = schema.additionalProperties;
-		if (extra && typeof extra === "object") {
-			const widen = /* @__PURE__ */ new Set();
-			widen.add(renderValueType(extra, defs, depth + 1));
-			let hasOptional = false;
-			for (const k of keys) {
-				widen.add(renderValueType(props[k], defs, depth + 1));
-				if (!required.has(k)) hasOptional = true;
-			}
-			if (hasOptional) widen.add("undefined");
-			const indexType = widen.has("unknown") ? "unknown" : Array.from(widen).join(" | ");
-			lines.push(`  [key: string]: ${indexType};`);
-		} else if (extra !== false) lines.push(`  [key: string]: unknown;`);
-		return `{\n${lines.join("\n")}\n}`;
-	}
-	function renderLiteral(v) {
-		if (v === null) return "null";
-		if (typeof v === "string") return JSON.stringify(v);
-		if (typeof v === "number" || typeof v === "boolean") return String(v);
-		return "unknown";
-	}
-	function toTypeName(name) {
-		const cleaned = String(name).replace(/[^A-Za-z0-9_]/g, "_");
-		if (cleaned === "") return "_Anon";
-		if (/^[0-9]/.test(cleaned)) return `_${cleaned}`;
-		return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
-	}
-	function renderJsDoc(schema, indent) {
-		if (!schema || typeof schema !== "object") return "";
-		let description = "";
-		if (typeof schema.description === "string" && schema.description.length > 0) description = schema.description.replace(/\*\//g, "* /");
-		const tags = [];
-		for (const k of [
-			"minLength",
-			"maxLength",
-			"minItems",
-			"maxItems",
-			"minProperties",
-			"maxProperties",
-			"minimum",
-			"maximum",
-			"exclusiveMinimum",
-			"exclusiveMaximum",
-			"multipleOf"
-		]) if (typeof schema[k] === "number") tags.push(`@${k} ${schema[k]}`);
-		if (typeof schema.pattern === "string") tags.push(`@pattern ${schema.pattern}`);
-		if (typeof schema.format === "string") tags.push(`@format ${schema.format}`);
-		if (schema.uniqueItems === true) tags.push("@uniqueItems");
-		if (schema.deprecated === true) tags.push("@deprecated");
-		if (schema.default !== void 0) try {
-			tags.push(`@default ${JSON.stringify(schema.default)}`);
-		} catch (_) {}
-		if (Array.isArray(schema.examples) && schema.examples.length > 0) try {
-			tags.push(`@example ${JSON.stringify(schema.examples[0])}`);
-		} catch (_) {}
-		if (description === "" && tags.length === 0) return "";
-		if (description !== "" && tags.length === 0) return `${indent}/** ${description} */\n`;
-		const lines = [`${indent}/**`];
-		if (description !== "") lines.push(`${indent} * ${description}`);
-		if (description !== "" && tags.length > 0) lines.push(`${indent} *`);
-		for (const t of tags) lines.push(`${indent} * ${t}`);
-		lines.push(`${indent} */`);
-		return lines.join("\n") + "\n";
-	}
-	function toTypeScript(schema, opts) {
-		const rootName = toTypeName((opts || {}).name || "Data");
-		const defs = schema && (schema.$defs || schema.definitions);
-		const defLines = [];
-		if (defs && typeof defs === "object") for (const [defName, defSchema] of Object.entries(defs)) {
-			const body = renderValueType(defSchema, defs, 0);
-			defLines.push(`export type ${toTypeName(defName)} = ${body};`);
-		}
-		const rootType = renderValueType(schema, defs, 0);
-		const rootDoc = renderJsDoc(schema, "");
-		const rootDecl = rootType.startsWith("{") && rootType.endsWith("}") && !rootType.includes(" | ") ? `${rootDoc}export interface ${rootName} ${rootType}` : `${rootDoc}export type ${rootName} = ${rootType};`;
-		return `// Auto-generated by ata-validator ${ATA_VERSION}, do not edit.
-${defLines.length ? defLines.join("\n\n") + "\n\n" : ""}${rootDecl}
-
-export interface ValidationError {
-  keyword?: string;
-  instancePath?: string;
-  schemaPath?: string;
-  params?: Record<string, unknown>;
-  message?: string;
-}
-
-export interface ValidResult {
-  valid: true;
-  errors: readonly never[];
-}
-export interface InvalidResult {
-  valid: false;
-  errors: readonly ValidationError[];
-}
-export type Result = ValidResult | InvalidResult;
-
-export declare function isValid(data: unknown): data is ${rootName};
-export declare function validate(data: unknown): Result;
-export declare const schemaHash: string;
-export declare const ataVersion: string;
-declare const _default: { validate: typeof validate; isValid: typeof isValid; schemaHash: typeof schemaHash; ataVersion: typeof ataVersion };
-export default _default;
-`;
-	}
-	module.exports = { toTypeScript };
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/render-shared.js
-var require_render_shared = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const ANSI = {
-		reset: "\x1B[0m",
-		bold: "\x1B[1m",
-		dim: "\x1B[2m",
-		red: "\x1B[31m",
-		yellow: "\x1B[33m",
-		cyan: "\x1B[36m"
-	};
-	const proc = typeof process !== "undefined" ? process : null;
-	function resolveColor(opt) {
-		if (opt === "never") return false;
-		if (opt === "always") return true;
-		if (proc === null) return false;
-		const env = proc.env || {};
-		if (env.NO_COLOR != null && env.NO_COLOR !== "") return false;
-		const fc = env.FORCE_COLOR;
-		if (fc === "1" || fc === "2" || fc === "3" || fc === "true") return true;
-		return !!(proc.stdout && proc.stdout.isTTY);
-	}
-	function color(enabled, code, s) {
-		return enabled ? code + s + ANSI.reset : s;
-	}
-	function pathToDotted(jsonPointer) {
-		if (!jsonPointer || jsonPointer === "/") return "body";
-		const parts = jsonPointer.replace(/^\//, "").split("/").map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
-		let out = "body";
-		for (const p of parts) if (/^[0-9]+$/.test(p)) out += "[" + p + "]";
-		else if (/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(p)) out += "." + p;
-		else out += "[" + JSON.stringify(p) + "]";
-		return out;
-	}
-	function trimCwd(file, cwd) {
-		if (!file) return file;
-		const c = cwd || (proc !== null && typeof proc.cwd === "function" ? proc.cwd() : "");
-		if (!c) return file;
-		if (file.startsWith(c + "/")) return file.slice(c.length + 1);
-		return file;
-	}
-	function truncateLine(text, maxWidth) {
-		if (!text || text.length <= maxWidth) return text;
-		return text.slice(0, maxWidth - 1) + "…";
-	}
-	function terminalWidth() {
-		const w = proc !== null && proc.stdout && proc.stdout.columns;
-		return typeof w === "number" && w > 0 ? w : 100;
-	}
-	module.exports = {
-		ANSI,
-		resolveColor,
-		color,
-		pathToDotted,
-		trimCwd,
-		truncateLine,
-		terminalWidth
-	};
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/diagnose.js
-var require_diagnose = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { correlateTypos } = require_correlate();
-	const { buildDataPositionMap } = require_data_positions();
-	const { pathToDotted } = require_render_shared();
-	const { reprValue, expectedFor } = require_enrich_error();
-	const MAX_SYNTHESIZED_BYTES = 262144;
-	/**
-	* Turn a validation error array into presentation-ready diagnostics.
-	*
-	* Pure: no I/O, no ANSI, no terminal width, deterministic for a given input.
-	* That is deliberate. The merge below is the one place in this library that
-	* can present two problems as one, so it has to be provable as data rather
-	* than by grepping terminal output.
-	*
-	* @param {Array} errors validation errors, enriched or raw
-	* @param {{text?: string, data?: any, positions?: object, schema?: object, mutatesInput?: boolean}} [source]
-	* @returns {Array} diagnostics
-	*/
-	function toDiagnostics(errors, source) {
-		if (!Array.isArray(errors) || errors.length === 0) return [];
-		const src = source || {};
-		const resolved = resolveFrames(src);
-		const pairs = correlateTypos(errors);
-		const diagnostics = [];
-		const consumed = /* @__PURE__ */ new Set();
-		for (let i = 0; i < errors.length; i++) {
-			if (consumed.has(i)) continue;
-			const e = errors[i];
-			if (!e) continue;
-			const partner = pairs === null ? void 0 : pairs.get(i);
-			if (partner !== void 0 && !consumed.has(partner)) {
-				consumed.add(i);
-				consumed.add(partner);
-				diagnostics.push(mergedDiagnostic(errors, i, partner, resolved, src));
-				continue;
-			}
-			diagnostics.push(singleDiagnostic(e, i, resolved, src));
-		}
-		diagnostics.sort((a, b) => {
-			if (a.sortPos !== b.sortPos) return a.sortPos - b.sortPos;
-			if (a.rank !== b.rank) return a.rank - b.rank;
-			return a.pointer < b.pointer ? -1 : a.pointer > b.pointer ? 1 : 0;
-		});
-		for (const d of diagnostics) delete d.sortPos;
-		return diagnostics;
-	}
-	function resolveFrames(src) {
-		const none = {
-			positions: null,
-			synthesized: false,
-			refusal: null
-		};
-		if (src.positions) return {
-			positions: src.positions,
-			synthesized: false,
-			refusal: null
-		};
-		if (src.text != null) try {
-			return {
-				positions: buildDataPositionMap(src.text),
-				synthesized: false,
-				refusal: null
-			};
-		} catch {
-			return none;
-		}
-		if (src.data === void 0) return none;
-		if (src.mutatesInput) return {
-			positions: null,
-			synthesized: false,
-			refusal: "no frame; the value was modified in place before validation (coerceTypes, useDefaults or removeAdditional)"
-		};
-		let text;
-		try {
-			text = JSON.stringify(src.data, null, 2);
-		} catch {
-			return none;
-		}
-		if (typeof text !== "string") return none;
-		if (text.length > MAX_SYNTHESIZED_BYTES) return {
-			positions: null,
-			synthesized: false,
-			refusal: "no frame; the value is larger than 256 KB"
-		};
-		try {
-			return {
-				positions: buildDataPositionMap(text),
-				synthesized: true,
-				refusal: null
-			};
-		} catch {
-			return none;
-		}
-	}
-	function frameFor(err, resolved) {
-		if (!resolved.positions) return frameFromError(err);
-		const path = err.instancePath != null ? err.instancePath : err.path || "";
-		const named = err.params && (err.params.additionalProperty || err.params.unevaluatedProperty) || null;
-		const hit = named && resolved.positions[path + "/" + named] || resolved.positions[path];
-		if (!hit) return null;
-		const useKey = named != null && hit.keyOffset !== void 0;
-		const col = useKey ? hit.keyCol : hit.col;
-		const rawLen = useKey ? hit.keyLength : hit.length;
-		const lineLen = (hit.text || "").length;
-		const length = Math.max(1, Math.min(rawLen || 1, Math.max(1, lineLen - col + 1)));
-		return {
-			line: useKey ? hit.keyLine : hit.line,
-			col,
-			length,
-			text: hit.text,
-			spans: rawLen > length,
-			synthesized: resolved.synthesized
-		};
-	}
-	function frameFromError(err) {
-		const df = err.dataFrame;
-		if (!df || typeof df.line !== "number") return null;
-		const a = err.anchor;
-		const useKey = (err.params && (err.params.additionalProperty || err.params.unevaluatedProperty) || null) != null && a && a.keyLine !== void 0;
-		const col = useKey ? a.keyCol : df.col;
-		const rawLen = useKey ? a.keyLength : df.length;
-		const lineLen = (df.text || "").length;
-		const length = Math.max(1, Math.min(rawLen || 1, Math.max(1, lineLen - col + 1)));
-		return {
-			line: useKey ? a.keyLine : df.line,
-			col,
-			length,
-			text: df.text,
-			spans: rawLen > length,
-			synthesized: false
-		};
-	}
-	function headlineFor(err, src) {
-		const p = err.params || {};
-		switch (err.keyword) {
-			case "additionalProperties": return `unknown property "${p.additionalProperty}"`;
-			case "unevaluatedProperties": return `unevaluated property "${p.unevaluatedProperty}"`;
-			case "required": return `missing required property "${p.missingProperty}"`;
-			case "oneOf":
-			case "anyOf": {
-				const disc = discriminatorFor(err, src);
-				if (disc) return `no variant matches ${disc.key} ${JSON.stringify(disc.value)}`;
-				return err.detail || err.message || "no variant matched";
-			}
-			default: return err.detail || err.message || "validation failed";
-		}
-	}
-	function discriminatorFor(err, src) {
-		const schema = src.schema;
-		const data = src.data;
-		if (!schema || !data || typeof data !== "object") return null;
-		const branches = branchesAt(schema, err.schemaPath, err.keyword);
-		if (!Array.isArray(branches) || branches.length < 2) return null;
-		const first = branches[0] && branches[0].properties;
-		if (!first) return null;
-		for (const key of Object.keys(first)) {
-			const values = [];
-			let ok = true;
-			for (const b of branches) {
-				const prop = b && b.properties && b.properties[key];
-				if (!prop || prop.const === void 0) {
-					ok = false;
-					break;
-				}
-				if (values.includes(prop.const)) {
-					ok = false;
-					break;
-				}
-				values.push(prop.const);
-			}
-			if (!ok) continue;
-			const actual = data[key];
-			if (actual === void 0) continue;
-			return {
-				key,
-				value: actual
-			};
-		}
-		return null;
-	}
-	function decorateBranches(subs, src) {
-		return subs.map((sub) => {
-			if (!sub || typeof sub !== "object") return sub;
-			const copy = Object.assign({}, sub);
-			const exp = expectedFor(sub);
-			if (exp !== void 0) copy.expected = exp;
-			if (copy.received === void 0) {
-				const got = valueAt(src.data, sub.instancePath);
-				if (got !== null) copy.received = got;
-			}
-			if (Array.isArray(sub.branchErrors)) copy.branchErrors = decorateBranches(sub.branchErrors, src);
-			return copy;
-		});
-	}
-	function valueAt(data, pointer) {
-		if (data === void 0 || typeof pointer !== "string") return null;
-		if (pointer === "") return reprValue(data);
-		let cur = data;
-		for (const seg of pointer.split("/").slice(1)) {
-			if (cur == null || typeof cur !== "object") return null;
-			cur = cur[seg.replace(/~1/g, "/").replace(/~0/g, "~")];
-		}
-		return cur === void 0 ? null : reprValue(cur);
-	}
-	function branchesAt(schema, schemaPath, keyword) {
-		if (typeof schemaPath !== "string" || !schemaPath.startsWith("#")) return schema[keyword];
-		const parts = schemaPath.slice(1).split("/").filter(Boolean).map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
-		let cur = schema;
-		for (const part of parts) {
-			if (cur == null || typeof cur !== "object") return null;
-			cur = cur[part];
-		}
-		return Array.isArray(cur) ? cur : null;
-	}
-	function singleDiagnostic(e, index, resolved, src) {
-		const pointer = e.instancePath != null ? e.instancePath : e.path || "";
-		const closest = e.branchErrors && e.branchErrors.length ? e.branchErrors[0] : null;
-		const anchorErr = closest && closest.instancePath ? closest : e;
-		const frame = frameFor(anchorErr, resolved);
-		let found = e.received != null ? e.received : null;
-		if (anchorErr !== e) found = closest.received != null ? closest.received : valueAt(src.data, closest.instancePath);
-		const notes = [];
-		if (!frame && resolved.refusal) notes.push(resolved.refusal);
-		if (frame && frame.spans) notes.push("value continues past the end of this line");
-		if (e.docUrl) notes.push("see " + e.docUrl);
-		return {
-			code: e.code,
-			headline: headlineFor(e, src),
-			pointer,
-			dotted: pathToDotted(anchorErr.instancePath != null ? anchorErr.instancePath : pointer),
-			frame,
-			found,
-			help: e.suggestion ? e.suggestion.text : null,
-			notes,
-			branchErrors: e.branchErrors ? decorateBranches(e.branchErrors, src) : null,
-			mergedFrom: [e],
-			rank: typeof e.rank === "number" ? e.rank : 2,
-			sortPos: frame ? frame.line * 1e5 + frame.col : index
-		};
-	}
-	function mergedDiagnostic(errors, i, j, resolved, src) {
-		const a = errors[i];
-		const b = errors[j];
-		const missing = a.keyword === "required" ? a : b;
-		const extra = a.keyword === "required" ? b : a;
-		const missingName = missing.params.missingProperty;
-		const extraName = extra.params.additionalProperty;
-		const frame = frameFor(extra, resolved);
-		const notes = [];
-		if (!frame && resolved.refusal) notes.push(resolved.refusal);
-		const docUrl = missing.docUrl || extra.docUrl;
-		if (docUrl) notes.push("see " + docUrl);
-		const pointer = missing.instancePath != null ? missing.instancePath : missing.path || "";
-		return {
-			code: missing.code,
-			headline: `unknown property "${extraName}"`,
-			pointer,
-			dotted: pathToDotted(pointer),
-			frame,
-			found: null,
-			help: `did you mean "${missingName}"?`,
-			notes,
-			branchErrors: null,
-			mergedFrom: [missing, extra],
-			rank: 0,
-			sortPos: frame ? frame.line * 1e5 + frame.col : Math.min(i, j)
-		};
-	}
-	module.exports = { toDiagnostics };
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/render-pretty.js
-var require_render_pretty = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { color, ANSI, resolveColor, trimCwd, truncateLine, terminalWidth } = require_render_shared();
-	const { toDiagnostics } = require_diagnose();
-	const { getDiagnosticSource } = require_diagnostic_source();
-	function sourceFor(errors, opts) {
-		const carried = getDiagnosticSource(errors) || {};
-		if (opts.data !== void 0) return Object.assign({}, carried, { data: opts.data });
-		return carried;
-	}
-	function caretLine(col, length, gutter) {
-		const pad = " ".repeat(gutter);
-		const lead = " ".repeat(Math.max(0, col - 1));
-		const carets = "^".repeat(Math.max(1, Math.min(length || 1, terminalWidth())));
-		return pad + "| " + lead + carets;
-	}
-	const NO_SUFFIX = /* @__PURE__ */ new Set([
-		"additionalProperties",
-		"unevaluatedProperties",
-		"unevaluatedItems",
-		"dependentRequired",
-		"propertyNames",
-		"oneOf",
-		"anyOf",
-		"allOf",
-		"not"
-	]);
-	function caretSuffix(d, raw, useColor) {
-		if (!raw) return "";
-		if (raw.keyword === "required") return raw.expected ? "  " + color(useColor, ANSI.dim, `expected ${raw.expected}`) : "";
-		if (d.found != null && (raw.keyword === "oneOf" || raw.keyword === "anyOf")) return "  " + color(useColor, ANSI.dim, `found ${d.found}`);
-		if (NO_SUFFIX.has(raw.keyword)) return "";
-		return d.found != null ? "  " + color(useColor, ANSI.dim, `found ${d.found}`) : "";
-	}
-	function renderOne(d, useColor, opts) {
-		const lines = [];
-		const width = terminalWidth();
-		const bar = (line) => " ".repeat(Math.max(3, String(line).length + 1)) + "|";
-		const src = (line, text) => String(line).padStart(Math.max(2, String(line).length)) + " | " + text;
-		const label = d.code ? `error[${d.code}]: ` : "error: ";
-		lines.push(color(useColor, ANSI.red + ANSI.bold, label) + d.headline);
-		const raw = d.mergedFrom[0];
-		if (raw && raw.schemaSource) {
-			const f = trimCwd(raw.schemaSource.file, opts.cwd);
-			lines.push(`  --> ${color(useColor, ANSI.cyan, `${f}:${raw.schemaSource.line}:${raw.schemaSource.col}`)}`);
-			const sl = raw.schemaSource.line;
-			lines.push(bar(sl));
-			lines.push(src(sl, truncateLine(raw.schemaSource.text, width - 8)));
-			const inlineHint = raw.expected ? "  " + color(useColor, ANSI.dim, `expected ${raw.expected}`) : "";
-			lines.push(caretLine(raw.schemaSource.col, 1, bar(sl).length - 1) + inlineHint);
-			lines.push(bar(sl));
-		}
-		if (d.frame) {
-			const where = `input:${d.frame.line}:${d.frame.col}`;
-			lines.push(`  --> ${color(useColor, ANSI.cyan, where)}  ${color(useColor, ANSI.dim, "(" + d.dotted + ")")}`);
-			const fl = d.frame.line;
-			lines.push(bar(fl));
-			lines.push(src(fl, truncateLine(d.frame.text, width - 8)));
-			lines.push(caretLine(d.frame.col, d.frame.length, bar(fl).length - 1) + caretSuffix(d, raw, useColor));
-			lines.push(bar(fl));
-		} else lines.push(`  --> ${color(useColor, ANSI.cyan, "at " + d.dotted)}`);
-		if (d.help) lines.push("   = " + color(useColor, ANSI.yellow, "help: ") + d.help);
-		if (d.branchErrors && d.branchErrors.length) {
-			const variant = raw && raw.params && raw.params.closestName || "closest variant";
-			const n = d.branchErrors.length;
-			lines.push("   = " + color(useColor, ANSI.dim, "note: ") + `closest match was ${variant} with ${n} error${n === 1 ? "" : "s"}:`);
-			renderBranchErrors(d.branchErrors, 1, lines, useColor);
-		}
-		for (const note of d.notes) lines.push("   = " + color(useColor, ANSI.dim, "note: ") + note);
-		return lines.join("\n");
-	}
-	function renderBranchErrors(subs, depth, lines, useColor) {
-		if (depth >= 3) {
-			lines.push("       " + color(useColor, ANSI.dim, "... deeper branch errors omitted, see structured output"));
-			return;
-		}
-		const max = 3;
-		const shown = subs.slice(0, max);
-		for (const sub of shown) {
-			let text = sub.message || "";
-			if (sub.expected !== void 0) text = `expected ${sub.expected}` + (sub.received !== void 0 ? `, found ${sub.received}` : "");
-			lines.push("       " + color(useColor, ANSI.dim, `${sub.keyword}: ${text}`));
-			if (sub.branchErrors && sub.branchErrors.length) renderBranchErrors(sub.branchErrors, depth + 1, lines, useColor);
-		}
-		if (subs.length > max) lines.push("       " + color(useColor, ANSI.dim, `... and ${subs.length - max} more`));
-	}
-	function renderPretty(errors, opts) {
-		if (!Array.isArray(errors) || errors.length === 0) return "";
-		opts = opts || {};
-		const useColor = resolveColor(opts.color || "auto");
-		const maxErrors = opts.maxErrors != null ? opts.maxErrors : 20;
-		const context = opts.context || "input";
-		const diags = toDiagnostics(errors, sourceFor(errors, opts));
-		const blocks = [];
-		const limit = maxErrors === 0 ? diags.length : Math.min(maxErrors, diags.length);
-		for (let i = 0; i < limit; i++) blocks.push(renderOne(diags[i], useColor, opts));
-		let out = blocks.join("\n\n");
-		if (limit < diags.length) out += `\n\n... and ${diags.length - limit} more errors (run with --pretty --max-errors=0 to see all)`;
-		const n = errors.length;
-		const shown = diags.length;
-		let summary = `${n} schema violation${n === 1 ? "" : "s"} in ${context}`;
-		if (shown !== n) summary += `, shown as ${shown} diagnostic${shown === 1 ? "" : "s"}`;
-		out += "\n\n" + color(useColor, ANSI.red + ANSI.bold, "error: ") + summary;
-		if (diags.some((d) => d.frame && d.frame.synthesized)) out += "\n" + color(useColor, ANSI.dim, "note: frames were reconstructed from the value, not from your input text; line numbers refer to that reconstruction");
-		return out;
-	}
-	module.exports = { renderPretty };
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/render-compact.js
-var require_render_compact = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { color, ANSI, resolveColor, trimCwd } = require_render_shared();
-	const { toDiagnostics } = require_diagnose();
-	const { getDiagnosticSource } = require_diagnostic_source();
-	function renderCompact(errors, opts) {
-		if (!Array.isArray(errors) || errors.length === 0) return "";
-		opts = opts || {};
-		const useColor = resolveColor(opts.color || "auto");
-		const cwd = opts.cwd;
-		const carried = getDiagnosticSource(errors) || {};
-		const source = opts.data !== void 0 ? Object.assign({}, carried, { data: opts.data }) : carried;
-		const diags = toDiagnostics(errors, source);
-		const lines = [];
-		for (const d of diags) {
-			let prefix = "";
-			const raw = d.mergedFrom[0];
-			if (raw && raw.schemaSource) {
-				const f = trimCwd(raw.schemaSource.file, cwd);
-				prefix = color(useColor, ANSI.cyan, `${f}:${raw.schemaSource.line}:${raw.schemaSource.col}`) + " - ";
-			}
-			const codeStr = color(useColor, ANSI.red + ANSI.bold, d.code ? `error ${d.code}` : "error");
-			const pathStr = color(useColor, ANSI.cyan, d.dotted);
-			const got = raw && raw.received != null ? `got ${raw.received}` : "";
-			const sugg = d.help ? color(useColor, ANSI.yellow, `, ${d.help}`) : "";
-			const tail = got || sugg ? ` (${got}${sugg})` : "";
-			lines.push(`${prefix}${codeStr}: ${pathStr} ${d.headline}${tail}`);
-		}
-		const n = errors.length;
-		const shown = diags.length;
-		lines.push("");
-		let summary = `Found ${n} error${n === 1 ? "" : "s"} in ${opts.context || "input"}`;
-		if (shown !== n) summary += `, shown as ${shown} diagnostic${shown === 1 ? "" : "s"}`;
-		lines.push(summary + ".");
-		if (!(typeof process !== "undefined" && process.stdout && process.stdout.isTTY)) lines.push("(run with --pretty for source frames)");
-		return lines.join("\n");
-	}
-	module.exports = { renderCompact };
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/output-format.js
-var require_output_format = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const METADATA_KEYWORDS = [
-		"title",
-		"description",
-		"default",
-		"deprecated",
-		"readOnly",
-		"writeOnly",
-		"examples",
-		"format",
-		"contentEncoding",
-		"contentMediaType",
-		"contentSchema"
-	];
-	function pointerSegment(s) {
-		return String(s).replace(/~/g, "~0").replace(/\//g, "~1");
-	}
-	function baseUri(schema) {
-		if (schema && typeof schema === "object" && typeof schema.$id === "string") return schema.$id.split("#")[0];
-		return null;
-	}
-	function unitFor(error, base) {
-		const keywordLocation = typeof error.schemaPath === "string" && error.schemaPath.charAt(0) === "#" ? error.schemaPath.slice(1) : error.schemaPath || "";
-		const unit = {
-			valid: false,
-			keywordLocation,
-			instanceLocation: error.instancePath || ""
-		};
-		if (base) unit.absoluteKeywordLocation = base + "#" + keywordLocation;
-		if (typeof error.message === "string") unit.error = error.message;
-		return unit;
-	}
-	function collectAnnotations(schema, data, keywordLocation, instanceLocation, base, out, isValid, depth) {
-		if (schema === true || schema === false || schema === null || typeof schema !== "object" || depth > 64) return;
-		for (const kw of METADATA_KEYWORDS) if (Object.prototype.hasOwnProperty.call(schema, kw)) {
-			const unit = {
-				valid: true,
-				keywordLocation: keywordLocation + "/" + kw,
-				instanceLocation,
-				annotation: schema[kw]
-			};
-			if (base) unit.absoluteKeywordLocation = base + "#" + keywordLocation + "/" + kw;
-			out.push(unit);
-		}
-		const down = (sub, kwSeg, value, instSeg) => collectAnnotations(sub, value, keywordLocation + kwSeg, instanceLocation + (instSeg || ""), base, out, isValid, depth + 1);
-		if (schema.properties && data !== null && typeof data === "object" && !Array.isArray(data)) {
-			for (const key of Object.keys(schema.properties)) if (Object.prototype.hasOwnProperty.call(data, key)) down(schema.properties[key], "/properties/" + pointerSegment(key), data[key], "/" + pointerSegment(key));
-		}
-		if (Array.isArray(schema.prefixItems) && Array.isArray(data)) for (let i = 0; i < schema.prefixItems.length && i < data.length; i++) down(schema.prefixItems[i], "/prefixItems/" + i, data[i], "/" + i);
-		if (schema.items && typeof schema.items === "object" && Array.isArray(data)) {
-			const start = Array.isArray(schema.prefixItems) ? schema.prefixItems.length : 0;
-			for (let i = start; i < data.length; i++) down(schema.items, "/items", data[i], "/" + i);
-		}
-		if (Array.isArray(schema.allOf)) for (let i = 0; i < schema.allOf.length; i++) down(schema.allOf[i], "/allOf/" + i, data, "");
-		for (const kw of ["anyOf", "oneOf"]) if (Array.isArray(schema[kw])) {
-			for (let i = 0; i < schema[kw].length; i++) if (isValid(schema[kw][i], data)) down(schema[kw][i], "/" + kw + "/" + i, data, "");
-		}
-		if (schema.if !== void 0) {
-			const taken = isValid(schema.if, data);
-			if (taken && schema.then !== void 0) down(schema.then, "/then", data, "");
-			if (!taken && schema.else !== void 0) down(schema.else, "/else", data, "");
-		}
-	}
-	function toOutput(validator, data, opts) {
-		const format = opts && opts.format || "basic";
-		const result = validator.validate(data);
-		if (format === "flag") return { valid: result.valid };
-		if (format !== "basic") throw new Error(`toOutput: unsupported format "${format}". Supported: "flag", "basic".`);
-		const schema = validator._schemaObj !== void 0 ? validator._schemaObj : validator._rawSchema;
-		const base = baseUri(schema);
-		const out = { valid: result.valid };
-		if (!result.valid) {
-			const errors = [];
-			for (const e of result.errors) errors.push(unitFor(e, base));
-			out.errors = errors;
-			return out;
-		}
-		const annotations = [];
-		const isValid = (sub, value) => {
-			try {
-				return new validator.constructor(sub).isValidObject(value);
-			} catch {
-				return false;
-			}
-		};
-		collectAnnotations(schema, data, "", "", base, annotations, isValid, 0);
-		if (annotations.length) out.annotations = annotations;
-		return out;
-	}
-	module.exports = {
-		toOutput,
-		METADATA_KEYWORDS
-	};
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/retry-message.js
-var require_retry_message = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	function phrase(error) {
-		const p = error.params || {};
-		if (error.keyword === "multipleOf" && typeof p.multipleOf === "number") {
-			const m = p.multipleOf;
-			if (m > 0 && m < 1) {
-				const places = Math.round(Math.log10(1 / m));
-				if (Math.abs(Math.pow(10, -places) - m) < Number.EPSILON * 8) return `must be rounded to ${places} decimal place${places === 1 ? "" : "s"}`;
-			}
-		}
-		return null;
-	}
-	function line(error) {
-		const where = error.instancePath || error.path || "";
-		const body = phrase(error) || (typeof error.detail === "string" && error.detail ? error.detail : error.message);
-		const raw = error.received === void 0 || error.received === null ? "" : String(error.received);
-		const head = raw.charAt(0);
-		const received = head === "[" && /^\[(object|array)\b/.test(raw) || head === "{" || head === "[" && raw.charAt(raw.length - 1) === "]" ? "" : raw;
-		const got = received && body && !body.includes(received) ? `, got ${received}` : "";
-		return `${where || "/"}: ${body}${got}`;
-	}
-	function toRetryMessage(errors, opts) {
-		if (!errors || typeof errors.length !== "number" || errors.length === 0) return "";
-		const limit = opts && typeof opts.limit === "number" ? opts.limit : 20;
-		const shown = errors.length > limit ? Array.prototype.slice.call(errors, 0, limit) : errors;
-		const lines = [];
-		for (let i = 0; i < shown.length; i++) lines.push(line(shown[i]));
-		if (errors.length > shown.length) lines.push(`and ${errors.length - shown.length} more`);
-		return lines.join("\n");
-	}
-	module.exports = { toRetryMessage };
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/describe-schema.js
-var require_describe_schema = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const MAX_DEPTH = 12;
-	function lit(v) {
-		try {
-			return JSON.stringify(v);
-		} catch (_) {
-			return String(v);
-		}
-	}
-	function resolveRef(schema, defs) {
-		const m = typeof schema.$ref === "string" && schema.$ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
-		if (m && defs && defs[m[1]]) return defs[m[1]];
-		return null;
-	}
-	function constraintsOf(s) {
-		const out = [];
-		if (Array.isArray(s.enum)) out.push("one of " + s.enum.map(lit).join(", "));
-		else if (s.const !== void 0) out.push("exactly " + lit(s.const));
-		else if (s.type) out.push(Array.isArray(s.type) ? s.type.join(" or ") : s.type);
-		if (typeof s.format === "string") out.push(s.format + " format");
-		if (typeof s.pattern === "string") out.push("matching " + s.pattern);
-		const range = (min, max, unit) => {
-			if (min !== void 0 && max !== void 0) out.push(`${min} to ${max}${unit}`);
-			else if (min !== void 0) out.push(`at least ${min}${unit}`);
-			else if (max !== void 0) out.push(`at most ${max}${unit}`);
-		};
-		range(s.minLength, s.maxLength, " characters");
-		range(s.minimum, s.maximum, "");
-		range(s.minItems, s.maxItems, " items");
-		if (s.exclusiveMinimum !== void 0) out.push("greater than " + s.exclusiveMinimum);
-		if (s.exclusiveMaximum !== void 0) out.push("less than " + s.exclusiveMaximum);
-		if (typeof s.multipleOf === "number") out.push(multipleOfPhrase(s.multipleOf));
-		if (s.uniqueItems === true) out.push("all items different");
-		if (typeof s.description === "string" && s.description) out.push(s.description);
-		return out;
-	}
-	function multipleOfPhrase(m) {
-		if (m > 0 && m < 1) {
-			const places = Math.round(Math.log10(1 / m));
-			if (Math.abs(Math.pow(10, -places) - m) < Number.EPSILON * 8) return `rounded to ${places} decimal place${places === 1 ? "" : "s"}`;
-		}
-		return "a multiple of " + m;
-	}
-	function isObjectSchema(s) {
-		return s && typeof s === "object" && s.properties && typeof s.properties === "object";
-	}
-	function describeObjectBody(schema, depth, defs, lines) {
-		const pad = "  ".repeat(depth);
-		const required = new Set(Array.isArray(schema.required) ? schema.required : []);
-		for (const [key, sub] of Object.entries(schema.properties)) describeNode(sub, key + (required.has(key) ? "" : " (optional)"), depth, defs, lines);
-		for (const key of required) if (!(key in schema.properties)) lines.push(`${pad}${key}: required, any`);
-		if (schema.additionalProperties === false) lines.push(`${pad}no other fields`);
-	}
-	function describeNode(schema, label, depth, defs, lines) {
-		const pad = "  ".repeat(depth);
-		if (schema === true || schema === void 0) {
-			lines.push(`${pad}${label}: any`);
-			return;
-		}
-		if (schema === false) {
-			lines.push(`${pad}${label}: nothing is allowed here`);
-			return;
-		}
-		if (typeof schema !== "object" || schema === null || depth > MAX_DEPTH) {
-			lines.push(`${pad}${label}: any`);
-			return;
-		}
-		const target = schema.$ref ? resolveRef(schema, defs) : null;
-		if (target) {
-			describeNode(target, label, depth, defs, lines);
-			return;
-		}
-		if (Array.isArray(schema.allOf) && schema.allOf.length) {
-			const merged = Object.assign({}, schema);
-			delete merged.allOf;
-			for (const part of schema.allOf) {
-				const resolved = part && part.$ref ? resolveRef(part, defs) || part : part;
-				if (resolved && typeof resolved === "object") Object.assign(merged, resolved, {
-					properties: Object.assign({}, merged.properties, resolved.properties),
-					required: [].concat(merged.required || [], resolved.required || [])
-				});
-			}
-			if (!merged.properties) delete merged.properties;
-			if (!merged.required || !merged.required.length) delete merged.required;
-			describeNode(merged, label, depth, defs, lines);
-			return;
-		}
-		const alternatives = schema.oneOf || schema.anyOf;
-		if (Array.isArray(alternatives) && alternatives.length) {
-			lines.push(`${pad}${label}: one of the following shapes`);
-			alternatives.forEach((alt, i) => describeNode(alt, `option ${i + 1}`, depth + 1, defs, lines));
-			return;
-		}
-		if (isObjectSchema(schema)) {
-			const own = constraintsOf(schema).filter((c) => c !== "object");
-			lines.push(`${pad}${label}: object${own.length ? ` (${own.join(", ")})` : ""}`);
-			describeObjectBody(schema, depth + 1, defs, lines);
-			return;
-		}
-		const rawItems = schema.items;
-		if (schema.type === "array" && rawItems && typeof rawItems === "object") {
-			const items = rawItems.$ref ? resolveRef(rawItems, defs) || rawItems : rawItems;
-			const own = constraintsOf(schema).filter((c) => c !== "array");
-			const bounds = own.length ? ` (${own.join(", ")})` : "";
-			if (isObjectSchema(items)) {
-				lines.push(`${pad}${label}: array${bounds}, each item is an object:`);
-				describeObjectBody(items, depth + 1, defs, lines);
-				return;
-			}
-			if (items.oneOf || items.anyOf || items.allOf) {
-				lines.push(`${pad}${label}: array${bounds}, each item is:`);
-				describeNode(items, "item", depth + 1, defs, lines);
-				return;
-			}
-			const inner = constraintsOf(items).join(", ") || "any";
-			lines.push(`${pad}${label}: array${bounds} of ${inner}`);
-			return;
-		}
-		lines.push(`${pad}${label}: ${constraintsOf(schema).join(", ") || "any"}`);
-	}
-	function describeSchema(schema, opts) {
-		const name = opts && opts.name || "output";
-		const defs = schema && (schema.$defs || schema.definitions) || null;
-		const lines = [];
-		describeNode(schema, name, 0, defs, lines);
-		return lines.join("\n");
-	}
-	module.exports = { describeSchema };
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/render-json.js
-var require_render_json = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	function renderJSON(errors, opts) {
-		opts = opts || {};
-		const payload = {
-			errors: Array.isArray(errors) ? errors : [],
-			summary: {
-				count: Array.isArray(errors) ? errors.length : 0,
-				context: opts.context || "input"
-			}
-		};
-		return opts.pretty ? JSON.stringify(payload, null, 2) : JSON.stringify(payload);
-	}
-	module.exports = { renderJSON };
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/index.js
-var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/codegen-engine.js
+var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { compileFunction } = require_compile_fn();
 	const core = require_validator_core();
 	const jsCompiler = require_js_compiler();
 	const { compileToJS, compileToJSCodegen } = jsCompiler;
@@ -19864,16 +20329,21 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			return;
 		}
 		st.seen.add(node);
+		const pk = "_pk" + st.n++;
+		lines.push(`const ${pk}=Object.getPrototypeOf(${ov})===Object.prototype`);
 		for (const [key, prop] of Object.entries(node.properties || {})) {
 			if (!prop || typeof prop !== "object") continue;
 			const k = JSON.stringify(key);
+			const inherited = key in Object.prototype;
+			const absent = inherited ? `!Object.hasOwn(${ov},${k})` : `(${ov}[${k}]===undefined||!${pk})&&!Object.hasOwn(${ov},${k})`;
 			if (prop.default !== void 0) {
 				const def = JSON.stringify(prop.default);
-				lines.push(key === "__proto__" ? `if(!Object.hasOwn(${ov},${k}))Object.defineProperty(${ov},${k},{value:${def},writable:true,enumerable:true,configurable:true})` : `if(!Object.hasOwn(${ov},${k}))${ov}[${k}]=${def}`);
+				lines.push(key === "__proto__" ? `if(${absent})Object.defineProperty(${ov},${k},{value:${def},writable:true,enumerable:true,configurable:true})` : `if(${absent})${ov}[${k}]=${def}`);
 			}
 			if (prop.properties && hasDefaultsInside(prop, /* @__PURE__ */ new Set())) {
 				const n = "_d" + st.n++;
-				lines.push(`if(Object.hasOwn(${ov},${k})){const ${n}=${ov}[${k}];if(typeof ${n}==='object'&&${n}!==null){`);
+				const own = inherited ? `Object.hasOwn(${ov},${k})` : `(${pk}||Object.hasOwn(${ov},${k}))`;
+				lines.push(`{const ${n}=${ov}[${k}];if(typeof ${n}==='object'&&${n}!==null&&${own}){`);
 				emitDefaults(prop, n, lines, st);
 				lines.push("}}");
 			}
@@ -19900,7 +20370,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		let fn = _preprocessBySource.get(src);
 		if (fn === void 0) {
 			try {
-				fn = new Function("d", src);
+				fn = compileFunction("d", src);
 			} catch {
 				fn = null;
 			}
@@ -19917,7 +20387,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		if (!expr) return decline("the set of keys to keep cannot be proven from the schema");
 		let copy;
 		try {
-			copy = new Function("data", "return " + expr);
+			copy = compileFunction("data", "return " + expr);
 		} catch {
 			return decline("code generation is not allowed here");
 		}
@@ -19987,7 +20457,7 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		self._coldCalls = n + 1;
 		return t;
 	}
-	core._registerCodegen({
+	module.exports = {
 		jsCompiler,
 		coldTwin,
 		nativePositions: () => require_native_positions().nativeTargeted,
@@ -19997,86 +20467,17 @@ var require_ata_validator = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		buildPreprocess: buildPreprocessCodegen,
 		buildParse,
 		aot: () => require_aot_browser()
-	});
-	function toTypeScript(...a) {
-		return require_ts_gen().toTypeScript(...a);
-	}
-	function renderPretty(...a) {
-		return require_render_pretty().renderPretty(...a);
-	}
-	function renderCompact(...a) {
-		return require_render_compact().renderCompact(...a);
-	}
-	function toOutput(...a) {
-		return require_output_format().toOutput(...a);
-	}
-	function toRetryMessage(...a) {
-		return require_retry_message().toRetryMessage(...a);
-	}
-	function describeSchema(...a) {
-		return require_describe_schema().describeSchema(...a);
-	}
-	function renderJSON(...a) {
-		return require_render_json().renderJSON(...a);
-	}
-	function _walkPointer(root, pointer) {
-		if (!pointer) return root;
-		const parts = pointer.replace(/^\//, "").split("/").map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
-		let cur = root;
-		for (const p of parts) {
-			if (cur == null) return void 0;
-			cur = cur[p];
-		}
-		return cur;
-	}
-	function attachSuggestions(errors, data) {
-		if (!errors) return errors;
-		const { suggestFor } = require_suggestions();
-		const { reprValue } = require_enrich_error();
-		for (const e of errors) {
-			if (!e || e.suggestion) continue;
-			let received = e.received;
-			if (received === void 0 && data !== void 0) {
-				const ptr = e.instancePath != null ? e.instancePath : e.path || "";
-				const raw = _walkPointer(data, ptr);
-				if (raw !== void 0 || ptr === "") received = reprValue(raw);
-			}
-			const s = suggestFor(received !== void 0 && e.received === void 0 ? Object.assign({}, e, { received }) : e, data);
-			if (s) e.suggestion = s;
-		}
-		require_diagnostic_source().setDiagnosticSource(errors, {
-			data,
-			mutatesInput: false
-		});
-		return errors;
-	}
-	module.exports = {
-		Validator: core.Validator,
-		compile: core.compile,
-		validate: core.validate,
-		validateAsync: core.validateAsync,
-		parseAsync: core.parseAsync,
-		version: core.version,
-		createPaddedBuffer: core.createPaddedBuffer,
-		SIMDJSON_PADDING: core.SIMDJSON_PADDING,
-		parseJSON: core.parseJSON,
-		toTypeScript,
-		defineSchema: core.defineSchema,
-		renderPretty,
-		renderCompact,
-		toOutput,
-		toRetryMessage,
-		describeSchema,
-		renderJSON,
-		attachSuggestions
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/index.browser.mjs
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords$1();
-const { Validator, compile, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, parseJSON, toTypeScript, defineSchema, renderPretty, renderCompact, toOutput, toRetryMessage, describeSchema, renderJSON } = (/* @__PURE__ */ __toESM(require_ata_validator(), 1)).default;
+var import_validator_core = /* @__PURE__ */ __toESM(require_validator_core(), 1);
+var import_codegen_engine = /* @__PURE__ */ __toESM(require_codegen_engine(), 1);
+import_validator_core.default._registerCodegen(import_codegen_engine.default);
+const { Validator, compile, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, parseJSON, defineSchema } = import_validator_core.default;
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.46.1_yaml@2.9.1/node_modules/ata-validator/lib/t.js
+//#region ../node_modules/.pnpm/ata-validator@1.51.0_yaml@2.9.1/node_modules/ata-validator/lib/t.js
 var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const OPTIONAL = Symbol.for("ata.t.optional");
 	const { attach: attachRefine } = require_refine();
