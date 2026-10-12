@@ -34,7 +34,7 @@
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
     "arktype": "^2.2.8",
-    "ata-validator": "^1.46.1",
+    "ata-validator": "^1.51.0",
     "decoders": "^2.12.2",
     "dedent": "catalog:",
     "effect": "^4.0.2",
@@ -52,7 +52,7 @@
     "typia": "^15.1.0",
     "valibot": "catalog:",
     "yup": "^1.7.1",
-    "z-schema": "^12.4.6",
+    "z-schema": "^12.5.0",
     "zod": "^4.6.5",
     "zod-to-json-schema": "^3.25.2"
   },
