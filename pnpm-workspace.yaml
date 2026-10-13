@@ -13,7 +13,6 @@ allowBuilds:
   sharp: false
 catalog:
   "@oxfmt/binding-linux-x64-gnu": ^0.72.0
-  "@standard-schema/spec": ^1.1.0
   "@ttsc/unplugin": "0.31.3"
   "@types/node": ^26
   "@types/react": ^19.3.0

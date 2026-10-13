@@ -29,7 +29,6 @@
     "@schema-benchmarks/json-schema-tests": "workspace:*",
     "@schema-benchmarks/schemas": "workspace:*",
     "@schema-benchmarks/utils": "workspace:*",
-    "@standard-schema/spec": "catalog:",
     "@ttsc/unplugin": "catalog:",
     "gzip-size": "^7.0.0",
     "p-limit": "^7.3.3",
