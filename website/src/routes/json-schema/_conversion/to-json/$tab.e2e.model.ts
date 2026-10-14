@@ -2,7 +2,7 @@ import { useTable as createTableHandle } from "@rickcedwhat/playwright-smart-tab
 import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
 import { lazy } from "@schema-benchmarks/utils";
 
-import { PageObjectModel, TabObjectModel } from "#e2e/fixtures/base.ts";
+import { PageObjectModel, TabObjectModel, withFilters } from "#e2e/fixtures/base.ts";
 import { expect } from "#e2e/fixtures/expect";
 import { trimSortLabels } from "#e2e/utils";
 import {
@@ -10,11 +10,11 @@ import {
   jsonSchemaDirectionProps,
 } from "#src/routes/json-schema/_conversion/-constants";
 
-class BenchmarksTab extends TabObjectModel<ToJsonPage> {
+class BenchmarksTab extends withFilters(TabObjectModel<ToJsonPage>) {
   url = "/json-schema/to-json/bench";
   tabName = "Benchmarks";
 
-  targetToggle = this.page.getByRole("list", { name: "Target" });
+  targetToggle = this.filters.getByRole("list", { name: "Target" });
 
   getTargetLabel(target: JsonSchemaConversionTarget) {
     return jsonSchemaConversionTargetProps.labels[target].label;
@@ -27,7 +27,7 @@ class BenchmarksTab extends TabObjectModel<ToJsonPage> {
     });
   }
 
-  directionFilter = this.page.getByRole("list", { name: "Type" });
+  directionFilter = this.filters.getByRole("list", { name: "Type" });
 
   getDirectionLabel(direction: JsonSchemaDirection) {
     return jsonSchemaDirectionProps.labels[direction].label;

@@ -2,16 +2,16 @@ import { useTable as createTableHandle } from "@rickcedwhat/playwright-smart-tab
 import type { MinifyType } from "@schema-benchmarks/bench";
 import { lazy } from "@schema-benchmarks/utils";
 
-import { PageObjectModel } from "#e2e/fixtures/base";
+import { PageObjectModel, withFilters } from "#e2e/fixtures/base";
 import { trimSortLabels } from "#e2e/utils";
 
 import { minifyTypeProps } from "./-constants";
 
-export class DownloadPage extends PageObjectModel {
+export class DownloadPage extends withFilters(PageObjectModel) {
   url = "/download";
   title = /Download/;
 
-  minifyToggle = this.main.getByRole("list", { name: "Minify" });
+  minifyToggle = this.filters.getByRole("list", { name: "Minify" });
 
   getMinifyTypeLink(minifyType: MinifyType) {
     return this.minifyToggle.getByRole("link", {
@@ -20,9 +20,9 @@ export class DownloadPage extends PageObjectModel {
     });
   }
 
-  downloadSpeedInput = this.main.getByRole("spinbutton", { name: "Download speed" });
+  downloadSpeedInput = this.filters.getByRole("spinbutton", { name: "Download speed" });
 
-  speedPresets = this.main.getByRole("toolbar", { name: "Speed presets" });
+  speedPresets = this.filters.getByRole("toolbar", { name: "Speed presets" });
 
   getSpeedPresetButtonByLabel(label: string) {
     return this.speedPresets.getByRole("link", { name: label });

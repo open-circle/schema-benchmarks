@@ -3,7 +3,7 @@ import type { DataType } from "@schema-benchmarks/bench";
 import type { OptimizeType, ErrorType } from "@schema-benchmarks/schemas";
 import { lazy } from "@schema-benchmarks/utils";
 
-import { PageObjectModel } from "#e2e/fixtures/base";
+import { PageObjectModel, withFilters } from "#e2e/fixtures/base";
 import { expect } from "#e2e/fixtures/expect";
 import { trimSortLabels } from "#e2e/utils";
 import {
@@ -12,8 +12,8 @@ import {
   optimizeTypeProps,
 } from "#src/routes/_benchmarks/_runtime/-constants";
 
-export abstract class RuntimePage extends PageObjectModel {
-  optimizeFilter = this.main.getByRole("list", { name: "Optimizations" });
+export abstract class RuntimePage extends withFilters(PageObjectModel) {
+  optimizeFilter = this.filters.getByRole("list", { name: "Optimizations" });
 
   getOptimizeTypeLabel(type: OptimizeType) {
     return optimizeTypeProps.labels[type].label;
@@ -68,7 +68,7 @@ export function withDataToggle<
   Constructor extends abstract new (...args: Array<any>) => RuntimePage,
 >(Base: Constructor) {
   abstract class DataToggleMixin extends Base {
-    dataToggle = this.main.getByRole("list", { name: "Data" });
+    dataToggle = this.filters.getByRole("list", { name: "Data" });
 
     getDataTypeLabel(dataType: DataType) {
       return dataTypeProps.labels[dataType].label;
@@ -88,7 +88,7 @@ export function withErrorTypeFilter<
   Constructor extends abstract new (...args: Array<any>) => RuntimePage,
 >(Base: Constructor) {
   abstract class ErrorTypeFilterMixin extends Base {
-    errorTypeFilter = this.main.getByRole("list", { name: "Abort early" });
+    errorTypeFilter = this.filters.getByRole("list", { name: "Abort early" });
 
     getErrorTypeLabel(errorType: ErrorType) {
       return errorTypeProps.labels[errorType].label;

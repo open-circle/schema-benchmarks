@@ -4,6 +4,7 @@ import { page } from "vite-plus/test/browser";
 
 import { it } from "#test/browser/fixtures";
 
+import { PageFilters } from ".";
 import { type OptionLabel, PageFilterChips } from "./chips";
 
 const options = ["foo", "bar", "baz"] as const;
@@ -26,25 +27,32 @@ const locators = unsafeFromEntries(
 describe("PageFilterChips", () => {
   it("should render options", async () => {
     await page.renderWithProviders(
-      <PageFilterChips
-        title="Test"
-        options={options}
-        labels={labels}
-        getLinkOptions={getLinkOptions}
-      />,
+      <PageFilters>
+        <PageFilterChips
+          title="Test"
+          options={options}
+          labels={labels}
+          getLinkOptions={getLinkOptions}
+        />
+      </PageFilters>,
     );
+    // workaround - <search> element implicit role of "search" doesn't seem to be picked up
+    const filters = page.getByLabelText("Filters");
+    await expect.element(filters).toBeInTheDocument();
     for (const option of options) {
       await expect.element(locators[option]).toBeInTheDocument();
     }
   });
   it("should switch between options", async () => {
     const { history } = await page.renderWithProviders(
-      <PageFilterChips
-        title="Test"
-        options={options}
-        labels={labels}
-        getLinkOptions={getLinkOptions}
-      />,
+      <PageFilters>
+        <PageFilterChips
+          title="Test"
+          options={options}
+          labels={labels}
+          getLinkOptions={getLinkOptions}
+        />
+      </PageFilters>,
       {
         historyOpts: {
           initialEntries: ["/foo"],

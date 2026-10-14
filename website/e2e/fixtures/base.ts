@@ -88,3 +88,12 @@ export function step<TThis>(
     };
   };
 }
+
+export function withFilters<
+  Constructor extends abstract new (...args: Array<any>) => ComponentObjectModel,
+>(Base: Constructor) {
+  abstract class WithFilters extends Base {
+    filters = this.main.getByRole("search", { name: "Filters" });
+  }
+  return WithFilters;
+}

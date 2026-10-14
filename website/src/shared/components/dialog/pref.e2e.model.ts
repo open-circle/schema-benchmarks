@@ -17,7 +17,7 @@ export class PrefsDialog extends ComponentObjectModel {
       if (!(await this.dialog.isVisible())) {
         await this.openButton.click();
       }
-      await expect(this.dialog).toBeVisible({ timeout: 5_000 });
+      await expect(this.dialog).toBeVisible({ timeout: 1_000 });
     }).toPass({ timeout: 5_000 });
   }
 

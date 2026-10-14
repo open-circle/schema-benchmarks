@@ -1,11 +1,11 @@
-import type { ReactNode } from "react";
+import type { ComponentPropsWithRef, ReactNode } from "react";
 import bem from "react-bem-helper";
-
-import { classed } from "#src/shared/components/utils";
 
 const cls = bem("page-filters");
 
-export const PageFilters = classed.div(cls().className);
+export function PageFilters({ className, ...props }: ComponentPropsWithRef<"search">) {
+  return <search {...props} {...cls({ extra: className })} aria-label="Filters" />;
+}
 
 PageFilters.displayName = "PageFilters";
 

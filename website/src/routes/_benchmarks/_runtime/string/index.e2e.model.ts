@@ -7,7 +7,7 @@ export class StringPage extends withDataToggle(RuntimePage) {
   url = "/string";
   title = /String/;
 
-  formatOptions = this.page.getByRole("list", { name: "Format" });
+  formatOptions = this.filters.getByRole("list", { name: "Format" });
 
   getFormatLabel(format: StringFormat) {
     return stringFormatProps.labels[format].label;
