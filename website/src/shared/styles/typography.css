@@ -40,6 +40,13 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Paper Mono";
+  src: url("/fonts/PaperMono[wght].woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
 :root {
   --font-family-heading: "Monaspace Xenon", monospace;
   --font-family-body: "Monaspace Neon", monospace;
@@ -269,6 +276,22 @@ h6 {
   @extend .typo-subtitle2;
 }
 
+body {
+  @extend .typo-body1;
+}
+
+dt {
+  @extend .typo-caption;
+}
+
+th {
+  @extend .typo-subtitle2;
+}
+
+td {
+  @extend .typo-body2;
+}
+
 *:not(.material-symbols-sharp) {
   font-variation-settings: "slnt" var(--font-slant, 0);
 }
@@ -289,6 +312,57 @@ code {
   }
 }
 
+[data-style="code"],
+[data-style="normal"] {
+  font-feature-settings:
+    "calt" 1,
+    "liga" 1;
+
+  pre,
+  code,
+  pre[class*="language-"],
+  code[class*="language-"] {
+    font-family: var(--font-family-code);
+    font-feature-settings:
+      "calt",
+      "liga",
+      "ss01" var(--code-ligatures, 1),
+      "ss02" var(--code-ligatures, 1),
+      "ss03" var(--code-ligatures, 1),
+      "ss04" var(--code-ligatures, 1),
+      "ss05" var(--code-ligatures, 1),
+      "ss06" var(--code-ligatures, 1),
+      "ss07" var(--code-ligatures, 1),
+      "ss08" var(--code-ligatures, 1),
+      "ss09" var(--code-ligatures, 1),
+      "ss10" var(--code-ligatures, 1);
+  }
+
+  td.numeric {
+    font-feature-settings:
+      "calt" 1,
+      "liga" 1,
+      "tnum" 1;
+  }
+}
+
+[data-style="normal"],
+[data-style="paper"] {
+  --headline1-transform: none;
+  --headline2-transform: none;
+  --headline3-transform: none;
+  --headline4-transform: none;
+  --headline5-transform: none;
+  --headline6-transform: none;
+  --body1-transform: none;
+  --body2-transform: none;
+  --subtitle1-transform: none;
+  --subtitle2-transform: none;
+  --button-transform: none;
+  --overline-transform: uppercase;
+  --caption-transform: none;
+}
+
 [data-style="normal"] {
   --font-family-body: "Mona Sans", sans-serif;
   --font-family-heading: "Mona Sans", sans-serif;
@@ -296,31 +370,76 @@ code {
   --font-family-admonition: "Mona Sans", sans-serif;
 
   --headline1-size: 6rem;
-  --headline1-transform: none;
   --headline2-size: 3.75rem;
-  --headline2-transform: none;
   --headline3-size: 3rem;
-  --headline3-transform: none;
   --headline4-size: 2.125rem;
-  --headline4-transform: none;
   --headline5-size: 1.5rem;
-  --headline5-transform: none;
   --headline6-size: 1.25rem;
-  --headline6-transform: none;
   --body1-size: 1rem;
-  --body1-transform: none;
   --body2-size: 0.875rem;
-  --body2-transform: none;
   --subtitle1-size: 1rem;
-  --subtitle1-transform: none;
   --subtitle2-size: 0.875rem;
-  --subtitle2-transform: none;
   --button-size: 0.875rem;
-  --button-transform: none;
   --overline-size: 0.625rem;
-  --overline-transform: uppercase;
   --caption-size: 0.75rem;
-  --caption-transform: none;
+}
+
+[data-style="paper"] {
+  --font-family-heading: "Paper Mono", monospace;
+  --font-family-body: "Paper Mono", monospace;
+  --font-family-code: "Paper Mono", monospace;
+  --font-family-button: "Paper Mono", monospace;
+  --font-family-comment: "Paper Mono", monospace;
+  --font-family-doc-comment: "Paper Mono", monospace;
+  /*
+   ss01: coding ligatures 
+   ss02: duospace characters (not monospace)
+   ss03: narrow spaces (not monospace)
+   ss04: small arrows
+   cv01: single-story a
+   zero: slashed zero
+   */
+
+  /* body: duospace characters, narrow spaces, single-story a */
+  font-feature-settings:
+    "ss02" 1,
+    "ss03" 1,
+    "cv01" 1;
+
+  .typo-headline1,
+  h1,
+  .typo-headline2,
+  h2,
+  .typo-headline3,
+  h3,
+  .typo-headline4,
+  h4,
+  .typo-headline5,
+  h5,
+  .typo-headline6,
+  h6,
+  th {
+    /* headings: duospace characters */
+    font-feature-settings: "ss02" 1;
+  }
+
+  code,
+  pre,
+  code[class*="language-"],
+  pre[class*="language-"] {
+    /* code: coding ligatures, slashed zeros (nothing that un-monospaces) */
+    font-feature-settings:
+      "ss01" 1,
+      "zero" 1;
+  }
+
+  td.numeric,
+  .plot-container {
+    /* numeric: slashed zeros, tabular nums */
+    font-feature-settings:
+      "zero" 1,
+      "tnum" 1;
+  }
 }
 
 em,

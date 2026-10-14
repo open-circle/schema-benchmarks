@@ -8,10 +8,11 @@ export const themeLabels: Record<Theme, { label: string; icon: string }> = {
   system: { label: "System", icon: "routine" },
 };
 
-export const styleSchema = v.fallback(v.picklist(["code", "normal"]), "code");
+export const styleSchema = v.fallback(v.picklist(["code", "paper", "normal"]), "code");
 export type Style = v.InferOutput<typeof styleSchema>;
 export const styleLabels: Record<Style, { label: string; icon: string }> = {
   code: { label: "Code", icon: "code" },
+  paper: { label: "Paper", icon: "description" },
   normal: { label: "Normal", icon: "match_case" },
 };
 

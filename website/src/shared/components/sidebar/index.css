@@ -64,6 +64,9 @@
       &:focus-visible,
       &[data-status="active"] {
         --font-slant: -11;
+        [data-style="paper"] & {
+          font-style: italic;
+        }
       }
       .list-item__text {
         transition:

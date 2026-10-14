@@ -191,6 +191,7 @@ export function withTooltip<TComp extends ElementType<TooltipableComponentProps>
             style={floatingStyles}
             {...cls({
               modifiers: { rich: typeof tooltip === "object" },
+              extra: "typo-caption",
             })}
             onBeforeToggle={(e) => {
               setOpen(e.newState === "open");

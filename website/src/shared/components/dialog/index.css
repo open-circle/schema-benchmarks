@@ -51,7 +51,6 @@
     overflow: auto;
   }
   .dialog__title {
-    @extend .typo-headline6;
     margin: 0;
     height: 2.5rem;
     display: flex;
@@ -60,7 +59,6 @@
   }
   .dialog__message {
     color: color(from var(--page-foreground) srgb r g b / var(--secondary-text));
-    @extend .typo-body1;
     margin: 0;
     margin-bottom: 1.75rem;
   }

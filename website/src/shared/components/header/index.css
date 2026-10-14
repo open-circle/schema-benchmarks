@@ -73,6 +73,9 @@
     &:hover,
     &:focus-visible {
       --font-slant: -11;
+      [data-style="paper"] & {
+        font-style: italic;
+      }
     }
     &:focus-visible {
       outline: none;

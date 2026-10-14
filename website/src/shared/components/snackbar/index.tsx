@@ -28,7 +28,7 @@ export function Snackbars() {
               visible: t.visible,
               [t.type]: true,
             },
-            extra: t.className,
+            extra: ["typo-body2", t.className ?? ""],
           })}
           style={t.style}
           {...t.ariaProps}

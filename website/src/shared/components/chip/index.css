@@ -47,7 +47,6 @@
       padding: 0.5rem 1rem;
     }
     --icon-size: 18;
-    @extend .typo-body2;
     font-family: var(--font-family-button);
     transition:
       background-color 250ms,

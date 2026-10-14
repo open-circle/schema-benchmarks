@@ -41,7 +41,7 @@ export const Button = withTooltip(function Button({
       disabled={disabled || loading}
       {...buttonCls({
         modifiers: [variant, color].filter(nonNullish),
-        extra: className,
+        extra: ["typo-button", className ?? ""],
       })}
     >
       {loading ? (
@@ -69,7 +69,7 @@ export const ExternalLinkButton = withTooltip(function ExternalLinkButton({
       {...props}
       {...buttonCls({
         modifiers: [variant, color].filter(nonNullish),
-        extra: className,
+        extra: ["typo-button", className ?? ""],
       })}
     >
       {children}

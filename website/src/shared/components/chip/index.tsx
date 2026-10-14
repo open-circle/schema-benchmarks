@@ -41,7 +41,7 @@ export function Chip({ children, className, activated, haptic, onClick, ...props
         type="button"
         {...props}
         aria-pressed={activated}
-        {...cls({ element: "button" })}
+        {...cls({ element: "button", extra: "typo-body2" })}
         onClick={(event) => {
           if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
           onClick?.(event);
@@ -64,7 +64,7 @@ function BaseLinkChip({ children, className, haptic, onClick, ...props }: LinkCh
       {/* oxlint-disable-next-line jsx_a11y/click-events-have-key-events, jsx_a11y/no-static-element-interactions */}
       <a
         {...props}
-        {...cls({ element: "button" })}
+        {...cls({ element: "button", extra: "typo-body2" })}
         onClick={(event) => {
           if (haptic) void haptics.trigger(typeof haptic === "boolean" ? undefined : haptic);
           onClick?.(event);

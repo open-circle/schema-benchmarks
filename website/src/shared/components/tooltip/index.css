@@ -4,7 +4,6 @@
 }
 
 .tooltip {
-  @extend .typo-caption;
   overflow: visible;
   margin: 0;
   padding: 0.25rem;

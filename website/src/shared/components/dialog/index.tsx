@@ -67,10 +67,10 @@ export const DialogContent = classed.div(cls("content").className);
 
 DialogContent.displayName = "DialogContent";
 
-export const DialogTitle = classed.h2(cls("title").className);
+export const DialogTitle = classed.h2([cls("title").className, "typo-headline6"]);
 
 DialogTitle.displayName = "DialogTitle";
 
-export const DialogMessage = classed.p(cls("message").className);
+export const DialogMessage = classed.p([cls("message").className, "typo-body1"]);
 
 DialogMessage.displayName = "DialogMessage";
