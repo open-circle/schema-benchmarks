@@ -1,7 +1,7 @@
 import type { RefCallback, RefObject } from "react";
 import { describe, expect, it, vi } from "vite-plus/test";
 
-import { mergeRefs } from "./index.ts";
+import { mergeRefs, mergeListeners } from "./index.ts";
 
 describe("mergeRefs", () => {
   it("should call all refs", () => {
@@ -18,5 +18,19 @@ describe("mergeRefs", () => {
     expect(refWithCleanup).toHaveBeenCalledWith(value);
     cleanup();
     expect(cleanupFn).toHaveBeenCalled();
+  });
+});
+
+describe("mergeListeners", () => {
+  it("should call all listeners", () => {
+    type Args = [string, number];
+    const listener1 = vi.fn<(...args: Args) => void>();
+    const listener2 = vi.fn<(...args: Args) => void>();
+    const merged = mergeListeners(listener1, listener2, undefined);
+
+    const args: Args = ["foo", 42];
+    merged(...args);
+    expect(listener1).toHaveBeenCalledWith(...args);
+    expect(listener2).toHaveBeenCalledWith(...args);
   });
 });

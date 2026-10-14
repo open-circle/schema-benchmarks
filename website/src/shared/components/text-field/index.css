@@ -48,7 +48,7 @@
     --text-field-border-color: var(--text-field-base-color);
   }
   .text-field--error &,
-  &:has(.text-field__input:invalid) {
+  &:has(.text-field__input:user-invalid) {
     --text-field-border-width: 2px;
     --text-field-border-color: var(--text-field-error-color);
   }

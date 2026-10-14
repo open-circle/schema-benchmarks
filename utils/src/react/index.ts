@@ -20,3 +20,13 @@ export const mergeRefs =
       }
     };
   };
+
+export const mergeListeners =
+  <TArgs extends ReadonlyArray<any>>(...listeners: Array<((...args: TArgs) => void) | undefined>) =>
+  (...args: TArgs) => {
+    for (const listener of listeners) {
+      if (typeof listener === "function") {
+        listener(...args);
+      }
+    }
+  };

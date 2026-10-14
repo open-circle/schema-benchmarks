@@ -1,5 +1,8 @@
-import type { ComponentPropsWithRef, ReactNode } from "react";
+import { mergeListeners } from "@schema-benchmarks/utils/react";
+import { useState, type ComponentPropsWithRef, type ReactNode } from "react";
 import bem from "react-bem-helper";
+
+import { useIdDefault } from "#src/shared/hooks/use-id-default";
 
 export interface TextFieldProps extends ComponentPropsWithRef<"input"> {
   startIcon?: ReactNode;
@@ -28,9 +31,23 @@ export function TextField({
   endIconIsButton,
   errorMessage,
   helpText,
+  id: idProp,
+  "aria-describedby": ariaDescribedBy,
+  "aria-invalid": ariaInvalid,
+  onBlur,
+  onChange,
   style,
   ...props
 }: TextFieldProps) {
+  const id = useIdDefault(idProp);
+  const messageId = `${id}-message`;
+  const [nativeInvalid, setNativeInvalid] = useState(false);
+  function calcNativeInvalid(event: React.SyntheticEvent<HTMLInputElement>) {
+    setNativeInvalid(event.currentTarget.matches(":user-invalid"));
+  }
+  const message = errorMessage || helpText;
+  const describedBy = [ariaDescribedBy, message ? messageId : undefined].filter(Boolean).join(" ");
+
   return (
     <label
       {...cls({
@@ -44,7 +61,15 @@ export function TextField({
       <div {...cls({ element: "container", extra: "typo-subtitle1" })}>
         {startIcon && <div {...cls("start-icon")}>{startIcon}</div>}
         {prefix && <span {...cls("prefix")}>{prefix}</span>}
-        <input {...props} {...cls("input")} />
+        <input
+          {...props}
+          id={id}
+          aria-describedby={describedBy || undefined}
+          aria-invalid={errorMessage ? true : (ariaInvalid ?? (nativeInvalid ? true : undefined))}
+          onBlur={mergeListeners(onBlur, calcNativeInvalid)}
+          onChange={mergeListeners(onChange, calcNativeInvalid)}
+          {...cls("input")}
+        />
         {suffix && <span {...cls("suffix")}>{suffix}</span>}
         {endIcon &&
           (endIconIsButton ? (
@@ -53,15 +78,16 @@ export function TextField({
             <div {...cls("end-icon")}>{endIcon}</div>
           ))}
       </div>
-      {errorMessage || helpText ? (
+      {message ? (
         <div {...cls("message-container")}>
           <p
+            id={messageId}
             {...cls({
               element: "message",
               extra: "typo-caption",
             })}
           >
-            {errorMessage || helpText}
+            {message}
           </p>
         </div>
       ) : null}
