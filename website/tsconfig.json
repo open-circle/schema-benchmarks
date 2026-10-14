@@ -4,6 +4,7 @@
     ".storybook/**/*",
     "vite.config.ts",
     "postcss.config.ts",
+    "playwright.config.ts",
     "preview.ts",
     "src/**/*",
     "test/**/*",

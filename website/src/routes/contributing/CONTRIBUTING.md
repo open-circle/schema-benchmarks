@@ -46,6 +46,8 @@ The following commands will help you check your changes before opening a PR. Wit
 - `vpr e2e` - runs end-to-end tests
 - `vpr bench:all` - runs all benchmark suites
 
+To run end-to-end tests against an existing local server on a different port, set `E2E_BASE_URL`, for example `E2E_BASE_URL=http://localhost:3001 vpr e2e`. The default is `http://localhost:3000`.
+
 ## PRs written by AI
 
 Please do not submit PRs solely written by AI. There's nothing wrong with using an assistant to speed up the process, but you should (at the very least) always review and test the changes yourself before submitting.
