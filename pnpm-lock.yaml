@@ -37,8 +37,8 @@ catalogs:
       specifier: ^3.0.0
       version: 3.0.0
     mutative:
-      specifier: ^1.3.0
-      version: 1.3.0
+      specifier: ^2.0.0
+      version: 2.0.0
     playwright:
       specifier: ^1.64.0
       version: 1.64.0
@@ -289,7 +289,7 @@ importers:
         version: 1.5.0
       mutative:
         specifier: 'catalog:'
-        version: 1.3.0
+        version: 2.0.0
       runtypes:
         specifier: ^7.0.5
         version: 7.0.5
@@ -461,7 +461,7 @@ importers:
         version: 3.4.0
       mutative:
         specifier: 'catalog:'
-        version: 1.3.0
+        version: 2.0.0
       normalize.css:
         specifier: ^8.0.1
         version: 8.0.1
@@ -7688,8 +7688,8 @@ packages:
       typescript:
         optional: true
 
-  mutative@1.3.0:
-    resolution: {integrity: sha512-8MJj6URmOZAV70dpFe1YnSppRTKC4DsMkXQiBDFayLcDI4ljGokHxmpqaBQuDWa4iAxWaJJ1PS8vAmbntjjKmQ==}
+  mutative@2.0.0:
+    resolution: {integrity: sha512-HCb6TyEvwUChR3K+sssLk2LqEAOobSlu1ZATUvoa7Kh952kzhyX+huPddmIFc0LYEctFRJb0+ioQybKMkFLO6A==}
     engines: {node: '>=14.0'}
 
   mute-stream@3.0.0:
@@ -16716,7 +16716,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  mutative@1.3.0: {}
+  mutative@2.0.0: {}
 
   mute-stream@3.0.0: {}
 
