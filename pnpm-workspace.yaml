@@ -17,10 +17,10 @@ catalog:
   "@types/node": ^26
   "@types/react": ^19.3.0
   "@types/react-dom": ^19.3.0
-  "@vitest/browser-playwright": 5.0.3
-  "@vitest/coverage-v8": 5.0.3
-  "@vitest/expect": 5.0.3
-  "@vitest/pretty-format": 5.0.3
+  "@vitest/browser-playwright": 5.0.4
+  "@vitest/coverage-v8": 5.0.4
+  "@vitest/expect": 5.0.4
+  "@vitest/pretty-format": 5.0.4
   dedent: ^1.7.2
   "mix-n-matchers": "^3.0.0"
   mutative: "^2.0.0"
@@ -32,15 +32,15 @@ catalog:
   typescript: 7.0.2
   "up-fetch": "^2.6.1"
   valibot: ^1.5.0
-  vite: npm:@voidzero-dev/vite-plus-core@1.1.0
-  vitest: 5.0.3
-  vite-plus: 1.1.0
+  vite: npm:@voidzero-dev/vite-plus-core@1.2.0
+  vitest: 5.0.4
+  vite-plus: 1.2.0
 minimumReleaseAgeExcludePrune: true
 overrides:
   "@opentelemetry/api": ^1.9.1
   "@types/node": ^26
   msw: ^3.0.2
-  rolldown: 1.2.11
+  rolldown: 1.2.13
   vite@*: "catalog:"
   vitest@*: "catalog:"
 update:
