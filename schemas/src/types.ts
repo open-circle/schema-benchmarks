@@ -19,8 +19,12 @@ export interface BaseBenchmarkConfig {
   throws?: boolean;
 }
 
+// oxlint-disable-next-line typescript/no-generated-empty-object-type
+type NotNullish = NonNullable<unknown>;
+
 export interface InitializationBenchmarkConfig extends BaseBenchmarkConfig {
-  run: () => MaybePromise<NonNullable<unknown>>;
+  // oxlint-disable-next-line typescript/no-generated-empty-object-type
+  run: () => MaybePromise<NotNullish>;
 }
 
 export interface ValidationBenchmarkConfig extends BaseBenchmarkConfig {
@@ -128,7 +132,8 @@ export interface ComplianceBenchmarkConfig extends BaseComplianceBenchmarkConfig
 
 export interface RoundtripComplianceBenchmarkConfig extends BaseComplianceBenchmarkConfig {
   // convert the schema and then back again
-  run: (schema: {} | boolean, context: ComplianceContext) => MaybePromise<{} | boolean>;
+  // oxlint-disable-next-line typescript/no-generated-empty-object-type
+  run: (schema: NotNullish, context: ComplianceContext) => MaybePromise<NotNullish>;
 }
 
 export interface SchemaConversionFromJsonConfig extends Omit<
