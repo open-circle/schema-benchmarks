@@ -5,8 +5,7 @@ import { staticMiddleware } from "srvx/static";
 import tanstackHandler from "./dist/server/server.js";
 
 const server = serve({
-  // oxlint-disable-next-line typescript/unbound-method
-  fetch: tanstackHandler.fetch,
+  fetch: (request) => tanstackHandler.fetch(request),
   middleware: [staticMiddleware({ dir: "./dist/client" })],
 });
 
