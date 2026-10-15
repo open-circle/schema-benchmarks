@@ -39,6 +39,7 @@ minimumReleaseAgeExcludePrune: true
 overrides:
   "@opentelemetry/api": ^1.9.1
   "@types/node": ^26
+  msw: ^3.0.2
   rolldown: 1.2.11
   vite@*: "catalog:"
   vitest@*: "catalog:"
