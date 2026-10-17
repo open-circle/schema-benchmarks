@@ -1846,7 +1846,7 @@ const EffectProto = {
 		return {
 			_id: "Effect",
 			op: this[identifier],
-			...args in this ? { args: this[args] } : void 0
+			..."~effect/Effect/args" in this ? { args: this[args] } : void 0
 		};
 	}
 };
@@ -2025,7 +2025,7 @@ function defaultEvaluate(_fiber) {
 const makePrimitiveProto = (options) => ({
 	...EffectProto,
 	[identifier]: options.op,
-	[evaluate]: options[evaluate] ?? defaultEvaluate,
+	[evaluate]: options["~effect/Effect/evaluate"] ?? defaultEvaluate,
 	[contA]: options[contA],
 	[contE]: options[contE],
 	[contAll]: options[contAll]
@@ -2061,7 +2061,7 @@ const makeExit = (options) => {
 			};
 		},
 		[symbol](that) {
-			return isExit(that) && that._tag === this._tag && equals$1(this[args], that[args]);
+			return isExit(that) && that._tag === this._tag && equals$1(this["~effect/Effect/args"], that["~effect/Effect/args"]);
 		},
 		[symbol$1]() {
 			return combine(string$1(options.op), hash(this[args]));
@@ -4459,7 +4459,7 @@ var FiberImpl = class {
 				current = cache.tracerContext ? cache.tracerContext(current, this) : current[evaluate](this);
 				if (current === Yield) {
 					const yielded = this._yielded;
-					if (ExitTypeId in yielded) {
+					if ("~effect/Exit" in yielded) {
 						this._deferredInterrupt = false;
 						this._yielded = void 0;
 						return yielded;
@@ -4471,7 +4471,7 @@ var FiberImpl = class {
 					return Yield;
 				}
 			} catch (error) {
-				if (!hasProperty(current, evaluate)) return exitDie(`Fiber.runLoop: Not a valid effect: ${String(current)}`);
+				if (!hasProperty(current, "~effect/Effect/evaluate")) return exitDie(`Fiber.runLoop: Not a valid effect: ${String(current)}`);
 				current = exitDie(error);
 			}
 		} finally {
@@ -4623,7 +4623,7 @@ const yieldNow = /*#__PURE__*/ (/* @__PURE__ */ makePrimitive({
 		fiber.currentDispatcher.scheduleTask(() => {
 			if (resumed) return;
 			fiber.evaluate(exitVoid);
-		}, this[args] ?? 0);
+		}, this["~effect/Effect/args"] ?? 0);
 		return fiber.yieldWith(() => {
 			resumed = true;
 		});
@@ -8669,7 +8669,7 @@ function run(ast) {
 function parserResult(result, input) {
 	if (result === sameExit) return succeed$1(input);
 	if (!effectIsExit(result)) return flatMapEager(result, getValue);
-	return result[args] === missing ? getValue(missing) : result;
+	return result["~effect/Effect/args"] === missing ? getValue(missing) : result;
 }
 function runWithCompiler(compiler, ast) {
 	let parser;
@@ -8677,7 +8677,7 @@ function runWithCompiler(compiler, ast) {
 		const result = (parser ??= compiler(ast))(input, options ?? defaultParseOptions);
 		if (result === sameExit) return succeed$1(input);
 		if (!effectIsExit(result)) return flatMapEager(result, getValue);
-		return result[args] === missing ? getValue(missing) : result;
+		return result["~effect/Effect/args"] === missing ? getValue(missing) : result;
 	};
 }
 function runSync(effect, message) {

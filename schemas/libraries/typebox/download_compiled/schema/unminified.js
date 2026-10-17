@@ -623,6 +623,8 @@ const IntegerPattern = "-?(?:0|[1-9][0-9]*)";
 function Null(options) {
 	return Create({ "~kind": "Null" }, { type: "null" }, options);
 }
+//#endregion
+//#region ../node_modules/.pnpm/typebox@1.3.37/node_modules/typebox/build/type/types/number.mjs
 /** Creates a Number type. */
 function Number$1(options) {
 	return Create({ "~kind": "Number" }, { type: "number" }, options);
