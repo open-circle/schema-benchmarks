@@ -307,6 +307,7 @@ function newError(Definition) {
 	}
 	return new Definition();
 }
+/* @__NO_SIDE_EFFECTS__ */
 function $constructor(name, initializer, proto, params) {
 	const zodProto = {};
 	function Internals(def) {
@@ -431,8 +432,7 @@ const initializer = (inst, def) => {
 		});
 	}
 };
-$constructor("$ZodError", initializer);
-const $ZodRealError = $constructor("$ZodError", initializer, void 0, { Parent: Error });
+const $ZodRealError = /* @__PURE__ */ $constructor("$ZodError", initializer, void 0, { Parent: Error });
 //#endregion
 //#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/parse.js
 const _parse = (_Err) => {

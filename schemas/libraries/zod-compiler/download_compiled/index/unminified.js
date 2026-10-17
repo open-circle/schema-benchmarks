@@ -411,6 +411,7 @@ function hide(inst, key, value) {
 	return own(inst, key, value, false);
 }
 /** Adds members a table derives from the instance: each builds on first read and shadows as own data, and assignment shadows the same way, as when these were own properties. */
+/* @__NO_SIDE_EFFECTS__ */
 function derived(computes, table) {
 	for (const key in computes) {
 		const compute = computes[key];
@@ -562,6 +563,7 @@ function newError(Definition) {
 	}
 	return new Definition();
 }
+/* @__NO_SIDE_EFFECTS__ */
 function $constructor(name, initializer, proto, params) {
 	const zodProto = {};
 	function Internals(def) {
@@ -692,8 +694,7 @@ const initializer$1 = (inst, def) => {
 		});
 	}
 };
-const $ZodError = $constructor("$ZodError", initializer$1);
-$constructor("$ZodError", initializer$1, void 0, { Parent: Error });
+const $ZodError = /* @__PURE__ */ $constructor("$ZodError", initializer$1);
 /** Get-or-create `obj[key]` as an own data property. A path segment naming an inherited member
 * ("toString", "constructor") would otherwise read through to the prototype, and assigning
 * "__proto__" would hit the setter instead of creating a key. */
