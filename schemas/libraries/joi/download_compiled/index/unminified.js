@@ -828,7 +828,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			8013(e, t, r) {
 				"use strict";
-				const s = r(554), n = r(9415), a = r(1532);
+				const s = r(9415), n = r(1532);
 				t.Report = class {
 					constructor(e, r, s, n, a, o, i) {
 						if (this.code = e, this.flags = n, this.messages = a, this.path = o.path, this.prefs = i, this.state = o, this.value = r, this.message = null, this.template = null, this.local = s || {}, this.local.label = t.label(this.flags, this.state, this.prefs, this.messages), void 0 === this.value || this.local.hasOwnProperty("value") || (this.local.value = this.value), this.path.length) {
@@ -859,11 +859,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					let t = "";
 					for (const r of e) "object" != typeof r && ("string" == typeof r ? (t && (t += "."), t += r) : t += `[${r}]`);
 					return t;
-				}, t.template = function(e, t, r, s, o) {
+				}, t.template = function(e, t, r, a, o) {
 					if (!t) return;
-					if (a.isTemplate(t)) return "root" !== r ? t : null;
+					if (n.isTemplate(t)) return "root" !== r ? t : null;
 					let i = o.errors.language;
-					if (n.isResolvable(i) && (i = i.resolve(e, s, o)), i && t[i]) {
+					if (s.isResolvable(i) && (i = i.resolve(e, a, o)), i && t[i]) {
 						if (void 0 !== t[i][r]) return t[i][r];
 						if (void 0 !== t[i]["*"]) return t[i]["*"];
 					}
@@ -916,7 +916,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					static isError(e) {
 						return e instanceof t.ValidationError;
 					}
-				}, t.ValidationError.prototype.isJoi = !0, t.ValidationError.prototype.name = "ValidationError", t.ValidationError.prototype.annotate = s.error;
+				}, t.ValidationError.prototype.isJoi = !0, t.ValidationError.prototype.name = "ValidationError", t.ValidationError.prototype.annotate = r(554).error;
 			},
 			2062(e, t, r) {
 				"use strict";
@@ -931,7 +931,13 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						const t = u.terms[e];
 						s(void 0 === c.$_terms[e], "Invalid term override for", u.type, e), c.$_terms[e] = t.init, m[e] = t;
 					}
-					u.terms = m, u.args || (u.args = f.args), u.prepare = i.prepare(u.prepare, f.prepare), u.coerce && ("function" == typeof u.coerce && (u.coerce = { method: u.coerce }), u.coerce.from && !Array.isArray(u.coerce.from) && (u.coerce = {
+					if (u.terms = m, u.args || (u.args = f.args), u.prepare) {
+						const { method: e, undefined: t } = "function" == typeof u.prepare ? { method: u.prepare } : u.prepare;
+						u.prepare = t ? e : (t, r) => {
+							if (void 0 !== t) return e(t, r);
+						};
+					}
+					u.prepare = i.prepare(u.prepare, f.prepare), u.coerce && ("function" == typeof u.coerce && (u.coerce = { method: u.coerce }), u.coerce.from && !Array.isArray(u.coerce.from) && (u.coerce = {
 						method: u.coerce.method,
 						from: [].concat(u.coerce.from)
 					})), u.coerce = i.coerce(u.coerce, f.coerce), u.validate = i.validate(u.validate, f.validate);
@@ -1558,7 +1564,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						objects: s.boolean()
 					}).or("arrays", "objects").allow(!0, !1),
 					warnings: s.boolean()
-				}).strict(), n.nameRx = /^[a-zA-Z0-9]\w*$/, n.rule = s.object({
+				}).strict(), n.nameRx = /^[a-zA-Z0-9]\w*$/, n.hook = s.function().maxArity(3), n.rule = s.object({
 					alias: s.array().items(s.string().pattern(n.nameRx)).single(),
 					args: s.array().items(s.string(), s.object({
 						name: s.string().pattern(n.nameRx).required(),
@@ -1590,8 +1596,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						is: s.object().regex(),
 						then: s.forbidden()
 					}),
-					coerce: [s.function().maxArity(3), s.object({
-						method: s.function().maxArity(3).required(),
+					coerce: [n.hook, s.object({
+						method: n.hook.required(),
 						from: s.array().items(s.string()).single()
 					})],
 					flags: s.object().pattern(n.nameRx, s.object({
@@ -1602,7 +1608,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					messages: [s.object(), s.string()],
 					modifiers: s.object().pattern(n.nameRx, s.function().minArity(1).maxArity(2)),
 					overrides: s.object().pattern(n.nameRx, s.function()),
-					prepare: s.function().maxArity(3),
+					prepare: [n.hook, s.object({
+						method: n.hook.required(),
+						undefined: s.boolean()
+					})],
 					rebuild: s.function().arity(1),
 					rules: s.object().pattern(n.nameRx, n.rule),
 					jsonSchema: s.function(),
@@ -1613,7 +1622,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							to: s.string().required()
 						}).required() })])
 					})),
-					validate: s.function().maxArity(3)
+					validate: n.hook
 				}).strict(), t.extensions = s.array().items(s.object(), s.function().arity(1)).strict(), n.desc = {
 					buffer: s.object({ buffer: s.string() }),
 					func: s.object({
@@ -4634,7 +4643,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					};
 					r.mainstay.tracer.entry(t, r);
 					const l = t._definition;
-					if (l.prepare && void 0 !== e && s.convert) {
+					if (l.prepare && s.convert) {
 						const t = l.prepare(e, o);
 						if (t) {
 							if (r.mainstay.tracer.value(r, "prepare", e, t.value), t.errors) return u.finalize(t.value, [].concat(t.errors), o);
@@ -5392,8 +5401,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						super(e || "Unknown error"), r = this, n = "AssertError", (s = function(e) {
 							var t = function(e) {
 								if ("object" != typeof e || !e) return e;
-								var t = e[Symbol.toPrimitive];
-								if (void 0 !== t) {
+								var t;
+								if ("undefined" != typeof Symbol && void 0 !== (t = e[Symbol.toPrimitive])) {
 									var r = t.call(e, "string");
 									if ("object" != typeof r) return r;
 									throw new TypeError("@@toPrimitive must return a primitive value.");
@@ -7306,7 +7315,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			6913(e) {
 				"use strict";
-				e.exports = { version: "18.2.9" };
+				e.exports = { version: "18.3.0" };
 			}
 		};
 		const t = {};
