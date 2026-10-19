@@ -10,8 +10,8 @@ catalogs:
       specifier: ^0.73.0
       version: 0.73.0
     '@ttsc/unplugin':
-      specifier: 0.33.0
-      version: 0.33.0
+      specifier: 0.33.1
+      version: 0.33.1
     '@types/react':
       specifier: ^19.3.0
       version: 19.3.0
@@ -49,8 +49,8 @@ catalogs:
       specifier: ^19.3.1
       version: 19.3.1
     ttsc:
-      specifier: 0.33.0
-      version: 0.33.0
+      specifier: 0.33.1
+      version: 0.33.1
     typebox:
       specifier: ^1.4.2
       version: 1.4.2
@@ -86,8 +86,8 @@ importers:
   .:
     devDependencies:
       '@tanstack/eslint-plugin-query':
-        specifier: ^5.104.3
-        version: 5.104.3(eslint@10.13.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)
+        specifier: ^5.104.4
+        version: 5.104.4(eslint@10.13.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)
       '@tanstack/eslint-plugin-router':
         specifier: ^1.162.0
         version: 1.162.0(eslint@10.13.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)
@@ -132,7 +132,7 @@ importers:
         version: link:../utils
       '@ttsc/unplugin':
         specifier: 'catalog:'
-        version: 0.33.0(ttsc@0.33.0)
+        version: 0.33.1(ttsc@0.33.1)
       gzip-size:
         specifier: ^7.0.0
         version: 7.0.0
@@ -144,7 +144,7 @@ importers:
         version: 6.2.2
       ttsc:
         specifier: 'catalog:'
-        version: 0.33.0
+        version: 0.33.1
       typebox:
         specifier: 'catalog:'
         version: 1.4.2
@@ -212,7 +212,7 @@ importers:
         version: 0.0.12
       '@ata-project/keywords':
         specifier: ^0.3.3
-        version: 0.3.3(ata-validator@1.54.0(yaml@2.9.1))
+        version: 0.3.3(ata-validator@1.55.0(yaml@2.9.1))
       '@cfworker/json-schema':
         specifier: ^4.1.1
         version: 4.1.1
@@ -259,8 +259,8 @@ importers:
         specifier: ^2.2.8
         version: 2.2.8
       ata-validator:
-        specifier: ^1.54.0
-        version: 1.54.0(yaml@2.9.1)
+        specifier: ^1.55.0
+        version: 1.55.0(yaml@2.9.1)
       decoders:
         specifier: ^2.12.2
         version: 2.12.2
@@ -305,7 +305,7 @@ importers:
         version: 1.4.2
       typia:
         specifier: ^15.1.0
-        version: 15.1.0(ttsc@0.33.0)
+        version: 15.1.0(ttsc@0.33.1)
       valibot:
         specifier: 'catalog:'
         version: 1.5.0(typescript@7.0.2)
@@ -324,7 +324,7 @@ importers:
     devDependencies:
       '@ttsc/unplugin':
         specifier: 'catalog:'
-        version: 0.33.0(ttsc@0.33.0)
+        version: 0.33.1(ttsc@0.33.1)
       '@types/node':
         specifier: ^26
         version: 26.1.2
@@ -333,7 +333,7 @@ importers:
         version: 5.0.5(@vitest/browser@5.0.5)(vitest@5.0.5)
       ttsc:
         specifier: 'catalog:'
-        version: 0.33.0
+        version: 0.33.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -419,11 +419,11 @@ importers:
         specifier: ^0.24.1
         version: 0.24.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@tanstack/react-query':
-        specifier: ^5.104.3
-        version: 5.104.3(react@19.3.1)
+        specifier: ^5.104.4
+        version: 5.104.4(@types/react@19.3.0)(react@19.3.1)
       '@tanstack/react-query-devtools':
-        specifier: ^5.104.3
-        version: 5.104.3(@tanstack/react-query@5.104.3(react@19.3.1))(@types/react@19.3.0)(csstype@3.2.3)(react@19.3.1)
+        specifier: ^5.104.4
+        version: 5.104.4(@tanstack/react-query@5.104.4(@types/react@19.3.0)(react@19.3.1))(@types/react@19.3.0)(csstype@3.2.3)(react@19.3.1)
       '@tanstack/react-router':
         specifier: ^1.170.45
         version: 1.170.45(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -432,7 +432,7 @@ importers:
         version: 1.167.2(@tanstack/react-router@1.170.45(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.38)(csstype@3.2.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@tanstack/react-router-ssr-query':
         specifier: ^1.167.3
-        version: 1.167.3(@tanstack/query-core@5.104.3)(@tanstack/react-query@5.104.3(react@19.3.1))(@tanstack/react-router@1.170.45(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.38)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 1.167.3(@tanstack/query-core@5.104.4)(@tanstack/react-query@5.104.4(@types/react@19.3.0)(react@19.3.1))(@tanstack/react-router@1.170.45(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.38)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@tanstack/react-start':
         specifier: ^1.169.3
         version: 1.169.3(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rollup@4.62.2)(supports-color@7.2.0)
@@ -526,7 +526,7 @@ importers:
         version: 3.1.1(rollup@4.62.2)(supports-color@7.2.0)
       '@netlify/vite-plugin-tanstack-start':
         specifier: ^1.3.19
-        version: 1.3.19(@parcel/watcher@2.5.6)(@tanstack/react-start@1.169.3(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rollup@4.62.2)(supports-color@7.2.0))(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(aws4fetch@1.0.20)(rollup@4.62.2)(srvx@1.0.5)(supports-color@7.2.0)
+        version: 1.3.19(@parcel/watcher@2.5.6)(@tanstack/react-start@1.169.3(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rollup@4.62.2)(supports-color@7.2.0))(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(aws4fetch@1.0.20)(rollup@4.62.2)(srvx@1.0.6)(supports-color@7.2.0)
       '@playwright/test':
         specifier: ^1.64.1
         version: 1.64.1
@@ -636,8 +636,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0
       srvx:
-        specifier: ^1.0.5
-        version: 1.0.5
+        specifier: ^1.0.6
+        version: 1.0.6
       storybook:
         specifier: ^10.6.2
         version: 10.6.2(@types/react@19.3.0)(prettier@3.9.6)(react@19.3.1)(vite-plus@1.3.0(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(esbuild@0.28.2)(jiti@2.7.0)(msw@3.0.3(@types/node@26.1.2)(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(graphql@16.14.2)(supports-color@7.2.0)(typescript@7.0.2))(playwright@1.64.1)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))
@@ -705,42 +705,42 @@ packages:
     peerDependencies:
       ata-validator: '>=0.9.3'
 
-  '@ata-validator/native-darwin-arm64@1.54.0':
-    resolution: {integrity: sha512-F+koRP3qZ79bpGTxLUPpJ9l4bqyc0CImBhG7vNuC8/BvT3aX6esGy5JuHAX32udH3twoLBkRAGcBvoi1F7W9Wg==}
+  '@ata-validator/native-darwin-arm64@1.55.0':
+    resolution: {integrity: sha512-kgmxIX3H/YCrnK/HLCSnZX+I9Fuwb36MK9Upl/t/SwL+Eg0mronzl0mWvFxL7kd8c/VTXIAVvYKP3PzDJbWmyA==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ata-validator/native-darwin-x64@1.54.0':
-    resolution: {integrity: sha512-8XkOqMLQxLxORZrmlkeqfbU9tvQPrakPZ5PIOUDO4An5/Duzl6mi1FGQC9B5CiaDvkb3rhQNjT/ml7/5BkpCTQ==}
+  '@ata-validator/native-darwin-x64@1.55.0':
+    resolution: {integrity: sha512-WS9UTAwuZZknXGKaGUAtPGovoul1xE/QIsGdq9G1BCd2LYEp1I3xSHYBK40Ec/bovN2a1fe8bzxMqHrOQ+Iy+Q==}
     cpu: [x64]
     os: [darwin]
 
-  '@ata-validator/native-linux-arm64-gnu@1.54.0':
-    resolution: {integrity: sha512-nyPGyNK/eUhBM/7O01XA1CwI4zWc54tQvclLsNW8N7JXqJ0IWnJ7EkEKL6jQKzmli+WUS03a9gCfIV/wycZcrA==}
+  '@ata-validator/native-linux-arm64-gnu@1.55.0':
+    resolution: {integrity: sha512-6P4C8RmLem27+y5IC77Da8/nYRfXd5JVI/QrEcrtXZWx5oZGPuHTwwK6mDs1YpwO/24CSKt0T5tzGH+YoapQ1A==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-arm64-musl@1.54.0':
-    resolution: {integrity: sha512-t6DoCWFbcDf+Tmxd8aiWi3S7cTPHg6Exqann96sP2Q8f0zKK699u/zJIqLnZAgFICnm1BS0BqT9EOi1YdK2pgQ==}
+  '@ata-validator/native-linux-arm64-musl@1.55.0':
+    resolution: {integrity: sha512-CKdNL16N5G7ywSpqBs/DF8ldkgkaBv4P+4nJG1DLL4iKHnlA17Oje1ufVo4K2H8748GT7NF0PoG4T46pVftcmA==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-linux-x64-gnu@1.54.0':
-    resolution: {integrity: sha512-vFHBY4dyMQm56yTDE2CAhcJ2ClapK5MkePubkT2rQIx/YDwNIIV1Gnz1gEx/WFZEsUSvNWyQEyU8UTygmVCfkQ==}
+  '@ata-validator/native-linux-x64-gnu@1.55.0':
+    resolution: {integrity: sha512-jrrZTbeK/vPC5t3v0EzumbXC2mN+2/KoN0rMBNtchZpPvOwMEMaRqxPPB8V8xMt5feCSgWhNBcx5keCBRLhR/A==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-x64-musl@1.54.0':
-    resolution: {integrity: sha512-MmKSKPdVT4dWjheQwSAxWYMZDB7hkSpml0vJUtNzF8qDqX9+Pkg9f3dyVZIWw4tVRPN+PtbNQrU7rR3nrojhfg==}
+  '@ata-validator/native-linux-x64-musl@1.55.0':
+    resolution: {integrity: sha512-elElsIai0hFSosM/wwESEdGMSdMD2uyxA1exCKmBLVcGdl7aNQ0Jk0t2HNpnq6/Yy1rPCOKFnWcuZlhSxzjj0g==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-win32-x64@1.54.0':
-    resolution: {integrity: sha512-Orac+hrQdziXHUgmB5YMCly8fybGhaS6CToUmmYMwwO8+9L9J/1j8Orr8pG4Xv90dTmHJe0p1B4QbvVOSL/RUw==}
+  '@ata-validator/native-win32-x64@1.55.0':
+    resolution: {integrity: sha512-HpGyU+RyzoQadUBeSFN86EWdkXhK8MoWoNQdOuJaJychlJDB/fbEQMdnniwL9UYlgCxHjxm/o/EsrBWSRVqtVw==}
     cpu: [x64]
     os: [win32]
 
@@ -4095,8 +4095,8 @@ packages:
     peerDependencies:
       solid-js: '>=1.9.7'
 
-  '@tanstack/eslint-plugin-query@5.104.3':
-    resolution: {integrity: sha512-rIWTUJ2oo+YtHpwQwlOLRlkxzd1FAbig+UGHGZQC/QNnxaSPCDejAkR+ouOVn4tBeqyoY6nMSVFRjucJnnollQ==}
+  '@tanstack/eslint-plugin-query@5.104.4':
+    resolution: {integrity: sha512-hdiLHE3zgGgZ3oxRqmVwWNk/hfCIvA6thpMZso15Z2LrEdlABKrrQvfiL33ta8sMSdm8ABRMSeFZeN9a0P1q3A==}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: ^5.6.0 || ^6.0.0 || ^7.0.0
@@ -4121,11 +4121,11 @@ packages:
     resolution: {integrity: sha512-ROZj19aPPGYebeRPhFZNRlqNaR2e4vkcLbgiXfbi5uJu8WiW/etsYmkcAcoSQRGOwGZbbioWRX7xssewDRVRhw==}
     engines: {node: '>=20'}
 
-  '@tanstack/query-core@5.104.3':
-    resolution: {integrity: sha512-DZY9TuJAOgU3UyHUhXb4CcTYEHNZszlwkPg4VViIwTxOKzLprPUU+rbaPZQd3srqkGOtpaDdKpW972UV/LKlcg==}
+  '@tanstack/query-core@5.104.4':
+    resolution: {integrity: sha512-nU4Yrb8Sjn0DeVb7PKG9uiepNavys3yoxy1FX0hViY4/P6Ng/mBje2SMl7i9812rtyHKtHyqiaC/td6GkI8StA==}
 
-  '@tanstack/query-devtools@5.104.3':
-    resolution: {integrity: sha512-2Hd8r9G7352GmM9Olu5rdgbslRFH71F5gVxknhgpkgPMgKse7IantVDu1NIeZbynlgsz6K3HhiY7dyq47mAb2A==}
+  '@tanstack/query-devtools@5.104.4':
+    resolution: {integrity: sha512-paO01QqGmuS0dNtOQeWTVrAMwOZAoL3QARPnOxSnck6Zp1s4sPphP2hlJEjBrjk2JGPTnTFOEbK15ZoiqljmOA==}
 
   '@tanstack/react-devtools@0.10.13':
     resolution: {integrity: sha512-r0cdB/14+st2Vxl/1Bodlyq4VC8pf9SykLQDYbGHDc1+V146WQo5B3KlYLkfyxD9Q/6+9NPRQHZyl8fvZVMdRA==}
@@ -4143,17 +4143,24 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
-  '@tanstack/react-query-devtools@5.104.3':
-    resolution: {integrity: sha512-5wRAGOZYQ+YUow/qKCnwXuB+UoHOymeyjC5vs5rJyGdir5yZ+JSyp3D59gqxvnFAXnjfFtzCepArR46f1PfSwg==}
+  '@tanstack/react-query-devtools@5.104.4':
+    resolution: {integrity: sha512-FvpCnCv3gpY0Y6Cw09kNjghpmhA3/MJn5MsLuaPFfalpTWoyXw1XZr+Q7kPLS4bp1VBBjUCyVWThzu4anve70g==}
     peerDependencies:
-      '@tanstack/react-query': ^5.104.3
+      '@tanstack/react-query': ^5.104.4
       '@types/react': ^18 || ^19
       react: ^18 || ^19
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
-  '@tanstack/react-query@5.104.3':
-    resolution: {integrity: sha512-5Ts1ImwJKqoJgPkLxl9WrPQy1JEoEmti3MaaODCfBamHUGFk57IFrc+AIksPq+BAm10EsroX56qm398Z42LG7w==}
+  '@tanstack/react-query@5.104.4':
+    resolution: {integrity: sha512-YD5QkvUNy8Ey3LbOy2vwL97JjoYycwDv++cWAibTe+9BLYvl3c09XpYp5dZ2VcxcguwoDhGF+utYJYb79RB36w==}
     peerDependencies:
+      '@types/react': ^18 || ^19
       react: ^18 || ^19
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
   '@tanstack/react-router-devtools@1.167.2':
     resolution: {integrity: sha512-VuoqB7OhDUrBa4WOFSKiAQ8xI8sJpeZdo9sYE1hQa89iMuVFUQu1iWE4iCiQhB+6TYOZDZ9e+iHKxYjop4ZVYw==}
@@ -4351,43 +4358,43 @@ packages:
     resolution: {integrity: sha512-/67zpWDBLV+oYAEL682s1ktXL0HgqX76f6gaVGkGnVZlBbm1zd0v4Bz8MFF2GGhoX9rvfq3KSQHubFHwa6w6/Q==}
     engines: {node: '>=12'}
 
-  '@ttsc/darwin-arm64@0.33.0':
-    resolution: {integrity: sha512-M/QnQYCtusU/RK435+zTDlRzihVLBdlav5L2C4C93+b76eoyGbPtHFcHPG4AMCHBf0YjDB8keTEhdpPQahEjWg==}
+  '@ttsc/darwin-arm64@0.33.1':
+    resolution: {integrity: sha512-5tqcsBRly32i98EXmMeahmxqfrWuFw527TqZneQ0ZXJbTjamSFaPSdSg6DAgfHncy1r4xkvIAt4UVUpAdEE11w==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ttsc/darwin-x64@0.33.0':
-    resolution: {integrity: sha512-Fumypwwg6sRbm1dMdsrO3RL+UF1ZaapZiuhOU9o7RFsD6u9pO+ZxpRHoaCj2HEIFXpr88hAM2rgxG8do2q1VtA==}
+  '@ttsc/darwin-x64@0.33.1':
+    resolution: {integrity: sha512-ARzhgpkyaV+OEtGerDOV9A29SXeOVZC9R/rkfRRMwdmWmPyHCseCE8ixzpmC8YxAdHaR5CefqN7QsQ4dK2DHzQ==}
     cpu: [x64]
     os: [darwin]
 
-  '@ttsc/linux-arm64@0.33.0':
-    resolution: {integrity: sha512-4zQ5c2X4NfeOkockT5Ucis6hyQkUqDXtEyFUDkK51xvX6/l2b9PFVFyaRF6xUOxGbNcmV8fdj8EwQVlRt/jsAg==}
+  '@ttsc/linux-arm64@0.33.1':
+    resolution: {integrity: sha512-dMPVnaQcgAyROyGf/ExOQmbJO9AZo+KXE0sQasrNymOkN2SUZVows5gNLXfiHeUftJ6/rp68B0TOM6XOqjf4Gg==}
     cpu: [arm64]
     os: [linux]
 
-  '@ttsc/linux-arm@0.33.0':
-    resolution: {integrity: sha512-sB2z7LPi062rwPbiV7RdzVeAeWW9ONHQS/d3SZXVfgVK/cBd7oAoFflUx3+fQKrzv2mcsvIsWZGmMZSLQJhtxA==}
+  '@ttsc/linux-arm@0.33.1':
+    resolution: {integrity: sha512-ot9wuwxQ1BQG/9a1zUcLM78s7alrTKp3ZtxM+muy6S0sLh/hlgpG8H/VL9CYiZJuIgeBtzja10qWGVtgBUF6oQ==}
     cpu: [arm]
     os: [linux]
 
-  '@ttsc/linux-x64@0.33.0':
-    resolution: {integrity: sha512-FRU5dvEyedExeQHbRf7aLCEkU3sPxgEGmSgP+1eWiq2s2lBv2WtDNbeSZRg1TMpcax13JL85xkJvNGd6hZUs1w==}
+  '@ttsc/linux-x64@0.33.1':
+    resolution: {integrity: sha512-hrS4Mpt+VlJU0M/AKoOuMXaMoAWrIdcYT+hYUnAmsXTiCC8iSQ/DHwNSbQaSFd19Rzl/HK+HmdWdy/0lwwx0RA==}
     cpu: [x64]
     os: [linux]
 
-  '@ttsc/unplugin@0.33.0':
-    resolution: {integrity: sha512-sJfFjBbcgY6gywHf/3DUYGQh7Y71Yx3GBZsMMzgkmCO9XbG9Pr5nyt+w3EhVDEeArD7NiFSTrfdO6m8rN2mnog==}
+  '@ttsc/unplugin@0.33.1':
+    resolution: {integrity: sha512-TwJj3iPpytuORKe4iU3qniQ3ne7fJs3coTQhLWQAve7sXLtoUr/tEbQYaMYkQXhAWTvyBnzrDlDQgLGqbjcxrA==}
     peerDependencies:
-      ttsc: ^0.33.0
+      ttsc: ^0.33.1
 
-  '@ttsc/win32-arm64@0.33.0':
-    resolution: {integrity: sha512-wsfxvB7a0YKRGVbVFkNxculQuZ/CycfmTjcEqYB6Ke2y4gduLp2HC4cZdUOckjeN3TC8/s+sJyQ9zVojHVdCTg==}
+  '@ttsc/win32-arm64@0.33.1':
+    resolution: {integrity: sha512-kBfyBaSDNPlyYF3OyhnV7m/Bguy2fnU0oBxPoJeYa0FPYf/+ZfQLmmF0TJV/kl6CoF9K6PfEGR7TB6XCUviEWg==}
     cpu: [arm64]
     os: [win32]
 
-  '@ttsc/win32-x64@0.33.0':
-    resolution: {integrity: sha512-kDN76XpViTtuDpZD4q68zPsEHshYTwnl83grXuNIPBAldxPHD+5XfVvND20Xh5sJ2Eow6zTA4kfvtc0elOtOgg==}
+  '@ttsc/win32-x64@0.33.1':
+    resolution: {integrity: sha512-TCbZ0wfcMeTVQMpJL/l9Dc05b+dYQgMSvILlOEhpgUswC4UQp6iB1tF6uNB5cCr3MRN+19zL/Eecnri4VFd3HA==}
     cpu: [x64]
     os: [win32]
 
@@ -5260,8 +5267,8 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
-  ata-validator@1.54.0:
-    resolution: {integrity: sha512-4IokH0XTEwoPaveegzqR+Zwpobu4hqgjY6B0qeb1ssf1ddQBZOTrAlHcvpaswsNRzCxR7lgJOTxadM7HBVOz8g==}
+  ata-validator@1.55.0:
+    resolution: {integrity: sha512-kOfbrS95U3sva9nJWGI6a6/MDfd1IY6OXf7YmW8ZS/JEs5WhI6A9gKcbGeJc39NhXtce243QZlVoJR4u5qGdUg==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -8512,8 +8519,8 @@ packages:
   spdx-license-ids@3.0.23:
     resolution: {integrity: sha512-CWLcCCH7VLu13TgOH+r8p1O/Znwhqv/dbb6lqWy67G+pT1kHmeD/+V36AVb/vq8QMIQwVShJ6Ssl5FPh0fuSdw==}
 
-  srvx@1.0.5:
-    resolution: {integrity: sha512-KvSKRpgPG/oaq3cyT614OQ2bAa7DynuGamivCZeoZzIUULOdbQz6wUtnnVuC4+DCx2Zglzo8v5gBYmWIWYhDxA==}
+  srvx@1.0.6:
+    resolution: {integrity: sha512-QeTKgAhk8OSsfeq60bl3wuVs9PmBftzmk7owBInA/F1YQne+TRw0UcPymNpURldAmx8hfmM2PNNGH/zgo3GpLA==}
     engines: {node: '>=20.16.0'}
     hasBin: true
 
@@ -8816,8 +8823,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  ttsc@0.33.0:
-    resolution: {integrity: sha512-nRLpjB0WVCRk6X6yKzNQs7fKvL3S17AT+dTr7aHCxcY81PtE3WO+lQUlo19XzYv2WOqDtfLICA0ReGK0qcA3Og==}
+  ttsc@0.33.1:
+    resolution: {integrity: sha512-kH4G1gYPfkD23Snu5/ly7if5Tfrgdt3WKMMa4nm06LTisr3/DO4dUNVbAAS5zXMrv715VOTbXTyTkZo3xe46qw==}
     engines: {node: '>=22.15.0'}
     hasBin: true
 
@@ -9548,29 +9555,29 @@ snapshots:
 
   '@ark/util@0.56.7': {}
 
-  '@ata-project/keywords@0.3.3(ata-validator@1.54.0(yaml@2.9.1))':
+  '@ata-project/keywords@0.3.3(ata-validator@1.55.0(yaml@2.9.1))':
     dependencies:
-      ata-validator: 1.54.0(yaml@2.9.1)
+      ata-validator: 1.55.0(yaml@2.9.1)
 
-  '@ata-validator/native-darwin-arm64@1.54.0':
+  '@ata-validator/native-darwin-arm64@1.55.0':
     optional: true
 
-  '@ata-validator/native-darwin-x64@1.54.0':
+  '@ata-validator/native-darwin-x64@1.55.0':
     optional: true
 
-  '@ata-validator/native-linux-arm64-gnu@1.54.0':
+  '@ata-validator/native-linux-arm64-gnu@1.55.0':
     optional: true
 
-  '@ata-validator/native-linux-arm64-musl@1.54.0':
+  '@ata-validator/native-linux-arm64-musl@1.55.0':
     optional: true
 
-  '@ata-validator/native-linux-x64-gnu@1.54.0':
+  '@ata-validator/native-linux-x64-gnu@1.55.0':
     optional: true
 
-  '@ata-validator/native-linux-x64-musl@1.54.0':
+  '@ata-validator/native-linux-x64-musl@1.55.0':
     optional: true
 
-  '@ata-validator/native-win32-x64@1.54.0':
+  '@ata-validator/native-win32-x64@1.55.0':
     optional: true
 
   '@babel/code-frame@7.29.7':
@@ -11097,7 +11104,7 @@ snapshots:
       parse-gitignore: 2.0.0
       semver: 7.8.5
 
-  '@netlify/dev@5.0.2(@parcel/watcher@2.5.6)(aws4fetch@1.0.20)(rollup@4.62.2)(srvx@1.0.5)(supports-color@7.2.0)':
+  '@netlify/dev@5.0.2(@parcel/watcher@2.5.6)(aws4fetch@1.0.20)(rollup@4.62.2)(srvx@1.0.6)(supports-color@7.2.0)':
     dependencies:
       '@netlify/ai': 1.0.0
       '@netlify/blobs': 11.0.2(supports-color@7.2.0)
@@ -11107,7 +11114,7 @@ snapshots:
       '@netlify/edge-functions-dev': 2.0.1
       '@netlify/functions-dev': 2.0.2(rollup@4.62.2)(supports-color@7.2.0)
       '@netlify/headers': 3.0.1
-      '@netlify/images': 2.0.1(@netlify/blobs@11.0.2(supports-color@7.2.0))(@parcel/watcher@2.5.6)(aws4fetch@1.0.20)(srvx@1.0.5)
+      '@netlify/images': 2.0.1(@netlify/blobs@11.0.2(supports-color@7.2.0))(@parcel/watcher@2.5.6)(aws4fetch@1.0.20)(srvx@1.0.6)
       '@netlify/redirects': 4.0.1
       '@netlify/runtime': 5.0.2(supports-color@7.2.0)
       '@netlify/static': 4.0.0
@@ -11211,9 +11218,9 @@ snapshots:
     dependencies:
       '@netlify/headers-parser': 10.1.1
 
-  '@netlify/images@2.0.1(@netlify/blobs@11.0.2(supports-color@7.2.0))(@parcel/watcher@2.5.6)(aws4fetch@1.0.20)(srvx@1.0.5)':
+  '@netlify/images@2.0.1(@netlify/blobs@11.0.2(supports-color@7.2.0))(@parcel/watcher@2.5.6)(aws4fetch@1.0.20)(srvx@1.0.6)':
     dependencies:
-      ipx: 3.1.1(@netlify/blobs@11.0.2(supports-color@7.2.0))(@parcel/watcher@2.5.6)(aws4fetch@1.0.20)(srvx@1.0.5)
+      ipx: 3.1.1(@netlify/blobs@11.0.2(supports-color@7.2.0))(@parcel/watcher@2.5.6)(aws4fetch@1.0.20)(srvx@1.0.6)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -11285,9 +11292,9 @@ snapshots:
 
   '@netlify/types@3.0.0': {}
 
-  '@netlify/vite-plugin-tanstack-start@1.3.19(@parcel/watcher@2.5.6)(@tanstack/react-start@1.169.3(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rollup@4.62.2)(supports-color@7.2.0))(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(aws4fetch@1.0.20)(rollup@4.62.2)(srvx@1.0.5)(supports-color@7.2.0)':
+  '@netlify/vite-plugin-tanstack-start@1.3.19(@parcel/watcher@2.5.6)(@tanstack/react-start@1.169.3(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rollup@4.62.2)(supports-color@7.2.0))(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(aws4fetch@1.0.20)(rollup@4.62.2)(srvx@1.0.6)(supports-color@7.2.0)':
     dependencies:
-      '@netlify/vite-plugin': 3.0.1(@parcel/watcher@2.5.6)(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(aws4fetch@1.0.20)(rollup@4.62.2)(srvx@1.0.5)(supports-color@7.2.0)
+      '@netlify/vite-plugin': 3.0.1(@parcel/watcher@2.5.6)(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(aws4fetch@1.0.20)(rollup@4.62.2)(srvx@1.0.6)(supports-color@7.2.0)
       vite: '@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1)'
     optionalDependencies:
       '@tanstack/react-start': 1.169.3(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rollup@4.62.2)(supports-color@7.2.0)
@@ -11320,9 +11327,9 @@ snapshots:
       - supports-color
       - uploadthing
 
-  '@netlify/vite-plugin@3.0.1(@parcel/watcher@2.5.6)(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(aws4fetch@1.0.20)(rollup@4.62.2)(srvx@1.0.5)(supports-color@7.2.0)':
+  '@netlify/vite-plugin@3.0.1(@parcel/watcher@2.5.6)(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(aws4fetch@1.0.20)(rollup@4.62.2)(srvx@1.0.6)(supports-color@7.2.0)':
     dependencies:
-      '@netlify/dev': 5.0.2(@parcel/watcher@2.5.6)(aws4fetch@1.0.20)(rollup@4.62.2)(srvx@1.0.5)(supports-color@7.2.0)
+      '@netlify/dev': 5.0.2(@parcel/watcher@2.5.6)(aws4fetch@1.0.20)(rollup@4.62.2)(srvx@1.0.6)(supports-color@7.2.0)
       '@netlify/dev-utils': 6.0.1
       dedent: 1.7.2
       vite: '@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1)'
@@ -12544,7 +12551,7 @@ snapshots:
       - csstype
       - utf-8-validate
 
-  '@tanstack/eslint-plugin-query@5.104.3(eslint@10.13.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)':
+  '@tanstack/eslint-plugin-query@5.104.4(eslint@10.13.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)':
     dependencies:
       '@typescript-eslint/utils': 8.71.2(eslint@10.13.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)
       eslint: 10.13.0(jiti@2.7.0)(supports-color@7.2.0)
@@ -12572,16 +12579,16 @@ snapshots:
       '@tanstack/devtools-event-client': 0.5.0
       '@tanstack/store': 0.11.2
 
-  '@tanstack/query-core@5.104.3': {}
+  '@tanstack/query-core@5.104.4': {}
 
-  '@tanstack/query-devtools@5.104.3(csstype@3.2.3)':
+  '@tanstack/query-devtools@5.104.4(csstype@3.2.3)':
     dependencies:
       '@kobalte/core': 0.13.14(solid-js@1.9.15)
       '@solid-primitives/keyed': 1.5.3(solid-js@1.9.15)
       '@solid-primitives/resize-observer': 2.2.0(solid-js@1.9.15)
       '@solid-primitives/storage': 1.3.11(solid-js@1.9.15)
       '@tanstack/match-sorter-utils': 9.1.2
-      '@tanstack/query-core': 5.104.3
+      '@tanstack/query-core': 5.104.4
       clsx: 2.1.1
       goober: 2.1.19(csstype@3.2.3)
       solid-js: 1.9.15
@@ -12610,19 +12617,22 @@ snapshots:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  '@tanstack/react-query-devtools@5.104.3(@tanstack/react-query@5.104.3(react@19.3.1))(@types/react@19.3.0)(csstype@3.2.3)(react@19.3.1)':
+  '@tanstack/react-query-devtools@5.104.4(@tanstack/react-query@5.104.4(@types/react@19.3.0)(react@19.3.1))(@types/react@19.3.0)(csstype@3.2.3)(react@19.3.1)':
     dependencies:
-      '@tanstack/query-devtools': 5.104.3(csstype@3.2.3)
-      '@tanstack/react-query': 5.104.3(react@19.3.1)
-      '@types/react': 19.3.0
+      '@tanstack/query-devtools': 5.104.4(csstype@3.2.3)
+      '@tanstack/react-query': 5.104.4(@types/react@19.3.0)(react@19.3.1)
       react: 19.3.1
+    optionalDependencies:
+      '@types/react': 19.3.0
     transitivePeerDependencies:
       - csstype
 
-  '@tanstack/react-query@5.104.3(react@19.3.1)':
+  '@tanstack/react-query@5.104.4(@types/react@19.3.0)(react@19.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.104.3
+      '@tanstack/query-core': 5.104.4
       react: 19.3.1
+    optionalDependencies:
+      '@types/react': 19.3.0
 
   '@tanstack/react-router-devtools@1.167.2(@tanstack/react-router@1.170.45(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.38)(csstype@3.2.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
@@ -12635,12 +12645,12 @@ snapshots:
     transitivePeerDependencies:
       - csstype
 
-  '@tanstack/react-router-ssr-query@1.167.3(@tanstack/query-core@5.104.3)(@tanstack/react-query@5.104.3(react@19.3.1))(@tanstack/react-router@1.170.45(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.38)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@tanstack/react-router-ssr-query@1.167.3(@tanstack/query-core@5.104.4)(@tanstack/react-query@5.104.4(@types/react@19.3.0)(react@19.3.1))(@tanstack/react-router@1.170.45(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.38)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.104.3
-      '@tanstack/react-query': 5.104.3(react@19.3.1)
+      '@tanstack/query-core': 5.104.4
+      '@tanstack/react-query': 5.104.4(@types/react@19.3.0)(react@19.3.1)
       '@tanstack/react-router': 1.170.45(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      '@tanstack/router-ssr-query-core': 1.169.3(@tanstack/query-core@5.104.3)(@tanstack/router-core@1.171.38)
+      '@tanstack/router-ssr-query-core': 1.169.3(@tanstack/query-core@5.104.4)(@tanstack/router-core@1.171.38)
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
     transitivePeerDependencies:
@@ -12783,9 +12793,9 @@ snapshots:
       - supports-color
       - unloader
 
-  '@tanstack/router-ssr-query-core@1.169.3(@tanstack/query-core@5.104.3)(@tanstack/router-core@1.171.38)':
+  '@tanstack/router-ssr-query-core@1.169.3(@tanstack/query-core@5.104.4)(@tanstack/router-core@1.171.38)':
     dependencies:
-      '@tanstack/query-core': 5.104.3
+      '@tanstack/query-core': 5.104.4
       '@tanstack/router-core': 1.171.38
 
   '@tanstack/router-utils@1.162.4(supports-color@7.2.0)':
@@ -12827,7 +12837,7 @@ snapshots:
       picomatch: 4.0.7
       seroval: 1.6.7
       source-map: 0.7.6
-      srvx: 1.0.5
+      srvx: 1.0.6
       tinyglobby: 0.2.17
       ufo: 1.6.4
       vitefu: 1.1.3(@voidzero-dev/vite-plus-core@1.3.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))
@@ -12912,32 +12922,32 @@ snapshots:
       magic-string: 0.30.21
       string.prototype.matchall: 4.0.12
 
-  '@ttsc/darwin-arm64@0.33.0':
+  '@ttsc/darwin-arm64@0.33.1':
     optional: true
 
-  '@ttsc/darwin-x64@0.33.0':
+  '@ttsc/darwin-x64@0.33.1':
     optional: true
 
-  '@ttsc/linux-arm64@0.33.0':
+  '@ttsc/linux-arm64@0.33.1':
     optional: true
 
-  '@ttsc/linux-arm@0.33.0':
+  '@ttsc/linux-arm@0.33.1':
     optional: true
 
-  '@ttsc/linux-x64@0.33.0':
+  '@ttsc/linux-x64@0.33.1':
     optional: true
 
-  '@ttsc/unplugin@0.33.0(ttsc@0.33.0)':
+  '@ttsc/unplugin@0.33.1(ttsc@0.33.1)':
     dependencies:
-      ttsc: 0.33.0
+      ttsc: 0.33.1
       unplugin: 2.3.11
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@ttsc/win32-arm64@0.33.0':
+  '@ttsc/win32-arm64@0.33.1':
     optional: true
 
-  '@ttsc/win32-x64@0.33.0':
+  '@ttsc/win32-x64@0.33.1':
     optional: true
 
   '@tybys/wasm-util@0.10.3':
@@ -13790,15 +13800,15 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
-  ata-validator@1.54.0(yaml@2.9.1):
+  ata-validator@1.55.0(yaml@2.9.1):
     optionalDependencies:
-      '@ata-validator/native-darwin-arm64': 1.54.0
-      '@ata-validator/native-darwin-x64': 1.54.0
-      '@ata-validator/native-linux-arm64-gnu': 1.54.0
-      '@ata-validator/native-linux-arm64-musl': 1.54.0
-      '@ata-validator/native-linux-x64-gnu': 1.54.0
-      '@ata-validator/native-linux-x64-musl': 1.54.0
-      '@ata-validator/native-win32-x64': 1.54.0
+      '@ata-validator/native-darwin-arm64': 1.55.0
+      '@ata-validator/native-darwin-x64': 1.55.0
+      '@ata-validator/native-linux-arm64-gnu': 1.55.0
+      '@ata-validator/native-linux-arm64-musl': 1.55.0
+      '@ata-validator/native-linux-x64-gnu': 1.55.0
+      '@ata-validator/native-linux-x64-musl': 1.55.0
+      '@ata-validator/native-win32-x64': 1.55.0
       yaml: 2.9.1
 
   atomically@2.1.1:
@@ -14148,9 +14158,9 @@ snapshots:
     dependencies:
       uncrypto: 0.1.3
 
-  crossws@0.4.10(srvx@1.0.5):
+  crossws@0.4.10(srvx@1.0.6):
     optionalDependencies:
-      srvx: 1.0.5
+      srvx: 1.0.6
 
   crypto-random-string@2.0.0: {}
 
@@ -15482,7 +15492,7 @@ snapshots:
     dependencies:
       fp-ts: 2.16.11
 
-  ipx@3.1.1(@netlify/blobs@11.0.2(supports-color@7.2.0))(@parcel/watcher@2.5.6)(aws4fetch@1.0.20)(srvx@1.0.5):
+  ipx@3.1.1(@netlify/blobs@11.0.2(supports-color@7.2.0))(@parcel/watcher@2.5.6)(aws4fetch@1.0.20)(srvx@1.0.6):
     dependencies:
       '@fastify/accept-negotiator': 2.0.1
       citty: 0.1.6
@@ -15492,7 +15502,7 @@ snapshots:
       etag: 1.8.1
       h3: 1.15.11
       image-meta: 0.2.2
-      listhen: 1.10.1(@parcel/watcher@2.5.6)(srvx@1.0.5)
+      listhen: 1.10.1(@parcel/watcher@2.5.6)(srvx@1.0.6)
       ofetch: 1.5.1
       pathe: 2.0.3
       sharp: 0.34.5
@@ -15909,12 +15919,12 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  listhen@1.10.1(@parcel/watcher@2.5.6)(srvx@1.0.5):
+  listhen@1.10.1(@parcel/watcher@2.5.6)(srvx@1.0.6):
     dependencies:
       '@parcel/watcher-wasm': 2.6.0
       citty: 0.2.2
       consola: 3.4.2
-      crossws: 0.4.10(srvx@1.0.5)
+      crossws: 0.4.10(srvx@1.0.6)
       defu: 6.1.7
       get-port-please: 3.2.0
       h3: 1.15.11
@@ -17682,7 +17692,7 @@ snapshots:
 
   spdx-license-ids@3.0.23: {}
 
-  srvx@1.0.5: {}
+  srvx@1.0.6: {}
 
   stack-trace@0.0.10: {}
 
@@ -18015,18 +18025,18 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  ttsc@0.33.0:
+  ttsc@0.33.1:
     dependencies:
       acorn: 8.16.0
       cjs-module-lexer: 2.2.1
     optionalDependencies:
-      '@ttsc/darwin-arm64': 0.33.0
-      '@ttsc/darwin-x64': 0.33.0
-      '@ttsc/linux-arm': 0.33.0
-      '@ttsc/linux-arm64': 0.33.0
-      '@ttsc/linux-x64': 0.33.0
-      '@ttsc/win32-arm64': 0.33.0
-      '@ttsc/win32-x64': 0.33.0
+      '@ttsc/darwin-arm64': 0.33.1
+      '@ttsc/darwin-x64': 0.33.1
+      '@ttsc/linux-arm': 0.33.1
+      '@ttsc/linux-arm64': 0.33.1
+      '@ttsc/linux-x64': 0.33.1
+      '@ttsc/win32-arm64': 0.33.1
+      '@ttsc/win32-x64': 0.33.1
       fsevents: 2.3.3
 
   type-check@0.4.0:
@@ -18105,13 +18115,13 @@ snapshots:
       '@typescript/typescript-win32-arm64': 7.0.2
       '@typescript/typescript-win32-x64': 7.0.2
 
-  typia@15.1.0(ttsc@0.33.0):
+  typia@15.1.0(ttsc@0.33.1):
     dependencies:
       '@typia/interface': 15.1.0
       '@typia/utils': 15.1.0
       randexp: 0.5.3
     optionalDependencies:
-      ttsc: 0.33.0
+      ttsc: 0.33.1
 
   ufo@1.6.4: {}
 
