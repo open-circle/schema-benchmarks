@@ -5,14 +5,16 @@ import { createIsomorphicFn } from "@tanstack/react-start";
 import * as v from "valibot";
 
 import { upfetch } from "#src/shared/lib/fetch";
+import { parseDefault } from "#src/shared/lib/import";
 
 export const getStackResultsFn = createIsomorphicFn()
   .client(({ signal }: { signal: AbortSignal }) =>
     upfetch("/stack.json", { schema: v.array(stackResultSchema), signal }),
   )
   .server(() =>
-    import("@schema-benchmarks/bench/stack.json", { with: { type: "json" } }).then(
-      (module) => module.default,
+    parseDefault(
+      import("@schema-benchmarks/bench/stack.json", { with: { type: "json" } }),
+      v.array(stackResultSchema),
     ),
   );
 

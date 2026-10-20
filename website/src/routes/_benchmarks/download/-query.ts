@@ -4,6 +4,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { createIsomorphicFn } from "@tanstack/react-start";
 
 import { upfetch } from "#src/shared/lib/fetch";
+import { parseDefault } from "#src/shared/lib/import";
 
 export function getCompiledPath(fileName: string, minify: MinifyType) {
   return fileName.replace("download/", `download_compiled/`).replace(".ts", `/${minify}.js`);
@@ -14,8 +15,9 @@ export const getDownloadResultsFn = createIsomorphicFn()
     upfetch("/download.json", { schema: downloadResultsSchema, signal }),
   )
   .server(() =>
-    import("@schema-benchmarks/bench/download.json", { with: { type: "json" } }).then(
-      (module) => module.default,
+    parseDefault(
+      import("@schema-benchmarks/bench/download.json", { with: { type: "json" } }),
+      downloadResultsSchema,
     ),
   );
 

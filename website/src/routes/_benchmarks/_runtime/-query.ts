@@ -4,14 +4,16 @@ import { queryOptions } from "@tanstack/react-query";
 import { createIsomorphicFn } from "@tanstack/react-start";
 
 import { upfetch } from "#src/shared/lib/fetch";
+import { parseDefault } from "#src/shared/lib/import";
 
 export const getBenchResultsFn = createIsomorphicFn()
   .client(({ signal }: { signal: AbortSignal }) =>
     upfetch("/bench.json", { schema: benchResultsSchema, signal }),
   )
   .server(() =>
-    import("@schema-benchmarks/bench/bench.json", { with: { type: "json" } }).then(
-      (module) => module.default,
+    parseDefault(
+      import("@schema-benchmarks/bench/bench.json", { with: { type: "json" } }),
+      benchResultsSchema,
     ),
   );
 
