@@ -1,4 +1,5 @@
-//#region ../node_modules/.pnpm/decoders@2.12.2/node_modules/decoders/dist/index.js
+//#region ../node_modules/.pnpm/decoders@2.13.0/node_modules/decoders/dist/index.js
+var MAX_ERRORS = 3;
 // @__NO_SIDE_EFFECTS__
 function qty(n, unit) {
 	return n === 1 ? `${n} ${unit}` : `${n} ${unit}s`;
@@ -165,8 +166,8 @@ function serializeArray(annotation, prefix) {
 	const { items } = annotation;
 	if (items.length === 0) return "[]";
 	const result = [];
-	for (const item of items) {
-		const [ser, ann] = serializeAnnotation(item, `${prefix}${INDENT}`);
+	for (let i = 0; i < items.length; ++i) {
+		const [ser, ann] = serializeAnnotation(items[i], `${prefix}${INDENT}`, `(at index ${i})`);
 		result.push(`${prefix}${INDENT}${ser},`);
 		if (ann !== void 0) result.push(/* @__PURE__ */ indent(ann, `${prefix}${INDENT}`));
 	}
@@ -203,7 +204,7 @@ function serializeValue(value) {
 	else if (value instanceof Date) return "(Invalid Date)";
 	else return "(unserializable)";
 }
-function serializeAnnotation(ann, prefix = "") {
+function serializeAnnotation(ann, prefix = "", location) {
 	let serialized;
 	if (ann.type === "array") serialized = serializeArray(ann, prefix);
 	else if (ann.type === "object") serialized = serializeObject(ann, prefix);
@@ -212,7 +213,12 @@ function serializeAnnotation(ann, prefix = "") {
 	const text = ann.text;
 	if (text !== void 0) {
 		const sep = "^".repeat(/* @__PURE__ */ isMultiline(serialized) ? 1 : serialized.length);
-		return [serialized, [sep, text].join(/* @__PURE__ */ isMultiline(text) ? "\n" : " ")];
+		const annotation = /* @__PURE__ */ isMultiline(text) ? [location ? `${sep} ${location}` : sep, text].join("\n") : [
+			sep,
+			text,
+			location
+		].filter(Boolean).join(" ");
+		return [serialized, annotation];
 	} else return [serialized, void 0];
 }
 function formatInline(ann) {
@@ -478,19 +484,21 @@ function array(decoder, options) {
 	const decodeFn = decoder.decode;
 	return (options !== void 0 ? /* @__PURE__ */ sized(poja, options) : poja).chain((inputs, ok2, err2) => {
 		const results = [];
+		let clone = null;
+		let errorCount = 0;
 		for (let i = 0; i < inputs.length; ++i) {
 			const blob = inputs[i];
 			const result = decodeFn(blob);
-			if (result.ok) results.push(result.value);
-			else {
+			if (result.ok) {
+				if (clone === null) results.push(result.value);
+			} else {
 				results.length = 0;
-				const ann = result.error;
-				const clone = inputs.slice();
-				clone.splice(i, 1, public_annotate(ann, ann.text ? `${ann.text} (at index ${i})` : `index ${i}`));
-				return err2(public_annotate(clone));
+				clone ??= inputs.slice();
+				clone[i] = result.error;
+				if (++errorCount >= MAX_ERRORS) break;
 			}
 		}
-		return ok2(results);
+		return clone !== null ? err2(public_annotate(clone)) : ok2(results);
 	});
 }
 var pojo = /* @__PURE__ */ define((blob, ok2, err2) => /* @__PURE__ */ isPlainObject(blob) ? ok2(blob) : err2("Must be an object"));
