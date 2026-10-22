@@ -17,7 +17,7 @@
     "test": "vp test"
   },
   "dependencies": {
-    "@ark/json-schema": "^0.0.12",
+    "@ark/json-schema": "^0.0.13",
     "@ata-project/keywords": "^0.3.3",
     "@cfworker/json-schema": "^4.1.1",
     "@paseri/compiler": "jsr:^0.7.7",
@@ -33,7 +33,7 @@
     "ajv-draft-04": "^1.0.0",
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
-    "arktype": "^2.2.8",
+    "arktype": "^2.2.9",
     "ata-validator": "^1.57.0",
     "decoders": "^2.13.0",
     "dedent": "catalog:",
