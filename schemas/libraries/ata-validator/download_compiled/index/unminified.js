@@ -21,7 +21,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	enumerable: true
 }) : target, mod));
 //#endregion
-//#region ../node_modules/.pnpm/@ata-project+keywords@0.3.3_ata-validator@1.57.0_yaml@2.9.1_/node_modules/@ata-project/keywords/index.js
+//#region ../node_modules/.pnpm/@ata-project+keywords@0.3.3_ata-validator@1.58.0_yaml@2.9.1_/node_modules/@ata-project/keywords/index.js
 var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -537,14 +537,14 @@ var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	});
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/native-load.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/native-load.browser.js
 var require_native_load_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = function loadNative() {
 		return null;
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/env.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/env.js
 var require_env = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function env(name) {
 		return typeof process !== "undefined" && process.env ? process.env[name] : void 0;
@@ -552,7 +552,7 @@ var require_env = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { env };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/compile-fn.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/compile-fn.js
 var require_compile_fn = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function compileFunction(...args) {
 		return new Function(...args);
@@ -560,7 +560,7 @@ var require_compile_fn = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { compileFunction };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/keywords.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/keywords.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const RESERVED = /* @__PURE__ */ new Set([
 		"$id",
@@ -698,7 +698,7 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/dialect.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/dialect.js
 var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const V1_DIALECTS = /* @__PURE__ */ new Set([
 		"https://json-schema.org/v1",
@@ -740,7 +740,7 @@ var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/draft7.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { DRAFT7_SCHEMAS, DRAFT6_SCHEMAS, DRAFT4_SCHEMAS, DRAFT2019_SCHEMAS, draftCode } = require_dialect();
 	function isDraft7(schema) {
@@ -1074,7 +1074,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/metaschemas.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/metaschemas.js
 var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const METASCHEMAS = /* @__PURE__ */ new Map([
 		["https://json-schema.org/draft/2020-12/schema", {
@@ -1994,7 +1994,7 @@ var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { METASCHEMAS };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/vocabularies.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/vocabularies.js
 var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CORE_VOCABULARY = "https://json-schema.org/draft/2020-12/vocab/core";
 	let KEYWORDS_BY_VOCABULARY = null;
@@ -2110,7 +2110,7 @@ var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/schema-scan.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/schema-scan.js
 var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const NULLABLE = 1;
 	const REF_SIBLINGS = 2;
@@ -2203,15 +2203,16 @@ var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	});
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/defaults.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/defaults.js
 var require_defaults = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const MAX_DEPTH = 512;
 	function buildDefaultsApplier(schema) {
 		if (typeof schema !== "object" || schema === null) return null;
-		const actions = [];
-		collectDefaults(schema, actions);
-		if (actions.length === 0) return null;
-		return (data) => {
-			for (let i = 0; i < actions.length; i++) actions[i](data);
+		const path = [];
+		const fn = compileNode(schema, schema, /* @__PURE__ */ new Map(), /* @__PURE__ */ new Map(), path);
+		return fn === null ? null : (data) => {
+			path.length = 0;
+			fn(data, 0, null);
 		};
 	}
 	function setOwn(obj, key, val) {
@@ -2223,39 +2224,180 @@ var require_defaults = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		});
 		else obj[key] = val;
 	}
-	function collectDefaults(schema, actions, path) {
-		if (typeof schema !== "object" || schema === null) return;
-		const props = schema.properties;
-		if (!props) return;
-		for (const [key, prop] of Object.entries(props)) {
-			if (prop && typeof prop === "object" && prop.default !== void 0) {
-				const defaultVal = prop.default;
-				if (!path) actions.push((data) => {
-					if (typeof data === "object" && data !== null && !Object.hasOwn(data, key)) setOwn(data, key, typeof defaultVal === "object" && defaultVal !== null ? JSON.parse(JSON.stringify(defaultVal)) : defaultVal);
-				});
-				else {
-					const parentPath = path;
-					actions.push((data) => {
-						let target = data;
-						for (let j = 0; j < parentPath.length; j++) {
-							if (typeof target !== "object" || target === null) return;
-							if (!Object.hasOwn(target, parentPath[j])) return;
-							target = target[parentPath[j]];
-						}
-						if (typeof target === "object" && target !== null && !Object.hasOwn(target, key)) setOwn(target, key, typeof defaultVal === "object" && defaultVal !== null ? JSON.parse(JSON.stringify(defaultVal)) : defaultVal);
-					});
+	function localRef(root, ref) {
+		if (typeof ref !== "string" || ref.charCodeAt(0) !== 35) return null;
+		if (ref === "#") return root;
+		if (ref.charCodeAt(1) !== 47) return null;
+		let t = root;
+		for (let seg of ref.slice(2).split("/")) {
+			if (seg.indexOf("%") >= 0) try {
+				seg = decodeURIComponent(seg);
+			} catch {
+				return null;
+			}
+			if (seg.indexOf("~") >= 0) seg = seg.replace(/~1/g, "/").replace(/~0/g, "~");
+			if (t === null || typeof t !== "object") return null;
+			if (!Object.hasOwn(t, seg)) {
+				const alias = seg === "definitions" ? "$defs" : seg === "$defs" ? "definitions" : null;
+				if (alias === null || !Object.hasOwn(t, alias)) return null;
+				seg = alias;
+			}
+			t = t[seg];
+		}
+		return t !== null && typeof t === "object" ? t : null;
+	}
+	function reachesDefault(node, root, memo, stack) {
+		if (node === null || typeof node !== "object") return 0;
+		const known = memo.get(node);
+		if (known !== void 0) return known;
+		if (stack.has(node)) return 2;
+		stack.add(node);
+		const props = valuesOf(node.properties);
+		let yes = props.some((p) => p && typeof p === "object" && p.default !== void 0);
+		let open = false;
+		const below = props.concat(localRef(root, node.$ref), listOf(node.allOf), listOf(node.prefixItems), node.items, node.additionalProperties, valuesOf(node.patternProperties), valuesOf(node.dependentSchemas));
+		for (let i = 0; !yes && i < below.length; i++) {
+			const r = reachesDefault(below[i], root, memo, stack);
+			if (r === 1) yes = true;
+			else if (r === 2) open = true;
+		}
+		stack.delete(node);
+		if (yes || !open) memo.set(node, yes ? 1 : 0);
+		return yes ? 1 : open ? 2 : 0;
+	}
+	function valuesOf(m) {
+		return m && typeof m === "object" && !Array.isArray(m) ? Object.values(m) : [];
+	}
+	function listOf(a) {
+		return Array.isArray(a) ? a : [];
+	}
+	function keyPattern(src) {
+		try {
+			return new RegExp(src, "u");
+		} catch {
+			try {
+				return new RegExp(src);
+			} catch {
+				return null;
+			}
+		}
+	}
+	function copyOf(v) {
+		return typeof v !== "object" || v === null ? v : Array.isArray(v) && v.length === 0 ? [] : JSON.parse(JSON.stringify(v));
+	}
+	function compileNode(node, root, memo, reach, path) {
+		if (node === null || typeof node !== "object") return null;
+		if (memo.has(node)) return memo.get(node);
+		if (reachesDefault(node, root, reach, /* @__PURE__ */ new Set()) !== 1) {
+			memo.set(node, null);
+			return null;
+		}
+		let body = null;
+		const fn = (data, depth, made) => {
+			if (depth > MAX_DEPTH) return;
+			if (made !== null) {
+				if (made.has(node)) return;
+				made.add(node);
+				body(data, depth, made);
+				made.delete(node);
+				return;
+			}
+			path.push(node);
+			body(data, depth, null);
+			path.pop();
+		};
+		memo.set(node, fn);
+		const own = [];
+		const below = [];
+		const props = node.properties;
+		if (props && typeof props === "object") for (const key of Object.keys(props)) {
+			const p = props[key];
+			if (!p || typeof p !== "object") continue;
+			if (p.default !== void 0) own.push([key, p.default]);
+			const child = compileNode(p, root, memo, reach, path);
+			if (child !== null) below.push([key, child]);
+		}
+		const tuple = Array.isArray(node.prefixItems) ? node.prefixItems.map((s) => compileNode(s, root, memo, reach, path)) : [];
+		const each = compileNode(node.items, root, memo, reach, path);
+		const patterns = [];
+		if (node.patternProperties && typeof node.patternProperties === "object") for (const src of Object.keys(node.patternProperties)) {
+			const re = keyPattern(src);
+			const t = compileNode(node.patternProperties[src], root, memo, reach, path);
+			if (re === null) continue;
+			patterns.push([re, t]);
+		}
+		const extra = compileNode(node.additionalProperties, root, memo, reach, path);
+		const declared = props && typeof props === "object" ? props : null;
+		const dependent = [];
+		if (node.dependentSchemas && typeof node.dependentSchemas === "object") for (const key of Object.keys(node.dependentSchemas)) {
+			const t = compileNode(node.dependentSchemas[key], root, memo, reach, path);
+			if (t !== null) dependent.push([key, t]);
+		}
+		const keyed = extra !== null || patterns.some((p) => p[1] !== null);
+		const also = [];
+		if (typeof node.$ref === "string") {
+			const t = compileNode(localRef(root, node.$ref), root, memo, reach, path);
+			if (t !== null) also.push(t);
+		}
+		if (Array.isArray(node.allOf)) for (const s of node.allOf) {
+			const t = compileNode(s, root, memo, reach, path);
+			if (t !== null) also.push(t);
+		}
+		body = (data, depth, made) => {
+			let fresh = null;
+			if (typeof data === "object" && data !== null) {
+				for (let i = 0; i < own.length; i++) {
+					const key = own[i][0];
+					if (!Object.hasOwn(data, key)) {
+						const v = copyOf(own[i][1]);
+						setOwn(data, key, v);
+						if (made === null && typeof v === "object" && v !== null) (fresh || (fresh = [])).push(key);
+					}
+				}
+				for (let i = 0; i < below.length; i++) {
+					const key = below[i][0];
+					if (Object.hasOwn(data, key)) below[i][1](data[key], depth + 1, fresh !== null && fresh.includes(key) ? new Set(path) : made);
+				}
+				if (Array.isArray(data)) for (let i = 0; i < data.length; i++) {
+					const t = i < tuple.length ? tuple[i] : each;
+					if (t !== null && t !== void 0) t(data[i], depth + 1, made);
+				}
+				else if (keyed) for (const key of Object.keys(data)) {
+					let matched = false;
+					for (let i = 0; i < patterns.length; i++) if (patterns[i][0].test(key)) {
+						matched = true;
+						if (patterns[i][1] !== null) patterns[i][1](data[key], depth + 1, made);
+					}
+					if (extra !== null && !matched && !(declared !== null && Object.hasOwn(declared, key))) extra(data[key], depth + 1, made);
+				}
+				if (!Array.isArray(data)) {
+					for (let i = 0; i < dependent.length; i++) if (Object.hasOwn(data, dependent[i][0])) dependent[i][1](data, depth + 1, made);
 				}
 			}
-			if (prop && typeof prop === "object" && prop.properties) collectDefaults(prop, actions, (path || []).concat(key));
-		}
+			for (let i = 0; i < also.length; i++) also[i](data, depth + 1, made);
+		};
+		return fn;
 	}
 	module.exports = {
 		buildDefaultsApplier,
-		setOwn
+		setOwn,
+		localRef,
+		MAX_DEPTH,
+		EMBED: [
+			"buildDefaultsApplier",
+			"setOwn",
+			"localRef",
+			"reachesDefault",
+			"valuesOf",
+			"listOf",
+			"keyPattern",
+			"copyOf",
+			"compileNode"
+		]
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/schema-order.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/schema-order.js
 var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const _keyIndexCache = /* @__PURE__ */ new WeakMap();
 	const _rankCache = /* @__PURE__ */ new WeakMap();
@@ -2489,7 +2631,7 @@ var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/diagnostic-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/diagnostic-source.js
 var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const KEY = Symbol.for("ata.diagnosticSource");
 	const DESCRIPTOR = {
@@ -2522,7 +2664,7 @@ var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module)
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/error-codes.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/error-codes.js
 var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CODES = Object.freeze({
 		ATA1001: {
@@ -2815,12 +2957,17 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		"oneOf",
 		"not",
 		"$ref",
-		"if"
+		"if",
+		"__depth__"
 	];
 	function fromNative(ordinal, format) {
 		if (typeof ordinal !== "number" || !Number.isInteger(ordinal)) return null;
 		const keyword = NATIVE_KEYWORDS[ordinal];
 		if (!keyword) return null;
+		if (keyword === "__depth__") return {
+			keyword,
+			code: "ATA9000"
+		};
 		return {
 			keyword,
 			code: keyword === "format" ? format ? codeFor("format", format) || "ATA3099" : "ATA3099" : codeFor(keyword) || "ATA9001"
@@ -2836,7 +2983,7 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/levenshtein.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/levenshtein.js
 var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let scratchA = /* @__PURE__ */ new Int32Array(64);
 	let scratchB = /* @__PURE__ */ new Int32Array(64);
@@ -2893,7 +3040,7 @@ var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { levenshtein };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/pointer.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/pointer.js
 var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Resolve a JSON pointer against a document, for the diagnostic paths that run
@@ -2938,7 +3085,7 @@ var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/suggestions.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/suggestions.js
 var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const { resolvePointer: walk, UNRESOLVED } = require_pointer();
@@ -3074,7 +3221,7 @@ var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/enrich-error.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/enrich-error.js
 var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor, fromNative } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -3398,7 +3545,7 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/correlate.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/correlate.js
 var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const MAX_DISTANCE = 2;
@@ -3503,7 +3650,7 @@ var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { correlateTypos };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/rejections.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/rejections.js
 var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { ordinalFor: schemaOrdinal, rankFor: schemaRank } = require_schema_order();
 	const { setDiagnosticSource: attachDiagnosticSource } = require_diagnostic_source();
@@ -3822,7 +3969,7 @@ var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/strict-check.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/strict-check.js
 var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { METASCHEMAS } = require_metaschemas();
 	const { levenshtein } = require_levenshtein();
@@ -4019,7 +4166,7 @@ var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { checkSchemaStrict };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/source-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/source-positions.js
 var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build a map of JSON pointer → { line, col, text } by scanning JSON text.
@@ -4175,7 +4322,7 @@ var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/data-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/data-positions.js
 var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build pointer → { byteOffset, length, line, col, text } from a JSON
@@ -4552,7 +4699,7 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/data-position-cache.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/data-position-cache.js
 var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { buildDataPositionMap, buildTargetedPositionMap } = require_data_positions();
 	/**
@@ -4639,7 +4786,7 @@ var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, modul
 	module.exports = { createCache };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/safe-regex.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/safe-regex.js
 var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function __ataSafeRegex() {
 		const WS = [
@@ -5362,7 +5509,7 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports.engineSource = () => __ataSafeRegex.toString();
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/branch-collapse.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/branch-collapse.js
 var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const __ATA_SEVERITY = {
 		type: 10,
@@ -5453,7 +5600,7 @@ var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) =
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/unique-items.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/unique-items.js
 var require_unique_items = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function _deq(a, b) {
 		if (a === b) return true;
@@ -5626,7 +5773,7 @@ var require_unique_items = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/uri-core.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/uri-core.js
 var require_uri_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function __ataUri(ip6) {
 		const C = /* @__PURE__ */ new Uint8Array(128);
@@ -5844,7 +5991,7 @@ var require_uri_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { __ataUri };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/formats.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/formats.js
 var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function isDigit(c) {
 		return c >= 48 && c <= 57;
@@ -6266,7 +6413,7 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/interpreter-core.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/interpreter-core.js
 var require_interpreter_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let _safeRe = null;
 	const compileSafe = (src) => (_safeRe || (_safeRe = require_safe_regex())).compileSafe(src);
@@ -7046,8 +7193,10 @@ var require_interpreter_core = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		_fastRoot() {
 			if (this._fast === void 0) {
 				const compile = planCompiler();
-				if (compile === null) this._fast = null;
-				else try {
+				if (compile === null) {
+					if (planPending) return null;
+					this._fast = null;
+				} else try {
 					this._fast = compile(this);
 				} catch (e) {
 					if (typeof process === "object" && process !== null && process.env && process.env.ATA_DEBUG) console.error("ata: plan compiler failed, plain walk used:", e && e.message);
@@ -7688,9 +7837,11 @@ var require_interpreter_core = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	const TIER = 1e3;
 	let loadPlanCompiler = null;
 	let compileInterpreter = null;
-	function setPlanCompiler(load) {
+	let planPending = false;
+	function setPlanCompiler(load, pending) {
 		loadPlanCompiler = load;
 		compileInterpreter = null;
+		planPending = load === null && pending === true;
 	}
 	function planCompiler() {
 		if (compileInterpreter === null && loadPlanCompiler !== null) compileInterpreter = loadPlanCompiler()({
@@ -7788,1128 +7939,34 @@ var require_interpreter_core = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	});
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/plan-compiler.js
-var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { collapseBranches } = require_branch_collapse();
-	const branchTitle = (n) => n && n.schema && typeof n.schema.title === "string" ? n.schema.title : "";
-	function install(deps) {
-		const { Plan, NOERRORS, err, evalLeaf, evalLeafV, runCustomV, dataBits, escapePointer, deepEqual, enumMember, allDistinct, multipleOfOk, cpAtLeast, cpAtMost, T_STRING, T_NUMBER, T_INTEGER, T_BOOLEAN, T_NULL, T_ARRAY, T_OBJECT, resolveRef, splitFragment, resolveUri } = deps;
-		const TRUE_FN = () => true;
-		const TRUE_PAIR = {
-			v: TRUE_FN,
-			c: TRUE_FN,
-			leaf: true
-		};
-		const FALSE_PAIR = {
-			leaf: true,
-			v: () => false,
-			c: (data, errors, instancePath, schemaPath) => {
-				if (errors !== NOERRORS) errors.push(err("false schema", "not", instancePath, schemaPath, {}, "boolean schema is false"));
-				return false;
-			}
-		};
-		function dynTarget(interp, ref, base, chain) {
-			const state = interp.state;
-			let { node, base: refBase } = resolveRef(ref, base, state);
-			const [, fragment] = splitFragment(resolveUri(base, ref));
-			if (fragment && !fragment.startsWith("/")) {
-				const initialDyn = state.dynamicAnchors.get(refBase);
-				if (node !== void 0 && initialDyn && initialDyn.get(fragment) === node || !interp.bookending) for (let i = 0; i < chain.length; i++) {
-					const dyn = state.dynamicAnchors.get(chain[i]);
-					if (dyn && dyn.has(fragment)) {
-						node = dyn.get(fragment);
-						refBase = chain[i];
-						break;
-					}
-				}
-			}
-			return {
-				node,
-				base: refBase
-			};
-		}
-		function fresh() {
-			return {
-				props: null,
-				n: 0,
-				x: null,
-				keys: null
-			};
-		}
-		function keysOf(rec, data) {
-			if (rec.keys === null) rec.keys = Object.keys(data);
-			return rec.keys;
-		}
-		function hasProp(rec, key) {
-			const p = rec.props;
-			if (p === null) return false;
-			for (let i = 0; i < p.length; i++) if (p[i] === key) return true;
-			return false;
-		}
-		function addProp(rec, key) {
-			if (rec.props === null) rec.props = [key];
-			else rec.props.push(key);
-		}
-		function hasItem(rec, i) {
-			if (i < rec.n) return true;
-			const x = rec.x;
-			if (x === null) return false;
-			for (let j = 0; j < x.length; j++) if (x[j] === i) return true;
-			return false;
-		}
-		function addItem(rec, i) {
-			if (i < rec.n) return;
-			if (i === rec.n) {
-				rec.n = i + 1;
-				return;
-			}
-			if (rec.x === null) rec.x = [i];
-			else rec.x.push(i);
-		}
-		function markRange(rec, from, to) {
-			if (from >= to) return;
-			if (from <= rec.n) {
-				if (to > rec.n) rec.n = to;
-				return;
-			}
-			if (rec.x === null) rec.x = [];
-			for (let i = from; i < to; i++) rec.x.push(i);
-		}
-		function mergeRec(target, from) {
-			if (from.props !== null) {
-				if (target.props === null) target.props = from.props;
-				else for (let i = 0; i < from.props.length; i++) target.props.push(from.props[i]);
-			}
-			if (from.n > target.n) target.n = from.n;
-			if (from.x !== null) {
-				if (target.x === null) target.x = from.x;
-				else for (let i = 0; i < from.x.length; i++) target.x.push(from.x[i]);
-			}
-		}
-		function pLen(rec) {
-			return rec.props === null ? 0 : rec.props.length;
-		}
-		function xLen(rec) {
-			return rec.x === null ? 0 : rec.x.length;
-		}
-		function undo(rec, pl, n0, xl) {
-			const p = rec.props;
-			if (p !== null && p.length !== pl) p.length = pl;
-			rec.n = n0;
-			const x = rec.x;
-			if (x !== null && x.length !== xl) x.length = xl;
-		}
-		function compileLeafV(P) {
-			const checks = [];
-			let needsBits = false;
-			if (P.hasType) {
-				const mask = P.typeMask;
-				needsBits = true;
-				checks.push((data, bits) => (bits & mask) !== 0);
-			}
-			if (P.enum !== null) {
-				if (P.enum.length === 0) checks.push(() => false);
-				else if (P.enumObjs.length === 0) {
-					const prims = P.enumPrims;
-					checks.push((data) => prims.has(data));
-				} else checks.push((data) => enumMember(P, data));
-			}
-			if (P.hasConst) {
-				const c = P.const;
-				checks.push((data) => deepEqual(c, data));
-			}
-			const reqFolded = P.required !== null && P.requiredUndef === null && P.properties !== null;
-			let numsRun = null;
-			if (P.hasNumber) {
-				const nums = [];
-				if (P.minimum !== void 0) {
-					const m = P.minimum;
-					nums.push((d) => d >= m);
-				}
-				if (P.maximum !== void 0) {
-					const m = P.maximum;
-					nums.push((d) => d <= m);
-				}
-				if (P.exclusiveMinimum !== void 0) {
-					const m = P.exclusiveMinimum;
-					nums.push((d) => d > m);
-				}
-				if (P.exclusiveMaximum !== void 0) {
-					const m = P.exclusiveMaximum;
-					nums.push((d) => d < m);
-				}
-				if (P.multipleOf !== void 0) {
-					const m = P.multipleOf;
-					nums.push((d) => multipleOfOk(d, m));
-				}
-				numsRun = combineValue(nums);
-			}
-			let strsRun = null;
-			if (P.hasString) {
-				const strs = [];
-				if (P.minLength !== void 0 && P.maxLength !== void 0) {
-					const lo = P.minLength, hi = P.maxLength;
-					strs.push((d) => {
-						const n = d.length;
-						return n >= 2 * lo && n <= hi || cpAtLeast(d, lo) && cpAtMost(d, hi);
-					});
-				} else if (P.minLength !== void 0) {
-					const m = P.minLength;
-					strs.push((d) => cpAtLeast(d, m));
-				} else if (P.maxLength !== void 0) {
-					const m = P.maxLength;
-					strs.push((d) => cpAtMost(d, m));
-				}
-				if (P.pattern !== null) {
-					const re = P.pattern;
-					strs.push((d) => re.test(d));
-				}
-				if (P.formatFn !== null) {
-					const f = P.formatFn;
-					strs.push((d) => f(d));
-				}
-				strsRun = combineValue(strs);
-			}
-			let arrsRun = null;
-			if (P.minItems !== void 0 || P.maxItems !== void 0 || P.uniqueItems) {
-				const arrs = [];
-				if (P.minItems !== void 0) {
-					const m = P.minItems;
-					arrs.push((d) => d.length >= m);
-				}
-				if (P.maxItems !== void 0) {
-					const m = P.maxItems;
-					arrs.push((d) => d.length <= m);
-				}
-				if (P.uniqueItems) arrs.push(allDistinct);
-				arrsRun = combineValue(arrs);
-			}
-			let objsRun = null;
-			if (P.required !== null && !reqFolded || P.minProperties !== void 0 || P.maxProperties !== void 0 || P.dependentRequired !== null) {
-				const objs = [];
-				if (P.required !== null && !reqFolded) {
-					const req = P.required;
-					const undef = P.requiredUndef;
-					if (req.length === 1) {
-						const k = req[0];
-						objs.push(undef !== null && undef[0] ? (d) => Object.hasOwn(d, k) && d[k] !== void 0 : (d) => Object.hasOwn(d, k));
-					} else if (undef === null) objs.push((d) => {
-						for (let i = 0; i < req.length; i++) if (!Object.hasOwn(d, req[i])) return false;
-						return true;
-					});
-					else objs.push((d) => {
-						for (let i = 0; i < req.length; i++) if (!Object.hasOwn(d, req[i]) || undef[i] && d[req[i]] === void 0) return false;
-						return true;
-					});
-				}
-				if (P.minProperties !== void 0) {
-					const m = P.minProperties;
-					objs.push((d) => Object.keys(d).length >= m);
-				}
-				if (P.maxProperties !== void 0) {
-					const m = P.maxProperties;
-					objs.push((d) => Object.keys(d).length <= m);
-				}
-				if (P.dependentRequired !== null) {
-					const entries = P.dependentRequired;
-					objs.push((d) => {
-						for (let i = 0; i < entries.length; i++) {
-							const [key, deps] = entries[i];
-							if (!Object.hasOwn(d, key)) continue;
-							for (let j = 0; j < deps.length; j++) if (!Object.hasOwn(d, deps[j])) return false;
-						}
-						return true;
-					});
-				}
-				objsRun = combineValue(objs);
-			}
-			if (P.hasType && P.enum === null && !P.hasConst && !P.hasCustom && checks.length === 1) {
-				const m = P.typeMask;
-				const own = m === T_STRING ? strsRun : m === T_INTEGER || m === T_NUMBER ? numsRun : m === T_OBJECT ? objsRun : m === T_ARRAY ? arrsRun : null;
-				if (!(numsRun !== null && m !== T_INTEGER && m !== T_NUMBER || strsRun !== null && m !== T_STRING || arrsRun !== null && m !== T_ARRAY || objsRun !== null && m !== T_OBJECT)) {
-					const r = own;
-					switch (m) {
-						case T_STRING: return r === null ? (d) => typeof d === "string" : (d) => typeof d === "string" && r(d);
-						case T_INTEGER: return r === null ? (d) => Number.isInteger(d) : (d) => Number.isInteger(d) && r(d);
-						case T_NUMBER: return r === null ? (d) => typeof d === "number" && isFinite(d) : (d) => typeof d === "number" && isFinite(d) && r(d);
-						case T_BOOLEAN: return (d) => typeof d === "boolean";
-						case T_NULL: return (d) => d === null;
-						case T_OBJECT: return r === null ? (d) => typeof d === "object" && d !== null && !Array.isArray(d) : (d) => typeof d === "object" && d !== null && !Array.isArray(d) && r(d);
-						case T_ARRAY: return r === null ? (d) => Array.isArray(d) : (d) => Array.isArray(d) && r(d);
-					}
-				}
-			}
-			if (numsRun !== null) {
-				const run = numsRun;
-				checks.push((data) => !Number.isFinite(data) || run(data));
-			}
-			if (strsRun !== null) {
-				const run = strsRun;
-				needsBits = true;
-				checks.push((data, bits) => bits !== T_STRING || run(data));
-			}
-			if (arrsRun !== null) {
-				const run = arrsRun;
-				needsBits = true;
-				checks.push((data, bits) => bits !== T_ARRAY || run(data));
-			}
-			if (objsRun !== null) {
-				const run = objsRun;
-				needsBits = true;
-				checks.push((data, bits) => bits !== T_OBJECT || run(data));
-			}
-			if (P.hasCustom) {
-				needsBits = true;
-				checks.push((data, bits) => runCustomV(P, data, bits));
-			}
-			if (checks.length === 0) return TRUE_FN;
-			if (!needsBits) {
-				if (checks.length === 1) {
-					const a = checks[0];
-					return (data) => a(data, 0);
-				}
-				return (data) => {
-					for (let i = 0; i < checks.length; i++) if (!checks[i](data, 0)) return false;
-					return true;
-				};
-			}
-			if (checks.length === 1) {
-				const a = checks[0];
-				return (data) => a(data, dataBits(data));
-			}
-			if (checks.length === 2) {
-				const [a, b] = checks;
-				return (data) => {
-					const bits = dataBits(data);
-					return a(data, bits) && b(data, bits);
-				};
-			}
-			return (data) => {
-				const bits = dataBits(data);
-				for (let i = 0; i < checks.length; i++) if (!checks[i](data, bits)) return false;
-				return true;
-			};
-		}
-		function combineValue(fns) {
-			if (fns.length === 0) return null;
-			if (fns.length === 1) return fns[0];
-			if (fns.length === 2) {
-				const [a, b] = fns;
-				return (d) => a(d) && b(d);
-			}
-			return (d) => {
-				for (let i = 0; i < fns.length; i++) if (!fns[i](d)) return false;
-				return true;
-			};
-		}
-		function compileNode(ctx, node, base, chain, ann) {
-			if (node === true) return TRUE_PAIR;
-			if (node === false) return FALSE_PAIR;
-			if (!(node instanceof Plan)) return TRUE_PAIR;
-			const interp = ctx.interp;
-			const P = node;
-			if (P.nodeBase !== null && P.nodeBase !== base) base = P.nodeBase;
-			if (chain.indexOf(base) === -1) chain = chain.concat(base);
-			const collect = ann || P.hasUnevaluated;
-			let perKey = ctx.memo.get(P);
-			if (perKey === void 0) {
-				perKey = /* @__PURE__ */ new Map();
-				ctx.memo.set(P, perKey);
-			}
-			const key = (ann ? "a " : "p ") + base + " " + chain.join(" ");
-			const cached = perKey.get(key);
-			if (cached !== void 0) {
-				if (cached.open) ctx.cyclic = true;
-				return cached;
-			}
-			const box = {
-				v: null,
-				c: null
-			};
-			const pair = {
-				open: true,
-				leaf: false,
-				v: (d, st, rec) => box.v(d, st, rec),
-				c: (d, e, ip, sp, st, rec) => box.c(d, e, ip, sp, st, rec)
-			};
-			perKey.set(key, pair);
-			let nested = false;
-			const inPlace = (n, b) => {
-				nested = true;
-				return compileNode(ctx, n, b, chain, collect);
-			};
-			const child = (n) => {
-				nested = true;
-				return compileNode(ctx, n, base, chain, false);
-			};
-			const steps = [];
-			const vsteps = [];
-			let leafV = TRUE_FN;
-			for (let which = 0; which < 2; which++) {
-				let t, seg;
-				if (which === 0) {
-					if (P.ref === null) continue;
-					t = resolveRef(P.ref, base, interp.state);
-					seg = "/$ref";
-				} else {
-					if (P.dynamicRef === null) continue;
-					t = dynTarget(interp, P.dynamicRef, base, chain);
-					seg = "/$dynamicRef";
-				}
-				if (t.node === void 0) {
-					const ref = which === 0 ? P.ref : P.dynamicRef;
-					const kw = which === 0 ? "$ref" : "$dynamicRef";
-					steps.push((data, errors, instancePath, schemaPath) => {
-						if (errors !== NOERRORS) errors.push(err(kw, kw, instancePath, schemaPath + seg, { ref }, `cannot resolve ${kw} ${ref}`));
-						return false;
-					});
-					vsteps.push(() => false);
-					continue;
-				}
-				const target = inPlace(interp.node(t.node), t.base);
-				let cstep, vstep;
-				if (collect) {
-					cstep = (data, errors, instancePath, schemaPath, stack, rec) => {
-						const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
-						const ok = target.c(data, errors, instancePath, schemaPath, stack, rec);
-						if (!ok) undo(rec, pl, n0, xl);
-						return ok;
-					};
-					vstep = (data, stack, rec) => target.v(data, stack, rec);
-				} else {
-					cstep = (data, errors, instancePath, schemaPath, stack) => target.c(data, errors, instancePath, schemaPath, stack);
-					vstep = target.v;
-				}
-				if (ctx.guard) {
-					const schema = P.schema;
-					const ic = cstep, iv = vstep;
-					cstep = (data, errors, instancePath, schemaPath, stack, rec) => {
-						for (let i = stack.length - 2; i >= 0; i -= 2) if (stack[i] === schema && stack[i + 1] === data) return true;
-						stack.push(schema, data);
-						const ok = ic(data, errors, instancePath, schemaPath, stack, rec);
-						stack.length -= 2;
-						return ok;
-					};
-					vstep = (data, stack, rec) => {
-						for (let i = stack.length - 2; i >= 0; i -= 2) if (stack[i] === schema && stack[i + 1] === data) return true;
-						stack.push(schema, data);
-						const ok = iv(data, stack, rec);
-						stack.length -= 2;
-						return ok;
-					};
-				}
-				steps.push(cstep);
-				vsteps.push(vstep);
-			}
-			if (P.hasType || P.enum !== null || P.hasConst || P.hasNumber || P.hasString || P.minItems !== void 0 || P.maxItems !== void 0 || P.uniqueItems || P.required !== null || P.minProperties !== void 0 || P.maxProperties !== void 0 || P.dependentRequired !== null || P.hasCustom) {
-				steps.push((data, errors, instancePath, schemaPath) => evalLeaf(P, data, errors, instancePath, schemaPath));
-				leafV = compileLeafV(P);
-				if (leafV !== TRUE_FN) vsteps.push(leafV);
-			}
-			if (P.prefixItems !== null) {
-				const fns = P.prefixItems.map(child);
-				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					if (dataBits(data) !== T_ARRAY) return true;
-					let ok = true;
-					const n = Math.min(fns.length, data.length);
-					for (let i = 0; i < n; i++) if (!(fns[i].leaf && fns[i].v(data[i], stack) || fns[i].c(data[i], errors, instancePath + "/" + i, schemaPath + "/prefixItems/" + i, stack))) {
-						ok = false;
-						if (errors === NOERRORS) return false;
-					}
-					if (collect) markRange(rec, 0, n);
-					return ok;
-				});
-				vsteps.push((data, stack, rec) => {
-					if (dataBits(data) !== T_ARRAY) return true;
-					const n = Math.min(fns.length, data.length);
-					for (let i = 0; i < n; i++) if (!fns[i].v(data[i], stack)) return false;
-					if (collect) markRange(rec, 0, n);
-					return true;
-				});
-			}
-			if (P.items !== void 0) {
-				const fn = child(P.items);
-				const start = P.prefixItems !== null ? P.prefixItems.length : 0;
-				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					if (dataBits(data) !== T_ARRAY) return true;
-					let ok = true;
-					for (let i = start; i < data.length; i++) if (!(fn.leaf && fn.v(data[i], stack) || fn.c(data[i], errors, instancePath + "/" + i, schemaPath + "/items", stack))) {
-						ok = false;
-						if (errors === NOERRORS) return false;
-					}
-					if (collect) markRange(rec, start, data.length);
-					return ok;
-				});
-				const fv = fn.v;
-				vsteps.push((data, stack, rec) => {
-					if (dataBits(data) !== T_ARRAY) return true;
-					for (let i = start; i < data.length; i++) if (!fv(data[i], stack)) return false;
-					if (collect) markRange(rec, start, data.length);
-					return true;
-				});
-			}
-			if (P.contains !== void 0) {
-				const fn = child(P.contains);
-				const minC = P.minContains !== void 0 ? P.minContains : 1;
-				const maxC = P.maxContains;
-				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					if (dataBits(data) !== T_ARRAY) return true;
-					let matched = 0;
-					for (let i = 0; i < data.length; i++) if (fn.v(data[i], stack)) {
-						matched++;
-						if (collect) addItem(rec, i);
-					}
-					let ok = true;
-					if (matched < minC) {
-						if (errors !== NOERRORS) errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", { minContains: minC }, `must contain at least ${minC} valid item(s)`));
-						ok = false;
-					}
-					if (maxC !== void 0 && matched > maxC) {
-						if (errors !== NOERRORS) errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", {
-							minContains: minC,
-							maxContains: maxC
-						}, `must NOT contain more than ${maxC} valid item(s)`));
-						ok = false;
-					}
-					return ok;
-				});
-				if (collect) vsteps.push((data, stack, rec) => {
-					if (dataBits(data) !== T_ARRAY) return true;
-					let matched = 0;
-					for (let i = 0; i < data.length; i++) if (fn.v(data[i], stack)) {
-						matched++;
-						addItem(rec, i);
-					}
-					return matched >= minC && (maxC === void 0 || matched <= maxC);
-				});
-				else vsteps.push((data, stack) => {
-					if (dataBits(data) !== T_ARRAY) return true;
-					let matched = 0;
-					for (let i = 0; i < data.length; i++) if (fn.v(data[i], stack)) {
-						matched++;
-						if (maxC === void 0 && matched >= minC) return true;
-					}
-					return matched >= minC && (maxC === void 0 || matched <= maxC);
-				});
-			}
-			if (P.properties !== null || P.patternProperties !== null || P.additionalProperties !== void 0 || P.propertyNames !== void 0) {
-				const props = P.properties;
-				const propKeys = props !== null ? [...props.keys()] : null;
-				const reqIn = P.requiredInProps;
-				const propList = props !== null ? [...props].map(([key, entry]) => ({
-					fn: child(entry.node),
-					seg: entry.seg,
-					schemaSeg: entry.schemaSeg,
-					req: reqIn !== null && reqIn.has(key)
-				})) : null;
-				const propMap = props !== null && props.size > 8 ? new Map(propKeys.map((k, i) => [k, propList[i]])) : null;
-				const lookup = propMap !== null ? (key) => propMap.get(key) : propKeys !== null ? (key) => {
-					for (let i = 0; i < propKeys.length; i++) if (propKeys[i] === key) return propList[i];
-				} : null;
-				const patterns = P.patternProperties !== null ? P.patternProperties.map((e) => ({
-					re: e.re,
-					src: e.src,
-					fn: child(e.node)
-				})) : null;
-				const apFn = P.additionalProperties !== void 0 ? child(P.additionalProperties) : null;
-				const fusedLeaf = vsteps.length > 0 && vsteps[vsteps.length - 1] === leafV && leafV !== TRUE_FN ? vsteps.pop() : null;
-				const apFalse = P.additionalProperties === false;
-				const pnFn = P.propertyNames !== void 0 ? child(P.propertyNames) : null;
-				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					if (dataBits(data) !== T_OBJECT) return true;
-					let ok = true;
-					const keys = collect ? keysOf(rec, data) : Object.keys(data);
-					if (pnFn !== null) {
-						for (const k of keys) if (!pnFn.c(k, errors, instancePath, schemaPath + "/propertyNames", stack)) {
-							ok = false;
-							if (errors === NOERRORS) return false;
-						}
-					}
-					for (let k = 0; k < keys.length; k++) {
-						const key = keys[k];
-						let evaluated = false;
-						const prop = lookup !== null ? lookup(key) : void 0;
-						if (prop !== void 0) {
-							const value = data[key];
-							if (value !== void 0) {
-								if (!(prop.fn.leaf && prop.fn.v(value, stack) || prop.fn.c(value, errors, instancePath + prop.seg, schemaPath + prop.schemaSeg, stack))) {
-									ok = false;
-									if (errors === NOERRORS) return false;
-								}
-							} else if (prop.req) {
-								ok = false;
-								if (errors === NOERRORS) return false;
-								errors.push(err("required", "required", instancePath, schemaPath + "/required", { missingProperty: key }, `must have required property '${key}'`));
-							}
-							evaluated = true;
-						}
-						if (patterns !== null) for (let pi = 0; pi < patterns.length; pi++) {
-							const pp = patterns[pi];
-							if (pp.re.test(key)) {
-								if (!(pp.fn.leaf && pp.fn.v(data[key], stack) || pp.fn.c(data[key], errors, instancePath + "/" + escapePointer(key), schemaPath + "/patternProperties/" + escapePointer(pp.src), stack))) {
-									ok = false;
-									if (errors === NOERRORS) return false;
-								}
-								evaluated = true;
-							}
-						}
-						if (!evaluated && apFn !== null) {
-							if (apFalse) {
-								ok = false;
-								if (errors === NOERRORS) return false;
-								errors.push(err("additionalProperties", "additionalProperties", instancePath, schemaPath + "/additionalProperties", { additionalProperty: key }, "must NOT have additional properties"));
-							} else if (!(apFn.leaf && apFn.v(data[key], stack) || apFn.c(data[key], errors, instancePath + "/" + escapePointer(key), schemaPath + "/additionalProperties", stack))) {
-								ok = false;
-								if (errors === NOERRORS) return false;
-							}
-							evaluated = true;
-						}
-						if (evaluated && collect) addProp(rec, key);
-					}
-					return ok;
-				});
-				if (patterns === null && apFn === null && pnFn === null && propKeys.length <= 8) {
-					const n = propKeys.length;
-					const direct = propKeys.map((k) => !(k in Object.prototype));
-					const assertsObject = fusedLeaf !== null && P.hasType && P.typeMask === T_OBJECT;
-					vsteps.push((data, stack, rec) => {
-						if (fusedLeaf !== null && !fusedLeaf(data)) return false;
-						if (!assertsObject && dataBits(data) !== T_OBJECT) return true;
-						const plain = Object.getPrototypeOf(data) === Object.prototype;
-						for (let i = 0; i < n; i++) {
-							const key = propKeys[i];
-							let value;
-							if (plain && direct[i]) {
-								value = data[key];
-								if (value === void 0) {
-									if (propList[i].req) return false;
-									if (collect && Object.hasOwn(data, key)) addProp(rec, key);
-									continue;
-								}
-							} else {
-								if (!Object.hasOwn(data, key)) {
-									if (propList[i].req) return false;
-									continue;
-								}
-								value = data[key];
-								if (value === void 0) {
-									if (propList[i].req) return false;
-									if (collect) addProp(rec, key);
-									continue;
-								}
-							}
-							if (!propList[i].fn.v(value, stack)) return false;
-							if (collect) addProp(rec, key);
-						}
-						return true;
-					});
-				} else {
-					const reqN = P.required !== null && P.requiredUndef === null && P.requiredInProps !== null ? P.requiredInProps.size : 0;
-					vsteps.push((data, stack, rec) => {
-						if (fusedLeaf !== null && !fusedLeaf(data)) return false;
-						if (dataBits(data) !== T_OBJECT) return true;
-						const keys = collect ? keysOf(rec, data) : Object.keys(data);
-						if (pnFn !== null) {
-							for (const k of keys) if (!pnFn.v(k, stack)) return false;
-						}
-						let seenReq = 0;
-						for (let k = 0; k < keys.length; k++) {
-							const key = keys[k];
-							let evaluated = false;
-							const prop = lookup !== null ? lookup(key) : void 0;
-							if (prop !== void 0) {
-								const value = data[key];
-								if (value !== void 0) {
-									if (!prop.fn.v(value, stack)) return false;
-								} else if (prop.req) return false;
-								if (prop.req) seenReq++;
-								evaluated = true;
-							}
-							if (patterns !== null) for (let pi = 0; pi < patterns.length; pi++) {
-								const pp = patterns[pi];
-								if (pp.re.test(key)) {
-									if (!pp.fn.v(data[key], stack)) return false;
-									evaluated = true;
-								}
-							}
-							if (!evaluated && apFn !== null) {
-								if (!apFn.v(data[key], stack)) return false;
-								evaluated = true;
-							}
-							if (evaluated && collect) addProp(rec, key);
-						}
-						return seenReq === reqN;
-					});
-				}
-			}
-			if (P.dependentSchemas !== null) {
-				const entries = P.dependentSchemas.map(([k, v]) => [
-					k,
-					inPlace(v, base),
-					escapePointer(k)
-				]);
-				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					if (dataBits(data) !== T_OBJECT) return true;
-					let ok = true;
-					for (const [k, fn, ek] of entries) if (Object.hasOwn(data, k)) {
-						if (collect) {
-							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
-							if (!fn.c(data, errors, instancePath, schemaPath + "/dependentSchemas/" + ek, stack, rec)) {
-								undo(rec, pl, n0, xl);
-								ok = false;
-								if (errors === NOERRORS) return false;
-							}
-						} else if (!fn.c(data, errors, instancePath, schemaPath + "/dependentSchemas/" + ek, stack)) {
-							ok = false;
-							if (errors === NOERRORS) return false;
-						}
-					}
-					return ok;
-				});
-				vsteps.push((data, stack, rec) => {
-					if (dataBits(data) !== T_OBJECT) return true;
-					for (const [k, fn] of entries) if (Object.hasOwn(data, k) && !fn.v(data, stack, rec)) return false;
-					return true;
-				});
-			}
-			if (P.propertyDependencies !== null) {
-				const entries = P.propertyDependencies.map(([k, choices]) => {
-					const m = /* @__PURE__ */ new Map();
-					for (const [value, v] of choices) m.set(value, inPlace(v, base));
-					return [k, m];
-				});
-				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					if (dataBits(data) !== T_OBJECT) return true;
-					let ok = true;
-					for (const [k, choices] of entries) {
-						if (!Object.hasOwn(data, k)) continue;
-						const value = data[k];
-						if (typeof value !== "string") continue;
-						const fn = choices.get(value);
-						if (fn === void 0) continue;
-						const branchPath = schemaPath + "/propertyDependencies/" + escapePointer(k) + "/" + escapePointer(value);
-						if (collect) {
-							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
-							if (!fn.c(data, errors, instancePath, branchPath, stack, rec)) {
-								undo(rec, pl, n0, xl);
-								ok = false;
-								if (errors === NOERRORS) return false;
-							}
-						} else if (!fn.c(data, errors, instancePath, branchPath, stack)) {
-							ok = false;
-							if (errors === NOERRORS) return false;
-						}
-					}
-					return ok;
-				});
-				vsteps.push((data, stack, rec) => {
-					if (dataBits(data) !== T_OBJECT) return true;
-					for (const [k, choices] of entries) {
-						if (!Object.hasOwn(data, k)) continue;
-						const value = data[k];
-						if (typeof value !== "string") continue;
-						const fn = choices.get(value);
-						if (fn !== void 0 && !fn.v(data, stack, rec)) return false;
-					}
-					return true;
-				});
-			}
-			if (P.allOf !== null) {
-				const fns = P.allOf.map((v) => inPlace(v, base));
-				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					let ok = true;
-					for (let i = 0; i < fns.length; i++) if (collect) {
-						const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
-						if (!fns[i].c(data, errors, instancePath, schemaPath + "/allOf/" + i, stack, rec)) {
-							undo(rec, pl, n0, xl);
-							ok = false;
-							if (errors === NOERRORS) return false;
-						}
-					} else if (!fns[i].c(data, errors, instancePath, schemaPath + "/allOf/" + i, stack)) {
-						ok = false;
-						if (errors === NOERRORS) return false;
-					}
-					return ok;
-				});
-				vsteps.push((data, stack, rec) => {
-					for (let i = 0; i < fns.length; i++) if (!fns[i].v(data, stack, rec)) return false;
-					return true;
-				});
-			}
-			if (P.macros !== null) {
-				const ms = P.macros.map((m) => ({
-					keyword: m.keyword,
-					fn: inPlace(m.node, base)
-				}));
-				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					let ok = true;
-					for (let i = 0; i < ms.length; i++) {
-						const m = ms[i];
-						const sp = schemaPath + "/" + m.keyword;
-						let passed;
-						if (collect) {
-							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
-							passed = m.fn.c(data, errors, instancePath, sp, stack, rec);
-							if (!passed) undo(rec, pl, n0, xl);
-						} else passed = m.fn.c(data, errors, instancePath, sp, stack);
-						if (!passed) {
-							ok = false;
-							if (errors === NOERRORS) return false;
-							errors.push(err(m.keyword, m.keyword, instancePath, sp, { keyword: m.keyword }, `must pass "${m.keyword}" keyword validation`));
-						}
-					}
-					return ok;
-				});
-				vsteps.push((data, stack, rec) => {
-					for (let i = 0; i < ms.length; i++) if (!ms[i].fn.v(data, stack, rec)) return false;
-					return true;
-				});
-			}
-			if (P.anyOf !== null) {
-				const fns = P.anyOf.map((v) => inPlace(v, base));
-				const titles = P.anyOf.map(branchTitle);
-				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					const scratch = errors === NOERRORS ? NOERRORS : [];
-					let any = false;
-					const branches = errors === NOERRORS ? null : [];
-					for (let i = 0; i < fns.length; i++) {
-						const mark = branches === null ? 0 : scratch.length;
-						let ok;
-						if (collect) {
-							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
-							ok = fns[i].c(data, scratch, instancePath, schemaPath + "/anyOf/" + i, stack, rec);
-							if (ok) any = true;
-							else undo(rec, pl, n0, xl);
-						} else {
-							ok = fns[i].c(data, scratch, instancePath, schemaPath + "/anyOf/" + i, stack);
-							if (ok) any = true;
-						}
-						if (branches !== null) branches.push({
-							valid: ok,
-							errors: scratch.slice(mark),
-							title: titles[i]
-						});
-					}
-					if (!any) {
-						if (branches !== null) {
-							const collapsed = collapseBranches({
-								keyword: "anyOf",
-								branchResults: branches,
-								parentPath: instancePath,
-								parentSchemaPath: schemaPath + "/anyOf"
-							});
-							if (collapsed !== null) errors.push(collapsed);
-						}
-						return false;
-					}
-					return true;
-				});
-				if (collect) vsteps.push((data, stack, rec) => {
-					let any = false;
-					for (let i = 0; i < fns.length; i++) {
-						const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
-						if (fns[i].v(data, stack, rec)) any = true;
-						else undo(rec, pl, n0, xl);
-					}
-					return any;
-				});
-				else vsteps.push((data, stack) => {
-					for (let i = 0; i < fns.length; i++) if (fns[i].v(data, stack)) return true;
-					return false;
-				});
-			}
-			if (P.oneOf !== null) {
-				const fns = P.oneOf.map((v) => inPlace(v, base));
-				const titles = P.oneOf.map(branchTitle);
-				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					const scratch = errors === NOERRORS ? NOERRORS : [];
-					let count = 0;
-					const branches = errors === NOERRORS ? null : [];
-					const pl0 = collect ? pLen(rec) : 0, n00 = collect ? rec.n : 0, xl0 = collect ? xLen(rec) : 0;
-					for (let i = 0; i < fns.length; i++) {
-						const mark = branches === null ? 0 : scratch.length;
-						let ok;
-						if (collect) {
-							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
-							ok = fns[i].c(data, scratch, instancePath, schemaPath + "/oneOf/" + i, stack, rec);
-							if (ok) count++;
-							else undo(rec, pl, n0, xl);
-						} else {
-							ok = fns[i].c(data, scratch, instancePath, schemaPath + "/oneOf/" + i, stack);
-							if (ok) count++;
-						}
-						if (branches !== null) branches.push({
-							valid: ok,
-							errors: scratch.slice(mark),
-							title: titles[i]
-						});
-					}
-					if (count !== 1) {
-						if (collect) undo(rec, pl0, n00, xl0);
-						if (branches !== null) {
-							const collapsed = collapseBranches({
-								keyword: "oneOf",
-								branchResults: branches,
-								parentPath: instancePath,
-								parentSchemaPath: schemaPath + "/oneOf"
-							});
-							if (collapsed !== null) errors.push(collapsed);
-						}
-						return false;
-					}
-					return true;
-				});
-				if (collect) vsteps.push((data, stack, rec) => {
-					let count = 0;
-					for (let i = 0; i < fns.length; i++) {
-						const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
-						if (fns[i].v(data, stack, rec)) {
-							count++;
-							if (count > 1) return false;
-						} else undo(rec, pl, n0, xl);
-					}
-					return count === 1;
-				});
-				else vsteps.push((data, stack) => {
-					let count = 0;
-					for (let i = 0; i < fns.length; i++) if (fns[i].v(data, stack)) {
-						count++;
-						if (count > 1) return false;
-					}
-					return count === 1;
-				});
-			}
-			if (P.not !== void 0) {
-				const fn = child(P.not);
-				steps.push((data, errors, instancePath, schemaPath, stack) => {
-					if (fn.v(data, stack)) {
-						if (errors !== NOERRORS) errors.push(err("not", "not", instancePath, schemaPath + "/not", {}, "must NOT be valid"));
-						return false;
-					}
-					return true;
-				});
-				vsteps.push((data, stack) => !fn.v(data, stack));
-			}
-			if (P.if !== void 0) {
-				const ifFn = inPlace(P.if, base);
-				const thenFn = P.then !== void 0 ? inPlace(P.then, base) : null;
-				const elseFn = P.else !== void 0 ? inPlace(P.else, base) : null;
-				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					let pl = collect ? pLen(rec) : 0, n0 = collect ? rec.n : 0, xl = collect ? xLen(rec) : 0;
-					let ok;
-					if (ifFn.v(data, stack, rec)) {
-						if (thenFn === null) return true;
-						if (collect) {
-							pl = pLen(rec);
-							n0 = rec.n;
-							xl = xLen(rec);
-						}
-						ok = thenFn.c(data, errors, instancePath, schemaPath + "/then", stack, rec);
-					} else {
-						if (collect) undo(rec, pl, n0, xl);
-						if (elseFn === null) return true;
-						ok = elseFn.c(data, errors, instancePath, schemaPath + "/else", stack, rec);
-					}
-					if (!ok && collect) undo(rec, pl, n0, xl);
-					return ok;
-				});
-				vsteps.push((data, stack, rec) => {
-					const pl = collect ? pLen(rec) : 0, n0 = collect ? rec.n : 0, xl = collect ? xLen(rec) : 0;
-					if (ifFn.v(data, stack, rec)) {
-						if (thenFn !== null) return thenFn.v(data, stack, rec);
-						return true;
-					}
-					if (collect) undo(rec, pl, n0, xl);
-					if (elseFn !== null) return elseFn.v(data, stack, rec);
-					return true;
-				});
-			}
-			if (P.unevaluatedProperties !== void 0) {
-				const fn = child(P.unevaluatedProperties);
-				if (fn === FALSE_PAIR) steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					if (dataBits(data) !== T_OBJECT) return true;
-					let ok = true;
-					const keys = keysOf(rec, data);
-					for (let k = 0; k < keys.length; k++) {
-						const key = keys[k];
-						if (hasProp(rec, key)) continue;
-						ok = false;
-						if (errors === NOERRORS) return false;
-						errors.push(err("unevaluatedProperties", "unevaluatedProperties", instancePath, schemaPath + "/unevaluatedProperties", { unevaluatedProperty: key }, "must NOT have unevaluated properties"));
-						addProp(rec, key);
-					}
-					return ok;
-				});
-				else steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					if (dataBits(data) !== T_OBJECT) return true;
-					let ok = true;
-					const keys = keysOf(rec, data);
-					for (let k = 0; k < keys.length; k++) {
-						const key = keys[k];
-						if (hasProp(rec, key)) continue;
-						if (!(fn.leaf && fn.v(data[key], stack) || fn.c(data[key], errors, instancePath + "/" + escapePointer(key), schemaPath + "/unevaluatedProperties", stack))) {
-							ok = false;
-							if (errors === NOERRORS) return false;
-						}
-						addProp(rec, key);
-					}
-					return ok;
-				});
-				if (fn === FALSE_PAIR) vsteps.push((data, stack, rec) => {
-					if (dataBits(data) !== T_OBJECT) return true;
-					const keys = keysOf(rec, data);
-					if (keys.length === 0) return true;
-					if (rec.props === null) return false;
-					for (let k = 0; k < keys.length; k++) if (!hasProp(rec, keys[k])) return false;
-					return true;
-				});
-				else vsteps.push((data, stack, rec) => {
-					if (dataBits(data) !== T_OBJECT) return true;
-					const keys = keysOf(rec, data);
-					for (let k = 0; k < keys.length; k++) {
-						const key = keys[k];
-						if (hasProp(rec, key)) continue;
-						if (!fn.v(data[key], stack)) return false;
-						addProp(rec, key);
-					}
-					return true;
-				});
-			}
-			if (P.unevaluatedItems !== void 0) {
-				const fn = child(P.unevaluatedItems);
-				if (fn === FALSE_PAIR) steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					if (dataBits(data) !== T_ARRAY) return true;
-					for (let i = 0; i < data.length; i++) {
-						if (hasItem(rec, i)) continue;
-						if (errors !== NOERRORS) errors.push(err("unevaluatedItems", "unevaluatedItems", instancePath, schemaPath + "/unevaluatedItems", { limit: i }, "must NOT have more than " + i + " items"));
-						if (data.length > rec.n) rec.n = data.length;
-						return false;
-					}
-					if (data.length > rec.n) rec.n = data.length;
-					return true;
-				});
-				else steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
-					if (dataBits(data) !== T_ARRAY) return true;
-					let ok = true;
-					for (let i = 0; i < data.length; i++) {
-						if (hasItem(rec, i)) continue;
-						if (!(fn.leaf && fn.v(data[i], stack) || fn.c(data[i], errors, instancePath + "/" + i, schemaPath + "/unevaluatedItems", stack))) {
-							ok = false;
-							if (errors === NOERRORS) return false;
-						}
-					}
-					if (data.length > rec.n) rec.n = data.length;
-					return ok;
-				});
-				if (fn === FALSE_PAIR) vsteps.push((data, stack, rec) => {
-					if (dataBits(data) !== T_ARRAY) return true;
-					for (let i = rec.n; i < data.length; i++) if (!hasItem(rec, i)) return false;
-					return true;
-				});
-				else vsteps.push((data, stack, rec) => {
-					if (dataBits(data) !== T_ARRAY) return true;
-					for (let i = 0; i < data.length; i++) {
-						if (hasItem(rec, i)) continue;
-						if (!fn.v(data[i], stack)) return false;
-					}
-					if (data.length > rec.n) rec.n = data.length;
-					return true;
-				});
-			}
-			let cfn;
-			if (steps.length === 0) cfn = TRUE_FN;
-			else if (steps.length === 1) cfn = steps[0];
-			else {
-				const arr = steps;
-				cfn = (d, e, ip, sp, st, rec) => {
-					let ok = true;
-					for (let i = 0; i < arr.length; i++) if (!arr[i](d, e, ip, sp, st, rec)) {
-						if (e === NOERRORS) return false;
-						ok = false;
-					}
-					return ok;
-				};
-			}
-			let vfn;
-			if (vsteps.length === 0) vfn = TRUE_FN;
-			else if (vsteps.length === 1) vfn = vsteps[0];
-			else if (vsteps.length === 2) {
-				const [a, b] = vsteps;
-				vfn = (d, st, rec) => a(d, st, rec) && b(d, st, rec);
-			} else {
-				const arr = vsteps;
-				vfn = (d, st, rec) => {
-					for (let i = 0; i < arr.length; i++) if (!arr[i](d, st, rec)) return false;
-					return true;
-				};
-			}
-			if (P.hasUnevaluated) {
-				const inner = cfn;
-				const innerV = vfn;
-				if (ann) {
-					cfn = (d, e, ip, sp, st, rec) => {
-						const own = fresh();
-						const ok = inner(d, e, ip, sp, st, own);
-						if (ok) mergeRec(rec, own);
-						return ok;
-					};
-					vfn = (d, st, rec) => {
-						const own = fresh();
-						const ok = innerV(d, st, own);
-						if (ok) mergeRec(rec, own);
-						return ok;
-					};
-				} else {
-					cfn = (d, e, ip, sp, st) => inner(d, e, ip, sp, st, fresh());
-					vfn = (d, st) => innerV(d, st, fresh());
-				}
-			}
-			box.c = cfn;
-			box.v = vfn;
-			pair.c = cfn;
-			pair.v = vfn;
-			pair.leaf = !nested;
-			pair.open = false;
-			return pair;
-		}
-		function compileInterpreter(interp) {
-			const root = interp.rootNode;
-			const base = interp.state.rootBase;
-			let ctx = {
-				interp,
-				memo: /* @__PURE__ */ new Map(),
-				guard: true,
-				cyclic: false
-			};
-			let pair = compileNode(ctx, root, base, [base], false);
-			if (!ctx.cyclic) {
-				ctx = {
-					interp,
-					memo: /* @__PURE__ */ new Map(),
-					guard: false,
-					cyclic: false
-				};
-				pair = compileNode(ctx, root, base, [base], false);
-			}
-			return {
-				v: pair.v,
-				c: pair.c,
-				cyclic: ctx.guard
-			};
-		}
-		return { compileInterpreter };
-	}
-	module.exports = { install };
-}));
-//#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/interpreter.js
-var require_interpreter = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/interpreter.browser.js
+var require_interpreter_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const core = require_interpreter_core();
-	core._setPlanCompiler(() => require_plan_compiler().install);
+	core._setPlanCompiler(null, true);
+	let asked = false;
+	const idle = (f) => {
+		if (typeof requestIdleCallback === "function") return requestIdleCallback(f, { timeout: 2e3 });
+		const t = setTimeout(f, 200);
+		if (t && typeof t.unref === "function") t.unref();
+	};
+	function load() {
+		import("./plan-compiler-LzxZbas-.js").then((m) => /* @__PURE__ */ __toESM(m.default, 1)).then((m) => {
+			const mod = m && m.install ? m : m.default;
+			core._setPlanCompiler(() => mod.install);
+		}, () => core._setPlanCompiler(null));
+	}
+	const create = core.createInterpreter;
+	core.createInterpreter = (schema, opts) => {
+		if (!asked) {
+			asked = true;
+			idle(load);
+		}
+		return create(schema, opts);
+	};
 	module.exports = core;
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/error-messages.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/error-messages.js
 var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function resolveOwner(rootSchema, schemaPath) {
 		if (!schemaPath || typeof schemaPath !== "string" || schemaPath[0] !== "#") return void 0;
@@ -8967,7 +8024,7 @@ var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/buffer-gate.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/buffer-gate.browser.js
 var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		bufferNeedsSlowPath: () => false,
@@ -8977,7 +8034,7 @@ var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, modul
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/refine.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/refine.js
 var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const REFINE = Symbol.for("ata.t.refine");
 	function getRefinements(schema) {
@@ -9028,12 +8085,12 @@ var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/version.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/version.js
 var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = "1.57.0";
+	module.exports = "1.58.0";
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/shape-classifier.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
 		"string",
@@ -9140,7 +8197,7 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/tier0.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/tier0.js
 var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const TYPE_MASK = {
 		string: 1,
@@ -9348,7 +8405,7 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/validator-core.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/validator-core.js
 var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let _nativeMod;
 	function getNative() {
@@ -10044,17 +9101,20 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 			if (this._engine === void 0) this._engine = null;
 			const preprocessSchema = resolveSchemaForPreprocess(schemaObj, this._schemaMap);
 			let preprocess = null;
+			const mayHaveDefaults = preprocessSchema !== schemaObj || this._schemaStr.includes("\"default\"");
 			if (!this._interpretOnly && _codegen !== null) {
 				const ppKey = !this._userFormats && !this._usesKeywords ? mapKey + "\0" + String(options.coerceTypes) + "|" + (options.useDefaults !== false) + "|" + String(options.removeAdditional) : null;
 				const hit = ppKey !== null ? _preprocessCache.get(ppKey) : void 0;
 				if (hit !== void 0) preprocess = hit;
 				else {
-					preprocess = _codegen.buildPreprocess(preprocessSchema, options) || null;
+					preprocess = _codegen.buildPreprocess(preprocessSchema, mayHaveDefaults || options.useDefaults === false ? options : {
+						...options,
+						useDefaults: false
+					}) || null;
 					if (ppKey !== null && preprocess !== null) _boundedSet(_preprocessCache, ppKey, preprocess);
 				}
 			}
 			if (!preprocess) {
-				const mayHaveDefaults = preprocessSchema !== schemaObj || this._schemaStr.includes("\"default\"");
 				const applyDefaults = options.useDefaults === false || !mayHaveDefaults ? null : buildDefaultsApplier(preprocessSchema);
 				const applyCoerce = options.coerceTypes ? buildCoercer(preprocessSchema) : null;
 				const mutators = [
@@ -10095,7 +9155,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				jsErrFn = this._usesKeywords ? null : compileToJSCodegenWithErrors(schemaObj, sm, this._userFormats, { runtimeShape: true }) || null;
 				_upgradeCacheEntry();
 			};
-			let _rejectBase = null, _rejectPresented = null, _rejectPlain = false, _oneShotRich = null, _richBuilder = null, _oneShotPlain = false, _isCleanShape = null, _onePassOf = null, _isCombined = null;
+			let _rejectBase = null, _rejectPresented = null, _rejectPlain = false, _oneShotRich = null, _richBuilder = null, _oneShotPlain = false, _isCleanShape = null, _onePassOf = null, _isCombined = null, _preVerdict = null, _rawVerdict = null;
 			if (jsFn) {
 				const _cg = {
 					jsFn,
@@ -10115,6 +9175,8 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 					isCleanShape: null,
 					isCombined: null,
 					onePassOf: null,
+					preVerdict: null,
+					rawVerdict: null,
 					buildRich: this._richErrors && !this._schemaPositions && !this._usesKeywords ? () => compileToJSCombined(schemaObj, VALID_RESULT, sm, this._userFormats, {
 						runtimeShape: true,
 						rich: true
@@ -10128,14 +9190,20 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				_oneShotPlain = _cg.oneShotPlain;
 				_isCleanShape = _cg.isCleanShape;
 				_onePassOf = _cg.onePassOf;
+				_preVerdict = _cg.preVerdict;
+				_rawVerdict = _cg.rawVerdict;
 				_isCombined = _cg.isCombined;
 			} else {
 				const iargs = _interpArgs(this, schemaObj);
-				const interp = _tiering !== null && _tiering.adopt(this, schemaObj, iargs) || require_interpreter().createInterpreter(schemaObj, iargs);
+				const interp = _tiering !== null && _tiering.adopt(this, schemaObj, iargs) || require_interpreter_browser().createInterpreter(schemaObj, iargs);
 				this._engine = "interpreter";
 				if (_codegen === null && _tiering !== null && !_forceNapi && !this._v1Dynamic) _tiering.watch(this, interp);
 				const once = interp.dataContext === true;
 				if (!preprocess && !once) this._fastVerdict = (d) => interp.isValid(d);
+				if (preprocess && !once) _preVerdict = (d) => {
+					preprocess(d);
+					return interp.isValid(d);
+				};
 				const run = options.abortEarly ? preprocess ? (data) => {
 					preprocess(data);
 					return interp.isValid(data) ? VALID_RESULT : ABORT_EARLY_RESULT;
@@ -10144,7 +9212,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 					return interp.validate(data);
 				} : (data) => interp.validate(data);
 				this.validate = this._verbose ? _verboseWrap(run, schemaObj) : run;
-				if (!preprocess && !options.abortEarly && !this._verbose && !once) _rejectBase = (data) => interp.validate(data);
+				if (!options.abortEarly && !this._verbose && !once) _rejectBase = (data) => interp.validate(data);
 				_bindVerdict(this, this._fastVerdict ? this._fastVerdict : (data) => run(data).valid);
 				const runText = options.abortEarly || once ? run : preprocess ? (data) => {
 					preprocess(data);
@@ -10275,9 +9343,10 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 			}
 			const _vx = this._validateTail !== null ? this._validateTail() : null;
 			let _vxApplied = false;
-			if (this._fastVerdict && !preprocess && !options.abortEarly && this.validate) {
+			const _verdict0 = preprocess ? _preVerdict : this._fastVerdict;
+			if (_verdict0 && !options.abortEarly && this.validate) {
 				const _full = _vx === null && !fusedRemove && _rejectPresented ? _rejectPresented : this.validate;
-				const _fast = _vx ? _fuseTail(this._fastVerdict, _vx.check) : this._fastVerdict;
+				const _fast = _vx ? _fuseTail(_verdict0, _vx.check) : _verdict0;
 				const _extra = _vx ? _vx.errors : null;
 				_vxApplied = true;
 				const EMPTY_ERRORS = Object.freeze([]);
@@ -10344,13 +9413,17 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 					return new LazyRejection(_errorsOf, data, _buildRawErrors);
 				};
 				const self = this;
-				const _factory = _vx === null && _fast === this._fastVerdict && typeof _fast._resultFactory === "function" ? _fast._resultFactory : null;
+				const _gv = preprocess ? _rawVerdict : _fast === this._fastVerdict ? _fast : null;
+				const _factory = _vx === null && _gv !== null && typeof _gv._resultFactory === "function" ? _gv._resultFactory : null;
 				if (_factory !== null) {
 					let calls = 0;
 					this.validate = (data) => {
 						if (++calls === HYBRID_TIER_CALLS && _onePass === null) {
 							const gen = _factory(LazyRejection, _errorsOf, _buildRawErrors, EMPTY_ERRORS);
-							if (gen) self.validate = gen;
+							if (gen) self.validate = preprocess ? (data) => {
+								preprocess(data);
+								return gen(data);
+							} : gen;
 						}
 						return _plainValidate(data);
 					};
@@ -11135,7 +10208,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	});
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/aot.browser.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/aot.browser.js
 var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function unavailable(name) {
 		return function() {
@@ -11158,7 +10231,7 @@ var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/tiering.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/tiering.js
 var require_tiering = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const core = require_validator_core();
 	const { compileFunction } = require_compile_fn();
@@ -11350,7 +10423,7 @@ var require_tiering = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				schema: raw,
 				text: JSON.stringify(raw),
 				args,
-				interp: require_interpreter().createInterpreter(raw, args)
+				interp: require_interpreter_browser().createInterpreter(raw, args)
 			};
 		}
 		function adopt(v, schemaObj, args) {
@@ -11407,14 +10480,14 @@ var require_tiering = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/index.browser.mjs
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords$1();
 var import_validator_core = /* @__PURE__ */ __toESM(require_validator_core(), 1);
 var import_tiering = /* @__PURE__ */ __toESM(require_tiering(), 1);
-import_validator_core.default._registerTiering(import_tiering.default.createTiering(() => import("./codegen-engine-CnPwAnM7.js").then((m) => /* @__PURE__ */ __toESM(m.default, 1))));
+import_validator_core.default._registerTiering(import_tiering.default.createTiering(() => import("./codegen-engine-CE0C7EiZ.js").then((m) => /* @__PURE__ */ __toESM(m.default, 1))));
 const { Validator, compile, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, parseJSON, defineSchema } = import_validator_core.default;
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/t.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/t.js
 var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const OPTIONAL = Symbol.for("ata.t.optional");
 	const { attach: attachRefine } = require_refine();
@@ -11719,10 +10792,10 @@ const productSchema = t.object({
 });
 (0, import_keywords.withKeywords)(new Validator(productSchema)).validate({});
 //#endregion
-export { require_native_load_browser as _, require_formats as a, require_branch_collapse as c, require_enrich_error as d, require_suggestions as f, require_env as g, require_compile_fn as h, require_interpreter as i, require_safe_regex as l, require_schema_order as m, require_validator_core as n, require_uri_core as o, require_error_codes as p, require_buffer_gate_browser as r, require_unique_items as s, require_aot_browser as t, require_rejections as u, __commonJSMin as v };
+export { require_env as _, require_formats as a, require_branch_collapse as c, require_enrich_error as d, require_suggestions as f, require_compile_fn as g, require_defaults as h, require_interpreter_browser as i, require_safe_regex as l, require_schema_order as m, require_validator_core as n, require_uri_core as o, require_error_codes as p, require_buffer_gate_browser as r, require_unique_items as s, require_aot_browser as t, require_rejections as u, require_native_load_browser as v, __commonJSMin as y };
 
-import { _ as require_native_load_browser, a as require_formats, c as require_branch_collapse, d as require_enrich_error, f as require_suggestions, g as require_env, h as require_compile_fn, i as require_interpreter, l as require_safe_regex, m as require_schema_order, n as require_validator_core, o as require_uri_core, p as require_error_codes, r as require_buffer_gate_browser, s as require_unique_items, t as require_aot_browser, u as require_rejections, v as __commonJSMin } from "./index.js";
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/combined-runtime.js
+import { _ as require_env, a as require_formats, c as require_branch_collapse, d as require_enrich_error, f as require_suggestions, g as require_compile_fn, h as require_defaults, i as require_interpreter_browser, l as require_safe_regex, m as require_schema_order, n as require_validator_core, o as require_uri_core, p as require_error_codes, r as require_buffer_gate_browser, s as require_unique_items, t as require_aot_browser, u as require_rejections, v as require_native_load_browser, y as __commonJSMin } from "./index.js";
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/combined-runtime.js
 var require_combined_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function apState() {
 		return {
@@ -11867,7 +10940,7 @@ var require_combined_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	});
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/regex-linear.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/regex-linear.js
 var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { parse } = require_safe_regex();
 	const NATIVE_ESCAPES = /* @__PURE__ */ new Set([
@@ -12222,7 +11295,7 @@ var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = { nativeIsLinear };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/formats-source.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/formats-source.js
 var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const _formats = () => require_formats();
 	function idnEmailSource(v, isStr) {
@@ -12312,7 +11385,6 @@ var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		dateTimeSource,
 		ipv6Source,
 		hostnameSource,
-		uriSource,
 		uuidSource,
 		timeSource,
 		noReservedSource,
@@ -12324,7 +11396,7 @@ var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/enrich-site.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/enrich-site.js
 var require_enrich_site = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -12407,7 +11479,7 @@ var require_enrich_site = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler-errors.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler-errors.js
 var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { env } = require_env();
 	const { compileFunction } = require_compile_fn();
@@ -15428,7 +14500,7 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileFunction } = require_compile_fn();
 	let _compileSeq = 0;
@@ -17432,7 +16504,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const BOOL_FALSE = { bool: false };
 	function expandDynamicScopes(root, schemaMap) {
 		if (root === null || typeof root !== "object" || Array.isArray(root)) return null;
-		const { indexSchemas, resolveRef, splitFragment, resolveUri } = require_interpreter()._refInternals;
+		const { indexSchemas, resolveRef, splitFragment, resolveUri } = require_interpreter_browser()._refInternals;
 		let state;
 		try {
 			state = indexSchemas(root, schemaMap && schemaMap.size ? schemaMap : null);
@@ -17614,7 +16686,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (/"\$(?:dynamicRef|dynamicAnchor)"/.test(text)) return expandDynamicScopes(root, schemaMap);
 		if (!hasRef) return root;
 		if (refsAllPlainLocal(root, text)) return root;
-		const { indexSchemas, resolveRef } = require_interpreter()._refInternals;
+		const { indexSchemas, resolveRef } = require_interpreter_browser()._refInternals;
 		const state = indexSchemas(root, schemaMap && schemaMap.size ? schemaMap : null);
 		const rootDialect = typeof root.$schema === "string" ? root.$schema.replace(/#$/, "") : null;
 		const names = /* @__PURE__ */ new Map();
@@ -20162,7 +19234,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/scan-runtime.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/scan-runtime.js
 var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function hex4(s, i) {
 		for (let k = i; k < i + 4; k++) {
@@ -20320,7 +19392,7 @@ var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/scan-compiler.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/scan-compiler.js
 var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileFunction } = require_compile_fn();
 	const { compileToJSCodegen } = require_js_compiler();
@@ -21256,7 +20328,7 @@ var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/clone-emit.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/clone-emit.js
 var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileToJSCodegen, unevalContributions } = require_js_compiler();
 	function resolveLocalPointer(root, ref) {
@@ -21314,12 +20386,11 @@ var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				cur = target;
 				entered = true;
 			}
-			const strip = inRef || entered;
 			const out = {};
 			for (const k of Object.keys(cur)) {
-				if (strip && k === "default") continue;
+				if (entered && k === "default") continue;
 				const v = cur[k];
-				const w = _INLINE_DATA_KEYS.has(k) || k === "$defs" || k === "definitions" ? v : walk(v, active, strip);
+				const w = _INLINE_DATA_KEYS.has(k) || k === "$defs" || k === "definitions" ? v : walk(v, active, false);
 				if (k === "__proto__") Object.defineProperty(out, k, {
 					value: w,
 					writable: true,
@@ -21399,7 +20470,7 @@ var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (apSchema) {
 			const kVar = `_k${depth}`;
 			const vVar = `_v${depth}`;
-			const valueExpr = emitValueExpr(stripDefaultsDeep(apSchema), vVar, depth);
+			const valueExpr = emitValueExpr(apSchema, vVar, depth);
 			if (valueExpr === null) return null;
 			let skip = "";
 			let declSet = "";
@@ -21418,16 +20489,6 @@ var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (dflt === void 0) return set;
 			return `${set} else ${key === "__proto__" ? `Object.defineProperty(${tmp}, ${JSON.stringify(key)}, { value: ${JSON.stringify(dflt)}, writable: true, enumerable: true, configurable: true });` : `${tmp}[${JSON.stringify(key)}] = ${JSON.stringify(dflt)};`}`;
 		}).join(" ")}${recordLoop} return ${tmp}; })()`;
-	}
-	function stripDefaultsDeep(node) {
-		if (!node || typeof node !== "object") return node;
-		if (Array.isArray(node)) return node.map(stripDefaultsDeep);
-		const out = {};
-		for (const k of Object.keys(node)) {
-			if (k === "default") continue;
-			out[k] = _INLINE_DATA_KEYS.has(k) ? node[k] : stripDefaultsDeep(node[k]);
-		}
-		return out;
 	}
 	const _CLONE_PRIMITIVE = /* @__PURE__ */ new Set([
 		"string",
@@ -21472,12 +20533,11 @@ var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		cloneExprFor,
 		emitClone,
 		inlineRefsForClone,
-		stripDefaultsDeep,
 		resolveLocalPointer
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/native-positions.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/native-positions.js
 var require_native_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const NATIVE_MIN = 32768;
 	let _native;
@@ -21593,7 +20653,7 @@ var require_native_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	module.exports = { nativeTargeted };
 }));
 //#endregion
-//#region ../node_modules/.pnpm/ata-validator@1.57.0_yaml@2.9.1/node_modules/ata-validator/lib/codegen-engine.js
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/codegen-engine.js
 var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileFunction } = require_compile_fn();
 	const core = require_validator_core();
@@ -21660,7 +20720,7 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				errors: []
 			};
 			if (!_interp) {
-				const { createInterpreter } = require_interpreter();
+				const { createInterpreter } = require_interpreter_browser();
 				_interp = createInterpreter(schemaObj, {
 					schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
 					formats: this._userFormats,
@@ -21748,6 +20808,13 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 			return _mustReject(_errPreferredImpl(d));
 		};
 		if (!hasDynRef || _isCodegen) this._fastVerdict = preprocess ? null : jsFn;
+		if ((!hasDynRef || _isCodegen) && preprocess && !fusedRemove) {
+			ctx.preVerdict = (data) => {
+				preprocess(data);
+				return jsFn(data);
+			};
+			ctx.rawVerdict = jsFn;
+		}
 		if (options.abortEarly && jsFn && !hasDynRef) {
 			const _fn = jsFn;
 			this.validate = preprocess ? (data) => {
@@ -21756,7 +20823,7 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 			} : (data) => _fn(data) ? VALID_RESULT : ABORT_EARLY_RESULT;
 		} else if (hasDynRef && !(_isCodegen && jsFn)) {
 			if (!_interp) {
-				const { createInterpreter } = require_interpreter();
+				const { createInterpreter } = require_interpreter_browser();
 				_interp = createInterpreter(schemaObj, {
 					schemaMap: this._schemaMap.size > 0 ? this._schemaMap : null,
 					formats: this._userFormats,
@@ -21794,7 +20861,7 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				preprocess(data);
 				return run(data);
 			} : run;
-			if (!preprocess) ctx.rejectBase = onReject;
+			ctx.rejectBase = onReject;
 			if (!preprocess) {
 				ctx.richBuilder = richBuilder;
 				ctx.oneShotRich = ctx.buildRich ? richIfSafe : () => combinedIfSafe() || errFnIfSafe();
@@ -21831,13 +20898,13 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 					preprocess(data);
 					return safeCombinedFn(data);
 				} : safeCombinedFn;
-				if (!preprocess) ctx.rejectBase = (data) => _mustReject(safeCombinedFn(data));
+				ctx.rejectBase = (data) => _mustReject(safeCombinedFn(data));
 			} else {
 				this.validate = preprocess ? (data) => {
 					preprocess(data);
 					return jsFn(data) ? VALID_RESULT : errOnly(data);
 				} : (data) => jsFn(data) ? VALID_RESULT : errOnly(data);
-				if (!preprocess) ctx.rejectBase = errOnly;
+				ctx.rejectBase = errOnly;
 			}
 		}
 		if (this._verbose) {
@@ -22149,19 +21216,103 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		}
 		st.seen.delete(node);
 	}
-	function hasDefaultsInside(node, seen) {
-		if (!node || typeof node !== "object" || !node.properties || seen.has(node)) return false;
-		seen.add(node);
-		let found = false;
-		for (const prop of Object.values(node.properties)) if (prop && typeof prop === "object" && (prop.default !== void 0 || hasDefaultsInside(prop, seen))) {
-			found = true;
-			break;
+	let _localRef = null;
+	const localRef = (root, ref) => (_localRef || (_localRef = require_defaults().localRef))(root, ref);
+	function reachState(root) {
+		return {
+			root,
+			memo: /* @__PURE__ */ new Map()
+		};
+	}
+	function hasDefaultsInside(node, rs) {
+		return reachDefault(node, rs, /* @__PURE__ */ new Set()) === 1;
+	}
+	function reachDefault(node, rs, stack) {
+		if (!node || typeof node !== "object") return 0;
+		const known = rs.memo.get(node);
+		if (known !== void 0) return known;
+		if (stack.has(node)) return 2;
+		stack.add(node);
+		let open = false;
+		const check = (n) => {
+			const r = reachDefault(n, rs, stack);
+			if (r === 2) open = true;
+			return r === 1;
+		};
+		let yes = false;
+		if (node.properties && typeof node.properties === "object") {
+			for (const prop of Object.values(node.properties)) if (prop && typeof prop === "object" && (prop.default !== void 0 || check(prop))) {
+				yes = true;
+				break;
+			}
 		}
-		seen.delete(node);
-		return found;
+		if (!yes && typeof node.$ref === "string") yes = check(localRef(rs.root, node.$ref));
+		if (!yes) {
+			for (const list of [node.allOf, node.prefixItems]) if (Array.isArray(list) && list.some(check)) {
+				yes = true;
+				break;
+			}
+		}
+		if (!yes) {
+			for (const one of [node.items, node.additionalProperties]) if (check(one)) {
+				yes = true;
+				break;
+			}
+		}
+		if (!yes) {
+			for (const map of [node.patternProperties, node.dependentSchemas]) if (map && typeof map === "object" && Object.keys(map).some((k) => check(map[k]))) {
+				yes = true;
+				break;
+			}
+		}
+		stack.delete(node);
+		if (yes) {
+			rs.memo.set(node, 1);
+			return 1;
+		}
+		if (!open) {
+			rs.memo.set(node, 0);
+			return 0;
+		}
+		return 2;
+	}
+	function defaultsNeedPatterns(node, rs) {
+		const pp = node.patternProperties;
+		if (!pp || typeof pp !== "object" || Object.keys(pp).length === 0) return false;
+		for (const k of Object.keys(pp)) if (hasDefaultsInside(pp[k], rs)) return true;
+		return hasDefaultsInside(node.additionalProperties, rs);
+	}
+	function emitDefaultsAt(schema, expr, lines, st) {
+		const n = "_d" + st.n++;
+		lines.push(`{const ${n}=${expr};if(typeof ${n}==='object'&&${n}!==null){`);
+		emitDefaults(schema, n, lines, st);
+		lines.push("}}");
+	}
+	const DEFAULTS_MAX_LINES = 4e3;
+	function defaultsVisits(node, st, stack) {
+		const known = st.visits.get(node);
+		if (known !== void 0) return known;
+		if (stack.has(node)) return Infinity;
+		stack.add(node);
+		let n = 1;
+		const add = (x) => {
+			if (n <= DEFAULTS_MAX_LINES && hasDefaultsInside(x, st.reach)) n += defaultsVisits(x, st, stack);
+		};
+		if (defaultsNeedPatterns(node, st.reach)) n = Infinity;
+		for (const prop of Object.values(node.properties || {})) if (prop && typeof prop === "object") add(prop);
+		if (Array.isArray(node.prefixItems)) node.prefixItems.forEach(add);
+		add(node.items);
+		add(node.additionalProperties);
+		if (node.dependentSchemas && typeof node.dependentSchemas === "object") Object.values(node.dependentSchemas).forEach(add);
+		if (typeof node.$ref === "string") add(localRef(st.root, node.$ref));
+		if (Array.isArray(node.allOf)) node.allOf.forEach(add);
+		stack.delete(node);
+		if (n > DEFAULTS_MAX_LINES) n = Infinity;
+		st.visits.set(node, n);
+		return n;
 	}
 	function emitDefaults(node, ov, lines, st) {
-		if (st.seen.has(node)) {
+		if (st.seen.has(node) || lines.length > DEFAULTS_MAX_LINES) {
 			st.cycle = true;
 			return;
 		}
@@ -22177,7 +21328,7 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				const def = JSON.stringify(prop.default);
 				lines.push(key === "__proto__" ? `if(${absent})Object.defineProperty(${ov},${k},{value:${def},writable:true,enumerable:true,configurable:true})` : `if(${absent})${ov}[${k}]=${def}`);
 			}
-			if (prop.properties && hasDefaultsInside(prop, /* @__PURE__ */ new Set())) {
+			if (hasDefaultsInside(prop, st.reach)) {
 				const n = "_d" + st.n++;
 				const own = inherited ? `Object.hasOwn(${ov},${k})` : `(${pk}||Object.hasOwn(${ov},${k}))`;
 				lines.push(`{const ${n}=${ov}[${k}];if(typeof ${n}==='object'&&${n}!==null&&${own}){`);
@@ -22185,10 +21336,57 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				lines.push("}}");
 			}
 		}
+		if (defaultsNeedPatterns(node, st.reach)) {
+			st.cycle = true;
+			st.seen.delete(node);
+			return;
+		}
+		const has = (x) => hasDefaultsInside(x, st.reach);
+		const tuple = Array.isArray(node.prefixItems) ? node.prefixItems : [];
+		const tupleHas = tuple.map(has);
+		const itemsHas = has(node.items);
+		if (tupleHas.some(Boolean) || itemsHas) {
+			lines.push(`if(Array.isArray(${ov})){`);
+			for (let i = 0; i < tuple.length; i++) {
+				if (!tupleHas[i]) continue;
+				lines.push(`if(${ov}.length>${i})`);
+				emitDefaultsAt(tuple[i], `${ov}[${i}]`, lines, st);
+			}
+			if (itemsHas) {
+				const i = "_i" + st.n++;
+				lines.push(`for(let ${i}=${tuple.length};${i}<${ov}.length;${i}++)`);
+				emitDefaultsAt(node.items, `${ov}[${i}]`, lines, st);
+			}
+			lines.push("}");
+		}
+		if (has(node.additionalProperties)) {
+			const k = "_k" + st.n++;
+			const declared = Object.keys(node.properties || {});
+			lines.push(`if(!Array.isArray(${ov}))for(const ${k} of Object.keys(${ov})){`);
+			if (declared.length) lines.push(`if(${declared.map((d) => `${k}===${JSON.stringify(d)}`).join("||")})continue;`);
+			emitDefaultsAt(node.additionalProperties, `${ov}[${k}]`, lines, st);
+			lines.push("}");
+		}
+		if (node.dependentSchemas && typeof node.dependentSchemas === "object") for (const key of Object.keys(node.dependentSchemas)) {
+			const dep = node.dependentSchemas[key];
+			if (!has(dep)) continue;
+			lines.push(`if(!Array.isArray(${ov})&&Object.hasOwn(${ov},${JSON.stringify(key)})){`);
+			emitDefaults(dep, ov, lines, st);
+			lines.push("}");
+		}
+		if (typeof node.$ref === "string") {
+			const target = localRef(st.root, node.$ref);
+			if (target && hasDefaultsInside(target, st.reach)) emitDefaults(target, ov, lines, st);
+		}
+		if (Array.isArray(node.allOf)) {
+			for (const sub of node.allOf) if (hasDefaultsInside(sub, st.reach)) emitDefaults(sub, ov, lines, st);
+		}
 		st.seen.delete(node);
 	}
 	function preprocessSource(schema, options) {
-		if (typeof schema !== "object" || schema === null || !schema.properties) return null;
+		if (typeof schema !== "object" || schema === null) return null;
+		const reach = reachState(schema);
+		if (!schema.properties && !(options.useDefaults !== false && hasDefaultsInside(schema, reach))) return null;
 		const lines = [];
 		if (options.removeAdditional) emitRemovals(schema, "d", lines, 0, /* @__PURE__ */ new Set());
 		const st = {
@@ -22196,10 +21394,16 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 			seen: /* @__PURE__ */ new Set(),
 			cycle: false,
 			arrayMode: options.coerceTypes === "array",
-			memo: /* @__PURE__ */ new Map()
+			memo: /* @__PURE__ */ new Map(),
+			root: schema,
+			reach,
+			visits: /* @__PURE__ */ new Map()
 		};
 		if (options.coerceTypes) emitCoercions(schema, "d", lines, st, 0);
-		if (options.useDefaults !== false && hasDefaultsInside(schema, /* @__PURE__ */ new Set())) emitDefaults(schema, "d", lines, st);
+		if (options.useDefaults !== false && hasDefaultsInside(schema, reach)) {
+			if (defaultsVisits(schema, st, /* @__PURE__ */ new Set()) > DEFAULTS_MAX_LINES) return null;
+			emitDefaults(schema, "d", lines, st);
+		}
 		if (st.cycle) return null;
 		if (lines.length === 0) return null;
 		lines.unshift(`if(d===null||typeof d!=='object')return`);
@@ -22313,3 +21517,1120 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 }));
 //#endregion
 export default require_codegen_engine();
+
+import { c as require_branch_collapse, y as __commonJSMin } from "./index.js";
+//#region ../node_modules/.pnpm/ata-validator@1.58.0_yaml@2.9.1/node_modules/ata-validator/lib/plan-compiler.js
+var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { collapseBranches } = require_branch_collapse();
+	const branchTitle = (n) => n && n.schema && typeof n.schema.title === "string" ? n.schema.title : "";
+	function install(deps) {
+		const { Plan, NOERRORS, err, evalLeaf, evalLeafV, runCustomV, dataBits, escapePointer, deepEqual, enumMember, allDistinct, multipleOfOk, cpAtLeast, cpAtMost, T_STRING, T_NUMBER, T_INTEGER, T_BOOLEAN, T_NULL, T_ARRAY, T_OBJECT, resolveRef, splitFragment, resolveUri } = deps;
+		const TRUE_FN = () => true;
+		const TRUE_PAIR = {
+			v: TRUE_FN,
+			c: TRUE_FN,
+			leaf: true
+		};
+		const FALSE_PAIR = {
+			leaf: true,
+			v: () => false,
+			c: (data, errors, instancePath, schemaPath) => {
+				if (errors !== NOERRORS) errors.push(err("false schema", "not", instancePath, schemaPath, {}, "boolean schema is false"));
+				return false;
+			}
+		};
+		function dynTarget(interp, ref, base, chain) {
+			const state = interp.state;
+			let { node, base: refBase } = resolveRef(ref, base, state);
+			const [, fragment] = splitFragment(resolveUri(base, ref));
+			if (fragment && !fragment.startsWith("/")) {
+				const initialDyn = state.dynamicAnchors.get(refBase);
+				if (node !== void 0 && initialDyn && initialDyn.get(fragment) === node || !interp.bookending) for (let i = 0; i < chain.length; i++) {
+					const dyn = state.dynamicAnchors.get(chain[i]);
+					if (dyn && dyn.has(fragment)) {
+						node = dyn.get(fragment);
+						refBase = chain[i];
+						break;
+					}
+				}
+			}
+			return {
+				node,
+				base: refBase
+			};
+		}
+		function fresh() {
+			return {
+				props: null,
+				n: 0,
+				x: null,
+				keys: null
+			};
+		}
+		function keysOf(rec, data) {
+			if (rec.keys === null) rec.keys = Object.keys(data);
+			return rec.keys;
+		}
+		function hasProp(rec, key) {
+			const p = rec.props;
+			if (p === null) return false;
+			for (let i = 0; i < p.length; i++) if (p[i] === key) return true;
+			return false;
+		}
+		function addProp(rec, key) {
+			if (rec.props === null) rec.props = [key];
+			else rec.props.push(key);
+		}
+		function hasItem(rec, i) {
+			if (i < rec.n) return true;
+			const x = rec.x;
+			if (x === null) return false;
+			for (let j = 0; j < x.length; j++) if (x[j] === i) return true;
+			return false;
+		}
+		function addItem(rec, i) {
+			if (i < rec.n) return;
+			if (i === rec.n) {
+				rec.n = i + 1;
+				return;
+			}
+			if (rec.x === null) rec.x = [i];
+			else rec.x.push(i);
+		}
+		function markRange(rec, from, to) {
+			if (from >= to) return;
+			if (from <= rec.n) {
+				if (to > rec.n) rec.n = to;
+				return;
+			}
+			if (rec.x === null) rec.x = [];
+			for (let i = from; i < to; i++) rec.x.push(i);
+		}
+		function mergeRec(target, from) {
+			if (from.props !== null) {
+				if (target.props === null) target.props = from.props;
+				else for (let i = 0; i < from.props.length; i++) target.props.push(from.props[i]);
+			}
+			if (from.n > target.n) target.n = from.n;
+			if (from.x !== null) {
+				if (target.x === null) target.x = from.x;
+				else for (let i = 0; i < from.x.length; i++) target.x.push(from.x[i]);
+			}
+		}
+		function pLen(rec) {
+			return rec.props === null ? 0 : rec.props.length;
+		}
+		function xLen(rec) {
+			return rec.x === null ? 0 : rec.x.length;
+		}
+		function undo(rec, pl, n0, xl) {
+			const p = rec.props;
+			if (p !== null && p.length !== pl) p.length = pl;
+			rec.n = n0;
+			const x = rec.x;
+			if (x !== null && x.length !== xl) x.length = xl;
+		}
+		function compileLeafV(P) {
+			const checks = [];
+			let needsBits = false;
+			if (P.hasType) {
+				const mask = P.typeMask;
+				needsBits = true;
+				checks.push((data, bits) => (bits & mask) !== 0);
+			}
+			if (P.enum !== null) {
+				if (P.enum.length === 0) checks.push(() => false);
+				else if (P.enumObjs.length === 0) {
+					const prims = P.enumPrims;
+					checks.push((data) => prims.has(data));
+				} else checks.push((data) => enumMember(P, data));
+			}
+			if (P.hasConst) {
+				const c = P.const;
+				checks.push((data) => deepEqual(c, data));
+			}
+			const reqFolded = P.required !== null && P.requiredUndef === null && P.properties !== null;
+			let numsRun = null;
+			if (P.hasNumber) {
+				const nums = [];
+				if (P.minimum !== void 0) {
+					const m = P.minimum;
+					nums.push((d) => d >= m);
+				}
+				if (P.maximum !== void 0) {
+					const m = P.maximum;
+					nums.push((d) => d <= m);
+				}
+				if (P.exclusiveMinimum !== void 0) {
+					const m = P.exclusiveMinimum;
+					nums.push((d) => d > m);
+				}
+				if (P.exclusiveMaximum !== void 0) {
+					const m = P.exclusiveMaximum;
+					nums.push((d) => d < m);
+				}
+				if (P.multipleOf !== void 0) {
+					const m = P.multipleOf;
+					nums.push((d) => multipleOfOk(d, m));
+				}
+				numsRun = combineValue(nums);
+			}
+			let strsRun = null;
+			if (P.hasString) {
+				const strs = [];
+				if (P.minLength !== void 0 && P.maxLength !== void 0) {
+					const lo = P.minLength, hi = P.maxLength;
+					strs.push((d) => {
+						const n = d.length;
+						return n >= 2 * lo && n <= hi || cpAtLeast(d, lo) && cpAtMost(d, hi);
+					});
+				} else if (P.minLength !== void 0) {
+					const m = P.minLength;
+					strs.push((d) => cpAtLeast(d, m));
+				} else if (P.maxLength !== void 0) {
+					const m = P.maxLength;
+					strs.push((d) => cpAtMost(d, m));
+				}
+				if (P.pattern !== null) {
+					const re = P.pattern;
+					strs.push((d) => re.test(d));
+				}
+				if (P.formatFn !== null) {
+					const f = P.formatFn;
+					strs.push((d) => f(d));
+				}
+				strsRun = combineValue(strs);
+			}
+			let arrsRun = null;
+			if (P.minItems !== void 0 || P.maxItems !== void 0 || P.uniqueItems) {
+				const arrs = [];
+				if (P.minItems !== void 0) {
+					const m = P.minItems;
+					arrs.push((d) => d.length >= m);
+				}
+				if (P.maxItems !== void 0) {
+					const m = P.maxItems;
+					arrs.push((d) => d.length <= m);
+				}
+				if (P.uniqueItems) arrs.push(allDistinct);
+				arrsRun = combineValue(arrs);
+			}
+			let objsRun = null;
+			if (P.required !== null && !reqFolded || P.minProperties !== void 0 || P.maxProperties !== void 0 || P.dependentRequired !== null) {
+				const objs = [];
+				if (P.required !== null && !reqFolded) {
+					const req = P.required;
+					const undef = P.requiredUndef;
+					if (req.length === 1) {
+						const k = req[0];
+						objs.push(undef !== null && undef[0] ? (d) => Object.hasOwn(d, k) && d[k] !== void 0 : (d) => Object.hasOwn(d, k));
+					} else if (undef === null) objs.push((d) => {
+						for (let i = 0; i < req.length; i++) if (!Object.hasOwn(d, req[i])) return false;
+						return true;
+					});
+					else objs.push((d) => {
+						for (let i = 0; i < req.length; i++) if (!Object.hasOwn(d, req[i]) || undef[i] && d[req[i]] === void 0) return false;
+						return true;
+					});
+				}
+				if (P.minProperties !== void 0) {
+					const m = P.minProperties;
+					objs.push((d) => Object.keys(d).length >= m);
+				}
+				if (P.maxProperties !== void 0) {
+					const m = P.maxProperties;
+					objs.push((d) => Object.keys(d).length <= m);
+				}
+				if (P.dependentRequired !== null) {
+					const entries = P.dependentRequired;
+					objs.push((d) => {
+						for (let i = 0; i < entries.length; i++) {
+							const [key, deps] = entries[i];
+							if (!Object.hasOwn(d, key)) continue;
+							for (let j = 0; j < deps.length; j++) if (!Object.hasOwn(d, deps[j])) return false;
+						}
+						return true;
+					});
+				}
+				objsRun = combineValue(objs);
+			}
+			if (P.hasType && P.enum === null && !P.hasConst && !P.hasCustom && checks.length === 1) {
+				const m = P.typeMask;
+				const own = m === T_STRING ? strsRun : m === T_INTEGER || m === T_NUMBER ? numsRun : m === T_OBJECT ? objsRun : m === T_ARRAY ? arrsRun : null;
+				if (!(numsRun !== null && m !== T_INTEGER && m !== T_NUMBER || strsRun !== null && m !== T_STRING || arrsRun !== null && m !== T_ARRAY || objsRun !== null && m !== T_OBJECT)) {
+					const r = own;
+					switch (m) {
+						case T_STRING: return r === null ? (d) => typeof d === "string" : (d) => typeof d === "string" && r(d);
+						case T_INTEGER: return r === null ? (d) => Number.isInteger(d) : (d) => Number.isInteger(d) && r(d);
+						case T_NUMBER: return r === null ? (d) => typeof d === "number" && isFinite(d) : (d) => typeof d === "number" && isFinite(d) && r(d);
+						case T_BOOLEAN: return (d) => typeof d === "boolean";
+						case T_NULL: return (d) => d === null;
+						case T_OBJECT: return r === null ? (d) => typeof d === "object" && d !== null && !Array.isArray(d) : (d) => typeof d === "object" && d !== null && !Array.isArray(d) && r(d);
+						case T_ARRAY: return r === null ? (d) => Array.isArray(d) : (d) => Array.isArray(d) && r(d);
+					}
+				}
+			}
+			if (numsRun !== null) {
+				const run = numsRun;
+				checks.push((data) => !Number.isFinite(data) || run(data));
+			}
+			if (strsRun !== null) {
+				const run = strsRun;
+				needsBits = true;
+				checks.push((data, bits) => bits !== T_STRING || run(data));
+			}
+			if (arrsRun !== null) {
+				const run = arrsRun;
+				needsBits = true;
+				checks.push((data, bits) => bits !== T_ARRAY || run(data));
+			}
+			if (objsRun !== null) {
+				const run = objsRun;
+				needsBits = true;
+				checks.push((data, bits) => bits !== T_OBJECT || run(data));
+			}
+			if (P.hasCustom) {
+				needsBits = true;
+				checks.push((data, bits) => runCustomV(P, data, bits));
+			}
+			if (checks.length === 0) return TRUE_FN;
+			if (!needsBits) {
+				if (checks.length === 1) {
+					const a = checks[0];
+					return (data) => a(data, 0);
+				}
+				return (data) => {
+					for (let i = 0; i < checks.length; i++) if (!checks[i](data, 0)) return false;
+					return true;
+				};
+			}
+			if (checks.length === 1) {
+				const a = checks[0];
+				return (data) => a(data, dataBits(data));
+			}
+			if (checks.length === 2) {
+				const [a, b] = checks;
+				return (data) => {
+					const bits = dataBits(data);
+					return a(data, bits) && b(data, bits);
+				};
+			}
+			return (data) => {
+				const bits = dataBits(data);
+				for (let i = 0; i < checks.length; i++) if (!checks[i](data, bits)) return false;
+				return true;
+			};
+		}
+		function combineValue(fns) {
+			if (fns.length === 0) return null;
+			if (fns.length === 1) return fns[0];
+			if (fns.length === 2) {
+				const [a, b] = fns;
+				return (d) => a(d) && b(d);
+			}
+			return (d) => {
+				for (let i = 0; i < fns.length; i++) if (!fns[i](d)) return false;
+				return true;
+			};
+		}
+		function compileNode(ctx, node, base, chain, ann) {
+			if (node === true) return TRUE_PAIR;
+			if (node === false) return FALSE_PAIR;
+			if (!(node instanceof Plan)) return TRUE_PAIR;
+			const interp = ctx.interp;
+			const P = node;
+			if (P.nodeBase !== null && P.nodeBase !== base) base = P.nodeBase;
+			if (chain.indexOf(base) === -1) chain = chain.concat(base);
+			const collect = ann || P.hasUnevaluated;
+			let perKey = ctx.memo.get(P);
+			if (perKey === void 0) {
+				perKey = /* @__PURE__ */ new Map();
+				ctx.memo.set(P, perKey);
+			}
+			const key = (ann ? "a " : "p ") + base + " " + chain.join(" ");
+			const cached = perKey.get(key);
+			if (cached !== void 0) {
+				if (cached.open) ctx.cyclic = true;
+				return cached;
+			}
+			const box = {
+				v: null,
+				c: null
+			};
+			const pair = {
+				open: true,
+				leaf: false,
+				v: (d, st, rec) => box.v(d, st, rec),
+				c: (d, e, ip, sp, st, rec) => box.c(d, e, ip, sp, st, rec)
+			};
+			perKey.set(key, pair);
+			let nested = false;
+			const inPlace = (n, b) => {
+				nested = true;
+				return compileNode(ctx, n, b, chain, collect);
+			};
+			const child = (n) => {
+				nested = true;
+				return compileNode(ctx, n, base, chain, false);
+			};
+			const steps = [];
+			const vsteps = [];
+			let leafV = TRUE_FN;
+			for (let which = 0; which < 2; which++) {
+				let t, seg;
+				if (which === 0) {
+					if (P.ref === null) continue;
+					t = resolveRef(P.ref, base, interp.state);
+					seg = "/$ref";
+				} else {
+					if (P.dynamicRef === null) continue;
+					t = dynTarget(interp, P.dynamicRef, base, chain);
+					seg = "/$dynamicRef";
+				}
+				if (t.node === void 0) {
+					const ref = which === 0 ? P.ref : P.dynamicRef;
+					const kw = which === 0 ? "$ref" : "$dynamicRef";
+					steps.push((data, errors, instancePath, schemaPath) => {
+						if (errors !== NOERRORS) errors.push(err(kw, kw, instancePath, schemaPath + seg, { ref }, `cannot resolve ${kw} ${ref}`));
+						return false;
+					});
+					vsteps.push(() => false);
+					continue;
+				}
+				const target = inPlace(interp.node(t.node), t.base);
+				let cstep, vstep;
+				if (collect) {
+					cstep = (data, errors, instancePath, schemaPath, stack, rec) => {
+						const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+						const ok = target.c(data, errors, instancePath, schemaPath, stack, rec);
+						if (!ok) undo(rec, pl, n0, xl);
+						return ok;
+					};
+					vstep = (data, stack, rec) => target.v(data, stack, rec);
+				} else {
+					cstep = (data, errors, instancePath, schemaPath, stack) => target.c(data, errors, instancePath, schemaPath, stack);
+					vstep = target.v;
+				}
+				if (ctx.guard) {
+					const schema = P.schema;
+					const ic = cstep, iv = vstep;
+					cstep = (data, errors, instancePath, schemaPath, stack, rec) => {
+						for (let i = stack.length - 2; i >= 0; i -= 2) if (stack[i] === schema && stack[i + 1] === data) return true;
+						stack.push(schema, data);
+						const ok = ic(data, errors, instancePath, schemaPath, stack, rec);
+						stack.length -= 2;
+						return ok;
+					};
+					vstep = (data, stack, rec) => {
+						for (let i = stack.length - 2; i >= 0; i -= 2) if (stack[i] === schema && stack[i + 1] === data) return true;
+						stack.push(schema, data);
+						const ok = iv(data, stack, rec);
+						stack.length -= 2;
+						return ok;
+					};
+				}
+				steps.push(cstep);
+				vsteps.push(vstep);
+			}
+			if (P.hasType || P.enum !== null || P.hasConst || P.hasNumber || P.hasString || P.minItems !== void 0 || P.maxItems !== void 0 || P.uniqueItems || P.required !== null || P.minProperties !== void 0 || P.maxProperties !== void 0 || P.dependentRequired !== null || P.hasCustom) {
+				steps.push((data, errors, instancePath, schemaPath) => evalLeaf(P, data, errors, instancePath, schemaPath));
+				leafV = compileLeafV(P);
+				if (leafV !== TRUE_FN) vsteps.push(leafV);
+			}
+			if (P.prefixItems !== null) {
+				const fns = P.prefixItems.map(child);
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					let ok = true;
+					const n = Math.min(fns.length, data.length);
+					for (let i = 0; i < n; i++) if (!(fns[i].leaf && fns[i].v(data[i], stack) || fns[i].c(data[i], errors, instancePath + "/" + i, schemaPath + "/prefixItems/" + i, stack))) {
+						ok = false;
+						if (errors === NOERRORS) return false;
+					}
+					if (collect) markRange(rec, 0, n);
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					const n = Math.min(fns.length, data.length);
+					for (let i = 0; i < n; i++) if (!fns[i].v(data[i], stack)) return false;
+					if (collect) markRange(rec, 0, n);
+					return true;
+				});
+			}
+			if (P.items !== void 0) {
+				const fn = child(P.items);
+				const start = P.prefixItems !== null ? P.prefixItems.length : 0;
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					let ok = true;
+					for (let i = start; i < data.length; i++) if (!(fn.leaf && fn.v(data[i], stack) || fn.c(data[i], errors, instancePath + "/" + i, schemaPath + "/items", stack))) {
+						ok = false;
+						if (errors === NOERRORS) return false;
+					}
+					if (collect) markRange(rec, start, data.length);
+					return ok;
+				});
+				const fv = fn.v;
+				vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					for (let i = start; i < data.length; i++) if (!fv(data[i], stack)) return false;
+					if (collect) markRange(rec, start, data.length);
+					return true;
+				});
+			}
+			if (P.contains !== void 0) {
+				const fn = child(P.contains);
+				const minC = P.minContains !== void 0 ? P.minContains : 1;
+				const maxC = P.maxContains;
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					let matched = 0;
+					for (let i = 0; i < data.length; i++) if (fn.v(data[i], stack)) {
+						matched++;
+						if (collect) addItem(rec, i);
+					}
+					let ok = true;
+					if (matched < minC) {
+						if (errors !== NOERRORS) errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", { minContains: minC }, `must contain at least ${minC} valid item(s)`));
+						ok = false;
+					}
+					if (maxC !== void 0 && matched > maxC) {
+						if (errors !== NOERRORS) errors.push(err("contains", "contains", instancePath, schemaPath + "/contains", {
+							minContains: minC,
+							maxContains: maxC
+						}, `must NOT contain more than ${maxC} valid item(s)`));
+						ok = false;
+					}
+					return ok;
+				});
+				if (collect) vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					let matched = 0;
+					for (let i = 0; i < data.length; i++) if (fn.v(data[i], stack)) {
+						matched++;
+						addItem(rec, i);
+					}
+					return matched >= minC && (maxC === void 0 || matched <= maxC);
+				});
+				else vsteps.push((data, stack) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					let matched = 0;
+					for (let i = 0; i < data.length; i++) if (fn.v(data[i], stack)) {
+						matched++;
+						if (maxC === void 0 && matched >= minC) return true;
+					}
+					return matched >= minC && (maxC === void 0 || matched <= maxC);
+				});
+			}
+			if (P.properties !== null || P.patternProperties !== null || P.additionalProperties !== void 0 || P.propertyNames !== void 0) {
+				const props = P.properties;
+				const propKeys = props !== null ? [...props.keys()] : null;
+				const reqIn = P.requiredInProps;
+				const propList = props !== null ? [...props].map(([key, entry]) => ({
+					fn: child(entry.node),
+					seg: entry.seg,
+					schemaSeg: entry.schemaSeg,
+					req: reqIn !== null && reqIn.has(key)
+				})) : null;
+				const propMap = props !== null && props.size > 8 ? new Map(propKeys.map((k, i) => [k, propList[i]])) : null;
+				const lookup = propMap !== null ? (key) => propMap.get(key) : propKeys !== null ? (key) => {
+					for (let i = 0; i < propKeys.length; i++) if (propKeys[i] === key) return propList[i];
+				} : null;
+				const patterns = P.patternProperties !== null ? P.patternProperties.map((e) => ({
+					re: e.re,
+					src: e.src,
+					fn: child(e.node)
+				})) : null;
+				const apFn = P.additionalProperties !== void 0 ? child(P.additionalProperties) : null;
+				const fusedLeaf = vsteps.length > 0 && vsteps[vsteps.length - 1] === leafV && leafV !== TRUE_FN ? vsteps.pop() : null;
+				const apFalse = P.additionalProperties === false;
+				const pnFn = P.propertyNames !== void 0 ? child(P.propertyNames) : null;
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					let ok = true;
+					const keys = collect ? keysOf(rec, data) : Object.keys(data);
+					if (pnFn !== null) {
+						for (const k of keys) if (!pnFn.c(k, errors, instancePath, schemaPath + "/propertyNames", stack)) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+						}
+					}
+					for (let k = 0; k < keys.length; k++) {
+						const key = keys[k];
+						let evaluated = false;
+						const prop = lookup !== null ? lookup(key) : void 0;
+						if (prop !== void 0) {
+							const value = data[key];
+							if (value !== void 0) {
+								if (!(prop.fn.leaf && prop.fn.v(value, stack) || prop.fn.c(value, errors, instancePath + prop.seg, schemaPath + prop.schemaSeg, stack))) {
+									ok = false;
+									if (errors === NOERRORS) return false;
+								}
+							} else if (prop.req) {
+								ok = false;
+								if (errors === NOERRORS) return false;
+								errors.push(err("required", "required", instancePath, schemaPath + "/required", { missingProperty: key }, `must have required property '${key}'`));
+							}
+							evaluated = true;
+						}
+						if (patterns !== null) for (let pi = 0; pi < patterns.length; pi++) {
+							const pp = patterns[pi];
+							if (pp.re.test(key)) {
+								if (!(pp.fn.leaf && pp.fn.v(data[key], stack) || pp.fn.c(data[key], errors, instancePath + "/" + escapePointer(key), schemaPath + "/patternProperties/" + escapePointer(pp.src), stack))) {
+									ok = false;
+									if (errors === NOERRORS) return false;
+								}
+								evaluated = true;
+							}
+						}
+						if (!evaluated && apFn !== null) {
+							if (apFalse) {
+								ok = false;
+								if (errors === NOERRORS) return false;
+								errors.push(err("additionalProperties", "additionalProperties", instancePath, schemaPath + "/additionalProperties", { additionalProperty: key }, "must NOT have additional properties"));
+							} else if (!(apFn.leaf && apFn.v(data[key], stack) || apFn.c(data[key], errors, instancePath + "/" + escapePointer(key), schemaPath + "/additionalProperties", stack))) {
+								ok = false;
+								if (errors === NOERRORS) return false;
+							}
+							evaluated = true;
+						}
+						if (evaluated && collect) addProp(rec, key);
+					}
+					return ok;
+				});
+				if (patterns === null && apFn === null && pnFn === null && propKeys.length <= 8) {
+					const n = propKeys.length;
+					const direct = propKeys.map((k) => !(k in Object.prototype));
+					const assertsObject = fusedLeaf !== null && P.hasType && P.typeMask === T_OBJECT;
+					vsteps.push((data, stack, rec) => {
+						if (fusedLeaf !== null && !fusedLeaf(data)) return false;
+						if (!assertsObject && dataBits(data) !== T_OBJECT) return true;
+						const plain = Object.getPrototypeOf(data) === Object.prototype;
+						for (let i = 0; i < n; i++) {
+							const key = propKeys[i];
+							let value;
+							if (plain && direct[i]) {
+								value = data[key];
+								if (value === void 0) {
+									if (propList[i].req) return false;
+									if (collect && Object.hasOwn(data, key)) addProp(rec, key);
+									continue;
+								}
+							} else {
+								if (!Object.hasOwn(data, key)) {
+									if (propList[i].req) return false;
+									continue;
+								}
+								value = data[key];
+								if (value === void 0) {
+									if (propList[i].req) return false;
+									if (collect) addProp(rec, key);
+									continue;
+								}
+							}
+							if (!propList[i].fn.v(value, stack)) return false;
+							if (collect) addProp(rec, key);
+						}
+						return true;
+					});
+				} else {
+					const reqN = P.required !== null && P.requiredUndef === null && P.requiredInProps !== null ? P.requiredInProps.size : 0;
+					vsteps.push((data, stack, rec) => {
+						if (fusedLeaf !== null && !fusedLeaf(data)) return false;
+						if (dataBits(data) !== T_OBJECT) return true;
+						const keys = collect ? keysOf(rec, data) : Object.keys(data);
+						if (pnFn !== null) {
+							for (const k of keys) if (!pnFn.v(k, stack)) return false;
+						}
+						let seenReq = 0;
+						for (let k = 0; k < keys.length; k++) {
+							const key = keys[k];
+							let evaluated = false;
+							const prop = lookup !== null ? lookup(key) : void 0;
+							if (prop !== void 0) {
+								const value = data[key];
+								if (value !== void 0) {
+									if (!prop.fn.v(value, stack)) return false;
+								} else if (prop.req) return false;
+								if (prop.req) seenReq++;
+								evaluated = true;
+							}
+							if (patterns !== null) for (let pi = 0; pi < patterns.length; pi++) {
+								const pp = patterns[pi];
+								if (pp.re.test(key)) {
+									if (!pp.fn.v(data[key], stack)) return false;
+									evaluated = true;
+								}
+							}
+							if (!evaluated && apFn !== null) {
+								if (!apFn.v(data[key], stack)) return false;
+								evaluated = true;
+							}
+							if (evaluated && collect) addProp(rec, key);
+						}
+						return seenReq === reqN;
+					});
+				}
+			}
+			if (P.dependentSchemas !== null) {
+				const entries = P.dependentSchemas.map(([k, v]) => [
+					k,
+					inPlace(v, base),
+					escapePointer(k)
+				]);
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					let ok = true;
+					for (const [k, fn, ek] of entries) if (Object.hasOwn(data, k)) {
+						if (collect) {
+							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+							if (!fn.c(data, errors, instancePath, schemaPath + "/dependentSchemas/" + ek, stack, rec)) {
+								undo(rec, pl, n0, xl);
+								ok = false;
+								if (errors === NOERRORS) return false;
+							}
+						} else if (!fn.c(data, errors, instancePath, schemaPath + "/dependentSchemas/" + ek, stack)) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+						}
+					}
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					for (const [k, fn] of entries) if (Object.hasOwn(data, k) && !fn.v(data, stack, rec)) return false;
+					return true;
+				});
+			}
+			if (P.propertyDependencies !== null) {
+				const entries = P.propertyDependencies.map(([k, choices]) => {
+					const m = /* @__PURE__ */ new Map();
+					for (const [value, v] of choices) m.set(value, inPlace(v, base));
+					return [k, m];
+				});
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					let ok = true;
+					for (const [k, choices] of entries) {
+						if (!Object.hasOwn(data, k)) continue;
+						const value = data[k];
+						if (typeof value !== "string") continue;
+						const fn = choices.get(value);
+						if (fn === void 0) continue;
+						const branchPath = schemaPath + "/propertyDependencies/" + escapePointer(k) + "/" + escapePointer(value);
+						if (collect) {
+							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+							if (!fn.c(data, errors, instancePath, branchPath, stack, rec)) {
+								undo(rec, pl, n0, xl);
+								ok = false;
+								if (errors === NOERRORS) return false;
+							}
+						} else if (!fn.c(data, errors, instancePath, branchPath, stack)) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+						}
+					}
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					for (const [k, choices] of entries) {
+						if (!Object.hasOwn(data, k)) continue;
+						const value = data[k];
+						if (typeof value !== "string") continue;
+						const fn = choices.get(value);
+						if (fn !== void 0 && !fn.v(data, stack, rec)) return false;
+					}
+					return true;
+				});
+			}
+			if (P.allOf !== null) {
+				const fns = P.allOf.map((v) => inPlace(v, base));
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					let ok = true;
+					for (let i = 0; i < fns.length; i++) if (collect) {
+						const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+						if (!fns[i].c(data, errors, instancePath, schemaPath + "/allOf/" + i, stack, rec)) {
+							undo(rec, pl, n0, xl);
+							ok = false;
+							if (errors === NOERRORS) return false;
+						}
+					} else if (!fns[i].c(data, errors, instancePath, schemaPath + "/allOf/" + i, stack)) {
+						ok = false;
+						if (errors === NOERRORS) return false;
+					}
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					for (let i = 0; i < fns.length; i++) if (!fns[i].v(data, stack, rec)) return false;
+					return true;
+				});
+			}
+			if (P.macros !== null) {
+				const ms = P.macros.map((m) => ({
+					keyword: m.keyword,
+					fn: inPlace(m.node, base)
+				}));
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					let ok = true;
+					for (let i = 0; i < ms.length; i++) {
+						const m = ms[i];
+						const sp = schemaPath + "/" + m.keyword;
+						let passed;
+						if (collect) {
+							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+							passed = m.fn.c(data, errors, instancePath, sp, stack, rec);
+							if (!passed) undo(rec, pl, n0, xl);
+						} else passed = m.fn.c(data, errors, instancePath, sp, stack);
+						if (!passed) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+							errors.push(err(m.keyword, m.keyword, instancePath, sp, { keyword: m.keyword }, `must pass "${m.keyword}" keyword validation`));
+						}
+					}
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					for (let i = 0; i < ms.length; i++) if (!ms[i].fn.v(data, stack, rec)) return false;
+					return true;
+				});
+			}
+			if (P.anyOf !== null) {
+				const fns = P.anyOf.map((v) => inPlace(v, base));
+				const titles = P.anyOf.map(branchTitle);
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					const scratch = errors === NOERRORS ? NOERRORS : [];
+					let any = false;
+					const branches = errors === NOERRORS ? null : [];
+					for (let i = 0; i < fns.length; i++) {
+						const mark = branches === null ? 0 : scratch.length;
+						let ok;
+						if (collect) {
+							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+							ok = fns[i].c(data, scratch, instancePath, schemaPath + "/anyOf/" + i, stack, rec);
+							if (ok) any = true;
+							else undo(rec, pl, n0, xl);
+						} else {
+							ok = fns[i].c(data, scratch, instancePath, schemaPath + "/anyOf/" + i, stack);
+							if (ok) any = true;
+						}
+						if (branches !== null) branches.push({
+							valid: ok,
+							errors: scratch.slice(mark),
+							title: titles[i]
+						});
+					}
+					if (!any) {
+						if (branches !== null) {
+							const collapsed = collapseBranches({
+								keyword: "anyOf",
+								branchResults: branches,
+								parentPath: instancePath,
+								parentSchemaPath: schemaPath + "/anyOf"
+							});
+							if (collapsed !== null) errors.push(collapsed);
+						}
+						return false;
+					}
+					return true;
+				});
+				if (collect) vsteps.push((data, stack, rec) => {
+					let any = false;
+					for (let i = 0; i < fns.length; i++) {
+						const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+						if (fns[i].v(data, stack, rec)) any = true;
+						else undo(rec, pl, n0, xl);
+					}
+					return any;
+				});
+				else vsteps.push((data, stack) => {
+					for (let i = 0; i < fns.length; i++) if (fns[i].v(data, stack)) return true;
+					return false;
+				});
+			}
+			if (P.oneOf !== null) {
+				const fns = P.oneOf.map((v) => inPlace(v, base));
+				const titles = P.oneOf.map(branchTitle);
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					const scratch = errors === NOERRORS ? NOERRORS : [];
+					let count = 0;
+					const branches = errors === NOERRORS ? null : [];
+					const pl0 = collect ? pLen(rec) : 0, n00 = collect ? rec.n : 0, xl0 = collect ? xLen(rec) : 0;
+					for (let i = 0; i < fns.length; i++) {
+						const mark = branches === null ? 0 : scratch.length;
+						let ok;
+						if (collect) {
+							const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+							ok = fns[i].c(data, scratch, instancePath, schemaPath + "/oneOf/" + i, stack, rec);
+							if (ok) count++;
+							else undo(rec, pl, n0, xl);
+						} else {
+							ok = fns[i].c(data, scratch, instancePath, schemaPath + "/oneOf/" + i, stack);
+							if (ok) count++;
+						}
+						if (branches !== null) branches.push({
+							valid: ok,
+							errors: scratch.slice(mark),
+							title: titles[i]
+						});
+					}
+					if (count !== 1) {
+						if (collect) undo(rec, pl0, n00, xl0);
+						if (branches !== null) {
+							const collapsed = collapseBranches({
+								keyword: "oneOf",
+								branchResults: branches,
+								parentPath: instancePath,
+								parentSchemaPath: schemaPath + "/oneOf"
+							});
+							if (collapsed !== null) errors.push(collapsed);
+						}
+						return false;
+					}
+					return true;
+				});
+				if (collect) vsteps.push((data, stack, rec) => {
+					let count = 0;
+					for (let i = 0; i < fns.length; i++) {
+						const pl = pLen(rec), n0 = rec.n, xl = xLen(rec);
+						if (fns[i].v(data, stack, rec)) {
+							count++;
+							if (count > 1) return false;
+						} else undo(rec, pl, n0, xl);
+					}
+					return count === 1;
+				});
+				else vsteps.push((data, stack) => {
+					let count = 0;
+					for (let i = 0; i < fns.length; i++) if (fns[i].v(data, stack)) {
+						count++;
+						if (count > 1) return false;
+					}
+					return count === 1;
+				});
+			}
+			if (P.not !== void 0) {
+				const fn = child(P.not);
+				steps.push((data, errors, instancePath, schemaPath, stack) => {
+					if (fn.v(data, stack)) {
+						if (errors !== NOERRORS) errors.push(err("not", "not", instancePath, schemaPath + "/not", {}, "must NOT be valid"));
+						return false;
+					}
+					return true;
+				});
+				vsteps.push((data, stack) => !fn.v(data, stack));
+			}
+			if (P.if !== void 0) {
+				const ifFn = inPlace(P.if, base);
+				const thenFn = P.then !== void 0 ? inPlace(P.then, base) : null;
+				const elseFn = P.else !== void 0 ? inPlace(P.else, base) : null;
+				steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					let pl = collect ? pLen(rec) : 0, n0 = collect ? rec.n : 0, xl = collect ? xLen(rec) : 0;
+					let ok;
+					if (ifFn.v(data, stack, rec)) {
+						if (thenFn === null) return true;
+						if (collect) {
+							pl = pLen(rec);
+							n0 = rec.n;
+							xl = xLen(rec);
+						}
+						ok = thenFn.c(data, errors, instancePath, schemaPath + "/then", stack, rec);
+					} else {
+						if (collect) undo(rec, pl, n0, xl);
+						if (elseFn === null) return true;
+						ok = elseFn.c(data, errors, instancePath, schemaPath + "/else", stack, rec);
+					}
+					if (!ok && collect) undo(rec, pl, n0, xl);
+					return ok;
+				});
+				vsteps.push((data, stack, rec) => {
+					const pl = collect ? pLen(rec) : 0, n0 = collect ? rec.n : 0, xl = collect ? xLen(rec) : 0;
+					if (ifFn.v(data, stack, rec)) {
+						if (thenFn !== null) return thenFn.v(data, stack, rec);
+						return true;
+					}
+					if (collect) undo(rec, pl, n0, xl);
+					if (elseFn !== null) return elseFn.v(data, stack, rec);
+					return true;
+				});
+			}
+			if (P.unevaluatedProperties !== void 0) {
+				const fn = child(P.unevaluatedProperties);
+				if (fn === FALSE_PAIR) steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					let ok = true;
+					const keys = keysOf(rec, data);
+					for (let k = 0; k < keys.length; k++) {
+						const key = keys[k];
+						if (hasProp(rec, key)) continue;
+						ok = false;
+						if (errors === NOERRORS) return false;
+						errors.push(err("unevaluatedProperties", "unevaluatedProperties", instancePath, schemaPath + "/unevaluatedProperties", { unevaluatedProperty: key }, "must NOT have unevaluated properties"));
+						addProp(rec, key);
+					}
+					return ok;
+				});
+				else steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					let ok = true;
+					const keys = keysOf(rec, data);
+					for (let k = 0; k < keys.length; k++) {
+						const key = keys[k];
+						if (hasProp(rec, key)) continue;
+						if (!(fn.leaf && fn.v(data[key], stack) || fn.c(data[key], errors, instancePath + "/" + escapePointer(key), schemaPath + "/unevaluatedProperties", stack))) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+						}
+						addProp(rec, key);
+					}
+					return ok;
+				});
+				if (fn === FALSE_PAIR) vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					const keys = keysOf(rec, data);
+					if (keys.length === 0) return true;
+					if (rec.props === null) return false;
+					for (let k = 0; k < keys.length; k++) if (!hasProp(rec, keys[k])) return false;
+					return true;
+				});
+				else vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_OBJECT) return true;
+					const keys = keysOf(rec, data);
+					for (let k = 0; k < keys.length; k++) {
+						const key = keys[k];
+						if (hasProp(rec, key)) continue;
+						if (!fn.v(data[key], stack)) return false;
+						addProp(rec, key);
+					}
+					return true;
+				});
+			}
+			if (P.unevaluatedItems !== void 0) {
+				const fn = child(P.unevaluatedItems);
+				if (fn === FALSE_PAIR) steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					for (let i = 0; i < data.length; i++) {
+						if (hasItem(rec, i)) continue;
+						if (errors !== NOERRORS) errors.push(err("unevaluatedItems", "unevaluatedItems", instancePath, schemaPath + "/unevaluatedItems", { limit: i }, "must NOT have more than " + i + " items"));
+						if (data.length > rec.n) rec.n = data.length;
+						return false;
+					}
+					if (data.length > rec.n) rec.n = data.length;
+					return true;
+				});
+				else steps.push((data, errors, instancePath, schemaPath, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					let ok = true;
+					for (let i = 0; i < data.length; i++) {
+						if (hasItem(rec, i)) continue;
+						if (!(fn.leaf && fn.v(data[i], stack) || fn.c(data[i], errors, instancePath + "/" + i, schemaPath + "/unevaluatedItems", stack))) {
+							ok = false;
+							if (errors === NOERRORS) return false;
+						}
+					}
+					if (data.length > rec.n) rec.n = data.length;
+					return ok;
+				});
+				if (fn === FALSE_PAIR) vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					for (let i = rec.n; i < data.length; i++) if (!hasItem(rec, i)) return false;
+					return true;
+				});
+				else vsteps.push((data, stack, rec) => {
+					if (dataBits(data) !== T_ARRAY) return true;
+					for (let i = 0; i < data.length; i++) {
+						if (hasItem(rec, i)) continue;
+						if (!fn.v(data[i], stack)) return false;
+					}
+					if (data.length > rec.n) rec.n = data.length;
+					return true;
+				});
+			}
+			let cfn;
+			if (steps.length === 0) cfn = TRUE_FN;
+			else if (steps.length === 1) cfn = steps[0];
+			else {
+				const arr = steps;
+				cfn = (d, e, ip, sp, st, rec) => {
+					let ok = true;
+					for (let i = 0; i < arr.length; i++) if (!arr[i](d, e, ip, sp, st, rec)) {
+						if (e === NOERRORS) return false;
+						ok = false;
+					}
+					return ok;
+				};
+			}
+			let vfn;
+			if (vsteps.length === 0) vfn = TRUE_FN;
+			else if (vsteps.length === 1) vfn = vsteps[0];
+			else if (vsteps.length === 2) {
+				const [a, b] = vsteps;
+				vfn = (d, st, rec) => a(d, st, rec) && b(d, st, rec);
+			} else {
+				const arr = vsteps;
+				vfn = (d, st, rec) => {
+					for (let i = 0; i < arr.length; i++) if (!arr[i](d, st, rec)) return false;
+					return true;
+				};
+			}
+			if (P.hasUnevaluated) {
+				const inner = cfn;
+				const innerV = vfn;
+				if (ann) {
+					cfn = (d, e, ip, sp, st, rec) => {
+						const own = fresh();
+						const ok = inner(d, e, ip, sp, st, own);
+						if (ok) mergeRec(rec, own);
+						return ok;
+					};
+					vfn = (d, st, rec) => {
+						const own = fresh();
+						const ok = innerV(d, st, own);
+						if (ok) mergeRec(rec, own);
+						return ok;
+					};
+				} else {
+					cfn = (d, e, ip, sp, st) => inner(d, e, ip, sp, st, fresh());
+					vfn = (d, st) => innerV(d, st, fresh());
+				}
+			}
+			box.c = cfn;
+			box.v = vfn;
+			pair.c = cfn;
+			pair.v = vfn;
+			pair.leaf = !nested;
+			pair.open = false;
+			return pair;
+		}
+		function compileInterpreter(interp) {
+			const root = interp.rootNode;
+			const base = interp.state.rootBase;
+			let ctx = {
+				interp,
+				memo: /* @__PURE__ */ new Map(),
+				guard: true,
+				cyclic: false
+			};
+			let pair = compileNode(ctx, root, base, [base], false);
+			if (!ctx.cyclic) {
+				ctx = {
+					interp,
+					memo: /* @__PURE__ */ new Map(),
+					guard: false,
+					cyclic: false
+				};
+				pair = compileNode(ctx, root, base, [base], false);
+			}
+			return {
+				v: pair.v,
+				c: pair.c,
+				cyclic: ctx.guard
+			};
+		}
+		return { compileInterpreter };
+	}
+	module.exports = { install };
+}));
+//#endregion
+export default require_plan_compiler();
