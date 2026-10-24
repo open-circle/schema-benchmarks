@@ -32,15 +32,15 @@ catalog:
   typescript: 7.0.2
   "up-fetch": "^2.6.1"
   valibot: ^1.5.0
-  vite: npm:@voidzero-dev/vite-plus-core@1.3.0
+  vite: npm:@voidzero-dev/vite-plus-core@1.4.0
   vitest: 5.0.5
-  vite-plus: 1.3.0
+  vite-plus: 1.4.0
 minimumReleaseAgeExcludePrune: true
 overrides:
   "@opentelemetry/api": ^1.9.1
   "@types/node": ^26
   msw: ^3.0.2
-  rolldown: 1.2.14
+  rolldown: 1.2.15
   vite@*: "catalog:"
   vitest@*: "catalog:"
 update:
