@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/@railway-ts+pipelines@0.1.29_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/schema/index.mjs
+// ../node_modules/.pnpm/@railway-ts+pipelines@0.1.29_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/schema/index.mjs
 var RESULT_BRAND = /* @__PURE__ */ Symbol("RESULT_BRAND");
 function ok(value) {
 	return {
@@ -275,8 +275,7 @@ function union(validators, options) {
 		return buildError(allErrors);
 	};
 }
-//#endregion
-//#region ../schemas/libraries/@railway-ts/pipelines/download/index.ts
+// ../schemas/libraries/@railway-ts/pipelines/download/index.ts
 const imageSchema = object({
 	id: required(number()),
 	created: required(date()),
@@ -305,4 +304,3 @@ validate({}, object({
 	images: required(array(imageSchema)),
 	ratings: required(array(ratingSchema))
 }));
-//#endregion

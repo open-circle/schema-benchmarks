@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/@remix-run+data-schema@1.0.0/node_modules/@remix-run/data-schema/dist/lib/schema.js
+// ../node_modules/.pnpm/@remix-run+data-schema@1.0.0/node_modules/@remix-run/data-schema/dist/lib/schema.js
 const builtinSchemas = /* @__PURE__ */ new WeakSet();
 /**
 * Creates a sync Standard Schema-compatible schema from a validation function.
@@ -353,8 +353,7 @@ function parse(schema, value, options) {
 	if (result.issues) throw new ValidationError(result.issues);
 	return result.value;
 }
-//#endregion
-//#region ../node_modules/.pnpm/@remix-run+data-schema@1.0.0/node_modules/@remix-run/data-schema/dist/lib/checks.js
+// ../node_modules/.pnpm/@remix-run+data-schema@1.0.0/node_modules/@remix-run/data-schema/dist/lib/checks.js
 /**
 * Require a string to be at least `length` characters long.
 *
@@ -438,8 +437,7 @@ function max(limit) {
 		message: "Expected number less than or equal to " + String(limit)
 	};
 }
-//#endregion
-//#region ../schemas/libraries/@remix-run/data-schema/download/index.ts
+// ../schemas/libraries/@remix-run/data-schema/download/index.ts
 const imageSchema = object({
 	id: number(),
 	created: instanceof_(Date),
@@ -468,4 +466,3 @@ parse(object({
 	images: array(imageSchema),
 	ratings: array(ratingSchema)
 }), {});
-//#endregion

@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js
 function toZod() {
 	return (schema) => schema;
 }
@@ -535,8 +535,7 @@ function constantCatch(value) {
 	fn[CONSTANT_CATCH] = true;
 	return fn;
 }
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/core.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/core.js
 var _a$1;
 const _zodDesc = {
 	value: void 0,
@@ -642,8 +641,7 @@ function config(newConfig) {
 	if (newConfig) Object.assign(globalConfig, newConfig);
 	return globalConfig;
 }
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/errors.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/errors.js
 function _getMessage() {
 	const internals = this._zod;
 	internals.message ?? (internals.message = JSON.stringify(internals.def, jsonStringifyReplacer, 2));
@@ -757,8 +755,7 @@ function formatError(error, mapper = (issue) => issue.message) {
 	processError(error);
 	return fieldErrors;
 }
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/parse.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/parse.js
 function finalizeParams(callee, params) {
 	return {
 		callee: params?.callee ?? callee,
@@ -960,8 +957,7 @@ const _safeEncodeAsync = (_Err) => async (schema, value, _ctx) => {
 const _safeDecodeAsync = (_Err) => async (schema, value, _ctx) => {
 	return _safeParseAsync(_Err)(schema, value, _ctx);
 };
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js
 /**
 * @deprecated CUID v1 is deprecated by its authors due to information leakage
 * (timestamps embedded in the id). Use {@link cuid2} instead.
@@ -1030,8 +1026,7 @@ const anyString = /^[\s\S]{0,}$/;
 const number$1 = /^-?\d+(?:\.\d+)?$/;
 const lowercase = /^[^A-Z]*$/;
 const uppercase = /^[^a-z]*$/;
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/checks.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/checks.js
 const $ZodCheck = /*@__PURE__*/ $constructor("$ZodCheck", (inst, def) => {
 	var _a;
 	inst._zod ?? (inst._zod = {});
@@ -1326,8 +1321,7 @@ const $ZodCheckOverwrite = /*@__PURE__*/ $constructor("$ZodCheckOverwrite", (ins
 		payload.value = def.tx(payload.value);
 	};
 });
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/doc.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/doc.js
 var Doc = class {
 	constructor(args = [], closed = {}) {
 		this.content = [];
@@ -1360,15 +1354,13 @@ var Doc = class {
 		return new F(...Object.keys(this.closed), `return function (${this.args.join(", ")}) {\n${content.join("\n")}\n};`)(...Object.values(this.closed));
 	}
 };
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/versions.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/versions.js
 const version = {
 	major: 4,
 	minor: 6,
 	patch: 7
 };
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/schemas.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/schemas.js
 const $ZodType = /*@__PURE__*/ $constructor("$ZodType", (inst, def) => {
 	var _a;
 	inst ?? (inst = {});
@@ -2607,8 +2599,7 @@ function handleRefineResult(result, payload, input, inst) {
 		payload.issues.push(issue(_iss));
 	}
 }
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/memoizer.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/memoizer.js
 var $ZodCyclicError = class extends Error {
 	constructor() {
 		super(`Cannot parse a reference cycle that closes through a transform`);
@@ -2860,8 +2851,7 @@ function isBackEdge(ctx, value) {
 	const backEdges = ctx[STATE]?.backEdges;
 	return backEdges !== void 0 && isRef(value) && backEdges.has(value);
 }
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/locales/en.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/locales/en.js
 const error = () => {
 	const Sizable = {
 		string: {
@@ -2968,8 +2958,7 @@ const error = () => {
 function en_default() {
 	return { localeError: error() };
 }
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/registries.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/registries.js
 var _a;
 var $ZodRegistry = class {
 	constructor() {
@@ -3015,8 +3004,7 @@ function registry() {
 }
 (_a = globalThis).__zod_globalRegistry ?? (_a.__zod_globalRegistry = registry());
 const globalRegistry = globalThis.__zod_globalRegistry;
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/api.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/api.js
 function snapshotChecks(def) {
 	if (def.checks) def.checks = [...def.checks];
 	return def;
@@ -3524,8 +3512,7 @@ function _check(fn, params) {
 	ch._zod.check = fn;
 	return ch;
 }
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/to-json-schema.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/to-json-schema.js
 function assignProps(target, ...sources) {
 	for (const source of sources) for (const key of Reflect.ownKeys(source)) if (Object.prototype.propertyIsEnumerable.call(source, key)) assignProp(target, key, source[key]);
 	return target;
@@ -3968,8 +3955,7 @@ const createStandardJSONSchemaMethod = (schema, io, processors = {}) => (params)
 	extractDefs(ctx, schema);
 	return finalize(ctx, schema);
 };
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/json-schema-processors.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/json-schema-processors.js
 const narrowMin = (agg, key, value) => {
 	if (agg[key] === void 0 || value > agg[key]) agg[key] = value;
 };
@@ -4289,8 +4275,7 @@ const optionalProcessor = (schema, ctx, _json, params) => {
 	const seen = ctx.seen.get(schema);
 	seen.ref = def.innerType;
 };
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/classic/errors.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/classic/errors.js
 const _installedErrorProtos = /* @__PURE__ */ new WeakSet([Object.prototype, Error.prototype]);
 function _lazyMethod(proto, key, make) {
 	Object.defineProperty(proto, key, {
@@ -4339,8 +4324,7 @@ const initializer = (inst, issues) => {
 	});
 };
 const ZodRealError = /*@__PURE__*/ $constructor("ZodError", initializer, void 0, { Parent: Error });
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/classic/parse.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/classic/parse.js
 const parse = /* @__PURE__ */ _parse(ZodRealError);
 const parseAsync = /* @__PURE__ */ _parseAsync(ZodRealError);
 const safeParse = /* @__PURE__ */ _safeParse(ZodRealError);
@@ -4353,8 +4337,7 @@ const safeEncode = /* @__PURE__ */ _safeEncode(ZodRealError);
 const safeDecode = /* @__PURE__ */ _safeDecode(ZodRealError);
 const safeEncodeAsync = /* @__PURE__ */ _safeEncodeAsync(ZodRealError);
 const safeDecodeAsync = /* @__PURE__ */ _safeDecodeAsync(ZodRealError);
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/classic/schemas.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/classic/schemas.js
 function _ensureDefaultLocale() {
 	if (!globalConfig.localeError) config(en_default());
 }
@@ -5198,8 +5181,7 @@ function refine(fn, _params = {}) {
 function superRefine(fn, params) {
 	return /* @__PURE__ */ _superRefine(fn, params);
 }
-//#endregion
-//#region ../schemas/libraries/zod-compiler/compiled/index.mjs
+// ../schemas/libraries/zod-compiler/compiled/index.mjs
 function __zcUw(m) {
 	return typeof m === "string" ? m : m === void 0 || m === null ? void 0 : m.message;
 }
@@ -5519,8 +5501,7 @@ const productSchema = toZod()(object({
 	images: array(imageSchema),
 	ratings: array(ratingSchema)
 }));
-//#endregion
-//#region ../schemas/libraries/zod-compiler/download/index.ts
+// ../schemas/libraries/zod-compiler/download/index.ts
 (/* @__PURE__ */ (() => {
 	var __bf_4 = {};
 	function __af_16(a) {
@@ -5979,4 +5960,3 @@ const productSchema = toZod()(object({
 	}
 	return __zcMkv(safeParse_compiledProductSchema, productSchema, null, null);
 })()).parse({});
-//#endregion

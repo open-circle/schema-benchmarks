@@ -1,4 +1,4 @@
-//#region \0rolldown/runtime.js
+// \0rolldown/runtime.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -20,8 +20,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	value: mod,
 	enumerable: true
 }) : target, mod));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/codegen/code.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/codegen/code.js
 var require_code$1 = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.regexpCode = exports.getEsmExportName = exports.getProperty = exports.safeStringify = exports.stringify = exports.strConcat = exports.addCodeArg = exports.str = exports._ = exports.nil = exports._Code = exports.Name = exports.IDENTIFIER = exports._CodeOrName = void 0;
@@ -155,8 +154,7 @@ var require_code$1 = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.regexpCode = regexpCode;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/codegen/scope.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/codegen/scope.js
 var require_scope = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.ValueScope = exports.ValueScopeName = exports.Scope = exports.varKinds = exports.UsedValueState = void 0;
@@ -292,8 +290,7 @@ var require_scope = /* @__PURE__ */ __commonJSMin(((exports) => {
 	};
 	exports.ValueScope = ValueScope;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/codegen/index.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/codegen/index.js
 var require_codegen = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.or = exports.and = exports.not = exports.CodeGen = exports.operators = exports.varKinds = exports.ValueScopeName = exports.ValueScope = exports.Scope = exports.Name = exports.regexpCode = exports.stringify = exports.getProperty = exports.nil = exports.strConcat = exports.str = exports._ = void 0;
@@ -961,8 +958,7 @@ var require_codegen = /* @__PURE__ */ __commonJSMin(((exports) => {
 		return x instanceof code_1.Name ? x : (0, code_1._)`(${x})`;
 	}
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/util.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/util.js
 var require_util = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.checkStrictMode = exports.getErrorPath = exports.Type = exports.useFunc = exports.setEvaluated = exports.evaluatedPropsToName = exports.mergeEvaluated = exports.eachItem = exports.unescapeJsonPointer = exports.escapeJsonPointer = exports.escapeFragment = exports.unescapeFragment = exports.schemaRefOrVal = exports.schemaHasRulesButRef = exports.schemaHasRules = exports.checkUnknownRules = exports.alwaysValidSchema = exports.toHash = void 0;
@@ -1102,8 +1098,7 @@ var require_util = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.checkStrictMode = checkStrictMode;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/names.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/names.js
 var require_names = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -1126,8 +1121,7 @@ var require_names = /* @__PURE__ */ __commonJSMin(((exports) => {
 		jsonPart: new codegen_1.Name("jsonPart")
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/errors.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/errors.js
 var require_errors = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.extendErrors = exports.resetErrorsCount = exports.reportExtraError = exports.reportError = exports.keyword$DataError = exports.keywordError = void 0;
@@ -1222,8 +1216,7 @@ var require_errors = /* @__PURE__ */ __commonJSMin(((exports) => {
 		if (propertyName) keyValues.push([E.propertyName, propertyName]);
 	}
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/boolSchema.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/boolSchema.js
 var require_boolSchema = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.boolOrEmptySchema = exports.topBoolOrEmptySchema = void 0;
@@ -1264,8 +1257,7 @@ var require_boolSchema = /* @__PURE__ */ __commonJSMin(((exports) => {
 		(0, errors_1.reportError)(cxt, boolError, void 0, overrideAllErrors);
 	}
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/rules.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/rules.js
 var require_rules = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.getRules = exports.isJSONType = void 0;
@@ -1322,8 +1314,7 @@ var require_rules = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.getRules = getRules;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/applicability.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/applicability.js
 var require_applicability = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.shouldUseRule = exports.shouldUseGroup = exports.schemaHasRulesForType = void 0;
@@ -1342,8 +1333,7 @@ var require_applicability = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.shouldUseRule = shouldUseRule;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/dataType.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/dataType.js
 var require_dataType = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.reportTypeError = exports.checkDataTypes = exports.checkDataType = exports.coerceAndCheckDataType = exports.getJSONTypes = exports.getSchemaTypes = exports.DataType = void 0;
@@ -1506,8 +1496,7 @@ var require_dataType = /* @__PURE__ */ __commonJSMin(((exports) => {
 		};
 	}
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/defaults.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/defaults.js
 var require_defaults = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.assignDefaults = void 0;
@@ -1532,8 +1521,7 @@ var require_defaults = /* @__PURE__ */ __commonJSMin(((exports) => {
 		gen.if(condition, (0, codegen_1._)`${childData} = ${(0, codegen_1.stringify)(defaultValue)}`);
 	}
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/code.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/code.js
 var require_code = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.validateUnion = exports.validateArray = exports.usePattern = exports.callValidateCode = exports.schemaProperties = exports.allSchemaProperties = exports.noPropertyInData = exports.propertyInData = exports.isOwnProperty = exports.hasPropFunc = exports.reportMissingProp = exports.checkMissingProp = exports.checkReportMissingProp = void 0;
@@ -1656,8 +1644,7 @@ var require_code = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.validateUnion = validateUnion;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/keyword.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/keyword.js
 var require_keyword = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.validateKeywordUsage = exports.validSchemaType = exports.funcKeywordCode = exports.macroKeywordCode = void 0;
@@ -1762,8 +1749,7 @@ var require_keyword = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.validateKeywordUsage = validateKeywordUsage;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/subschema.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/subschema.js
 var require_subschema = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.extendSubschemaMode = exports.extendSubschemaData = exports.getSubschema = void 0;
@@ -1829,8 +1815,7 @@ var require_subschema = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.extendSubschemaMode = extendSubschemaMode;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/fast-deep-equal@3.1.3/node_modules/fast-deep-equal/index.js
+// ../node_modules/.pnpm/fast-deep-equal@3.1.3/node_modules/fast-deep-equal/index.js
 var require_fast_deep_equal = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = function equal(a, b) {
 		if (a === b) return true;
@@ -1859,8 +1844,7 @@ var require_fast_deep_equal = /* @__PURE__ */ __commonJSMin(((exports, module) =
 		return a !== a && b !== b;
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/json-schema-traverse@1.0.0/node_modules/json-schema-traverse/index.js
+// ../node_modules/.pnpm/json-schema-traverse@1.0.0/node_modules/json-schema-traverse/index.js
 var require_json_schema_traverse = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	var traverse = module.exports = function(schema, opts, cb) {
 		if (typeof opts == "function") {
@@ -1934,8 +1918,7 @@ var require_json_schema_traverse = /* @__PURE__ */ __commonJSMin(((exports, modu
 		return str.replace(/~/g, "~0").replace(/\//g, "~1");
 	}
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/resolve.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/resolve.js
 var require_resolve = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.getSchemaRefs = exports.resolveUrl = exports.normalizeId = exports._getFullPath = exports.getFullPath = exports.inlineRef = void 0;
@@ -2063,8 +2046,7 @@ var require_resolve = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.getSchemaRefs = getSchemaRefs;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/index.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/validate/index.js
 var require_validate = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.getData = exports.KeywordCxt = exports.validateFunctionCode = void 0;
@@ -2482,8 +2464,7 @@ var require_validate = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.getData = getData;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/runtime/validation_error.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/runtime/validation_error.js
 var require_validation_error = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var ValidationError = class extends Error {
@@ -2495,8 +2476,7 @@ var require_validation_error = /* @__PURE__ */ __commonJSMin(((exports) => {
 	};
 	exports.default = ValidationError;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/ref_error.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/ref_error.js
 var require_ref_error = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const resolve_1 = require_resolve();
@@ -2509,8 +2489,7 @@ var require_ref_error = /* @__PURE__ */ __commonJSMin(((exports) => {
 	};
 	exports.default = MissingRefError;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/index.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/compile/index.js
 var require_compile = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.resolveSchema = exports.getCompilingSchema = exports.resolveRef = exports.compileSchema = exports.SchemaEnv = void 0;
@@ -2723,8 +2702,7 @@ var require_compile = /* @__PURE__ */ __commonJSMin(((exports) => {
 		if (env.schema !== env.root.schema) return env;
 	}
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/refs/data.json
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/refs/data.json
 var require_data = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		"$id": "https://raw.githubusercontent.com/ajv-validator/ajv/master/lib/refs/data.json#",
@@ -2738,8 +2716,7 @@ var require_data = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		"additionalProperties": false
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/fast-uri@3.1.8/node_modules/fast-uri/lib/utils.js
+// ../node_modules/.pnpm/fast-uri@3.1.9/node_modules/fast-uri/lib/utils.js
 var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/** @type {(value: string) => boolean} */
 	const isUUID = RegExp.prototype.test.bind(/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/iu);
@@ -3031,6 +3008,38 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			}
 		}
 		return output.join("");
+	}
+	/**
+	* Removes dot segments from the path of a relative reference (a path that does
+	* not start with "/") without changing what it resolves to against any base.
+	* Unlike `removeDotSegments`, leading ".." segments that cannot be collapsed
+	* are kept, the result never becomes root-relative, and a result that would be
+	* empty or start with an empty segment is prefixed with "." (an empty path
+	* means "same document" and a leading "//" would introduce an authority).
+	*
+	* @param {string} path
+	* @returns {string}
+	*/
+	function removeDotSegmentsRelative(path) {
+		if (path === "" || path[0] === "/") return removeDotSegments(path);
+		const segments = path.split("/");
+		const last = segments.length - 1;
+		/** @type {string[]} */
+		const output = [];
+		let trailingDirectory = false;
+		for (let i = 0; i <= last; i++) {
+			const segment = segments[i];
+			if (segment === "." || segment === "..") {
+				if (segment === "..") {
+					if (output.length !== 0 && output[output.length - 1] !== "..") output.pop();
+					else output.push("..");
+				}
+				trailingDirectory = i === last;
+			} else output.push(segment);
+		}
+		if (trailingDirectory && output[output.length - 1] !== "..") output.push("");
+		if (output.length === 0 || output[0] === "" || output[0].includes(":")) output.unshift(".");
+		return output.join("/");
 	}
 	/**
 	* Re-escape RFC 3986 gen-delims that must not appear literally in the host.
@@ -3336,14 +3345,14 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		encodeFragment,
 		escapePreservingEscapes,
 		removeDotSegments,
+		removeDotSegmentsRelative,
 		isIPv4,
 		isUUID,
 		normalizeIPv6,
 		stringArrayToHexStripped
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/fast-uri@3.1.8/node_modules/fast-uri/lib/schemes.js
+// ../node_modules/.pnpm/fast-uri@3.1.9/node_modules/fast-uri/lib/schemes.js
 var require_schemes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { isUUID } = require_utils();
 	const URN_REG = /^([\da-z][\d\-a-z]{0,31}):((?:[\w!$'()*+,\-./:;=@]|%[\da-f]{2})+)$/iu;
@@ -3526,21 +3535,26 @@ var require_schemes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		getSchemeHandler
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/fast-uri@3.1.8/node_modules/fast-uri/index.js
+// ../node_modules/.pnpm/fast-uri@3.1.9/node_modules/fast-uri/index.js
 var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { normalizeIPv6, removeDotSegments, recomposeAuthority, normalizePercentEncoding, normalizePathEncoding, serializePathEncoding, normalizeQueryFragmentEncoding, encodeQuery, encodeFragment, reescapeHostDelimiters, isIPv4, nonSimpleDomain } = require_utils();
+	const { normalizeIPv6, removeDotSegments, removeDotSegmentsRelative, recomposeAuthority, normalizePercentEncoding, normalizePathEncoding, serializePathEncoding, normalizeQueryFragmentEncoding, encodeQuery, encodeFragment, reescapeHostDelimiters, isIPv4, nonSimpleDomain } = require_utils();
 	const { SCHEMES, getSchemeHandler } = require_schemes();
 	const VALID_SCHEME = /^[A-Za-z][A-Za-z0-9+.-]*$/u;
 	const MALFORMED_SCHEME_ERROR = "URI scheme is malformed.";
+	const MALFORMED_HOST_ERROR = "URI host is malformed.";
+	const FORBIDDEN_DOMAIN_HOST_CHARACTER = /[\0-\x20"#/:<>?@[\\\]^`{|}\x7F]/u;
 	/**
+	* RFC 3986 section 3.1 does not allow percent-encoding in a scheme, so the
+	* scheme is validated as-is and never decoded. Decoding would let inert input
+	* such as `%6Aavascript:` become a live `javascript:` scheme.
+	*
 	* @param {string} scheme
 	* @returns {string}
 	*/
-	function decodeValidScheme(scheme) {
-		const decodedScheme = unescape(String(scheme));
-		if (!VALID_SCHEME.test(decodedScheme)) throw new TypeError(MALFORMED_SCHEME_ERROR);
-		return decodedScheme;
+	function validateScheme(scheme) {
+		const stringScheme = String(scheme);
+		if (!VALID_SCHEME.test(stringScheme)) throw new TypeError(MALFORMED_SCHEME_ERROR);
+		return stringScheme;
 	}
 	/**
 	* @template {import('./types/index').URIComponent|string} T
@@ -3568,6 +3582,7 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const resolvedSchemeHandler = getSchemeHandler(options && options.scheme || resolved.scheme);
 		const resolvedHost = resolved.host;
 		const resolvedHostIsIP = resolvedHost !== void 0 && resolvedHost !== "" && (isIPv4(resolvedHost) || normalizeIPv6(resolvedHost).isIPV6);
+		if (hasForbiddenDomainHost(resolved, options || {}, resolvedSchemeHandler, resolvedHostIsIP)) throw new Error(MALFORMED_HOST_ERROR);
 		canonicalizeHost(resolved, options || {}, resolvedSchemeHandler, resolvedHostIsIP);
 		const encodedASCIIHost = resolvedHost && resolvedHost.indexOf("%") !== -1 && !/\P{ASCII}/u.test(resolvedHost);
 		if (resolved.error && !encodedASCIIHost) throw new Error(resolved.error);
@@ -3611,10 +3626,11 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				} else {
 					if (relative.path[0] === "/") target.path = removeDotSegments(relative.path);
 					else {
-						if ((base.userinfo !== void 0 || base.host !== void 0 || base.port !== void 0) && !base.path) target.path = "/" + relative.path;
+						const baseHasAuthority = base.userinfo !== void 0 || base.host !== void 0 || base.port !== void 0;
+						if (baseHasAuthority && !base.path) target.path = "/" + relative.path;
 						else if (!base.path) target.path = relative.path;
 						else target.path = base.path.slice(0, base.path.lastIndexOf("/") + 1) + relative.path;
-						target.path = removeDotSegments(target.path);
+						target.path = base.scheme === void 0 && !baseHasAuthority && target.path[0] !== "/" ? removeDotSegmentsRelative(target.path) : removeDotSegments(target.path);
 					}
 					target.query = relative.query;
 				}
@@ -3662,17 +3678,18 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		};
 		const options = Object.assign({}, opts);
 		const uriTokens = [];
-		if (component.scheme) component.scheme = decodeValidScheme(component.scheme);
+		if (component.scheme) component.scheme = validateScheme(component.scheme);
 		const schemeHandler = getSchemeHandler(options.scheme || component.scheme);
 		if (schemeHandler && schemeHandler.serialize) schemeHandler.serialize(component, options);
 		const hasAuthority = component.userinfo !== void 0 || component.host !== void 0 || component.port !== void 0;
-		const pathNoScheme = !options.skipEscape && component.scheme === void 0 && !hasAuthority;
+		const schemelessReference = (component.scheme === void 0 || options.reference === "suffix") && !hasAuthority;
+		const pathNoScheme = !options.skipEscape && schemelessReference;
 		if (component.path !== void 0) {
 			if (!options.skipEscape) component.path = serializePathEncoding(component.path, pathNoScheme);
 			else component.path = normalizePercentEncoding(component.path);
 		}
 		if (options.reference !== "suffix" && component.scheme) {
-			component.scheme = decodeValidScheme(component.scheme);
+			component.scheme = validateScheme(component.scheme);
 			uriTokens.push(component.scheme, ":");
 		}
 		const authority = recomposeAuthority(component);
@@ -3683,8 +3700,8 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		if (component.path !== void 0) {
 			let s = component.path;
-			if (!options.absolutePath && (!schemeHandler || !schemeHandler.absolutePath)) s = removeDotSegments(s);
-			if (pathNoScheme) s = serializePathEncoding(s, true);
+			if (!options.absolutePath && (!schemeHandler || !schemeHandler.absolutePath)) s = schemelessReference && s[0] !== "/" ? removeDotSegmentsRelative(s) : removeDotSegments(s);
+			if (schemelessReference) s = serializePathEncoding(s, true);
 			if (authority === void 0 && s[0] === "/" && s[1] === "/") s = "/%2F" + s.slice(2);
 			uriTokens.push(s);
 		}
@@ -3748,13 +3765,48 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	* @returns {boolean} whether host conversion failed
 	*/
 	function canonicalizeHost(parsed, options, schemeHandler, isIP) {
-		if (!options.unicodeSupport && (!schemeHandler || !schemeHandler.unicodeSupport) && parsed.host && !isIPLiteral(parsed.host) && (options.domainHost || schemeHandler && schemeHandler.domainHost) && isIP === false && nonSimpleDomain(parsed.host)) try {
-			parsed.host = new URL("http://" + parsed.host).hostname;
-		} catch (e) {
-			parsed.error = parsed.error || "Host's domain name can not be converted to ASCII: " + e;
+		if (hasForbiddenDomainHost(parsed, options, schemeHandler, isIP)) {
+			parsed.error = parsed.error || MALFORMED_HOST_ERROR;
 			return true;
 		}
+		if (!options.unicodeSupport && (!schemeHandler || !schemeHandler.unicodeSupport) && parsed.host && !isIPLiteral(parsed.host) && (options.domainHost || schemeHandler && schemeHandler.domainHost) && isIP === false && nonSimpleDomain(parsed.host)) {
+			let url;
+			try {
+				url = new URL("http://" + parsed.host);
+			} catch (e) {
+				parsed.error = parsed.error || "Host's domain name can not be converted to ASCII: " + e;
+				return true;
+			}
+			if (!isHostOnlyURL(url)) {
+				parsed.error = parsed.error || MALFORMED_HOST_ERROR;
+				return true;
+			}
+			parsed.host = url.hostname;
+		}
 		return false;
+	}
+	/**
+	* Whether a domain host contains an ASCII character that RFC 3986 does not
+	* allow in a reg-name (unreserved, sub-delims, or pct-encoded). Such a host is
+	* rejected instead of being handed to the WHATWG URL parser, which would treat
+	* "@" as a userinfo delimiter (silently dropping the data before it) and strip
+	* TAB, LF, and CR. Non-ASCII characters remain allowed for IDNs.
+	*
+	* @param {import('./types/index').URIComponent} parsed
+	* @param {import('./types/index').Options} options
+	* @param {{ domainHost?: boolean }|undefined} schemeHandler
+	* @param {boolean} isIP
+	* @returns {boolean}
+	*/
+	function hasForbiddenDomainHost(parsed, options, schemeHandler, isIP) {
+		return Boolean(parsed.host && isIP === false && !isIPLiteral(parsed.host) && (options.domainHost || schemeHandler && schemeHandler.domainHost) && FORBIDDEN_DOMAIN_HOST_CHARACTER.test(parsed.host));
+	}
+	/**
+	* @param {URL} url
+	* @returns {boolean}
+	*/
+	function isHostOnlyURL(url) {
+		return url.username === "" && url.password === "" && url.port === "" && url.pathname === "/" && url.search === "" && url.hash === "" && url.hostname !== "";
 	}
 	/**
 	* @param {string} uri
@@ -3813,8 +3865,7 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			parsed.query = matches[7];
 			parsed.fragment = matches[8];
 			if (parsed.scheme !== void 0) {
-				const decodedScheme = unescape(parsed.scheme);
-				if (VALID_SCHEME.test(decodedScheme)) parsed.scheme = decodedScheme.toLowerCase();
+				if (VALID_SCHEME.test(parsed.scheme)) parsed.scheme = parsed.scheme.toLowerCase();
 				else {
 					parsed.error = parsed.error || MALFORMED_SCHEME_ERROR;
 					malformedScheme = true;
@@ -3837,7 +3888,7 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					malformedIPLiteral = hasIPLiteralBracket && (!bracketedIPLiteral || ipv6result.error === true);
 					parsed.host = isIP ? ipv6result.host : ipv6result.host.toLowerCase();
 					if (malformedIPLiteral) {
-						parsed.error = parsed.error || "URI host is malformed.";
+						parsed.error = parsed.error || MALFORMED_HOST_ERROR;
 						malformedAuthorityOrPort = true;
 					}
 				} else isIP = true;
@@ -3852,7 +3903,7 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (uri.indexOf("%") !== -1 && parsed.host !== void 0 && !malformedIPLiteral) {
 				let host = isIP ? parsed.host : normalizePercentEncoding(parsed.host, true);
 				if (!isIP) host = normalizePercentEncoding(host.toLowerCase());
-				parsed.host = reescapeHostDelimiters(host, isIP);
+				parsed.host = isIP || options.scheme !== "null" ? reescapeHostDelimiters(host, isIP) : host;
 			}
 			if (!schemeHandler || schemeHandler && !schemeHandler.skipNormalize) {
 				if (parsed.path) parsed.path = normalizePathEncoding(parsed.path);
@@ -3934,16 +3985,14 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports.default = fastUri;
 	module.exports.fastUri = fastUri;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/runtime/uri.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/runtime/uri.js
 var require_uri = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const uri = require_fast_uri();
 	uri.code = "require(\"ajv/dist/runtime/uri\").default";
 	exports.default = uri;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/core.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/core.js
 var require_core$1 = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = void 0;
@@ -4511,8 +4560,7 @@ var require_core$1 = /* @__PURE__ */ __commonJSMin(((exports) => {
 		return { anyOf: [schema, $dataRef] };
 	}
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/core/id.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/core/id.js
 var require_id = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = {
@@ -4522,8 +4570,7 @@ var require_id = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/core/ref.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/core/ref.js
 var require_ref = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.callRef = exports.getValidate = void 0;
@@ -4629,8 +4676,7 @@ var require_ref = /* @__PURE__ */ __commonJSMin(((exports) => {
 	exports.callRef = callRef;
 	exports.default = def;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/core/index.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/core/index.js
 var require_core = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const id_1 = require_id();
@@ -4646,8 +4692,7 @@ var require_core = /* @__PURE__ */ __commonJSMin(((exports) => {
 		ref_1.default
 	];
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/limitNumber.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/limitNumber.js
 var require_limitNumber = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -4689,8 +4734,7 @@ var require_limitNumber = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/multipleOf.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/multipleOf.js
 var require_multipleOf = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -4712,8 +4756,7 @@ var require_multipleOf = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/runtime/ucs2length.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/runtime/ucs2length.js
 var require_ucs2length = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	function ucs2length(str) {
@@ -4734,8 +4777,7 @@ var require_ucs2length = /* @__PURE__ */ __commonJSMin(((exports) => {
 	exports.default = ucs2length;
 	ucs2length.code = "require(\"ajv/dist/runtime/ucs2length\").default";
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/limitLength.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/limitLength.js
 var require_limitLength = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -4761,8 +4803,7 @@ var require_limitLength = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/pattern.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/pattern.js
 var require_pattern = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const code_1 = require_code();
@@ -4793,8 +4834,7 @@ var require_pattern = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/limitProperties.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/limitProperties.js
 var require_limitProperties = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -4817,8 +4857,7 @@ var require_limitProperties = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/required.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/required.js
 var require_required = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const code_1 = require_code();
@@ -4883,8 +4922,7 @@ var require_required = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/limitItems.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/limitItems.js
 var require_limitItems = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -4907,16 +4945,14 @@ var require_limitItems = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/runtime/equal.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/runtime/equal.js
 var require_equal = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const equal = require_fast_deep_equal();
 	equal.code = "require(\"ajv/dist/runtime/equal\").default";
 	exports.default = equal;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js
 var require_uniqueItems = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const dataType_1 = require_dataType();
@@ -4978,8 +5014,7 @@ var require_uniqueItems = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/const.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/const.js
 var require_const = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -4999,8 +5034,7 @@ var require_const = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/enum.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/enum.js
 var require_enum = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -5042,8 +5076,7 @@ var require_enum = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/index.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/validation/index.js
 var require_validation = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const limitNumber_1 = require_limitNumber();
@@ -5077,8 +5110,7 @@ var require_validation = /* @__PURE__ */ __commonJSMin(((exports) => {
 		enum_1.default
 	];
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js
 var require_additionalItems = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.validateAdditionalItems = void 0;
@@ -5129,8 +5161,7 @@ var require_additionalItems = /* @__PURE__ */ __commonJSMin(((exports) => {
 	exports.validateAdditionalItems = validateAdditionalItems;
 	exports.default = def;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/items.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/items.js
 var require_items = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.validateTuple = void 0;
@@ -5182,8 +5213,7 @@ var require_items = /* @__PURE__ */ __commonJSMin(((exports) => {
 	exports.validateTuple = validateTuple;
 	exports.default = def;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js
 var require_prefixItems = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const items_1 = require_items();
@@ -5195,8 +5225,7 @@ var require_prefixItems = /* @__PURE__ */ __commonJSMin(((exports) => {
 		code: (cxt) => (0, items_1.validateTuple)(cxt, "items")
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/items2020.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/items2020.js
 var require_items2020 = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -5222,8 +5251,7 @@ var require_items2020 = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/contains.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/contains.js
 var require_contains = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -5306,8 +5334,7 @@ var require_contains = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/dependencies.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/dependencies.js
 var require_dependencies = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.validateSchemaDeps = exports.validatePropertyDeps = exports.error = void 0;
@@ -5387,8 +5414,7 @@ var require_dependencies = /* @__PURE__ */ __commonJSMin(((exports) => {
 	exports.validateSchemaDeps = validateSchemaDeps;
 	exports.default = def;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js
 var require_propertyNames = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -5423,8 +5449,7 @@ var require_propertyNames = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js
 var require_additionalProperties = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const code_1 = require_code();
@@ -5512,8 +5537,7 @@ var require_additionalProperties = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/properties.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/properties.js
 var require_properties = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const validate_1 = require_validate();
@@ -5557,8 +5581,7 @@ var require_properties = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js
 var require_patternProperties = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const code_1 = require_code();
@@ -5612,8 +5635,7 @@ var require_patternProperties = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/not.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/not.js
 var require_not = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const util_1 = require_util();
@@ -5639,8 +5661,7 @@ var require_not = /* @__PURE__ */ __commonJSMin(((exports) => {
 		error: { message: "must NOT be valid" }
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/anyOf.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/anyOf.js
 var require_anyOf = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = {
@@ -5651,8 +5672,7 @@ var require_anyOf = /* @__PURE__ */ __commonJSMin(((exports) => {
 		error: { message: "must match a schema in anyOf" }
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/oneOf.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/oneOf.js
 var require_oneOf = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -5697,8 +5717,7 @@ var require_oneOf = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/allOf.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/allOf.js
 var require_allOf = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const util_1 = require_util();
@@ -5722,8 +5741,7 @@ var require_allOf = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/if.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/if.js
 var require_if = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -5779,8 +5797,7 @@ var require_if = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.default = def;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/thenElse.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/thenElse.js
 var require_thenElse = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const util_1 = require_util();
@@ -5792,8 +5809,7 @@ var require_thenElse = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/index.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/applicator/index.js
 var require_applicator = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const additionalItems_1 = require_additionalItems();
@@ -5833,8 +5849,7 @@ var require_applicator = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.default = getApplicator;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/format/format.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/format/format.js
 var require_format$1 = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -5921,14 +5936,12 @@ var require_format$1 = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/format/index.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/format/index.js
 var require_format = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = [require_format$1().default];
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/metadata.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/metadata.js
 var require_metadata = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.contentVocabulary = exports.metadataVocabulary = void 0;
@@ -5947,8 +5960,7 @@ var require_metadata = /* @__PURE__ */ __commonJSMin(((exports) => {
 		"contentSchema"
 	];
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/draft7.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const core_1 = require_core();
@@ -5965,8 +5977,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports) => {
 		metadata_1.contentVocabulary
 	];
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/discriminator/types.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/discriminator/types.js
 var require_types = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.DiscrError = void 0;
@@ -5976,8 +5987,7 @@ var require_types = /* @__PURE__ */ __commonJSMin(((exports) => {
 		DiscrError["Mapping"] = "mapping";
 	})(DiscrError || (exports.DiscrError = DiscrError = {}));
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/discriminator/index.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/vocabularies/discriminator/index.js
 var require_discriminator = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -6069,8 +6079,7 @@ var require_discriminator = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/refs/json-schema-draft-07.json
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/refs/json-schema-draft-07.json
 var require_json_schema_draft_07 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		"$schema": "http://json-schema.org/draft-07/schema#",
@@ -6207,8 +6216,7 @@ var require_json_schema_draft_07 = /* @__PURE__ */ __commonJSMin(((exports, modu
 		"default": true
 	};
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/ajv.js
+// ../node_modules/.pnpm/ajv@8.20.0/node_modules/ajv/dist/ajv.js
 var require_ajv = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.MissingRefError = exports.ValidationError = exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = exports.Ajv = void 0;
@@ -6299,8 +6307,7 @@ var require_ajv = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 	});
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-formats@3.0.1_ajv@8.20.0/node_modules/ajv-formats/dist/formats.js
+// ../node_modules/.pnpm/ajv-formats@3.0.1_ajv@8.20.0/node_modules/ajv-formats/dist/formats.js
 var require_formats = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.formatNames = exports.fastFormats = exports.fullFormats = void 0;
@@ -6487,8 +6494,7 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports) => {
 		}
 	}
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-formats@3.0.1_ajv@8.20.0/node_modules/ajv-formats/dist/limit.js
+// ../node_modules/.pnpm/ajv-formats@3.0.1_ajv@8.20.0/node_modules/ajv-formats/dist/limit.js
 var require_limit = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.formatLimitDefinition = void 0;
@@ -6565,8 +6571,7 @@ var require_limit = /* @__PURE__ */ __commonJSMin(((exports) => {
 	};
 	exports.default = formatLimitPlugin;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-formats@3.0.1_ajv@8.20.0/node_modules/ajv-formats/dist/index.js
+// ../node_modules/.pnpm/ajv-formats@3.0.1_ajv@8.20.0/node_modules/ajv-formats/dist/index.js
 var require_dist$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const formats_1 = require_formats();
@@ -6599,8 +6604,7 @@ var require_dist$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = formatsPlugin;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/typeof.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/typeof.js
 var require_typeof$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -6636,8 +6640,7 @@ var require_typeof$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/typeof.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/typeof.js
 var require_typeof = /* @__PURE__ */ __commonJSMin(((exports, module, this$22) => {
 	var __importDefault = this$22 && this$22.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -6648,8 +6651,7 @@ var require_typeof = /* @__PURE__ */ __commonJSMin(((exports, module, this$22) =
 	exports.default = typeofPlugin;
 	module.exports = typeofPlugin;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/instanceof.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/instanceof.js
 var require_instanceof$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const CONSTRUCTORS = {
@@ -6699,8 +6701,7 @@ var require_instanceof$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/instanceof.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/instanceof.js
 var require_instanceof = /* @__PURE__ */ __commonJSMin(((exports, module, this$21) => {
 	var __importDefault = this$21 && this$21.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -6711,8 +6712,7 @@ var require_instanceof = /* @__PURE__ */ __commonJSMin(((exports, module, this$2
 	exports.default = instanceofPlugin;
 	module.exports = instanceofPlugin;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/_range.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/_range.js
 var require__range = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	function getRangeDef(keyword) {
@@ -6743,8 +6743,7 @@ var require__range = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.default = getRangeDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/range.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/range.js
 var require_range$1 = /* @__PURE__ */ __commonJSMin(((exports, module, this$20) => {
 	var __importDefault = this$20 && this$20.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -6754,8 +6753,7 @@ var require_range$1 = /* @__PURE__ */ __commonJSMin(((exports, module, this$20) 
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/range.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/range.js
 var require_range = /* @__PURE__ */ __commonJSMin(((exports, module, this$19) => {
 	var __importDefault = this$19 && this$19.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -6766,8 +6764,7 @@ var require_range = /* @__PURE__ */ __commonJSMin(((exports, module, this$19) =>
 	exports.default = range;
 	module.exports = range;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/exclusiveRange.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/exclusiveRange.js
 var require_exclusiveRange$1 = /* @__PURE__ */ __commonJSMin(((exports, module, this$18) => {
 	var __importDefault = this$18 && this$18.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -6777,8 +6774,7 @@ var require_exclusiveRange$1 = /* @__PURE__ */ __commonJSMin(((exports, module, 
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/exclusiveRange.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/exclusiveRange.js
 var require_exclusiveRange = /* @__PURE__ */ __commonJSMin(((exports, module, this$17) => {
 	var __importDefault = this$17 && this$17.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -6789,8 +6785,7 @@ var require_exclusiveRange = /* @__PURE__ */ __commonJSMin(((exports, module, th
 	exports.default = exclusiveRange;
 	module.exports = exclusiveRange;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/_util.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/_util.js
 var require__util = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.usePattern = exports.metaSchemaRef = void 0;
@@ -6810,8 +6805,7 @@ var require__util = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.usePattern = usePattern;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/regexp.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/regexp.js
 var require_regexp$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -6851,8 +6845,7 @@ var require_regexp$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/regexp.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/regexp.js
 var require_regexp = /* @__PURE__ */ __commonJSMin(((exports, module, this$16) => {
 	var __importDefault = this$16 && this$16.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -6863,8 +6856,7 @@ var require_regexp = /* @__PURE__ */ __commonJSMin(((exports, module, this$16) =
 	exports.default = regexp;
 	module.exports = regexp;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/transform.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/transform.js
 var require_transform$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -6939,8 +6931,7 @@ var require_transform$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/transform.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/transform.js
 var require_transform = /* @__PURE__ */ __commonJSMin(((exports, module, this$15) => {
 	var __importDefault = this$15 && this$15.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -6951,8 +6942,7 @@ var require_transform = /* @__PURE__ */ __commonJSMin(((exports, module, this$15
 	exports.default = transform;
 	module.exports = transform;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/uniqueItemProperties.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/uniqueItemProperties.js
 var require_uniqueItemProperties$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const equal = require_fast_deep_equal();
@@ -7012,8 +7002,7 @@ var require_uniqueItemProperties$1 = /* @__PURE__ */ __commonJSMin(((exports, mo
 	}
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/uniqueItemProperties.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/uniqueItemProperties.js
 var require_uniqueItemProperties = /* @__PURE__ */ __commonJSMin(((exports, module, this$14) => {
 	var __importDefault = this$14 && this$14.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7024,8 +7013,7 @@ var require_uniqueItemProperties = /* @__PURE__ */ __commonJSMin(((exports, modu
 	exports.default = uniqueItemProperties;
 	module.exports = uniqueItemProperties;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/allRequired.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/allRequired.js
 var require_allRequired$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	function getDef() {
@@ -7045,8 +7033,7 @@ var require_allRequired$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/allRequired.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/allRequired.js
 var require_allRequired = /* @__PURE__ */ __commonJSMin(((exports, module, this$13) => {
 	var __importDefault = this$13 && this$13.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7057,8 +7044,7 @@ var require_allRequired = /* @__PURE__ */ __commonJSMin(((exports, module, this$
 	exports.default = allRequired;
 	module.exports = allRequired;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/_required.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/_required.js
 var require__required = /* @__PURE__ */ __commonJSMin(((exports) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	function getRequiredDef(keyword) {
@@ -7079,8 +7065,7 @@ var require__required = /* @__PURE__ */ __commonJSMin(((exports) => {
 	}
 	exports.default = getRequiredDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/anyRequired.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/anyRequired.js
 var require_anyRequired$1 = /* @__PURE__ */ __commonJSMin(((exports, module, this$12) => {
 	var __importDefault = this$12 && this$12.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7090,8 +7075,7 @@ var require_anyRequired$1 = /* @__PURE__ */ __commonJSMin(((exports, module, thi
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/anyRequired.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/anyRequired.js
 var require_anyRequired = /* @__PURE__ */ __commonJSMin(((exports, module, this$11) => {
 	var __importDefault = this$11 && this$11.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7102,8 +7086,7 @@ var require_anyRequired = /* @__PURE__ */ __commonJSMin(((exports, module, this$
 	exports.default = anyRequired;
 	module.exports = anyRequired;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/oneRequired.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/oneRequired.js
 var require_oneRequired$1 = /* @__PURE__ */ __commonJSMin(((exports, module, this$10) => {
 	var __importDefault = this$10 && this$10.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7113,8 +7096,7 @@ var require_oneRequired$1 = /* @__PURE__ */ __commonJSMin(((exports, module, thi
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/oneRequired.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/oneRequired.js
 var require_oneRequired = /* @__PURE__ */ __commonJSMin(((exports, module, this$9) => {
 	var __importDefault = this$9 && this$9.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7125,8 +7107,7 @@ var require_oneRequired = /* @__PURE__ */ __commonJSMin(((exports, module, this$
 	exports.default = oneRequired;
 	module.exports = oneRequired;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/patternRequired.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/patternRequired.js
 var require_patternRequired$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -7170,8 +7151,7 @@ var require_patternRequired$1 = /* @__PURE__ */ __commonJSMin(((exports, module)
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/patternRequired.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/patternRequired.js
 var require_patternRequired = /* @__PURE__ */ __commonJSMin(((exports, module, this$8) => {
 	var __importDefault = this$8 && this$8.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7182,8 +7162,7 @@ var require_patternRequired = /* @__PURE__ */ __commonJSMin(((exports, module, t
 	exports.default = patternRequired;
 	module.exports = patternRequired;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/prohibited.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/prohibited.js
 var require_prohibited$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	function getDef() {
@@ -7205,8 +7184,7 @@ var require_prohibited$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/prohibited.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/prohibited.js
 var require_prohibited = /* @__PURE__ */ __commonJSMin(((exports, module, this$7) => {
 	var __importDefault = this$7 && this$7.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7217,8 +7195,7 @@ var require_prohibited = /* @__PURE__ */ __commonJSMin(((exports, module, this$7
 	exports.default = prohibited;
 	module.exports = prohibited;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/deepProperties.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/deepProperties.js
 var require_deepProperties$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const _util_1 = require__util();
@@ -7270,8 +7247,7 @@ var require_deepProperties$1 = /* @__PURE__ */ __commonJSMin(((exports, module) 
 	}
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/deepProperties.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/deepProperties.js
 var require_deepProperties = /* @__PURE__ */ __commonJSMin(((exports, module, this$6) => {
 	var __importDefault = this$6 && this$6.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7282,8 +7258,7 @@ var require_deepProperties = /* @__PURE__ */ __commonJSMin(((exports, module, th
 	exports.default = deepProperties;
 	module.exports = deepProperties;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/deepRequired.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/deepRequired.js
 var require_deepRequired$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -7319,8 +7294,7 @@ var require_deepRequired$1 = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	}
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/deepRequired.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/deepRequired.js
 var require_deepRequired = /* @__PURE__ */ __commonJSMin(((exports, module, this$5) => {
 	var __importDefault = this$5 && this$5.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7331,8 +7305,7 @@ var require_deepRequired = /* @__PURE__ */ __commonJSMin(((exports, module, this
 	exports.default = deepRequired;
 	module.exports = deepRequired;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/dynamicDefaults.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/dynamicDefaults.js
 var require_dynamicDefaults$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const sequences = {};
@@ -7405,8 +7378,7 @@ var require_dynamicDefaults$1 = /* @__PURE__ */ __commonJSMin(((exports, module)
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/dynamicDefaults.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/dynamicDefaults.js
 var require_dynamicDefaults = /* @__PURE__ */ __commonJSMin(((exports, module, this$4) => {
 	var __importDefault = this$4 && this$4.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7417,8 +7389,7 @@ var require_dynamicDefaults = /* @__PURE__ */ __commonJSMin(((exports, module, t
 	exports.default = dynamicDefaults;
 	module.exports = dynamicDefaults;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/select.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/definitions/select.js
 var require_select$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	const codegen_1 = require_codegen();
@@ -7488,8 +7459,7 @@ var require_select$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	exports.default = getDef;
 	module.exports = getDef;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/select.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/select.js
 var require_select = /* @__PURE__ */ __commonJSMin(((exports, module, this$3) => {
 	var __importDefault = this$3 && this$3.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7503,8 +7473,7 @@ var require_select = /* @__PURE__ */ __commonJSMin(((exports, module, this$3) =>
 	exports.default = select;
 	module.exports = select;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/index.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/keywords/index.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module, this$2) => {
 	var __importDefault = this$2 && this$2.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7547,8 +7516,7 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module, this$2) 
 	exports.default = ajvKeywords;
 	module.exports = ajvKeywords;
 }));
-//#endregion
-//#region ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/index.js
+// ../node_modules/.pnpm/ajv-keywords@5.1.0_ajv@8.20.0/node_modules/ajv-keywords/dist/index.js
 var require_dist = /* @__PURE__ */ __commonJSMin(((exports, module, this$1) => {
 	var __importDefault = this$1 && this$1.__importDefault || function(mod) {
 		return mod && mod.__esModule ? mod : { "default": mod };
@@ -7577,8 +7545,7 @@ var require_dist = /* @__PURE__ */ __commonJSMin(((exports, module, this$1) => {
 	module.exports = ajvKeywords;
 	module.exports.default = ajvKeywords;
 }));
-//#endregion
-//#region ../schemas/libraries/ajv/download/index.ts
+// ../schemas/libraries/ajv/download/index.ts
 var import_ajv = require_ajv();
 var import_dist = /* @__PURE__ */ __toESM(require_dist$1(), 1);
 var import_dist$1 = /* @__PURE__ */ __toESM(require_dist(), 1);
@@ -7718,4 +7685,3 @@ const productSchema = {
 	]
 };
 ajv.validate(productSchema, {});
-//#endregion

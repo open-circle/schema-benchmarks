@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js
 function toZod() {
 	return (schema) => schema;
 }
@@ -315,8 +315,7 @@ function installLazyProp(inst, key, make, enumerable) {
 		}
 	});
 }
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/core.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/core.js
 var _a;
 const _zodDesc = {
 	value: void 0,
@@ -416,8 +415,7 @@ function config(newConfig) {
 	if (newConfig) Object.assign(globalConfig, newConfig);
 	return globalConfig;
 }
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/errors.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/errors.js
 function _getMessage() {
 	const internals = this._zod;
 	internals.message ?? (internals.message = JSON.stringify(internals.def, jsonStringifyReplacer, 2));
@@ -469,8 +467,7 @@ const initializer = (inst, def) => {
 	}
 };
 const $ZodRealError = /* @__PURE__ */ $constructor("$ZodError", initializer, void 0, { Parent: Error });
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/parse.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/parse.js
 const _parse = (_Err) => {
 	const fn = (schema, value, _ctx, _params) => {
 		const ctx = _ctx ? {
@@ -564,15 +561,13 @@ const _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 	};
 };
 const safeParseAsync = /* @__PURE__*/ _safeParseAsync($ZodRealError);
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js
 const httpProtocol = /^https?$/;
 const creditCard = /^\d(?:[ -]?\d){11,18}$/;
 const iban = /^[A-Z]{2}(?!00|01|99)\d{2}[A-Z0-9]{11,30}$/;
 const anyString = /^[\s\S]{0,}$/;
 const number$1 = /^-?\d+(?:\.\d+)?$/;
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/checks.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/checks.js
 const $ZodCheck = /*@__PURE__*/ $constructor("$ZodCheck", (inst, def) => {
 	var _a;
 	inst._zod ?? (inst._zod = {});
@@ -679,8 +674,7 @@ const $ZodCheckStringFormat = /*@__PURE__*/ $constructor("$ZodCheckStringFormat"
 	});
 	else (_b = inst._zod).check ?? (_b.check = () => {});
 });
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/doc.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/doc.js
 var Doc = class {
 	constructor(args = [], closed = {}) {
 		this.content = [];
@@ -713,15 +707,13 @@ var Doc = class {
 		return new F(...Object.keys(this.closed), `return function (${this.args.join(", ")}) {\n${content.join("\n")}\n};`)(...Object.values(this.closed));
 	}
 };
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/versions.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/versions.js
 const version = {
 	major: 4,
 	minor: 6,
 	patch: 7
 };
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/schemas.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/schemas.js
 const $ZodType = /*@__PURE__*/ $constructor("$ZodType", (inst, def) => {
 	var _a;
 	inst ?? (inst = {});
@@ -1391,8 +1383,7 @@ const $ZodNullable = /*@__PURE__*/ $constructor("$ZodNullable", (inst, def) => {
 		return def.innerType._zod.run(payload, ctx);
 	};
 });
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/memoizer.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/memoizer.js
 /** Keyed off the context object every schema in one parse call already shares. */
 const STATE = "~memo";
 function isRef(value) {
@@ -1534,8 +1525,7 @@ function isBackEdge(ctx, value) {
 	const backEdges = ctx[STATE]?.backEdges;
 	return backEdges !== void 0 && isRef(value) && backEdges.has(value);
 }
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/compile.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/compile.js
 /** @internal Sentinel the compiled fast path returns when validation fails. */
 const INVALID = Symbol.for("zod.compile.invalid");
 const FALLBACK_FLAG = Symbol.for("zod.compile.fallback");
@@ -3019,8 +3009,7 @@ function generateTransformCheck(doc, ctx, schema, accessor) {
 	}
 	return accessor;
 }
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/api.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/api.js
 function snapshotChecks(def) {
 	if (def.checks) def.checks = [...def.checks];
 	return def;
@@ -3091,8 +3080,7 @@ function _minLength(minimum, params) {
 		minimum
 	});
 }
-//#endregion
-//#region ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/mini/schemas.js
+// ../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/mini/schemas.js
 const ZodMiniType = /*@__PURE__*/ $constructor("ZodMiniType", (inst, def) => {
 	if (!inst._zod) throw new Error("Uninitialized schema in ZodMiniType.");
 	$ZodType.init(inst, def);
@@ -3229,8 +3217,7 @@ function nullable(innerType) {
 		innerType
 	});
 }
-//#endregion
-//#region ../schemas/libraries/zod/mini/download/compile.ts
+// ../schemas/libraries/zod/mini/download/compile.ts
 const imageSchema = /* @__PURE__ */ object({
 	id: /* @__PURE__ */ number(),
 	created: /* @__PURE__ */ date(),
@@ -3259,4 +3246,3 @@ compile(toZod()(/* @__PURE__ */ object({
 	images: /* @__PURE__ */ array(imageSchema),
 	ratings: /* @__PURE__ */ array(ratingSchema)
 })), { strict: true }).parse({});
-//#endregion

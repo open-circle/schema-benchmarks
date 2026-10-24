@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/message.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/message.js
 function messageList(node, locale) {
 	const messages = [];
 	const missingCodes = /* @__PURE__ */ new Set();
@@ -38,8 +38,7 @@ function messageList(node, locale) {
 	}
 	return messages;
 }
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/result.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/result.js
 /** @internal */ var ParseErrorResult = class {
 	ok = false;
 	_issue;
@@ -71,8 +70,7 @@ function messageList(node, locale) {
 /** @internal */ function isParseSuccess(value) {
 	return value.ok === true;
 }
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/issue.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/issue.js
 /** @internal */ const issueCodes = {
 	INVALID_TYPE: "invalid_type",
 	TOO_SHORT: "too_short",
@@ -115,8 +113,7 @@ function messageList(node, locale) {
 		right: newNode
 	};
 }
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/utils.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/utils.js
 function isPlainObject(value) {
 	if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
 	if (value.constructor === Object) return true;
@@ -221,8 +218,7 @@ function deepFreeze(value) {
 	for (const key of Reflect.ownKeys(value)) deepFreeze(value[key]);
 	return value;
 }
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/schema.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/schema.js
 var _computedKey;
 const DEFAULT_MAX_DEPTH = 1e3;
 const nonExtensibleStandardProps = /* @__PURE__ */ new WeakMap();
@@ -477,8 +473,7 @@ var ChainSchema = class extends Schema {
 		return issue;
 	}
 };
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/array.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/array.js
 var ArraySchema = class ArraySchema extends Schema {
 	_element;
 	_minLength = 0;
@@ -568,8 +563,7 @@ var ArraySchema = class ArraySchema extends Schema {
 /**
 * [Array](https://paseri.dev/reference/schema/collections/array/) schema.
 */ const array = (...args) => new ArraySchema(...args);
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/bounds.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/bounds.js
 function effectiveLowerBound(checks, gteTag, gtTag) {
 	if (checks === void 0) return;
 	let value;
@@ -600,8 +594,7 @@ function assertLowerWithinUpper(upper, value, strict) {
 function assertUpperWithinLower(lower, value, strict) {
 	if (lower !== void 0 && (value < lower.value || value === lower.value && (strict || lower.strict))) throw new Error("Lower bound must not exceed upper bound.");
 }
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/date.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/date.js
 const TAG_MIN$1 = 0;
 const TAG_MAX$1 = 1;
 const singleton$2 = /* @__PURE__ */ new class DateSchema extends Schema {
@@ -674,8 +667,7 @@ const singleton$2 = /* @__PURE__ */ new class DateSchema extends Schema {
 /**
 * [Date](https://paseri.dev/reference/schema/primitives/date/) schema.
 */ const date = () => singleton$2;
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/enum.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/enum.js
 var EnumSchema = class EnumSchema extends Schema {
 	_values;
 	_set;
@@ -710,8 +702,7 @@ var EnumSchema = class EnumSchema extends Schema {
 /**
 * [Enum](https://paseri.dev/reference/schema/others/enum/) schema.
 */ const enum_ = (...values) => new EnumSchema(...values);
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/number.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/number.js
 const TAG_GTE = 0;
 const TAG_GT = 1;
 const TAG_LTE = 2;
@@ -865,8 +856,7 @@ const singleton$1 = /* @__PURE__ */ new class NumberSchema extends Schema {
 /**
 * [Number](https://paseri.dev/reference/schema/primitives/number/) schema.
 */ const number = () => singleton$1;
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/object.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/object.js
 function mergeShapes(destination, source) {
 	return {
 		...destination,
@@ -1109,8 +1099,7 @@ var ObjectSchema = class ObjectSchema extends Schema {
 /**
 * [Object](https://paseri.dev/reference/schema/collections/object/) schema.
 */ const object = (...args) => new ObjectSchema(...args);
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/regex.gen.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/regex.gen.js
 const emailRegex = () => /^(?:(?:[a-zA-Z\d\!\#\$\%\&'\*\-\/\=\?\^_\u0060\{\|\}\~\+]+)(?:\.(?:[a-zA-Z\d\!\#\$\%\&'\*\-\/\=\?\^_\u0060\{\|\}\~\+]+))*(?:)@(?:(?:[a-zA-Z\d](?:[a-zA-Z\d\-]*[a-zA-Z\d])?\.)+[a-zA-Z]{2,}))$/v;
 const emojiRegex = () => /^\p{RGI_Emoji}+$/v;
 const uuidRegex = () => /^(?:(?:\p{AHex}{8}-\p{AHex}{4}-[1-8]\p{AHex}{3}-[89ab]\p{AHex}{3}-\p{AHex}{12})|(?:00000000-0000-0000-0000-000000000000)|(?:ffffffff-ffff-ffff-ffff-ffffffffffff))$/iv;
@@ -1121,8 +1110,7 @@ const timeRegex = (precision, offset, local = true) => new RegExp(`^(?:(?:(?:[01
 const datetimeRegex = (precision, offset, local) => new RegExp(`^(?:(?:(?:\\d{4}-(?:(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01]))|(?:(?:0[469]|11)-(?:0[1-9]|[12]\\d|30))|(?:02-(?:0[1-9]|1\\d|2[0-8])))|(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29)))T(?:(?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d):(?:[0-5]\\d)(?:${precision === void 0 ? "(?:\\.\\d+)?" : precision === 0 ? "" : `\\.\\d{${String(precision)}}`}))(?:${offset && local ? "(?:(?:[+\\-](?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d))|Z?)" : offset ? "(?:(?:[+\\-](?:(?:[01]\\d|2[0-3])):(?:[0-5]\\d))|Z)" : local ? "Z?" : "Z"}))$`, "v");
 const ipRegex = (version) => new RegExp(`^(?:${version === void 0 ? "(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?:(?:(?:(?:\\p{AHex}{1,4}):){7}(?:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){6}(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){5}(?::(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,2}|:)|(?:(?:\\p{AHex}{1,4}):){4}(?:(?::(?:\\p{AHex}{1,4})){0,1}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,3}|:)|(?:(?:\\p{AHex}{1,4}):){3}(?:(?::(?:\\p{AHex}{1,4})){0,2}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,4}|:)|(?:(?:\\p{AHex}{1,4}):){2}(?:(?::(?:\\p{AHex}{1,4})){0,3}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,5}|:)|(?:(?:\\p{AHex}{1,4}):){1}(?:(?::(?:\\p{AHex}{1,4})){0,4}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,6}|:)|(?::(?:(?::(?:\\p{AHex}{1,4})){0,5}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,7}|:)))(?:%[\\da-zA-Z]+)?))" : version === 4 ? "(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))" : "(?:(?:(?:(?:\\p{AHex}{1,4}):){7}(?:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){6}(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){5}(?::(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,2}|:)|(?:(?:\\p{AHex}{1,4}):){4}(?:(?::(?:\\p{AHex}{1,4})){0,1}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,3}|:)|(?:(?:\\p{AHex}{1,4}):){3}(?:(?::(?:\\p{AHex}{1,4})){0,2}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,4}|:)|(?:(?:\\p{AHex}{1,4}):){2}(?:(?::(?:\\p{AHex}{1,4})){0,3}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,5}|:)|(?:(?:\\p{AHex}{1,4}):){1}(?:(?::(?:\\p{AHex}{1,4})){0,4}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,6}|:)|(?::(?:(?::(?:\\p{AHex}{1,4})){0,5}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,7}|:)))(?:%[\\da-zA-Z]+)?)"})$`, "v");
 const ipCidrRegex = (version) => new RegExp(`^(?:${version === void 0 ? "(?:(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))\\/(?:(?:3[0-2]|2\\d|1\\d|\\d)))|(?:(?:(?:(?:(?:\\p{AHex}{1,4}):){7}(?:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){6}(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){5}(?::(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,2}|:)|(?:(?:\\p{AHex}{1,4}):){4}(?:(?::(?:\\p{AHex}{1,4})){0,1}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,3}|:)|(?:(?:\\p{AHex}{1,4}):){3}(?:(?::(?:\\p{AHex}{1,4})){0,2}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,4}|:)|(?:(?:\\p{AHex}{1,4}):){2}(?:(?::(?:\\p{AHex}{1,4})){0,3}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,5}|:)|(?:(?:\\p{AHex}{1,4}):){1}(?:(?::(?:\\p{AHex}{1,4})){0,4}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,6}|:)|(?::(?:(?::(?:\\p{AHex}{1,4})){0,5}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,7}|:)))(?:%[\\da-zA-Z]+)?)\\/(?:(?:12[0-8]|1[01]\\d|\\d{1,2}))))" : version === 4 ? "(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))\\/(?:(?:3[0-2]|2\\d|1\\d|\\d)))" : "(?:(?:(?:(?:(?:\\p{AHex}{1,4}):){7}(?:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){6}(?:(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|:(?:\\p{AHex}{1,4})|:)|(?:(?:\\p{AHex}{1,4}):){5}(?::(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,2}|:)|(?:(?:\\p{AHex}{1,4}):){4}(?:(?::(?:\\p{AHex}{1,4})){0,1}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,3}|:)|(?:(?:\\p{AHex}{1,4}):){3}(?:(?::(?:\\p{AHex}{1,4})){0,2}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,4}|:)|(?:(?:\\p{AHex}{1,4}):){2}(?:(?::(?:\\p{AHex}{1,4})){0,3}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,5}|:)|(?:(?:\\p{AHex}{1,4}):){1}(?:(?::(?:\\p{AHex}{1,4})){0,4}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,6}|:)|(?::(?:(?::(?:\\p{AHex}{1,4})){0,5}(?:):(?:(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d))|(?::(?:\\p{AHex}{1,4})){1,7}|:)))(?:%[\\da-zA-Z]+)?)\\/(?:(?:12[0-8]|1[01]\\d|\\d{1,2})))"})$`, "v");
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/string.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/schemas/string.js
 const TAG_MIN = 0;
 const TAG_MAX = 1;
 const TAG_REGEX = 2;
@@ -1452,8 +1440,7 @@ const singleton = /* @__PURE__ */ new class StringSchema extends Schema {
 /**
 * [String](https://paseri.dev/reference/schema/primitives/string/) schema.
 */ const string = () => singleton;
-//#endregion
-//#region ../schemas/libraries/@paseri/paseri/download/index.ts
+// ../schemas/libraries/@paseri/paseri/download/index.ts
 const imageSchema = object({
 	id: number(),
 	created: date(),
@@ -1482,4 +1469,3 @@ object({
 	images: array(imageSchema),
 	ratings: array(ratingSchema)
 }).safeParse({});
-//#endregion

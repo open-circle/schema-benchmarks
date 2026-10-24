@@ -465,8 +465,7 @@ function pipe(...pipe$1) {
 		}
 	});
 }
-//#endregion
-//#region ../schemas/libraries/valibot/download/index.ts
+// ../schemas/libraries/valibot/download/index.ts
 const imageSchema = /* @__PURE__ */ object({
 	id: /* @__PURE__ */ number(),
 	created: /* @__PURE__ */ date(),
@@ -494,4 +493,3 @@ parse(/* @__PURE__ */ object({
 		images: /* @__PURE__ */ array(imageSchema)
 	}))
 }), {});
-//#endregion
