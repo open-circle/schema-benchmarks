@@ -1,6 +1,6 @@
 import * as z from "zod";
 import { ZodRealError, config } from "zod";
-//#region \0zod-compiler-runtime
+// \0zod-compiler-runtime
 function __zcUw(m) {
 	return typeof m === "string" ? m : m === void 0 || m === null ? void 0 : m.message;
 }
@@ -139,8 +139,7 @@ function __zcUrl(s) {
 		return false;
 	}
 }
-//#endregion
-//#region libraries/zod-compiler/index.ts
+// libraries/zod-compiler/index.ts
 const imageSchema = z.object({
 	id: z.number(),
 	created: z.date(),
@@ -314,7 +313,6 @@ const compiledProductSchema = /* @__PURE__ */ (() => {
 	}
 	return __zcMkv(safeParse_compiledProductSchema, __zs, null, null);
 })();
-//#endregion
 export { compiledProductSchema };
 
 //# sourceMappingURL=index.mjs.map

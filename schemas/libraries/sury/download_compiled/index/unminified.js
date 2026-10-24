@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/sury@11.0.0/node_modules/sury/index.mjs
+// ../node_modules/.pnpm/sury@11.0.0/node_modules/sury/index.mjs
 var pathEmpty = [];
 var pathDynamic = ["[]"];
 var inlineUnsafeRe = /["\\\n\r]/;
@@ -2488,8 +2488,7 @@ var nullable2 = /* @__NO_SIDE_EFFECTS__ */ (definition, maybeOr) => {
 		else return /* @__PURE__ */ Option_getOr(schema2, maybeOr);
 	} else return unionFactory([schema, nullLiteral]);
 };
-//#endregion
-//#region ../schemas/libraries/sury/download/index.ts
+// ../schemas/libraries/sury/download/index.ts
 const imageSchema = /* @__PURE__ */ definitionToSchema({
 	id: float,
 	created: date,
@@ -2518,4 +2517,3 @@ const ratingSchema = /* @__PURE__ */ definitionToSchema({
 	images: /* @__PURE__ */ array(imageSchema),
 	ratings: /* @__PURE__ */ array(ratingSchema)
 })))({});
-//#endregion

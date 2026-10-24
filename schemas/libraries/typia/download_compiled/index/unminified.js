@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/typia@15.1.0_ttsc@0.34.1_typescript@7.0.2_/node_modules/typia/lib/internal/_isFormatUrl.mjs
+// ../node_modules/.pnpm/typia@15.1.0_ttsc@0.34.1_typescript@7.0.2_/node_modules/typia/lib/internal/_isFormatUrl.mjs
 /**
 * Checks the `url` format, which is stricter than a generic URI.
 *
@@ -16,8 +16,7 @@
 */
 const _isFormatUrl = (str) => PATTERN.test(str);
 const PATTERN = /^(?:https?|ftp):\/\/(?:[^\s/?#@]+(?::[^\s/?#@]*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?=.{1,253}(?::\d{2,5})?(?:\/[^\s]*)?$)(?:[a-z0-9\u00a1-\uffff](?:[-a-z0-9\u00a1-\uffff]{0,61}[a-z0-9\u00a1-\uffff])?\.)+(?:[a-z\u00a1-\uffff](?:[-a-z0-9\u00a1-\uffff]{0,61}[a-z0-9\u00a1-\uffff])))(?::\d{2,5})?(?:\/[^\s]*)?$/iu;
-//#endregion
-//#region ../node_modules/.pnpm/typia@15.1.0_ttsc@0.34.1_typescript@7.0.2_/node_modules/typia/lib/internal/_stringLengthGte.mjs
+// ../node_modules/.pnpm/typia@15.1.0_ttsc@0.34.1_typescript@7.0.2_/node_modules/typia/lib/internal/_stringLengthGte.mjs
 /**
 * Test whether a string has at least the given number of code points.
 *
@@ -35,8 +34,7 @@ const _stringLengthGte = (value, length) => {
 	for (const _ch of value) if (length <= ++count) return true;
 	return false;
 };
-//#endregion
-//#region ../node_modules/.pnpm/typia@15.1.0_ttsc@0.34.1_typescript@7.0.2_/node_modules/typia/lib/internal/_stringLengthLte.mjs
+// ../node_modules/.pnpm/typia@15.1.0_ttsc@0.34.1_typescript@7.0.2_/node_modules/typia/lib/internal/_stringLengthLte.mjs
 /**
 * Test whether a string has at most the given number of code points.
 *
@@ -54,8 +52,7 @@ const _stringLengthLte = (value, length) => {
 	for (const _ch of value) if (!(++count <= length)) return false;
 	return true;
 };
-//#endregion
-//#region ../node_modules/.pnpm/typia@15.1.0_ttsc@0.34.1_typescript@7.0.2_/node_modules/typia/lib/internal/_validateReport.mjs
+// ../node_modules/.pnpm/typia@15.1.0_ttsc@0.34.1_typescript@7.0.2_/node_modules/typia/lib/internal/_validateReport.mjs
 /**
 * Create the reporter that validation functions use to collect errors.
 *
@@ -90,8 +87,7 @@ const _validateReport = (array) => {
 		return false;
 	};
 };
-//#endregion
-//#region ../schemas/libraries/typia/download/index.ts
+// ../schemas/libraries/typia/download/index.ts
 (() => {
 	const _ip0 = (input) => "number" === typeof input["id"];
 	const _ip1 = (input) => input["created"] instanceof Date;
@@ -337,4 +333,3 @@ const _validateReport = (array) => {
 		};
 	};
 })()({});
-//#endregion

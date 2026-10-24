@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/issue.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/issue.js
 /** @internal */ const issueCodes = {
 	INVALID_TYPE: "invalid_type",
 	TOO_SHORT: "too_short",
@@ -41,8 +41,7 @@
 		right: newNode
 	};
 }
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/message.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/message.js
 function messageList(node, locale) {
 	const messages = [];
 	const missingCodes = /* @__PURE__ */ new Set();
@@ -82,8 +81,7 @@ function messageList(node, locale) {
 	}
 	return messages;
 }
-//#endregion
-//#region ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/result.js
+// ../node_modules/.pnpm/@jsr+paseri__paseri@1.9.7/node_modules/@jsr/paseri__paseri/src/result.js
 /** @internal */ var ParseErrorResult = class {
 	ok = false;
 	_issue;
@@ -115,8 +113,7 @@ function messageList(node, locale) {
 /** @internal */ function isParseSuccess(value) {
 	return value.ok === true;
 }
-//#endregion
-//#region ../schemas/libraries/@paseri/compiler/compiled/index.ts
+// ../schemas/libraries/@paseri/compiler/compiled/index.ts
 function isPlainObject(value) {
 	if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
 	if (value.constructor === Object) return true;
@@ -1128,8 +1125,7 @@ function parseProduct(value, options) {
 	if (result.ok) return result.value;
 	throw new PaseriError(result.issue);
 }
-//#endregion
-//#region ../schemas/libraries/@paseri/compiler/download/index.ts
+// ../schemas/libraries/@paseri/compiler/download/index.ts
 ({
 	"~standard": Object.freeze({
 		version: 1,
@@ -1144,4 +1140,3 @@ function parseProduct(value, options) {
 	safeParse: safeParseProduct,
 	parse: parseProduct
 }).safeParse({});
-//#endregion

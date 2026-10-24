@@ -1,6 +1,6 @@
 import * as z from "zod";
 import { ZodRealError, config } from "zod";
-//#region \0zod-compiler-runtime
+// \0zod-compiler-runtime
 function __zcUw(m) {
 	return typeof m === "string" ? m : m === void 0 || m === null ? void 0 : m.message;
 }
@@ -206,8 +206,7 @@ function __zcPa(p, k) {
 	r[n] = k;
 	return r;
 }
-//#endregion
-//#region libraries/zod-compiler/index.ts
+// libraries/zod-compiler/index.ts
 var __re_tnl_10 = /* @__PURE__ */ new RegExp("[\\t\\n\\r]", "g");
 function __zcSw_0(input, path, _e) {
 	if (!Array.isArray(input)) _e.push(__zcIT("array", input, path));
@@ -780,7 +779,6 @@ const compiledProductSchema = /* @__PURE__ */ (() => {
 	}
 	return __zcMkv(safeParse_compiledProductSchema, null, null, null);
 })();
-//#endregion
 export { compiledProductSchema };
 
 //# sourceMappingURL=index.mjs.map

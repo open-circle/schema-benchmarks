@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/superstruct@2.0.2/node_modules/superstruct/dist/index.mjs
+// ../node_modules/.pnpm/superstruct@2.0.2/node_modules/superstruct/dist/index.mjs
 /**
 * A `StructFailure` represents a single specific failure in validation.
 */
@@ -402,8 +402,7 @@ function refine(struct, name, refiner) {
 		}
 	});
 }
-//#endregion
-//#region ../schemas/libraries/superstruct/download/index.ts
+// ../schemas/libraries/superstruct/download/index.ts
 function stringWithLength(min, max) {
 	return refine(string(), `string with length between ${min} and ${max}`, (value) => value.length >= min && value.length <= max);
 }
@@ -436,4 +435,3 @@ create({}, object({
 	images: array(imageSchema),
 	ratings: array(ratingSchema)
 }));
-//#endregion

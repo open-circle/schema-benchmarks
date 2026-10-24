@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/decoders@2.13.0/node_modules/decoders/dist/index.js
+// ../node_modules/.pnpm/decoders@2.13.0/node_modules/decoders/dist/index.js
 var MAX_ERRORS = 3;
 // @__NO_SIDE_EFFECTS__
 function qty(n, unit) {
@@ -597,8 +597,7 @@ function between(min2, max2, decoder = number) {
 }
 // istanbul ignore next -- @preserve
 // istanbul ignore else -- @preserve
-//#endregion
-//#region ../schemas/libraries/decoders/download/index.ts
+// ../schemas/libraries/decoders/download/index.ts
 const imageDecoder = /* @__PURE__ */ object({
 	id: number,
 	created: date,
@@ -647,4 +646,3 @@ const imageDecoder = /* @__PURE__ */ object({
 		images: /* @__PURE__ */ array(imageDecoder)
 	}))
 })).verify({});
-//#endregion

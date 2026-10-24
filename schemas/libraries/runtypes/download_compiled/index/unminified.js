@@ -1,4 +1,4 @@
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/defineProperties.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/defineProperties.js
 const defineProperties = (target, properties, descriptor) => {
 	for (const key of Reflect.ownKeys(properties)) {
 		const value = properties[key];
@@ -9,15 +9,13 @@ const defineProperties = (target, properties, descriptor) => {
 	}
 	return target;
 };
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/defineIntrinsics.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/defineIntrinsics.js
 const defineIntrinsics = (target, properties) => defineProperties(target, properties, {
 	configurable: true,
 	enumerable: false,
 	writable: true
 });
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Spread.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Spread.js
 const Spread = globalThis.Object.assign((content) => ({
 	tag: "spread",
 	content
@@ -26,14 +24,12 @@ const Spread = globalThis.Object.assign((content) => ({
 asSpreadable: (base) => defineIntrinsics(base, { *[Symbol.iterator]() {
 	yield Spread(base);
 } }) });
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/SUCCESS.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/SUCCESS.js
 const SUCCESS = (value) => ({
 	success: true,
 	value
 });
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Literal.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Literal.js
 /**
 * <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality>
 */
@@ -51,11 +47,9 @@ const Literal = (value) => Runtype.create(({ received: x, expected }) => sameVal
 	tag: "literal",
 	value
 });
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/quoteWithDoubleQuote.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/quoteWithDoubleQuote.js
 const quoteWithDoubleQuote = (string) => `"${string.replaceAll("\"", "\\\"")}"`;
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/result/Failcode.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/result/Failcode.js
 const Failcode = {
 	/** The type of the received primitive value is incompatible with expected one. */
 	TYPE_INCORRECT: "TYPE_INCORRECT",
@@ -84,24 +78,19 @@ const Failcode = {
 	/** `Symbol.hasInstance` of the class failed. */
 	INSTANCEOF_FAILED: "INSTANCEOF_FAILED"
 };
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/isObject.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/isObject.js
 const isObject = (object) => object !== null && typeof object === "object";
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/enumerableKeysOf.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/enumerableKeysOf.js
 const enumerableKeysOf = (object) => isObject(object) ? Reflect.ownKeys(object).filter((key) => globalThis.Object.prototype.propertyIsEnumerable.call(object, key)) : [];
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Optional.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Optional.js
 const Optional = Object.assign(((...args) => ({
 	tag: "optional",
 	underlying: args[0],
 	...args.length === 2 ? { default: args[1] } : {}
 })), { isOptional: (runtype) => runtype.tag === "optional" });
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/quoteWithBacktick.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/quoteWithBacktick.js
 const quoteWithBacktick = (string) => `\`${string.replaceAll("`", "\\`")}\``;
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/show.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/show.js
 /**
 * Return the display string for the stringified version of a type, e.g.
 *
@@ -211,8 +200,7 @@ const show = (needsParens, circular) => (runtype) => {
 	}
 };
 var show_default = show(false, /* @__PURE__ */ new Set());
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/typeOf.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/typeOf.js
 const typeOf = (value) => {
 	const type = typeof value;
 	if (type === "object") {
@@ -225,8 +213,7 @@ const typeOf = (value) => {
 	}
 	return type;
 };
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/FAILURE.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/FAILURE.js
 const FAILURE = new Proxy({}, { get: (target, key, receiver) => {
 	if (key in Failcode) return (failure) => {
 		const content = {
@@ -264,8 +251,7 @@ const toMessage = (failure) => {
 		case Failcode.INSTANCEOF_FAILED: return `\`instanceof\` failed in ${show_default(failure.expected)}` + ("thrown" in failure ? `: ${failure.thrown instanceof Error ? failure.thrown.message : failure.thrown}` : "");
 	}
 };
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Brand.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Brand.js
 const Brand = (brand, entity) => {
 	const base = {
 		tag: "brand",
@@ -286,8 +272,7 @@ const Brand = (brand, entity) => {
 		});
 	}, Spread.asSpreadable(base));
 };
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Constraint.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Constraint.js
 const Constraint = (underlying, constraint) => Runtype.create(({ received, innerValidate, expected, parsing }) => {
 	const result = innerValidate({
 		expected: expected.underlying,
@@ -310,8 +295,7 @@ const Constraint = (underlying, constraint) => Runtype.create(({ received, inner
 	underlying,
 	constraint
 });
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Intersect.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Intersect.js
 const Intersect = (...intersectees) => {
 	const base = {
 		tag: "intersect",
@@ -345,8 +329,7 @@ const Intersect = (...intersectees) => {
 		return SUCCESS(parsing ? success.value : received);
 	}, Spread.asSpreadable(base));
 };
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Parser.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Parser.js
 const Parser = (underlying, parser) => Runtype.create(({ received, innerValidate, expected, parsing }) => {
 	try {
 		const result = innerValidate({
@@ -369,8 +352,7 @@ const Parser = (underlying, parser) => Runtype.create(({ received, innerValidate
 	underlying,
 	parser
 });
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Union.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Union.js
 const Union = (...alternatives) => {
 	const base = {
 		tag: "union",
@@ -408,8 +390,7 @@ const Union = (...alternatives) => {
 		throw new Error("No alternatives were matched");
 	}) }));
 };
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/result/ValidationError.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/result/ValidationError.js
 var _a$1;
 const ValidationErrorSymbol = globalThis.Symbol();
 var ValidationError = class extends Error {
@@ -460,13 +441,11 @@ Object.defineProperty(ValidationError, _a$1, {
 	writable: true,
 	value: ValidationError.isValidationError
 });
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/copyProperties.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/copyProperties.js
 const copyProperties = (dst, src) => {
 	globalThis.Object.defineProperties(dst, globalThis.Object.getOwnPropertyDescriptors(src));
 };
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Runtype.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Runtype.js
 var __classPrivateFieldGet = function(receiver, state, kind, f) {
 	if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
 	if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
@@ -764,16 +743,14 @@ const createVisitedState = () => {
 	};
 	return { memo };
 };
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/isNumberLikeKey.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/isNumberLikeKey.js
 /**
 * Mimicking the behavior of type-level `` `${number}` ``.
 *
 * Note that `` `${NaN}` `` is not assignable to a variable of type `` `${number}` ``, but `` `${NaN as number}` `` is assignable, thus this function also accepts `"NaN"`. The same applies to `Infinity` and `-Infinity`.
 */
 const isNumberLikeKey = (key) => typeof key === "string" && key === globalThis.Number(key).toString();
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Array.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Array.js
 const Array$1 = (element) => {
 	const base = {
 		tag: "array",
@@ -804,8 +781,7 @@ const Array$1 = (element) => {
 		else return SUCCESS(parsing ? results.map((result) => result.value) : received);
 	}, Spread.asSpreadable(base)).with((self) => defineIntrinsics({}, { asReadonly: () => self }));
 };
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/InstanceOf.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/InstanceOf.js
 const InstanceOf = (ctor) => Runtype.create(({ received, expected }) => {
 	try {
 		if (received instanceof ctor) return SUCCESS(received);
@@ -824,20 +800,17 @@ const InstanceOf = (ctor) => Runtype.create(({ received, expected }) => {
 	tag: "instanceof",
 	ctor
 });
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Never.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Never.js
 const Never = Runtype.create(({ received, expected }) => FAILURE.NOTHING_EXPECTED({
 	expected,
 	received
 }), { tag: "never" });
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Number.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Number.js
 const Number = Runtype.create(({ received, expected }) => typeof received === "number" ? SUCCESS(received) : FAILURE.TYPE_INCORRECT({
 	expected,
 	received
 }), { tag: "number" });
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/defineProperty.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/defineProperty.js
 const defineProperty = (target, key, value) => {
 	globalThis.Object.defineProperty(target, key, {
 		value,
@@ -847,11 +820,9 @@ const defineProperty = (target, key, value) => {
 	});
 	return target;
 };
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/hasEnumerableOwn.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/utils-internal/hasEnumerableOwn.js
 const hasEnumerableOwn = (key, object) => globalThis.Object.prototype.propertyIsEnumerable.call(object, key);
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Object.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/Object.js
 const Object$1 = (fields) => {
 	return Runtype.create(({ received: x, innerValidate, expected, parsing, memoParsed: memoParsedInherited }) => {
 		if (x === null || x === void 0) return FAILURE.TYPE_INCORRECT({
@@ -967,14 +938,12 @@ const Object$1 = (fields) => {
 		}
 	}));
 };
-//#endregion
-//#region ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/String.js
+// ../node_modules/.pnpm/runtypes@7.0.5/node_modules/runtypes/esm/String.js
 const String = Runtype.create(({ received, expected }) => typeof received === "string" ? SUCCESS(received) : FAILURE.TYPE_INCORRECT({
 	expected,
 	received
 }), { tag: "string" });
-//#endregion
-//#region ../schemas/libraries/runtypes/download/index.ts
+// ../schemas/libraries/runtypes/download/index.ts
 const StringWithLength = (min, max) => String.withConstraint((s) => s.length >= min && s.length <= max);
 const NumberInRange = (min, max) => Number.withConstraint((n) => n >= min && n <= max);
 const Image = Object$1({
@@ -1005,4 +974,3 @@ Object$1({
 	images: Array$1(Image),
 	ratings: Array$1(Rating)
 }).conform().parse({});
-//#endregion

@@ -39,8 +39,7 @@ var right$1 = function(a) {
 		right: a
 	};
 };
-//#endregion
-//#region ../node_modules/.pnpm/fp-ts@2.16.11/node_modules/fp-ts/es6/Functor.js
+// ../node_modules/.pnpm/fp-ts@2.16.11/node_modules/fp-ts/es6/Functor.js
 /** @internal */
 function as$1(F) {
 	return function(self, b) {
@@ -56,8 +55,7 @@ function asUnit$1(F) {
 		return asM(self, void 0);
 	};
 }
-//#endregion
-//#region ../node_modules/.pnpm/fp-ts@2.16.11/node_modules/fp-ts/es6/Either.js
+// ../node_modules/.pnpm/fp-ts@2.16.11/node_modules/fp-ts/es6/Either.js
 /**
 * Constructs a new `Either` holding a `Left` value. This usually represents a failure, due to the right-bias of this
 * structure.
@@ -111,8 +109,7 @@ var FromEither = {
 */
 var isLeft = isLeft$1;
 FromEither.fromEither;
-//#endregion
-//#region ../node_modules/.pnpm/io-ts@2.2.22_fp-ts@2.16.11/node_modules/io-ts/es6/index.js
+// ../node_modules/.pnpm/io-ts@2.2.22_fp-ts@2.16.11/node_modules/io-ts/es6/index.js
 /**
 * @since 1.0.0
 */
@@ -1046,8 +1043,7 @@ new (function(_super) {
 	}
 	return StrictType;
 })(Type);
-//#endregion
-//#region ../node_modules/.pnpm/io-ts-types@0.5.19_fp-ts@2.16.11_io-ts@2.2.22_fp-ts@2.16.11__monocle-ts@2.3.13_fp-ts@2._7101a83b7a58eba9f8f58c77403f5b0c/node_modules/io-ts-types/es6/fromRefinement.js
+// ../node_modules/.pnpm/io-ts-types@0.5.19_fp-ts@2.16.11_io-ts@2.2.22_fp-ts@2.16.11__monocle-ts@2.3.13_fp-ts@2._7101a83b7a58eba9f8f58c77403f5b0c/node_modules/io-ts-types/es6/fromRefinement.js
 /**
 * @since 0.4.4
 */
@@ -1061,8 +1057,7 @@ function fromRefinement(name, is) {
 		return is(u) ? success(u) : failure(u, c);
 	}, identity);
 }
-//#endregion
-//#region ../node_modules/.pnpm/io-ts-types@0.5.19_fp-ts@2.16.11_io-ts@2.2.22_fp-ts@2.16.11__monocle-ts@2.3.13_fp-ts@2._7101a83b7a58eba9f8f58c77403f5b0c/node_modules/io-ts-types/es6/date.js
+// ../node_modules/.pnpm/io-ts-types@0.5.19_fp-ts@2.16.11_io-ts@2.2.22_fp-ts@2.16.11__monocle-ts@2.3.13_fp-ts@2._7101a83b7a58eba9f8f58c77403f5b0c/node_modules/io-ts-types/es6/date.js
 var isDate = function(u) {
 	return u instanceof Date;
 };
@@ -1070,8 +1065,7 @@ var isDate = function(u) {
 * @since 0.5.0
 */
 var date = fromRefinement("Date", isDate);
-//#endregion
-//#region ../schemas/libraries/io-ts/download/index.ts
+// ../schemas/libraries/io-ts/download/index.ts
 const stringWithLength = (min, max) => refinement(string, (s) => s.length >= min && s.length <= max, `string with length between ${min} and ${max}`);
 const numberInRange = (min, max) => refinement(number, (n) => n >= min && n <= max, `number between ${min} and ${max}`);
 const urlString = refinement(string, (s) => URL.canParse(s), "url");
@@ -1108,4 +1102,3 @@ type({
 	images: array(ImageData),
 	ratings: array(RatingData)
 }, "ProductData").decode({});
-//#endregion
