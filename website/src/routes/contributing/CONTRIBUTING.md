@@ -30,6 +30,10 @@ Keeping commit history simple is appreciated, but not necessarily required. For 
 8. Run the benchmarks with `vpr bench:all` to check all is working. You can commit the results during development, as they'll be overwritten when the PR is merged. Additionally, the GitHub action will run the benchmarks and upload its results as an artifact.
 9. Open a PR with your changes.
 
+### PR benchmarks
+
+Benchmark-relevant changes trigger the PR benchmark workflow. New commits replace older benchmark runs for the same PR. Adding the `no-bench` label cancels pending or running benchmarks and skips benchmarks on subsequent commits while the label is present. Other label additions do not interrupt benchmarks.
+
 ## Bug reports/feature requests
 
 Please open an issue for any bugs you find, or features you would like to see. Opening a PR without confirmation it's desired means it may not be merged.

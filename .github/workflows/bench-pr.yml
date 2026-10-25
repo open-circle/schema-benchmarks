@@ -13,7 +13,8 @@ on:
       - "pnpm-workspace.yaml"
 
 concurrency:
-  group: bench-pr-${{ github.event.pull_request.number }}
+  # Unrelated labels must not replace pending benchmark runs.
+  group: bench-pr-${{ github.event.pull_request.number }}${{ github.event.action == 'labeled' && github.event.label.name != 'no-bench' && format('-label-{0}', github.run_id) || '' }}
   cancel-in-progress: ${{ github.event.action != 'labeled' || github.event.label.name == 'no-bench' }}
 
 jobs:
