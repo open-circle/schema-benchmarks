@@ -103,7 +103,7 @@
     "rehype-mdx-code-props": "^3.0.1",
     "rehype-prism-plus": "^2.0.2",
     "rehype-slug": "^6.0.0",
-    "srvx": "^1.0.6",
+    "srvx": "^1.0.7",
     "storybook": "^10.6.3",
     "typescript": "catalog:",
     "unist-util-visit": "^5.1.0",
