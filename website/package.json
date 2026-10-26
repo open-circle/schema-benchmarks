@@ -106,7 +106,7 @@
     "srvx": "^1.0.7",
     "storybook": "^10.6.3",
     "typescript": "catalog:",
-    "unist-util-visit": "^5.1.0",
+    "unist-util-visit": "^5.2.0",
     "vite": "catalog:",
     "vite-plugin-prismjs": "^0.0.11",
     "vite-plugin-pwa": "^2.0.0",
