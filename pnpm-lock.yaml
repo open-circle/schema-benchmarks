@@ -10,8 +10,8 @@ catalogs:
       specifier: ^0.74.0
       version: 0.74.0
     '@ttsc/unplugin':
-      specifier: 0.34.1
-      version: 0.34.1
+      specifier: 0.34.2
+      version: 0.34.2
     '@types/react':
       specifier: ^19.3.0
       version: 19.3.0
@@ -49,8 +49,8 @@ catalogs:
       specifier: ^19.3.1
       version: 19.3.1
     ttsc:
-      specifier: 0.34.1
-      version: 0.34.1
+      specifier: 0.34.2
+      version: 0.34.2
     typebox:
       specifier: ^1.4.3
       version: 1.4.3
@@ -132,7 +132,7 @@ importers:
         version: link:../utils
       '@ttsc/unplugin':
         specifier: 'catalog:'
-        version: 0.34.1(ttsc@0.34.1(typescript@7.0.2))
+        version: 0.34.2(ttsc@0.34.2(typescript@7.0.2))
       gzip-size:
         specifier: ^7.0.0
         version: 7.0.0
@@ -144,7 +144,7 @@ importers:
         version: 6.2.2
       ttsc:
         specifier: 'catalog:'
-        version: 0.34.1(typescript@7.0.2)
+        version: 0.34.2(typescript@7.0.2)
       typebox:
         specifier: 'catalog:'
         version: 1.4.3
@@ -305,7 +305,7 @@ importers:
         version: 1.4.3
       typia:
         specifier: ^15.2.1
-        version: 15.2.1(ttsc@0.34.1(typescript@7.0.2))
+        version: 15.2.1(ttsc@0.34.2(typescript@7.0.2))
       valibot:
         specifier: 'catalog:'
         version: 1.5.0(typescript@7.0.2)
@@ -324,7 +324,7 @@ importers:
     devDependencies:
       '@ttsc/unplugin':
         specifier: 'catalog:'
-        version: 0.34.1(ttsc@0.34.1(typescript@7.0.2))
+        version: 0.34.2(ttsc@0.34.2(typescript@7.0.2))
       '@types/node':
         specifier: ^26
         version: 26.1.2
@@ -333,7 +333,7 @@ importers:
         version: 5.0.5(@vitest/browser@5.0.5)(vitest@5.0.5)
       ttsc:
         specifier: 'catalog:'
-        version: 0.34.1(typescript@7.0.2)
+        version: 0.34.2(typescript@7.0.2)
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -4347,43 +4347,43 @@ packages:
     resolution: {integrity: sha512-/67zpWDBLV+oYAEL682s1ktXL0HgqX76f6gaVGkGnVZlBbm1zd0v4Bz8MFF2GGhoX9rvfq3KSQHubFHwa6w6/Q==}
     engines: {node: '>=12'}
 
-  '@ttsc/darwin-arm64@0.34.1':
-    resolution: {integrity: sha512-0V0kdvtoBN8FmWhVA8jpbGen0EYQE81wiMn75ivLuhvF544fs/jYCNi9P5kNOzH/DpCoyDe3W4+YyJZMaLY3gQ==}
+  '@ttsc/darwin-arm64@0.34.2':
+    resolution: {integrity: sha512-BwiDW175r73JrhVitNQfOg2MjtSE8Rprsr5kFdrVoLUKWBBFCgGE4J6o6sz97jYhKqm+vlWQ5zN7WtVdqUVsaA==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ttsc/darwin-x64@0.34.1':
-    resolution: {integrity: sha512-yjSWopxlpWokYKhMTZAla1PpNgcPPFVWZ5p9RlwH1ZgmTbmjn1cj2RY0E5vvtUjWaYhMxk/5HfSPuvYHyDpgIg==}
+  '@ttsc/darwin-x64@0.34.2':
+    resolution: {integrity: sha512-/44vWw5w1JkWOnvvOnBclQXRp13EdimJYeWj8Wt8Z/NPIsre7i4lhA9b0h7dfTleuSCw/w28+oX9EqKHYU8icg==}
     cpu: [x64]
     os: [darwin]
 
-  '@ttsc/linux-arm64@0.34.1':
-    resolution: {integrity: sha512-5bJiTf2jXv5No9MXWbuvOpEh4+CfNWIqxbwR5GFcTQn9NGpQAOhB3RJnl3XCtyrvTHRM2Q1suW40gvKfVf+sIA==}
+  '@ttsc/linux-arm64@0.34.2':
+    resolution: {integrity: sha512-wZdFY3vbBZHzR9Q7WnNEMmC6UIy7BCsGNG+z6nsZb0BnFIoBCISfCGxYvapdeVwgMGCHBCn3cTlyU30+/C2/fA==}
     cpu: [arm64]
     os: [linux]
 
-  '@ttsc/linux-arm@0.34.1':
-    resolution: {integrity: sha512-TZ1xkLar5XfJoPeWu/e1htXNjSblY1GV+Mp8xWaTQ1x/+27qhI7dVG9D1G6uHQV3cTD2ZYA/psURNGKjngxVbw==}
+  '@ttsc/linux-arm@0.34.2':
+    resolution: {integrity: sha512-8CMmxmVFYuYALzawW7aJqp3Gx7W8gSFfUgLXLbRpIOIZ4IYfyw6aBdulPGYuShbyj0x2S6hygZ/yiFG6o2K1Ag==}
     cpu: [arm]
     os: [linux]
 
-  '@ttsc/linux-x64@0.34.1':
-    resolution: {integrity: sha512-gCXTiK63S6tuSGoAKyGy4MoXuAOHUhYaMjulFRZ0mVAFYaUdwpO2EY4TIpL9wL3sqUuNYoNdGkAqeFs+vDQBeQ==}
+  '@ttsc/linux-x64@0.34.2':
+    resolution: {integrity: sha512-rb4dlSu8suGmFHwbVJ5NQY7WZZr69ABxeCXBEKuSfnmisqO46/G7zlekALxQYDfofwsMHSetwGvTAyPJJcn9LQ==}
     cpu: [x64]
     os: [linux]
 
-  '@ttsc/unplugin@0.34.1':
-    resolution: {integrity: sha512-To99CkEX2PSLo0GF9BV5qxfzR37fw5gAAFjQhOO6w/xo8qaZ5aN+OUkggSyfM9wdOGRN04ouW/pNm0p/9PRQTg==}
+  '@ttsc/unplugin@0.34.2':
+    resolution: {integrity: sha512-TxuskHE42/PJrB2xz7Ng6/+vJhBHcj2Vvg/IJlwHo+RHZB4WjlYNcEJhucEDnt+HrEWx6GwJC49sY0PbBA7y2A==}
     peerDependencies:
-      ttsc: ^0.34.1
+      ttsc: ^0.34.2
 
-  '@ttsc/win32-arm64@0.34.1':
-    resolution: {integrity: sha512-Pm797k07lV9GpCelGumkNUh4tMoG3/kt85sj03g/k4/Kw6evt9MrbjxU7uT2xXQk7z4WLJMhdeE3JVFNkuey2A==}
+  '@ttsc/win32-arm64@0.34.2':
+    resolution: {integrity: sha512-pqfMYgtkiha+Mer4iheFQ1DgVYAYnl3/AV0Wxe5FV8b1dRzTeF0tsCXTQ4u2gBf0x88ICbn1Zr0Cybpp39kV6A==}
     cpu: [arm64]
     os: [win32]
 
-  '@ttsc/win32-x64@0.34.1':
-    resolution: {integrity: sha512-c4jIBbU6/ThZdvUf8oyLC6BI8xiALydVcYyzwZF6zbDBfgYPoKj12h9CZ52Ywh3MSIaeuoIqfjbzhvboIXHllQ==}
+  '@ttsc/win32-x64@0.34.2':
+    resolution: {integrity: sha512-M3t8h0VucUTWeWd6Sqj4/rDXdHpPCoB9MzqqsiAKBWjdKLBBPWj2ouEt0Bqak29MILYOuYGpDAW926cjPNn2eg==}
     cpu: [x64]
     os: [win32]
 
@@ -8282,7 +8282,7 @@ packages:
     resolution: {integrity: sha512-dv8GOXkYqUQdI0rsXB8hmzO95pKWSuX2eg5/JSJa9czfEVIFuKNR7ZJDfat8LlmD35RAhWY+evS7/wXXqFDfSg==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
-      rolldown: 1.2.14
+      rolldown: 1.2.15
     peerDependenciesMeta:
       rolldown:
         optional: true
@@ -8812,8 +8812,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  ttsc@0.34.1:
-    resolution: {integrity: sha512-F5R8b2+/OvaDLyqxCEhOkGAm256pO2tOL+P1E3o+wYeU20k3FRRQMWuVN+Ne4XrDVz8lBxusJV93AhInoPltUA==}
+  ttsc@0.34.2:
+    resolution: {integrity: sha512-YOkuih7vC21LbOnbHwzq7QDNAWnGMsIuoXrXJeheoLpF6Q0bXeYPVMm3U3ErPdJYbIQ0B8ykvCqWGaAXna4BpA==}
     engines: {node: '>=22.15.0'}
     hasBin: true
     peerDependencies:
@@ -8990,7 +8990,7 @@ packages:
       '@rspack/core': '*'
       bun-types-no-globals: '*'
       esbuild: '*'
-      rolldown: 1.2.14
+      rolldown: 1.2.15
       rollup: '*'
       unloader: '*'
       vite: '*'
@@ -12899,32 +12899,32 @@ snapshots:
       magic-string: 0.30.21
       string.prototype.matchall: 4.0.12
 
-  '@ttsc/darwin-arm64@0.34.1':
+  '@ttsc/darwin-arm64@0.34.2':
     optional: true
 
-  '@ttsc/darwin-x64@0.34.1':
+  '@ttsc/darwin-x64@0.34.2':
     optional: true
 
-  '@ttsc/linux-arm64@0.34.1':
+  '@ttsc/linux-arm64@0.34.2':
     optional: true
 
-  '@ttsc/linux-arm@0.34.1':
+  '@ttsc/linux-arm@0.34.2':
     optional: true
 
-  '@ttsc/linux-x64@0.34.1':
+  '@ttsc/linux-x64@0.34.2':
     optional: true
 
-  '@ttsc/unplugin@0.34.1(ttsc@0.34.1(typescript@7.0.2))':
+  '@ttsc/unplugin@0.34.2(ttsc@0.34.2(typescript@7.0.2))':
     dependencies:
-      ttsc: 0.34.1(typescript@7.0.2)
+      ttsc: 0.34.2(typescript@7.0.2)
       unplugin: 2.3.11
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@ttsc/win32-arm64@0.34.1':
+  '@ttsc/win32-arm64@0.34.2':
     optional: true
 
-  '@ttsc/win32-x64@0.34.1':
+  '@ttsc/win32-x64@0.34.2':
     optional: true
 
   '@tybys/wasm-util@0.10.3':
@@ -18002,19 +18002,19 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  ttsc@0.34.1(typescript@7.0.2):
+  ttsc@0.34.2(typescript@7.0.2):
     dependencies:
       acorn: 8.16.0
       cjs-module-lexer: 2.2.1
       typescript: 7.0.2
     optionalDependencies:
-      '@ttsc/darwin-arm64': 0.34.1
-      '@ttsc/darwin-x64': 0.34.1
-      '@ttsc/linux-arm': 0.34.1
-      '@ttsc/linux-arm64': 0.34.1
-      '@ttsc/linux-x64': 0.34.1
-      '@ttsc/win32-arm64': 0.34.1
-      '@ttsc/win32-x64': 0.34.1
+      '@ttsc/darwin-arm64': 0.34.2
+      '@ttsc/darwin-x64': 0.34.2
+      '@ttsc/linux-arm': 0.34.2
+      '@ttsc/linux-arm64': 0.34.2
+      '@ttsc/linux-x64': 0.34.2
+      '@ttsc/win32-arm64': 0.34.2
+      '@ttsc/win32-x64': 0.34.2
       fsevents: 2.3.3
 
   type-check@0.4.0:
@@ -18093,13 +18093,13 @@ snapshots:
       '@typescript/typescript-win32-arm64': 7.0.2
       '@typescript/typescript-win32-x64': 7.0.2
 
-  typia@15.2.1(ttsc@0.34.1(typescript@7.0.2)):
+  typia@15.2.1(ttsc@0.34.2(typescript@7.0.2)):
     dependencies:
       '@typia/interface': 15.2.1
       '@typia/utils': 15.2.1
       randexp: 0.5.3
     optionalDependencies:
-      ttsc: 0.34.1(typescript@7.0.2)
+      ttsc: 0.34.2(typescript@7.0.2)
 
   ufo@1.6.4: {}
 
