@@ -20,7 +20,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	value: mod,
 	enumerable: true
 }) : target, mod));
-// ../node_modules/.pnpm/@ata-project+keywords@0.3.3_ata-validator@1.60.0_yaml@2.9.1_/node_modules/@ata-project/keywords/index.js
+// ../node_modules/.pnpm/@ata-project+keywords@0.3.3_ata-validator@1.61.1_yaml@2.9.1_/node_modules/@ata-project/keywords/index.js
 var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -535,27 +535,27 @@ var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		enumerable: false
 	});
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/native-load.browser.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/native-load.browser.js
 var require_native_load_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = function loadNative() {
 		return null;
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/env.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/env.js
 var require_env = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function env(name) {
 		return typeof process !== "undefined" && process.env ? process.env[name] : void 0;
 	}
 	module.exports = { env };
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/compile-fn.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/compile-fn.js
 var require_compile_fn = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function compileFunction(...args) {
 		return new Function(...args);
 	}
 	module.exports = { compileFunction };
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/keywords.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/keywords.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const RESERVED = /* @__PURE__ */ new Set([
 		"$id",
@@ -692,7 +692,7 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		schemaUsesDataContext
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/dialect.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/dialect.js
 var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const V1_DIALECTS = /* @__PURE__ */ new Set([
 		"https://json-schema.org/v1",
@@ -733,7 +733,7 @@ var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		draftCode
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/draft7.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { DRAFT7_SCHEMAS, DRAFT6_SCHEMAS, DRAFT4_SCHEMAS, DRAFT2019_SCHEMAS, draftCode } = require_dialect();
 	function isDraft7(schema) {
@@ -1066,7 +1066,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		stripFormatAssertions
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/metaschemas.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/metaschemas.js
 var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const METASCHEMAS = /* @__PURE__ */ new Map([
 		["https://json-schema.org/draft/2020-12/schema", {
@@ -1985,7 +1985,7 @@ var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = { METASCHEMAS };
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/vocabularies.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/vocabularies.js
 var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CORE_VOCABULARY = "https://json-schema.org/draft/2020-12/vocab/core";
 	let KEYWORDS_BY_VOCABULARY = null;
@@ -2100,7 +2100,7 @@ var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		keywordsByVocabulary
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/schema-scan.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/schema-scan.js
 var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const NULLABLE = 1;
 	const REF_SIBLINGS = 2;
@@ -2192,7 +2192,7 @@ var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		enumerable: false
 	});
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/defaults.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/defaults.js
 var require_defaults = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const MAX_DEPTH = 512;
 	function buildDefaultsApplier(schema) {
@@ -2385,7 +2385,7 @@ var require_defaults = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		]
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/schema-order.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/schema-order.js
 var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const _keyIndexCache = /* @__PURE__ */ new WeakMap();
 	const _rankCache = /* @__PURE__ */ new WeakMap();
@@ -2618,39 +2618,7 @@ var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		registerDocuments
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/diagnostic-source.js
-var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const KEY = Symbol.for("ata.diagnosticSource");
-	const DESCRIPTOR = {
-		value: null,
-		enumerable: false,
-		configurable: true,
-		writable: true
-	};
-	function setDiagnosticSource(errors, payload) {
-		if (!Array.isArray(errors) || !payload || !Object.isExtensible(errors)) return errors;
-		const prev = errors[KEY];
-		let value = payload;
-		if (prev) {
-			value = Object.assign({}, prev);
-			for (const k of Object.keys(payload)) if (payload[k] !== void 0) value[k] = payload[k];
-		}
-		try {
-			DESCRIPTOR.value = value;
-			Object.defineProperty(errors, KEY, DESCRIPTOR);
-			DESCRIPTOR.value = null;
-		} catch {}
-		return errors;
-	}
-	function getDiagnosticSource(errors) {
-		return Array.isArray(errors) && errors[KEY] || null;
-	}
-	module.exports = {
-		setDiagnosticSource,
-		getDiagnosticSource
-	};
-}));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/error-codes.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/error-codes.js
 var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CODES = Object.freeze({
 		ATA1001: {
@@ -2728,66 +2696,23 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			category: "constraint",
 			headline: "string does not match pattern"
 		},
-		ATA3001: {
+		...Object.fromEntries([
+			"email",
+			"date",
+			"date-time",
+			"time",
+			"uri",
+			"uri-reference",
+			"ipv4",
+			"ipv6",
+			"uuid",
+			"hostname"
+		].map((format, i) => [`ATA30${String(i + 1).padStart(2, "0")}`, {
 			keyword: "format",
-			format: "email",
+			format,
 			category: "format",
-			headline: "value does not match format \"email\""
-		},
-		ATA3002: {
-			keyword: "format",
-			format: "date",
-			category: "format",
-			headline: "value does not match format \"date\""
-		},
-		ATA3003: {
-			keyword: "format",
-			format: "date-time",
-			category: "format",
-			headline: "value does not match format \"date-time\""
-		},
-		ATA3004: {
-			keyword: "format",
-			format: "time",
-			category: "format",
-			headline: "value does not match format \"time\""
-		},
-		ATA3005: {
-			keyword: "format",
-			format: "uri",
-			category: "format",
-			headline: "value does not match format \"uri\""
-		},
-		ATA3006: {
-			keyword: "format",
-			format: "uri-reference",
-			category: "format",
-			headline: "value does not match format \"uri-reference\""
-		},
-		ATA3007: {
-			keyword: "format",
-			format: "ipv4",
-			category: "format",
-			headline: "value does not match format \"ipv4\""
-		},
-		ATA3008: {
-			keyword: "format",
-			format: "ipv6",
-			category: "format",
-			headline: "value does not match format \"ipv6\""
-		},
-		ATA3009: {
-			keyword: "format",
-			format: "uuid",
-			category: "format",
-			headline: "value does not match format \"uuid\""
-		},
-		ATA3010: {
-			keyword: "format",
-			format: "hostname",
-			category: "format",
-			headline: "value does not match format \"hostname\""
-		},
+			headline: `value does not match format "${format}"`
+		}])),
 		ATA3099: {
 			keyword: "format",
 			category: "format",
@@ -2894,12 +2819,6 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			headline: "schema failed to compile"
 		}
 	});
-	function get(code) {
-		return CODES[code];
-	}
-	function all() {
-		return Object.keys(CODES).sort();
-	}
 	const BY_KEYWORD = /* @__PURE__ */ new Map();
 	const BY_FORMAT = /* @__PURE__ */ new Map();
 	for (const c of Object.keys(CODES).sort()) {
@@ -2915,60 +2834,19 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		const hit = BY_KEYWORD.get(keyword);
 		return hit === void 0 ? null : hit;
 	}
-	const NATIVE_KEYWORDS = [
-		null,
-		"__parse__",
-		"__compile__",
-		"type",
-		"required",
-		"additionalProperties",
-		"enum",
-		"const",
-		"minimum",
-		"maximum",
-		"exclusiveMinimum",
-		"exclusiveMaximum",
-		"minLength",
-		"maxLength",
-		"pattern",
-		"format",
-		"minItems",
-		"maxItems",
-		"uniqueItems",
-		"minProperties",
-		"maxProperties",
-		"multipleOf",
-		"allOf",
-		"anyOf",
-		"oneOf",
-		"not",
-		"$ref",
-		"if",
-		"__depth__"
-	];
-	function fromNative(ordinal, format) {
-		if (typeof ordinal !== "number" || !Number.isInteger(ordinal)) return null;
-		const keyword = NATIVE_KEYWORDS[ordinal];
-		if (!keyword) return null;
-		if (keyword === "__depth__") return {
-			keyword,
-			code: "ATA9000"
-		};
-		return {
-			keyword,
-			code: keyword === "format" ? format ? codeFor("format", format) || "ATA3099" : "ATA3099" : codeFor(keyword) || "ATA9001"
-		};
-	}
 	module.exports = {
 		CODES,
-		get,
-		all,
-		codeFor,
-		fromNative,
-		NATIVE_KEYWORDS
+		codeFor
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/levenshtein.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/native.browser.js
+var require_native_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const message = (err) => err && err.message || "validation failed";
+	message.fromNative = message.nativeTargeted = () => null;
+	message.NATIVE_KEYWORDS = [];
+	module.exports = message;
+}));
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/levenshtein.js
 var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let scratchA = /* @__PURE__ */ new Int32Array(64);
 	let scratchB = /* @__PURE__ */ new Int32Array(64);
@@ -3024,7 +2902,7 @@ var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = { levenshtein };
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/pointer.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/pointer.js
 var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Resolve a JSON pointer against a document, for the diagnostic paths that run
@@ -3068,7 +2946,7 @@ var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		UNRESOLVED: Symbol("ata.pointer.unresolved")
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/suggestions.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/suggestions.js
 var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const { resolvePointer: walk, UNRESOLVED } = require_pointer();
@@ -3203,9 +3081,11 @@ var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		suggestCoercion
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/enrich-error.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/enrich-error.js
 var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { CODES, codeFor, fromNative } = require_error_codes();
+	const { CODES, codeFor } = require_error_codes();
+	let _fromNative = null;
+	const fromNative = (ordinal, format) => (_fromNative || (_fromNative = require_native_browser().fromNative))(ordinal, format);
 	const { suggestFor } = require_suggestions();
 	const { resolvePointer } = require_pointer();
 	const MISSING = Symbol("ata.received.missing");
@@ -3526,7 +3406,7 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		DOC_BASE
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/correlate.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/correlate.js
 var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const MAX_DISTANCE = 2;
@@ -3630,10 +3510,9 @@ var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = { correlateTypos };
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/rejections.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/rejections.js
 var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { ordinalFor: schemaOrdinal, rankFor: schemaRank } = require_schema_order();
-	const { setDiagnosticSource: attachDiagnosticSource } = require_diagnostic_source();
 	var LazyRejection = class {
 		constructor(build, data, buildRaw) {
 			this.valid = false;
@@ -3688,9 +3567,13 @@ var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			return raw;
 		}
 	};
+	let _positionsFor = null;
+	function _setPositionsFor(fn) {
+		_positionsFor = fn;
+	}
 	function presentErrors(raw, data, rawInput, self, root, enrich) {
 		if (needsOrdering(raw)) raw = sortErrorsBySchemaOrder(root, raw);
-		const lazyPositions = enrich && raw.length && rawInput != null ? lazyPositionsFor(self, rawInput, raw) : null;
+		const lazyPositions = enrich && raw.length && rawInput != null ? _positionsFor(self, rawInput, raw) : null;
 		const opts = enrich && raw.length ? {
 			data,
 			positions: null,
@@ -3710,6 +3593,162 @@ var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			return this._cached;
 		}
 	});
+	const COLLAPSE_CODES = /* @__PURE__ */ new Set([
+		"ATA4001",
+		"ATA4002",
+		"ATA4003"
+	]);
+	function stripOrdinal(e) {
+		if (e === null || typeof e !== "object") return e;
+		if (e._s === true && e.code === void 0 && e.docUrl === void 0 && e.branchErrors === void 0) return {
+			keyword: e.keyword,
+			instancePath: e.instancePath,
+			schemaPath: e.schemaPath,
+			params: e.params,
+			message: e.message
+		};
+		if (e.path !== void 0 && e.docUrl === void 0 && COLLAPSE_CODES.has(e.code)) {
+			const out = {
+				code: e.code,
+				keyword: e.keyword,
+				instancePath: e.instancePath,
+				path: e.path,
+				schemaPath: e.schemaPath,
+				message: e.message,
+				params: e.params
+			};
+			if ("branchErrors" in e) out.branchErrors = Array.isArray(e.branchErrors) ? e.branchErrors.map(stripOrdinal) : e.branchErrors;
+			return out;
+		}
+		if (e._o === void 0 && e.docUrl === void 0 && (e.code === void 0 || COLLAPSE_CODES.has(e.code)) && !e.branchErrors) return e._s === true ? { ...e } : e;
+		const out = {};
+		for (const k in e) {
+			if (k === "_o" || k === "docUrl") continue;
+			if (k === "code" && !COLLAPSE_CODES.has(e.code)) continue;
+			out[k] = k === "branchErrors" && Array.isArray(e[k]) ? e[k].map(stripOrdinal) : e[k];
+		}
+		return out;
+	}
+	function needsOrdering(raw) {
+		if (raw.length > 1) return true;
+		const e = raw[0];
+		return raw.length === 1 && e !== null && typeof e === "object" && Array.isArray(e.branchErrors) && needsOrdering(e.branchErrors);
+	}
+	function sortBranchErrors(rootSchema, errors) {
+		let out = null;
+		for (let i = 0; i < errors.length; i++) {
+			const e = errors[i];
+			const b = e !== null && typeof e === "object" ? e.branchErrors : void 0;
+			if (!Array.isArray(b) || b.length === 0) continue;
+			const sb = sortErrorsBySchemaOrder(rootSchema, b);
+			if (sb === b) continue;
+			if (out === null) out = errors.slice();
+			out[i] = Object.assign({}, e, { branchErrors: sb });
+		}
+		return out === null ? errors : out;
+	}
+	function sortErrorsBySchemaOrder(rootSchema, errors) {
+		errors = sortBranchErrors(rootSchema, errors);
+		const n = errors.length;
+		const keys = new Array(n);
+		let sorted = true;
+		let prev = -1;
+		let prevPath = null;
+		for (let i = 0; i < n; i++) {
+			const e = errors[i];
+			let o = typeof e._o === "number" ? e._o : schemaOrdinal(rootSchema, e.schemaPath);
+			if (o === null) o = prev < 0 ? 0 : prev;
+			keys[i] = o;
+			if (o < prev || o === prev && sorted && e.schemaPath !== prevPath && tieOrder(rootSchema, prevPath, e.schemaPath) > 0) sorted = false;
+			prev = o;
+			prevPath = e.schemaPath;
+		}
+		if (sorted) return errors;
+		const out = errors.slice();
+		for (let i = 1; i < n; i++) {
+			const k = keys[i];
+			const e = out[i];
+			let j = i - 1;
+			while (j >= 0 && (keys[j] > k || keys[j] === k && tieOrder(rootSchema, out[j].schemaPath, e.schemaPath) > 0)) {
+				keys[j + 1] = keys[j];
+				out[j + 1] = out[j];
+				j--;
+			}
+			keys[j + 1] = k;
+			out[j + 1] = e;
+		}
+		return out;
+	}
+	function tieOrder(rootSchema, a, b) {
+		if (a === b) return 0;
+		const ra = schemaRank(rootSchema, a), rb = schemaRank(rootSchema, b);
+		if (ra === null || rb === null) return 0;
+		const m = Math.min(ra.length, rb.length);
+		for (let k = 0; k < m; k++) if (ra[k] !== rb[k]) return ra[k] - rb[k];
+		return ra.length - rb.length;
+	}
+	let _correlateTypos = null;
+	function attachRelated(errors) {
+		if (_correlateTypos === null) _correlateTypos = require_correlate().correlateTypos;
+		const pairs = _correlateTypos(errors);
+		if (pairs === null) return errors;
+		for (const [from, to] of pairs) {
+			const e = errors[from];
+			if (!e) continue;
+			if (e.related) {
+				if (!e.related.includes(to)) e.related.push(to);
+			} else e.related = [to];
+		}
+		return errors;
+	}
+	module.exports = {
+		LazyRejection,
+		RichRejection,
+		presentErrors,
+		needsOrdering,
+		_enrichLazy,
+		attachRelated,
+		sortErrorsBySchemaOrder,
+		stripOrdinal,
+		_setPositionsFor
+	};
+}));
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/diagnostic-source.js
+var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const KEY = Symbol.for("ata.diagnosticSource");
+	const DESCRIPTOR = {
+		value: null,
+		enumerable: false,
+		configurable: true,
+		writable: true
+	};
+	function setDiagnosticSource(errors, payload) {
+		if (!Array.isArray(errors) || !payload || !Object.isExtensible(errors)) return errors;
+		const prev = errors[KEY];
+		let value = payload;
+		if (prev) {
+			value = Object.assign({}, prev);
+			for (const k of Object.keys(payload)) if (payload[k] !== void 0) value[k] = payload[k];
+		}
+		try {
+			DESCRIPTOR.value = value;
+			Object.defineProperty(errors, KEY, DESCRIPTOR);
+			DESCRIPTOR.value = null;
+		} catch {}
+		return errors;
+	}
+	function getDiagnosticSource(errors) {
+		return Array.isArray(errors) && errors[KEY] || null;
+	}
+	module.exports = {
+		setDiagnosticSource,
+		getDiagnosticSource
+	};
+}));
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/json-rejections.js
+var require_json_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	const { needsOrdering, sortErrorsBySchemaOrder, attachRelated, _setPositionsFor } = require_rejections();
+	const { setDiagnosticSource: attachDiagnosticSource } = require_diagnostic_source();
 	var LazyJsonRejection = class {
 		constructor(result, jsonStr, self, enrich, parsed) {
 			this.valid = false;
@@ -3827,128 +3866,10 @@ var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		return wanted;
 	}
-	const COLLAPSE_CODES = /* @__PURE__ */ new Set([
-		"ATA4001",
-		"ATA4002",
-		"ATA4003"
-	]);
-	function stripOrdinal(e) {
-		if (e === null || typeof e !== "object") return e;
-		if (e._s === true && e.code === void 0 && e.docUrl === void 0 && e.branchErrors === void 0) return {
-			keyword: e.keyword,
-			instancePath: e.instancePath,
-			schemaPath: e.schemaPath,
-			params: e.params,
-			message: e.message
-		};
-		if (e.path !== void 0 && e.docUrl === void 0 && COLLAPSE_CODES.has(e.code)) {
-			const out = {
-				code: e.code,
-				keyword: e.keyword,
-				instancePath: e.instancePath,
-				path: e.path,
-				schemaPath: e.schemaPath,
-				message: e.message,
-				params: e.params
-			};
-			if ("branchErrors" in e) out.branchErrors = Array.isArray(e.branchErrors) ? e.branchErrors.map(stripOrdinal) : e.branchErrors;
-			return out;
-		}
-		if (e._o === void 0 && e.docUrl === void 0 && (e.code === void 0 || COLLAPSE_CODES.has(e.code)) && !e.branchErrors) return e._s === true ? { ...e } : e;
-		const out = {};
-		for (const k in e) {
-			if (k === "_o" || k === "docUrl") continue;
-			if (k === "code" && !COLLAPSE_CODES.has(e.code)) continue;
-			out[k] = k === "branchErrors" && Array.isArray(e[k]) ? e[k].map(stripOrdinal) : e[k];
-		}
-		return out;
-	}
-	function needsOrdering(raw) {
-		if (raw.length > 1) return true;
-		const e = raw[0];
-		return raw.length === 1 && e !== null && typeof e === "object" && Array.isArray(e.branchErrors) && needsOrdering(e.branchErrors);
-	}
-	function sortBranchErrors(rootSchema, errors) {
-		let out = null;
-		for (let i = 0; i < errors.length; i++) {
-			const e = errors[i];
-			const b = e !== null && typeof e === "object" ? e.branchErrors : void 0;
-			if (!Array.isArray(b) || b.length === 0) continue;
-			const sb = sortErrorsBySchemaOrder(rootSchema, b);
-			if (sb === b) continue;
-			if (out === null) out = errors.slice();
-			out[i] = Object.assign({}, e, { branchErrors: sb });
-		}
-		return out === null ? errors : out;
-	}
-	function sortErrorsBySchemaOrder(rootSchema, errors) {
-		errors = sortBranchErrors(rootSchema, errors);
-		const n = errors.length;
-		const keys = new Array(n);
-		let sorted = true;
-		let prev = -1;
-		let prevPath = null;
-		for (let i = 0; i < n; i++) {
-			const e = errors[i];
-			let o = typeof e._o === "number" ? e._o : schemaOrdinal(rootSchema, e.schemaPath);
-			if (o === null) o = prev < 0 ? 0 : prev;
-			keys[i] = o;
-			if (o < prev || o === prev && sorted && e.schemaPath !== prevPath && tieOrder(rootSchema, prevPath, e.schemaPath) > 0) sorted = false;
-			prev = o;
-			prevPath = e.schemaPath;
-		}
-		if (sorted) return errors;
-		const out = errors.slice();
-		for (let i = 1; i < n; i++) {
-			const k = keys[i];
-			const e = out[i];
-			let j = i - 1;
-			while (j >= 0 && (keys[j] > k || keys[j] === k && tieOrder(rootSchema, out[j].schemaPath, e.schemaPath) > 0)) {
-				keys[j + 1] = keys[j];
-				out[j + 1] = out[j];
-				j--;
-			}
-			keys[j + 1] = k;
-			out[j + 1] = e;
-		}
-		return out;
-	}
-	function tieOrder(rootSchema, a, b) {
-		if (a === b) return 0;
-		const ra = schemaRank(rootSchema, a), rb = schemaRank(rootSchema, b);
-		if (ra === null || rb === null) return 0;
-		const m = Math.min(ra.length, rb.length);
-		for (let k = 0; k < m; k++) if (ra[k] !== rb[k]) return ra[k] - rb[k];
-		return ra.length - rb.length;
-	}
-	let _correlateTypos = null;
-	function attachRelated(errors) {
-		if (_correlateTypos === null) _correlateTypos = require_correlate().correlateTypos;
-		const pairs = _correlateTypos(errors);
-		if (pairs === null) return errors;
-		for (const [from, to] of pairs) {
-			const e = errors[from];
-			if (!e) continue;
-			if (e.related) {
-				if (!e.related.includes(to)) e.related.push(to);
-			} else e.related = [to];
-		}
-		return errors;
-	}
-	module.exports = {
-		LazyRejection,
-		RichRejection,
-		presentErrors,
-		needsOrdering,
-		LazyJsonRejection,
-		_enrichLazy,
-		attachRelated,
-		sortErrorsBySchemaOrder,
-		stripOrdinal,
-		wantedPointersFor
-	};
+	_setPositionsFor(lazyPositionsFor);
+	module.exports = { LazyJsonRejection };
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/strict-check.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/strict-check.js
 var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { METASCHEMAS } = require_metaschemas();
 	const { levenshtein } = require_levenshtein();
@@ -4144,7 +4065,7 @@ var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = { checkSchemaStrict };
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/source-positions.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/source-positions.js
 var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build a map of JSON pointer → { line, col, text } by scanning JSON text.
@@ -4299,7 +4220,7 @@ var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		escapePtr
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/data-positions.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/data-positions.js
 var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build pointer → { byteOffset, length, line, col, text } from a JSON
@@ -4675,7 +4596,7 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		buildTargetedPositionMap
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/data-position-cache.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/data-position-cache.js
 var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { buildDataPositionMap, buildTargetedPositionMap } = require_data_positions();
 	/**
@@ -4761,7 +4682,7 @@ var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, modul
 	}
 	module.exports = { createCache };
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/safe-regex.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/safe-regex.js
 var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function __ataSafeRegex() {
 		const WS = [
@@ -5483,7 +5404,7 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = __ataSafeRegex();
 	module.exports.engineSource = () => __ataSafeRegex.toString();
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/branch-collapse.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/branch-collapse.js
 var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const __ATA_SEVERITY = {
 		type: 10,
@@ -5573,7 +5494,7 @@ var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) =
 		_multi: __ataMulti
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/unique-items.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/unique-items.js
 var require_unique_items = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function _deq(a, b) {
 		if (a === b) return true;
@@ -5745,7 +5666,7 @@ var require_unique_items = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		_uqp
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/uri-core.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/uri-core.js
 var require_uri_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function __ataUri(ip6) {
 		const C = /* @__PURE__ */ new Uint8Array(128);
@@ -5962,7 +5883,7 @@ var require_uri_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = { __ataUri };
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/formats.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/formats.js
 var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function isDigit(c) {
 		return c >= 48 && c <= 57;
@@ -6357,6 +6278,7 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = {
 		IPV4,
+		DURATION_RE,
 		IPV6_FULL,
 		ipv4Range,
 		URI_FAST,
@@ -6383,7 +6305,7 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		URI_TEMPLATE_EXPR
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/interpreter-core.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/interpreter-core.js
 var require_interpreter_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let _safeRe = null;
 	const compileSafe = (src) => (_safeRe || (_safeRe = require_safe_regex())).compileSafe(src);
@@ -7908,7 +7830,7 @@ var require_interpreter_core = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		enumerable: false
 	});
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/interpreter.browser.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/interpreter.browser.js
 var require_interpreter_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const core = require_interpreter_core();
 	core._setPlanCompiler(null, true);
@@ -7919,7 +7841,7 @@ var require_interpreter_browser = /* @__PURE__ */ __commonJSMin(((exports, modul
 		if (t && typeof t.unref === "function") t.unref();
 	};
 	function load() {
-		import("./plan-compiler-CHpcxreG.js").then((m) => /* @__PURE__ */ __toESM(m.default, 1)).then((m) => {
+		import("./plan-compiler-C3ObD4uS.js").then((m) => /* @__PURE__ */ __toESM(m.default, 1)).then((m) => {
 			const mod = m && m.install ? m : m.default;
 			core._setPlanCompiler(() => mod.install);
 		}, () => core._setPlanCompiler(null));
@@ -7934,7 +7856,7 @@ var require_interpreter_browser = /* @__PURE__ */ __commonJSMin(((exports, modul
 	};
 	module.exports = core;
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/error-messages.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/error-messages.js
 var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function resolveOwner(rootSchema, schemaPath) {
 		if (!schemaPath || typeof schemaPath !== "string" || schemaPath[0] !== "#") return void 0;
@@ -7991,7 +7913,7 @@ var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		pickMessage
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/buffer-gate.browser.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/buffer-gate.browser.js
 var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		bufferNeedsSlowPath: () => false,
@@ -8000,7 +7922,7 @@ var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, modul
 		}
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/standard-schema.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/standard-schema.js
 var require_standard_schema = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const _pathBuckets = /* @__PURE__ */ new Map();
 	const PATH_LENGTHS_MAX = 256;
@@ -8074,7 +7996,7 @@ var require_standard_schema = /* @__PURE__ */ __commonJSMin(((exports, module) =
 					const err = raw[i];
 					const path = err.instancePath != null ? err.instancePath : err.path || "";
 					let message = err.message;
-					if (!message) message = require_enrich_error().enrich(err, {}).message;
+					if (!message) message = require_native_browser()(err);
 					issues[i] = {
 						message,
 						path: parsePointerPath(path)
@@ -8107,7 +8029,7 @@ var require_standard_schema = /* @__PURE__ */ __commonJSMin(((exports, module) =
 		installStandard
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/refine.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/refine.js
 var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const REFINE = Symbol.for("ata.t.refine");
 	function getRefinements(schema) {
@@ -8157,11 +8079,11 @@ var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		runRefinements
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/version.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/version.js
 var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = "1.60.0";
+	module.exports = "1.61.1";
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/shape-classifier.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
 		"string",
@@ -8267,7 +8189,7 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		PRIMITIVE_TYPES
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/tier0.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/tier0.js
 var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const TYPE_MASK = {
 		string: 1,
@@ -8295,7 +8217,7 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const F_MULT = 16;
 	const PROTO_NAMES = /* @__PURE__ */ new Set([...Object.getOwnPropertyNames(Object.prototype), "__proto__"]);
 	const _hop = Object.prototype.hasOwnProperty;
-	const _PN = {}.__proto__ === Object.prototype;
+	const _PN = typeof Bun === "undefined" && {}.__proto__ === Object.prototype;
 	function primConstraint(key, propSchema) {
 		const t = propSchema.type;
 		const hasEnum = Array.isArray(propSchema.enum);
@@ -8474,7 +8396,7 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		TYPE_MASK
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/validator-core.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/validator-core.js
 var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let _nativeMod;
 	function getNative() {
@@ -8484,6 +8406,11 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	const { env } = require_env();
 	const { compileFunction } = require_compile_fn();
 	const { normalizeKeywords, schemaUsesKeywords } = require_keywords();
+	function aotHost() {
+		if (env("ATA_ENGINE") === "interpreter") return true;
+		const b = typeof Bun !== "undefined" ? Bun : void 0;
+		return !!(b && b.isAOT === true);
+	}
 	let _codegen = null;
 	let compileToJS;
 	let compileToJSCodegen;
@@ -8498,6 +8425,10 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	let _tiering = null;
 	function _registerTiering(t) {
 		_tiering = t;
+	}
+	let _onBuilt = null;
+	function _registerBuiltHook(f) {
+		_onBuilt = f;
 	}
 	function _registerAot(load) {
 		_aotLoader = load;
@@ -8703,7 +8634,10 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	let sortErrorsBySchemaOrder;
 	let stripOrdinal;
 	function _loadRejections() {
-		({LazyRejection, RichRejection, LazyJsonRejection, _enrichLazy, presentErrors, needsOrdering, sortErrorsBySchemaOrder, stripOrdinal} = require_rejections());
+		({LazyRejection, RichRejection, _enrichLazy, presentErrors, needsOrdering, sortErrorsBySchemaOrder, stripOrdinal} = require_rejections());
+	}
+	function _loadJsonRejections() {
+		if (LazyJsonRejection === void 0) ({LazyJsonRejection} = require_json_rejections());
 	}
 	function _jsonSyntaxRejection(e) {
 		return {
@@ -9002,7 +8936,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 			this._options = options;
 			this._noOpts = !opts;
 			if (options.engine !== void 0 && options.engine !== "auto" && options.engine !== "interpreter") throw new TypeError("engine must be 'auto' or 'interpreter', got " + JSON.stringify(options.engine));
-			this._interpretOnly = options.engine === "interpreter";
+			this._interpretOnly = options.engine === "interpreter" || options.engine === void 0 && aotHost();
 			this._initialized = false;
 			this._nativeReady = false;
 			this._compiled = null;
@@ -9049,6 +8983,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 			this._validateTail = null;
 			this._entryExt = null;
 			if (_tiering !== null) _tiering.built(this);
+			if (_onBuilt !== null) _onBuilt(this);
 		}
 		_needsPreprocess() {
 			const o = this._options;
@@ -9093,7 +9028,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				}
 			}
 			const sm = this._schemaMap.size > 0 ? this._schemaMap : null;
-			const mapKey = compileCacheKey(this._schemaStr, this._schemaMap);
+			const mapKey = compileCacheKey(this._schemaStr, this._schemaMap) + "\0" + (_codegen && _codegen.jsCompiler && typeof _codegen.jsCompiler.targetEngine === "function" ? _codegen.jsCompiler.targetEngine() : "v8");
 			var _forceNapi = this._interpretOnly || env("ATA_FORCE_NAPI");
 			const cached = this._userFormats || this._usesKeywords || _forceNapi ? null : _compileCache.get(mapKey);
 			let jsFn, jsCombinedFn, jsErrFn, _isCodegen = false;
@@ -9276,6 +9211,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				const present = (result, data) => {
 					if (result && result.valid === false && result !== ABORT_EARLY_RESULT) {
 						const rawInput = enrich ? self._lastRawInput : null;
+						if (rawInput != null) _loadJsonRejections();
 						return new RichRejection(result, data, rawInput, self, root, enrich);
 					}
 					return result;
@@ -9297,7 +9233,10 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 							parsed = this._lastParsed;
 							this._lastParsed = void 0;
 						}
-						if (result && result.valid === false) return new LazyJsonRejection(result, jsonStr, this, enrich, parsed);
+						if (result && result.valid === false) {
+							_loadJsonRejections();
+							return new LazyJsonRejection(result, jsonStr, this, enrich, parsed);
+						}
 						return result;
 					};
 				} else if (this.validateJSON) {
@@ -9720,6 +9659,9 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		if (!opts && typeof schema === "object" && schema !== null) _compileFnCache.set(schema, fn);
 		return fn;
 	}
+	function schemaOf() {
+		throw new Error("schemaOf<T>() is replaced at build time by @ata-project/unplugin (with ts-json-schema-generator installed); it has no run-time form. Write the JSON Schema, or build with the plugin.");
+	}
 	function defineSchema(schema) {
 		return schema;
 	}
@@ -10140,7 +10082,8 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		createPaddedBuffer,
 		SIMDJSON_PADDING,
 		parseJSON,
-		defineSchema
+		defineSchema,
+		schemaOf
 	};
 	Object.defineProperty(module.exports, "_registerCodegen", {
 		value: _registerCodegen,
@@ -10154,6 +10097,10 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	});
 	Object.defineProperty(module.exports, "_registerTiering", {
 		value: _registerTiering,
+		enumerable: false
+	});
+	Object.defineProperty(module.exports, "_registerBuiltHook", {
+		value: _registerBuiltHook,
 		enumerable: false
 	});
 	Object.defineProperty(module.exports, "_codegenRegistered", {
@@ -10195,7 +10142,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		enumerable: false
 	});
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/aot.browser.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/aot.browser.js
 var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function unavailable(name) {
 		return function() {
@@ -10217,7 +10164,7 @@ var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		loadBundle
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/tiering.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/tiering.js
 var require_tiering = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const core = require_validator_core();
 	const { compileFunction } = require_compile_fn();
@@ -10465,13 +10412,13 @@ var require_tiering = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		TIER_CALLS
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/index.browser.mjs
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords$1();
 var import_validator_core = /* @__PURE__ */ __toESM(require_validator_core(), 1);
 var import_tiering = /* @__PURE__ */ __toESM(require_tiering(), 1);
-import_validator_core.default._registerTiering(import_tiering.default.createTiering(() => import("./codegen-engine-CuH8izsn.js").then((m) => /* @__PURE__ */ __toESM(m.default, 1))));
-const { Validator, compile, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, parseJSON, defineSchema } = import_validator_core.default;
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/t.js
+import_validator_core.default._registerTiering(import_tiering.default.createTiering(() => import("./codegen-engine-CbzyIXTM.js").then((m) => /* @__PURE__ */ __toESM(m.default, 1))));
+const { Validator, compile, validate, validateAsync, parseAsync, version, createPaddedBuffer, SIMDJSON_PADDING, parseJSON, defineSchema, schemaOf } = import_validator_core.default;
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/t.js
 var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const OPTIONAL = Symbol.for("ata.t.optional");
 	const { attach: attachRefine } = require_refine();
@@ -10774,10 +10721,10 @@ const productSchema = t.object({
 	ratings: t.array(ratingSchema)
 });
 (0, import_keywords.withKeywords)(new Validator(productSchema)).validate({});
-export { require_env as _, require_formats as a, require_branch_collapse as c, require_enrich_error as d, require_suggestions as f, require_compile_fn as g, require_defaults as h, require_interpreter_browser as i, require_safe_regex as l, require_schema_order as m, require_validator_core as n, require_uri_core as o, require_error_codes as p, require_buffer_gate_browser as r, require_unique_items as s, require_aot_browser as t, require_rejections as u, require_native_load_browser as v, __commonJSMin as y };
+export { require_compile_fn as _, require_formats as a, require_branch_collapse as c, require_enrich_error as d, require_suggestions as f, require_defaults as g, require_schema_order as h, require_interpreter_browser as i, require_safe_regex as l, require_error_codes as m, require_validator_core as n, require_uri_core as o, require_native_browser as p, require_buffer_gate_browser as r, require_unique_items as s, require_aot_browser as t, require_rejections as u, require_env as v, __commonJSMin as y };
 
-import { _ as require_env, a as require_formats, c as require_branch_collapse, d as require_enrich_error, f as require_suggestions, g as require_compile_fn, h as require_defaults, i as require_interpreter_browser, l as require_safe_regex, m as require_schema_order, n as require_validator_core, o as require_uri_core, p as require_error_codes, r as require_buffer_gate_browser, s as require_unique_items, t as require_aot_browser, u as require_rejections, v as require_native_load_browser, y as __commonJSMin } from "./index.js";
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/combined-runtime.js
+import { _ as require_compile_fn, a as require_formats, c as require_branch_collapse, d as require_enrich_error, f as require_suggestions, g as require_defaults, h as require_schema_order, i as require_interpreter_browser, l as require_safe_regex, m as require_error_codes, n as require_validator_core, o as require_uri_core, p as require_native_browser, r as require_buffer_gate_browser, s as require_unique_items, t as require_aot_browser, u as require_rejections, v as require_env, y as __commonJSMin } from "./index.js";
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/combined-runtime.js
 var require_combined_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function apState() {
 		return {
@@ -10850,7 +10797,7 @@ var require_combined_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		if (a.length !== b.length || a.some((x, i) => x.schemaPath !== b[i].schemaPath || x.instancePath !== b[i].instancePath)) throw new Error("ata: local error sort disagrees with the reader " + JSON.stringify(a.map((x) => x.schemaPath)) + " vs " + JSON.stringify(b.map((x) => x.schemaPath)) + " keys " + JSON.stringify(k));
 		return a;
 	}
-	const _PN = {}.__proto__ === Object.prototype;
+	const _PN = typeof Bun === "undefined" && {}.__proto__ === Object.prototype;
 	const _OP = Object.prototype;
 	const _gp = Object.getPrototypeOf;
 	const _hop = Object.prototype.hasOwnProperty;
@@ -10921,7 +10868,7 @@ var require_combined_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		}
 	});
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/regex-linear.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/regex-linear.js
 var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { parse } = require_safe_regex();
 	const NATIVE_ESCAPES = /* @__PURE__ */ new Set([
@@ -11275,7 +11222,9 @@ var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = { nativeIsLinear };
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/formats-source.js
+// (ignored) ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/email-literal.js
+var require_email_literal = /* @__PURE__ */ __commonJSMin((() => {}));
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/formats-source.js
 var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const _formats = () => require_formats();
 	function idnEmailSource(v, isStr) {
@@ -11344,8 +11293,13 @@ var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		return isStr ? `{${inner}}` : `if(typeof ${v}==='string'){${inner}}`;
 	}
 	const EMAIL_LOCAL_SRC = (v) => `(${v}>32&&${v}<127&&${v}!==34&&${v}!==40&&${v}!==41&&${v}!==44&&${v}!==58&&${v}!==59&&${v}!==60&&${v}!==62&&${v}!==64&&${v}!==91&&${v}!==92&&${v}!==93)`;
+	const _literalByParsers = () => `if((_in.charCodeAt(0)|32)===105&&(_in.charCodeAt(1)|32)===112&&(_in.charCodeAt(2)|32)===118&&_in.charCodeAt(3)===54&&_in.charCodeAt(4)===58){const _i6=_in.slice(5);${ipv6Source("_i6", true)}}else{${ipv4Source("_in", true)}}`;
+	const _emailLiteral = () => {
+		const byExpression = require_email_literal();
+		return typeof byExpression === "function" ? byExpression() : _literalByParsers();
+	};
 	function emailSource(v, isStr) {
-		const inner = `const _n0=${v}.length;let _at;if(${v}.charCodeAt(0)===34){_at=${v}.lastIndexOf('@');if(_at<2||_at===_n0-1||_at>64||${v}.charCodeAt(_at-1)!==34)return false;for(let _qi=1;_qi<_at-1;_qi++){const _qc=${v}.charCodeAt(_qi);if(_qc===92){const _qp=${v}.charCodeAt(_qi+1);if(_qp<32||_qp>126||_qi+1>=_at-1)return false;_qi++;continue}if(_qc<32||_qc>126||_qc===34)return false}}else{if(${v}.charCodeAt(0)===46)return false;_at=-1;let _pd=false;for(let _i=0;_i<_n0;_i++){const _lc=${v}.charCodeAt(_i);if(_lc===64){_at=_i;break}if(!${EMAIL_LOCAL_SRC("_lc")})return false;if(_lc===46){if(_pd)return false;_pd=true}else _pd=false}if(_at<=0||_at===_n0-1||_at>64||${v}.charCodeAt(_at-1)===46)return false}if(${v}.charCodeAt(_at+1)===91){const _dm=${v}.slice(_at+1);if(_dm.charCodeAt(_dm.length-1)!==93||_dm.length<=2)return false;const _in=_dm.slice(1,-1);if((_in.charCodeAt(0)|32)===105&&(_in.charCodeAt(1)|32)===112&&(_in.charCodeAt(2)|32)===118&&_in.charCodeAt(3)===54&&_in.charCodeAt(4)===58){const _i6=_in.slice(5);${ipv6Source("_i6", true)}}else{${ipv4Source("_in", true)}}}else{${hostnameRangeSource(v, "_at+1", `${v}.length`)}}`;
+		const inner = `const _n0=${v}.length;let _at;if(${v}.charCodeAt(0)===34){_at=${v}.lastIndexOf('@');if(_at<2||_at===_n0-1||_at>64||${v}.charCodeAt(_at-1)!==34)return false;for(let _qi=1;_qi<_at-1;_qi++){const _qc=${v}.charCodeAt(_qi);if(_qc===92){const _qp=${v}.charCodeAt(_qi+1);if(_qp<32||_qp>126||_qi+1>=_at-1)return false;_qi++;continue}if(_qc<32||_qc>126||_qc===34)return false}}else{if(${v}.charCodeAt(0)===46)return false;_at=-1;let _pd=false;for(let _i=0;_i<_n0;_i++){const _lc=${v}.charCodeAt(_i);if(_lc===64){_at=_i;break}if(!${EMAIL_LOCAL_SRC("_lc")})return false;if(_lc===46){if(_pd)return false;_pd=true}else _pd=false}if(_at<=0||_at===_n0-1||_at>64||${v}.charCodeAt(_at-1)===46)return false}if(${v}.charCodeAt(_at+1)===91){const _dm=${v}.slice(_at+1);if(_dm.charCodeAt(_dm.length-1)!==93||_dm.length<=2)return false;const _in=_dm.slice(1,-1);` + _emailLiteral() + `}else{${hostnameRangeSource(v, "_at+1", `${v}.length`)}}`;
 		return isStr ? `{${inner}}` : `if(typeof ${v}==='string'){${inner}}`;
 	}
 	function durationSource(v, isStr) {
@@ -11353,6 +11307,7 @@ var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		return isStr ? inner : `if(typeof ${v}==='string'&&${inner.slice(3)}`;
 	}
 	module.exports = {
+		_literalByParsers,
 		uriHelperSource,
 		uriHelperCompactSource,
 		uriSource,
@@ -11375,7 +11330,7 @@ var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		durationSource
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/enrich-site.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/enrich-site.js
 var require_enrich_site = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -11457,11 +11412,11 @@ var require_enrich_site = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		makeRich
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler-errors.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler-errors.js
 var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { env } = require_env();
 	const { compileFunction } = require_compile_fn();
-	const { ownHead, hasConstraints, assertEmitted, prepareForCodegen, sharedCodegenGate, codegenSafe, isSimplePN, hasUnresolvableRef, needsBaseTracking, _cpLen, sharedRt, DECLINE, bindRt, compileSafe, emitGuardState, withPlain, REF_NEUTRAL_SIBLINGS, resolveCrossSchemaRef, enumCondition, enumOperand, emitDeq, emitConstant, ownGuard, ownKeyExpr, multipleOfBad, compilePatternInline, useSafeEngine, reFlags, FORMAT_CODEGEN, PROTO_NAMES, setOwn, nestedGenCode, compileToJSCodegen, SKIP_VALUE_KEYS, skipString, CYCLE_DEPTH, cyclicDefNames, sharedDefNames, reFlagArg, hoistOnce, PTR_ESC_HELPER, unevalContributions, emitUq, uqSources, safeReClosure, fastPrefixCheck, replaceTopLevel, refTargetFor, genCode, addLocalAnnotations, addTopApplicatorAnnotations, protoIs, ANNOT_APPLICATORS, SIZE_SKIPS, emitRootGuard, emitGuardedRun, keyLoopEligible, SAME_KEYS_HELPER, seqTag } = require_js_compiler()._internal;
+	const { ownHead, plainFlag, hasConstraints, assertEmitted, prepareForCodegen, sharedCodegenGate, codegenSafe, isSimplePN, hasUnresolvableRef, needsBaseTracking, _cpLen, sharedRt, DECLINE, bindRt, compileSafe, emitGuardState, withPlain, REF_NEUTRAL_SIBLINGS, resolveCrossSchemaRef, enumCondition, enumOperand, emitDeq, emitConstant, ownGuard, ownKeyExpr, multipleOfBad, compilePatternInline, useSafeEngine, reFlags, FORMAT_CODEGEN, PROTO_NAMES, setOwn, nestedGenCode, compileToJSCodegen, SKIP_VALUE_KEYS, skipString, CYCLE_DEPTH, cyclicDefNames, sharedDefNames, reFlagArg, hoistOnce, PTR_ESC_HELPER, unevalContributions, emitUq, uqSources, safeReClosure, fastPrefixCheck, replaceTopLevel, refTargetFor, genCode, addLocalAnnotations, addTopApplicatorAnnotations, protoIs, ANNOT_APPLICATORS, SIZE_SKIPS, emitRootGuard, emitGuardedRun, keyLoopEligible, SAME_KEYS_HELPER, seqTag } = require_js_compiler()._internal;
 	function emitPtrEsc(ctx) {
 		hoistOnce(ctx, "_peHoisted", PTR_ESC_HELPER);
 		return "_pe";
@@ -12204,7 +12159,7 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 					const outerStack = ctx.refStack;
 					ctx.refStack = /* @__PURE__ */ new Set();
 					try {
-						genCodeE(ctx.rootE, "d", "_p", bodyLines, ctx, SP_PLACEHOLDER);
+						isolatedE(ctx, () => genCodeE(ctx.rootE, "d", "_p", bodyLines, ctx, SP_PLACEHOLDER));
 					} finally {
 						ctx.refStack = outerStack;
 					}
@@ -12228,7 +12183,7 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 						fnName = "_defE" + ctx.defFns.size + "_" + defName.replace(/[^A-Za-z0-9_]/g, "_");
 						ctx.defFns.set(defName, fnName);
 						const bodyLines = [];
-						genCodeE(ctx.rootDefs[defName], "d", "_p", bodyLines, ctx, SP_PLACEHOLDER);
+						isolatedE(ctx, () => genCodeE(ctx.rootDefs[defName], "d", "_p", bodyLines, ctx, SP_PLACEHOLDER));
 						let body = bodyLines.join("\n  ");
 						body = body.split(`'${SP_PLACEHOLDER}`).join(`_sp+'`).split(`"${SP_PLACEHOLDER}`).join(`_sp+"`);
 						if (body.includes(SP_PLACEHOLDER)) throw DECLINE;
@@ -12441,10 +12396,14 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 			}
 			const isAdditional = patChecks.length ? `!_a${ci}.has(_k${ci}[_i])&&!(${patChecks.join("||")})` : `!_a${ci}.has(_k${ci}[_i])`;
 			const gateChecks = patChecks.map((c) => c.split(`_k${ci}[_i]`).join(`_f${ci}`));
-			const gateTest = gateChecks.length ? `!_a${ci}.has(_f${ci})&&!(${gateChecks.join("||")})` : `!_a${ci}.has(_f${ci})`;
+			const declaredNames = Object.keys(schema.properties || {});
+			const notDeclared = declaredNames.length > 0 && declaredNames.length <= 8 ? declaredNames.map((k) => `_f${ci}!==${JSON.stringify(k)}`).join("&&") : `!_a${ci}.has(_f${ci})`;
+			const gateTest = gateChecks.length ? `${notDeclared}&&!(${gateChecks.join("||")})` : notDeclared;
 			const detail = `const _k${ci}=Object.keys(${v});for(let _i=0;_i<_k${ci}.length;_i++){if(${isAdditional}){_e.push({code:'${apLit.codeStr}',keyword:'additionalProperties',instancePath:${pathExpr || "\"\""},schemaPath:'${apSp}'${ordinalField(ctx, `${apSp}`)},params:{additionalProperty:_k${ci}[_i]},message:'must NOT have additional properties',docUrl:'${apLit.docUrl}'${apLit.frame}});if(!_all)return{valid:false,errors:_e}}}`;
 			ctx.helperCode.push(`const _a${ci}=new Set([${allowed}])`);
-			const inner = `let _x${ci}=0;${ownHead(ctx, v, `_f${ci}`, "const")}{if(${gateTest}){_x${ci}=1;break}}if(_x${ci}){${detail}}`;
+			const stdHead = ownHead(ctx, v, `_f${ci}`, "const");
+			const pk = plainFlag(ctx, v);
+			const inner = `let _x${ci}=0;${pk ? `for(const _f${ci} in ${v})if(!${pk}&&!_hop.call(${v},_f${ci}))continue;else ` : stdHead}{if(${gateTest}){_x${ci}=1;break}}if(_x${ci}){${detail}}`;
 			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
 		}
 		if (ctx.inCombined && schema.unevaluatedProperties !== void 0 && schema.unevaluatedProperties !== true && !unevalLocalOk(schema, "unevaluatedProperties")) throw DECLINE;
@@ -12464,9 +12423,10 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 			const childPath = childPathExpr(pathExpr, ptrSeg(key));
 			const sp = schemaPrefix + "/properties/" + ptrSeg(key);
 			const from = lines.length;
-			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})&&${v}[${JSON.stringify(key)}]!==undefined&&${ownKeyExpr(ctx, v, key)}){`);
-			if (!propFnCandidateE(prop, ctx, sp) || !emitPropFnE(prop, `${v}[${JSON.stringify(key)}]`, childPath, lines, ctx, sp)) genCodeE(prop, `${v}[${JSON.stringify(key)}]`, childPath, lines, ctx, sp);
-			lines.push(`}`);
+			const child = `_c${ctx.varCounter++}`;
+			lines.push(`if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){const ${child}=${v}[${JSON.stringify(key)}];if(${child}!==undefined&&${ownKeyExpr(ctx, v, key)}){`);
+			if (!propFnCandidateE(prop, ctx, sp) || !emitPropFnE(prop, child, childPath, lines, ctx, sp)) genCodeE(prop, child, childPath, lines, ctx, sp);
+			lines.push(`}}`);
 			countInlineE(lines, from, ctx);
 		}
 		if (schema.patternProperties) genPatternPropertiesE(schema, v, pathExpr, lines, ctx, schemaPrefix);
@@ -12991,6 +12951,7 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 			"oneOf"
 		]);
 		for (const t of types) for (const k of TYPE_KEYWORDS[t] || []) drop.add(k);
+		if (types.includes("string") && typeof schema.format === "string" && FORMAT_CODEGEN[schema.format]) drop.add("format");
 		let rest = null;
 		for (const k of Object.keys(schema)) {
 			if (drop.has(k)) continue;
@@ -13052,12 +13013,24 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 		}
 		return size >= SPLIT_C_SCHEMA || (ctx.fnBytesE || 0) > SPLIT_C_BUDGET && size >= SPLIT_C_SMALL;
 	}
+	function isolatedE(ctx, run) {
+		const outerPlain = ctx.plainOf;
+		const outerReuse = ctx.plainReuse;
+		ctx.plainOf = void 0;
+		ctx.plainReuse = void 0;
+		try {
+			return run();
+		} finally {
+			ctx.plainOf = outerPlain;
+			ctx.plainReuse = outerReuse;
+		}
+	}
 	function emitPropFnE(prop, v, pathExpr, lines, ctx, schemaPrefix) {
 		const outerBytes = ctx.fnBytesE;
 		ctx.fnBytesE = 0;
 		const bodyLines = [];
 		try {
-			genCodeE(prop, "d", "_p", bodyLines, ctx, schemaPrefix);
+			isolatedE(ctx, () => genCodeE(prop, "d", "_p", bodyLines, ctx, schemaPrefix));
 		} finally {
 			ctx.fnBytesE = outerBytes;
 		}
@@ -14477,7 +14450,7 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 		compileToJSCombined
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileFunction } = require_compile_fn();
 	let _compileSeq = 0;
@@ -14548,8 +14521,8 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				return `var _apk${i}=Object.keys(${v});for(var _api${i}=0;_api${i}<_apk${i}.length;_api${i}++)if(${id}[_apk${i}[_api${i}]]===undefined)return false`;
 			}
 		}
-		if (names.length === 0) return `for(var _k in ${v})if(${ownFail(ctx, v)})return false`;
-		return `for(var _k in ${v})if(${names.map((k) => `_k!==${JSON.stringify(k)}`).join("&&")}&&${ownFail(ctx, v)})return false`;
+		if (names.length === 0) return closedKeyLoop(ctx, v, `if(${ownFail(ctx, v)})return false`);
+		return closedKeyLoop(ctx, v, `if(${names.map((k) => `_k!==${JSON.stringify(k)}`).join("&&")}&&${ownFail(ctx, v)})return false`);
 	}
 	function emitDeq(ctx) {
 		hoistOnce(ctx, "_deqHoisted", DEQ_HELPER);
@@ -15131,7 +15104,9 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	const PROTO_NAMES = /* @__PURE__ */ new Set([...Object.getOwnPropertyNames(Object.prototype), "__proto__"]);
 	const OWN_HELPER_CODE = {
-		_PN: "const _PN=({}).__proto__===Object.prototype;const _OP=Object.prototype;const _gp=Object.getPrototypeOf;",
+		get _PN() {
+			return TARGET_ENGINE !== "v8" ? "const _PN=false;const _OP=Object.prototype;const _gp=Object.getPrototypeOf;" : "const _PN=({}).__proto__===Object.prototype;const _OP=Object.prototype;const _gp=Object.getPrototypeOf;";
+		},
 		_hop: "const _hop=Object.prototype.hasOwnProperty;",
 		_h: "function _h(o,k){return _hop.call(o,k)}",
 		_ok: "function _ok(o,k){return (_PN?o.__proto__:_gp(o))===_OP||_hop.call(o,k)}",
@@ -15190,7 +15165,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 	}
 	const _hop = Object.prototype.hasOwnProperty;
-	({}).__proto__;
+	typeof Bun === "undefined" && {}.__proto__;
 	function hasOwnKey(d, key) {
 		return _hop.call(d, key);
 	}
@@ -17428,7 +17403,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				else typed.push(key);
 			}
 			if (reqChecks.length > 0) lines.push(`if(${reqChecks.join("||")})return false`);
-			if (typed.length > 0) {
+			if (typed.length > 0 && !exactKeysNode(schema, ctx)) {
 				useOwnHelper(ctx, "_hall");
 				const pk = plainFlag(ctx, v);
 				lines.push(`if(!${pk || protoIs(ctx, v)}&&!_hall(${v},${JSON.stringify(typed)}))return false`);
@@ -17444,7 +17419,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				const knownKeys = evalResult.props;
 				const propCount = knownKeys.length;
 				if (schema.required.length >= propCount && knownKeys.every((k) => schema.required.includes(k)) && propCount > 0) {
-					if (propCount <= 15) lines.push(`var _n=0;for(var _k in ${v})_n++;if(_n!==${propCount}&&${ownCountOff(ctx, v, propCount, plainFlag(ctx, v))})return false`);
+					if (propCount <= 15) lines.push(exactKeys(ctx, v, knownKeys));
 					else lines.push(`if(Object.keys(${v}).length!==${propCount})return false`);
 					earlyKeyCount = true;
 				}
@@ -17527,7 +17502,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			const declaredKeys = Object.keys(schema.properties || {});
 			const propCount = declaredKeys.length;
 			const req = new Set(schema.required || []);
-			const inner = !!schema.required && declaredKeys.every((k) => req.has(k)) ? propCount <= 15 ? `var _n=0;for(var _k in ${v})_n++;if(_n!==${propCount}&&${ownCountOff(ctx, v, propCount, plainFlag(ctx, v))})return false` : `if(Object.keys(${v}).length!==${propCount})return false` : apMembershipCheck(ctx, Object.keys(schema.properties || {}), v);
+			const inner = !!schema.required && declaredKeys.every((k) => req.has(k)) ? propCount <= 15 ? exactKeys(ctx, v, declaredKeys) : `if(Object.keys(${v}).length!==${propCount})return false` : apMembershipCheck(ctx, Object.keys(schema.properties || {}), v);
 			_deferOrInline(ctx, lines, v, isObj ? inner : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
 		}
 		if (typeof schema.additionalProperties === "object" && schema.additionalProperties !== null && !schema.patternProperties) genAdditionalSchemaNode(schema, v, lines, ctx, knownType, isObj);
@@ -18246,7 +18221,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				let inner;
 				if (allRequired && propCount > 0) {
 					if (!earlyKeyCount) {
-						inner = propCount <= 15 ? `var _n=0;for(var _k in ${v})_n++;if(_n!==${propCount}&&${ownCountOff(ctx, v, propCount, plainFlag(ctx, v))})return false` : `if(Object.keys(${v}).length!==${propCount})return false`;
+						inner = propCount <= 15 ? exactKeys(ctx, v, knownKeys) : `if(Object.keys(${v}).length!==${propCount})return false`;
 						_deferOrInline(ctx, lines, v, isObj ? inner : `if(typeof ${v}==='object'&&${v}!==null&&!Array.isArray(${v})){${inner}}`);
 					}
 				} else if (propCount > 0) {
@@ -18835,6 +18810,46 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		useOwnHelper(ctx, "_ok");
 		return `_ok(${v},${k})`;
 	}
+	let TARGET_ENGINE = typeof Bun !== "undefined" ? "jsc" : "v8";
+	const ENGINES = [
+		"v8",
+		"jsc",
+		"jsc-aot"
+	];
+	function setTargetEngine(engine) {
+		const prev = TARGET_ENGINE;
+		if (ENGINES.includes(engine)) TARGET_ENGINE = engine;
+		else if (engine === null || engine === void 0) TARGET_ENGINE = typeof Bun !== "undefined" ? "jsc" : "v8";
+		else throw new Error(`unknown target engine ${JSON.stringify(engine)}; expected "v8", "jsc" or "jsc-aot"`);
+		return prev;
+	}
+	function targetEngine() {
+		return TARGET_ENGINE;
+	}
+	function keyCount(v) {
+		return TARGET_ENGINE !== "v8" ? `var _n=Object.keys(${v}).length;` : `var _n=0;for(var _k in ${v})_n++;`;
+	}
+	function exactKeysNode(schema, ctx) {
+		if (TARGET_ENGINE !== "jsc-aot") return false;
+		if (schema.additionalProperties !== false || schema.patternProperties || !schema.properties || !schema.required) return false;
+		if (ctx.removeNodes && ctx.removeNodes.has(schema)) return false;
+		const keys = Object.keys(schema.properties);
+		if (keys.length === 0 || keys.length > 15) return false;
+		const req = new Set(schema.required);
+		return keys.every((k) => req.has(k));
+	}
+	function exactKeys(ctx, v, keys) {
+		const n = keys.length;
+		if (TARGET_ENGINE !== "jsc-aot" || n === 0) return `${keyCount(v)}if(_n!==${n}&&${ownCountOff(ctx, v, n, plainFlag(ctx, v))})return false`;
+		const i = ctx.varCounter++;
+		const names = keys.map((k) => JSON.stringify(k));
+		return `{const _ks${i}=Object.keys(${v});if(_ks${i}.length!==${n})return false;if(!(${names.map((k, j) => `_ks${i}[${j}]===${k}`).join("&&")}))for(let _i=0;_i<${n};_i++){const _k=_ks${i}[_i];if(${names.map((k) => `_k!==${k}`).join("&&")})return false}}`;
+	}
+	function closedKeyLoop(ctx, v, body) {
+		if (TARGET_ENGINE === "v8") return `for(var _k in ${v}){${body}}`;
+		const i = ctx.varCounter++;
+		return `{var _ks${i}=Object.keys(${v});for(var _ki${i}=0;_ki${i}<_ks${i}.length;_ki${i}++){var _k=_ks${i}[_ki${i}];${body}}}`;
+	}
 	function ownCountOff(ctx, v, n, pk) {
 		useOwnHelper(ctx, "_nk");
 		return pk ? `(${pk}||_nk(${v},${n}))` : `_nk(${v},${n})`;
@@ -18845,8 +18860,8 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return `var _pl${i}=${v}!==null&&typeof ${v}==='object'&&${protoIs(ctx, v)};for(${kind} ${k} in ${v})if(!_pl${i}&&!_hop.call(${v},${k}))continue;else `;
 	}
 	function genCharCodeSwitch(keys, v, ctx) {
-		if (keys.length === 0) return `for(var _k in ${v})if(${ownFail(ctx, v)})return false`;
-		if (keys.length <= 3) return `for(var _k in ${v})if(${keys.map((k) => `_k!==${JSON.stringify(k)}`).join("&&")}&&${ownFail(ctx, v)})return false`;
+		if (keys.length === 0) return closedKeyLoop(ctx, v, `if(${ownFail(ctx, v)})return false`);
+		if (keys.length <= 3) return closedKeyLoop(ctx, v, `if(${keys.map((k) => `_k!==${JSON.stringify(k)}`).join("&&")}&&${ownFail(ctx, v)})return false`);
 		const groups = /* @__PURE__ */ new Map();
 		for (const k of keys) {
 			const cc = k.charCodeAt(0);
@@ -18858,7 +18873,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			const cond = groupKeys.map((k) => `_k===${JSON.stringify(k)}`).join("||");
 			cases += `case ${cc}:if(${cond})continue;break;`;
 		}
-		return `for(var _k in ${v}){switch(_k.charCodeAt(0)){${cases}default:break}if(${ownFail(ctx, v)})return false}`;
+		return closedKeyLoop(ctx, v, `switch(_k.charCodeAt(0)){${cases}default:break}if(${ownFail(ctx, v)})return false`);
 	}
 	function genUnevalDynamicVerdict(schema, v, lines, ctx, isObj, nonObjApplicators) {
 		if (schema.additionalProperties !== void 0) {
@@ -19125,6 +19140,8 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		compileToJSCodegen,
 		compileToJSCodegenWithErrors,
 		compileToJSCombined,
+		setTargetEngine,
+		targetEngine,
 		collectEvaluated,
 		unevalContributions,
 		expandedChars,
@@ -19150,6 +19167,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	});
 	module.exports._internal = {
 		ownHead,
+		plainFlag,
 		hasConstraints,
 		assertEmitted,
 		prepareForCodegen,
@@ -19210,7 +19228,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		seqTag
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/scan-runtime.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/scan-runtime.js
 var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function hex4(s, i) {
 		for (let k = i; k < i + 4; k++) {
@@ -19367,7 +19385,7 @@ var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		MAX_SKIP_DEPTH
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/scan-compiler.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/scan-compiler.js
 var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileFunction } = require_compile_fn();
 	const { compileToJSCodegen } = require_js_compiler();
@@ -20302,7 +20320,7 @@ var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		BAIL
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/clone-emit.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/clone-emit.js
 var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileToJSCodegen, unevalContributions } = require_js_compiler();
 	function resolveLocalPointer(root, ref) {
@@ -20510,122 +20528,7 @@ var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		resolveLocalPointer
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/native-positions.js
-var require_native_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const NATIVE_MIN = 32768;
-	let _native;
-	function nativeTargeted(text, wanted) {
-		if (typeof text !== "string" || text.length < NATIVE_MIN) return null;
-		if (_native === void 0) {
-			try {
-				_native = require_native_load_browser()();
-			} catch {
-				_native = null;
-			}
-			if (_native && typeof _native.locatePointers !== "function") _native = null;
-		}
-		if (_native === null || typeof Buffer === "undefined" || Buffer.byteLength(text, "utf8") !== text.length) return null;
-		const ptrs = Array.from(wanted);
-		let found;
-		try {
-			found = _native.locatePointers(text, ptrs);
-		} catch {
-			return null;
-		}
-		const offs = [];
-		for (let k = 0; k < ptrs.length; k++) {
-			if (!(found[2 * k] >= 0)) return null;
-			offs.push(found[2 * k]);
-		}
-		const needed = [];
-		for (let k = 0; k < ptrs.length; k++) {
-			needed.push(offs[k]);
-			const ks = keyStartBefore(text, offs[k]);
-			if (ks >= 0) needed.push(ks);
-		}
-		const lineOf = lineFinder(text, needed);
-		const map = Object.create(null);
-		for (let k = 0; k < ptrs.length; k++) {
-			const off = offs[k];
-			const at = lineOf(off);
-			const entry = {
-				byteOffset: off,
-				length: found[2 * k + 1],
-				line: at.line,
-				col: off - at.start + 1,
-				text: at.text
-			};
-			const ks = keyStartBefore(text, off);
-			if (ks >= 0 && ptrs[k] !== "") {
-				const kat = lineOf(ks);
-				entry.keyOffset = ks;
-				entry.keyLength = keyEndAfter(text, ks) - ks + 1;
-				entry.keyLine = kat.line;
-				entry.keyCol = ks - kat.start + 1;
-			}
-			map[ptrs[k]] = entry;
-		}
-		return map;
-	}
-	function keyStartBefore(text, off) {
-		let j = off - 1;
-		while (j >= 0) {
-			const c = text.charCodeAt(j);
-			if (c === 32 || c === 9 || c === 10 || c === 13) j--;
-			else break;
-		}
-		if (j < 0 || text.charCodeAt(j) !== 58) return -1;
-		j--;
-		while (j >= 0) {
-			const c = text.charCodeAt(j);
-			if (c === 32 || c === 9 || c === 10 || c === 13) j--;
-			else break;
-		}
-		if (j < 0 || text.charCodeAt(j) !== 34) return -1;
-		for (let q = j - 1; q >= 0; q--) {
-			if (text.charCodeAt(q) !== 34) continue;
-			let b = q - 1;
-			while (b >= 0 && text.charCodeAt(b) === 92) b--;
-			if ((q - 1 - b & 1) === 0) return q;
-		}
-		return -1;
-	}
-	function keyEndAfter(text, start) {
-		let q = start + 1;
-		for (;;) {
-			const c = text.charCodeAt(q);
-			if (c === 92) {
-				q += 2;
-				continue;
-			}
-			if (c === 34 || q >= text.length) return q;
-			q++;
-		}
-	}
-	function lineFinder(text, offsets) {
-		const sorted = Array.from(new Set(offsets)).sort((a, b) => a - b);
-		const info = /* @__PURE__ */ new Map();
-		let line = 1, start = 0, s = 0;
-		while (s < sorted.length) {
-			const nl = text.indexOf("\n", start);
-			const end = nl === -1 ? text.length : nl;
-			while (s < sorted.length && sorted[s] <= end) {
-				info.set(sorted[s], {
-					line,
-					start,
-					text: text.slice(start, end)
-				});
-				s++;
-			}
-			if (nl === -1) break;
-			line++;
-			start = nl + 1;
-		}
-		return (off) => info.get(off);
-	}
-	module.exports = { nativeTargeted };
-}));
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/codegen-engine.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/codegen-engine.js
 var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileFunction } = require_compile_fn();
 	const core = require_validator_core();
@@ -20834,35 +20737,33 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				return run(data);
 			} : run;
 			ctx.rejectBase = onReject;
-			if (!preprocess) {
-				ctx.richBuilder = richBuilder;
-				ctx.oneShotRich = ctx.buildRich ? richIfSafe : () => combinedIfSafe() || errFnIfSafe();
-				ctx.oneShotPlain = !ctx.buildRich;
-				ctx.isCleanShape = (fn) => fn !== null && fn === _safeCombined;
-				ctx.isCombined = (fn) => fn !== null && fn === _safeCombined;
-				ctx.onePassOf = (empty, fallback) => {
-					const sort = (errs) => _needsOrdering(errs) ? _sortErrors(schemaObj, errs) : errs;
-					try {
-						const fn = jsCompiler.compileToJSCombined(schemaObj, VALID_RESULT, this._schemaMap.size > 0 ? this._schemaMap : null, this._userFormats, {
-							runtimeShape: true,
-							resultShape: {
-								Rejection: EagerRejection,
-								empty,
-								sort,
-								fallback,
-								verdict: jsFn
-							}
-						});
-						if (!fn) return null;
-						fn({});
-						fn(null);
-						fn(0);
-						return fn;
-					} catch {
-						return null;
-					}
-				};
-			}
+			ctx.richBuilder = richBuilder;
+			ctx.oneShotRich = ctx.buildRich ? richIfSafe : () => combinedIfSafe() || errFnIfSafe();
+			ctx.oneShotPlain = !ctx.buildRich;
+			ctx.isCleanShape = (fn) => fn !== null && fn === _safeCombined;
+			ctx.isCombined = (fn) => fn !== null && fn === _safeCombined;
+			ctx.onePassOf = preprocess ? null : (empty, fallback) => {
+				const sort = (errs) => _needsOrdering(errs) ? _sortErrors(schemaObj, errs) : errs;
+				try {
+					const fn = jsCompiler.compileToJSCombined(schemaObj, VALID_RESULT, this._schemaMap.size > 0 ? this._schemaMap : null, this._userFormats, {
+						runtimeShape: true,
+						resultShape: {
+							Rejection: EagerRejection,
+							empty,
+							sort,
+							fallback,
+							verdict: jsFn
+						}
+					});
+					if (!fn) return null;
+					fn({});
+					fn(null);
+					fn(0);
+					return fn;
+				} catch {
+					return null;
+				}
+			};
 		} else {
 			const safeCombinedFn = combinedIfSafe();
 			if (safeCombinedFn) {
@@ -21477,7 +21378,7 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	module.exports = {
 		jsCompiler,
 		coldTwin,
-		nativePositions: () => require_native_positions().nativeTargeted,
+		nativePositions: () => require_native_browser().nativeTargeted,
 		installPaths: installCodegenPaths,
 		compileVerdict: installCodegenPaths.compileVerdict,
 		installScanner: installCodegenPaths.installScanner,
@@ -21490,7 +21391,7 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 export default require_codegen_engine();
 
 import { c as require_branch_collapse, y as __commonJSMin } from "./index.js";
-// ../node_modules/.pnpm/ata-validator@1.60.0_yaml@2.9.1/node_modules/ata-validator/lib/plan-compiler.js
+// ../node_modules/.pnpm/ata-validator@1.61.1_yaml@2.9.1/node_modules/ata-validator/lib/plan-compiler.js
 var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { collapseBranches } = require_branch_collapse();
 	const branchTitle = (n) => n && n.schema && typeof n.schema.title === "string" ? n.schema.title : "";
