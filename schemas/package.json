@@ -34,7 +34,7 @@
     "ajv-formats": "^3.0.1",
     "ajv-keywords": "^5.1.0",
     "arktype": "^2.2.9",
-    "ata-validator": "^1.60.0",
+    "ata-validator": "^1.61.1",
     "decoders": "^2.13.0",
     "dedent": "catalog:",
     "effect": "^4.0.6",
