@@ -12,7 +12,7 @@ export const libraryVersions = {
   arktype: "2.2.9",
   "ata-validator": "1.61.1",
   decoders: "2.13.0",
-  effect: "4.0.6",
+  effect: "4.0.7",
   "io-ts": "2.2.22",
   joi: "18.3.0",
   jsonschema: "1.5.0",
