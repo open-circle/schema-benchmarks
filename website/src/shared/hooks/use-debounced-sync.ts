@@ -2,7 +2,6 @@ import { useDebouncedCallback } from "@tanstack/react-pacer";
 import { castDraft, castMutable } from "mutative";
 import type { SetStateAction } from "react";
 
-import type { PayloadAction } from "./use-local-slice";
 import { useLocalSlice } from "./use-local-slice";
 
 function isCallback<T>(value: SetStateAction<T>): value is (prevState: T) => T {
@@ -18,11 +17,11 @@ export function useDebouncedSync<T>(
   const [{ local, snapshot }, dispatchAction] = useLocalSlice({
     initialState: { snapshot: incomingValue, local: incomingValue },
     reducers: {
-      resync: (state, { payload }: PayloadAction<T>) => {
+      resync: (state, { payload }: useLocalSlice.PayloadAction<T>) => {
         state.snapshot = castDraft(payload);
         state.local = castDraft(payload);
       },
-      setLocal: (state, { payload }: PayloadAction<SetStateAction<T>>) => {
+      setLocal: (state, { payload }: useLocalSlice.PayloadAction<SetStateAction<T>>) => {
         const newValue = isCallback(payload) ? payload(castMutable(state.local)) : payload;
         state.local = castDraft(newValue);
         debouncedSync(newValue);

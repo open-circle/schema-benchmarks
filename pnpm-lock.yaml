@@ -505,6 +505,9 @@ importers:
       up-fetch:
         specifier: 'catalog:'
         version: 2.6.1
+      use-local-slice:
+        specifier: ^2.0.0
+        version: 2.0.0(react@19.3.1)
       valibot:
         specifier: 'catalog:'
         version: 1.5.0(typescript@7.0.2)
@@ -6688,6 +6691,9 @@ packages:
   image-meta@0.2.2:
     resolution: {integrity: sha512-3MOLanc3sb3LNGWQl1RlQlNWURE5g32aUphrDyFeCsxBTk08iE3VNe4CwsUZ0Qs1X+EfX0+r29Sxdpza4B+yRA==}
 
+  immer@11.2.9:
+    resolution: {integrity: sha512-IQ4UEtXjZjyefyWjtLEDXUSrF6T2hwjKPi6BIJl3bY/2XXW24d6cNGdXJSBOA/+KNnuiXkZY6DR0C3efolhitA==}
+
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
     engines: {node: '>=6'}
@@ -9118,6 +9124,11 @@ packages:
 
   urlpattern-polyfill@8.0.2:
     resolution: {integrity: sha512-Qp95D4TPJl1kC9SKigDcqgyM2VDVO4RiJc2d4qe5GrYm+zbIQCWWKAFaJNQ4BhdFeDGwBmAxqJBwWSJDb9T3BQ==}
+
+  use-local-slice@2.0.0:
+    resolution: {integrity: sha512-2s3IGzGxKCs+7O5mB02yYmqPIi+ewpsdiORWImdnOlLIA7bfvM2u6pjeHXOcm9MhQG2GuE2ttfATVjHFmkk7vg==}
+    peerDependencies:
+      react: '>=16.8.0'
 
   use-sync-external-store@1.6.0:
     resolution: {integrity: sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==}
@@ -15433,6 +15444,8 @@ snapshots:
 
   image-meta@0.2.2: {}
 
+  immer@11.2.9: {}
+
   import-fresh@3.3.1:
     dependencies:
       parent-module: 1.0.1
@@ -18286,6 +18299,11 @@ snapshots:
   urlpattern-polyfill@10.1.0: {}
 
   urlpattern-polyfill@8.0.2: {}
+
+  use-local-slice@2.0.0(react@19.3.1):
+    dependencies:
+      immer: 11.2.9
+      react: 19.3.1
 
   use-sync-external-store@1.6.0(react@19.3.1):
     dependencies:
