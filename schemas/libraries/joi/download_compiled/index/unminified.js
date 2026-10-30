@@ -28,7 +28,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 		var e = {
 			2115(e, t, r) {
 				"use strict";
-				const { assert: s, clone: n, deepEqual: a, merge: o } = r(3115), i = r(2130), l = r(9415), c = r(3541), u = r(8013), f = r(2062), m = r(9017), h = r(6162), p = r(5844), d = r(8529), g = r(125), y = r(1190), b = r(6220), v = {
+				const { assert: s, clone: n, deepEqual: a, merge: o } = r(3115), i = r(2130), l = r(9415), c = r(3541), u = r(8013), f = r(2062), m = r(9017), h = r(6162), p = r(5844), d = r(8529), g = r(125), y = r(1190), b = r(6220), _ = {
 					standardTypes: /* @__PURE__ */ new Set([
 						"string",
 						"number",
@@ -60,7 +60,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						}
 						$_jsonSchema(e, t = {}) {
 							var r;
-							if (void 0 !== t.target && t.target !== v.jsonSchemaTarget) throw new Error(`Unsupported JSON Schema target: ${t.target}`);
+							if (void 0 !== t.target && t.target !== _.jsonSchemaTarget) throw new Error(`Unsupported JSON Schema target: ${t.target}`);
 							const s = !t.$defs, n = null !== (r = t.$defs) && void 0 !== r ? r : {};
 							let o = {};
 							const i = "any" === this.type, c = this._flags.only, u = this._valids && Array.from(this._valids._values).filter((e) => null !== e);
@@ -69,7 +69,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								const e = new Set(u.map((e) => typeof e));
 								f = e.has(this.type) || "date" === this.type && e.has("object");
 							}
-							!i && f && v.standardTypes.has(this.type) && (o.type = this.type), this._flags.description && (o.description = this._flags.description), void 0 !== this._flags.default && "function" != typeof this._flags.default && (o.default = this._flags.default);
+							!i && f && _.standardTypes.has(this.type) && (o.type = this.type), this._flags.description && (o.description = this._flags.description), void 0 !== this._flags.default && "function" != typeof this._flags.default && (o.default = this._flags.default);
 							const m = {
 								...t,
 								$defs: n
@@ -84,7 +84,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								const e = u.filter((e) => "symbol" != typeof e);
 								if (e.length) if (this._flags.only) {
 									o.enum = e;
-									const t = l.intersect(new Set(e.map((e) => typeof e)), v.primitiveTypes);
+									const t = l.intersect(new Set(e.map((e) => typeof e)), _.primitiveTypes);
 									if (t.size) {
 										const e = [...t];
 										o.type = 1 === e.length ? e[0] : e;
@@ -94,7 +94,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									!t.length || i && !c || (o.anyOf || (o = { anyOf: [o] }), o.anyOf.push({ enum: t }));
 								}
 							}
-							if (this._valids && this._valids.has(null) && (!i || c) && (1 === this._valids.length && (i || c) ? o.type = "null" : o.type ? o.type = [o.type, "null"] : o.anyOf ? o.anyOf.unshift(v.nullSchema()) : o = { anyOf: [v.nullSchema(), o] }), this.$_terms.whens) {
+							if (this._valids && this._valids.has(null) && (!i || c) && (1 === this._valids.length && (i || c) ? o.type = "null" : o.type ? o.type = [o.type, "null"] : o.anyOf ? o.anyOf.unshift(_.nullSchema()) : o = { anyOf: [_.nullSchema(), o] }), this.$_terms.whens) {
 								const t = this.clone();
 								t.$_terms.whens = null;
 								const r = [];
@@ -544,11 +544,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 						}
 					}
 				};
-				v.Base.prototype[l.symbols.any] = {
+				_.Base.prototype[l.symbols.any] = {
 					version: l.version,
 					compile: c.compile,
 					root: "$_root"
-				}, v.Base.prototype.isImmutable = !0, v.Base.prototype.deny = v.Base.prototype.invalid, v.Base.prototype.disallow = v.Base.prototype.invalid, v.Base.prototype.equal = v.Base.prototype.valid, v.Base.prototype.exist = v.Base.prototype.required, v.Base.prototype.not = v.Base.prototype.invalid, v.Base.prototype.options = v.Base.prototype.prefs, v.Base.prototype.preferences = v.Base.prototype.prefs, e.exports = new v.Base();
+				}, _.Base.prototype.isImmutable = !0, _.Base.prototype.deny = _.Base.prototype.invalid, _.Base.prototype.disallow = _.Base.prototype.invalid, _.Base.prototype.equal = _.Base.prototype.valid, _.Base.prototype.exist = _.Base.prototype.required, _.Base.prototype.not = _.Base.prototype.invalid, _.Base.prototype.options = _.Base.prototype.prefs, _.Base.prototype.preferences = _.Base.prototype.prefs, e.exports = new _.Base();
 			},
 			2130(e, t, r) {
 				"use strict";
@@ -1170,7 +1170,9 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							continue;
 						}
 						s("object" == typeof n && !Array.isArray(n), "Invalid message for", r);
-						const o = r, i = Object.hasOwn(t, o) ? t[o] : {};
+						const o = r;
+						s("__proto__" !== o, "Cannot use __proto__ as a language");
+						const i = Object.hasOwn(t, o) ? t[o] : {};
 						t[o] = i;
 						for (const e of Object.keys(n)) {
 							const t = n[e];
@@ -1215,7 +1217,9 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							continue;
 						}
 						s("object" == typeof t && !Array.isArray(t), "Invalid message for", e);
-						const n = e, i = Object.hasOwn(o, n) ? o[n] : {};
+						const n = e;
+						s("__proto__" !== n, "Cannot use __proto__ as a language");
+						const i = Object.hasOwn(o, n) ? o[n] : {};
 						o[n] = i;
 						for (const e of Object.keys(t)) {
 							const r = t[e];
@@ -2424,14 +2428,14 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 											break;
 										}
 									}
-									const v = [];
-									let _ = o.length;
-									for (let l = 0; l < _; ++l) {
+									const _ = [];
+									let v = o.length;
+									for (let l = 0; l < v; ++l) {
 										const u = s.localize(y, b, o[l]);
 										u.snapshot();
 										const f = o[l].$_validate(i, u, n);
-										if (v[l] = f, !f.errors) {
-											if (u.commit(), e[a] = f.value, d = !0, c.fastSplice(o, l), --l, --_, !t._flags.sparse && void 0 === f.value && (m.push(r("array.sparse", {
+										if (_[l] = f, !f.errors) {
+											if (u.commit(), e[a] = f.value, d = !0, c.fastSplice(o, l), --l, --v, !t._flags.sparse && void 0 === f.value && (m.push(r("array.sparse", {
 												key: g,
 												path: y,
 												pos: a,
@@ -2443,11 +2447,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									}
 									if (d) continue;
 									const A = n.stripUnknown && !!n.stripUnknown.arrays || !1;
-									_ = u.length;
+									v = u.length;
 									for (const l of u) {
 										let u;
 										const f = o.indexOf(l);
-										if (-1 !== f) u = v[f];
+										if (-1 !== f) u = _[f];
 										else {
 											const o = s.localize(y, b, l);
 											if (o.snapshot(), u = l.$_validate(i, o, n), !u.errors) {
@@ -2461,7 +2465,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 											}
 											o.restore();
 										}
-										if (1 === _) {
+										if (1 === v) {
 											if (A) {
 												c.fastSplice(e, a), --a, --h, d = !0;
 												break;
@@ -3468,7 +3472,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				}, h.isPresent = function(e) {
 					return "function" == typeof e.isPresent ? e.isPresent : (e) => void 0 !== e;
 				}, h.rename = function(e, t, r, s, n) {
-					const a = {};
+					const a = Object.create(null);
 					for (const o of e.$_terms.renames) {
 						const i = [], l = "string" != typeof o.from;
 						if (l) for (const e of Object.keys(t)) {
@@ -4137,7 +4141,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									"separator",
 									"tlds"
 								]), s(void 0 === e.multiple || "boolean" == typeof e.multiple, "multiple option must be an boolean");
-								const t = m.addressOptions(e), r = new RegExp(`\\s*[${e.separator ? n(e.separator) : ","}]\\s*`);
+								const t = m.addressOptions(e), r = e.multiple ? new RegExp(`(?:(?<!\\s)\\s+)?[${e.separator ? n(e.separator) : ","}]\\s*`) : void 0;
 								return this.$_addRule({
 									name: "email",
 									args: { options: e },
@@ -4906,10 +4910,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			9089(e, t, r) {
 				"use strict";
 				r.d(t, {
-					ipRegex: () => C,
+					ipRegex: () => T,
 					isDomainValid: () => h,
 					isEmailValid: () => y,
-					uriRegex: () => T
+					uriRegex: () => C
 				});
 				var s = r(8663);
 				const n = {
@@ -5008,11 +5012,11 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 							for (const e of r) {
 								if (!e.length) return a("EMPTY_LOCAL_SEGMENT");
 								if (t) {
-									if (!v.test(e)) return a("INVALID_LOCAL_CHARS");
-								} else for (const t of e) {
-									if (v.test(t)) continue;
-									const e = b(t);
 									if (!_.test(e)) return a("INVALID_LOCAL_CHARS");
+								} else for (const t of e) {
+									if (_.test(t)) continue;
+									const e = b(t);
+									if (!v.test(e)) return a("INVALID_LOCAL_CHARS");
 								}
 							}
 							return null;
@@ -5022,7 +5026,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 				function b(e) {
 					return Array.from(g.encode(e), (e) => String.fromCharCode(e)).join("");
 				}
-				const v = /^[\w!#\$%&'\*\+\-/=\?\^`\{\|\}~]+$/, _ = new RegExp([
+				const _ = /^[\w!#\$%&'\*\+\-/=\?\^`\{\|\}~]+$/, v = new RegExp([
 					"(?:[\\xc2-\\xdf][\\x80-\\xbf])",
 					"(?:\\xe0[\\xa0-\\xbf][\\x80-\\xbf])|(?:[\\xe1-\\xec][\\x80-\\xbf]{2})|(?:\\xed[\\x80-\\x9f][\\x80-\\xbf])|(?:[\\xee-\\xef][\\x80-\\xbf]{2})",
 					"(?:\\xf0[\\x90-\\xbf][\\x80-\\xbf]{2})|(?:[\\xf1-\\xf3][\\x80-\\xbf]{3})|(?:\\xf4[\\x80-\\x8f][\\x80-\\xbf]{2})"
@@ -5033,7 +5037,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					e.ipv4address = "(?:" + l + "\\.){3}" + l;
 					const c = r + "{1,4}", u = "(?:" + c + ":" + c + "|" + e.ipv4address + ")", f = "(?:" + c + ":){6}" + u, m = "::(?:" + c + ":){5}" + u, h = "(?:" + c + ")?::(?:" + c + ":){4}" + u, p = "(?:(?:" + c + ":){0,1}" + c + ")?::(?:" + c + ":){3}" + u, d = "(?:(?:" + c + ":){0,2}" + c + ")?::(?:" + c + ":){2}" + u, g = "(?:(?:" + c + ":){0,3}" + c + ")?::" + c + ":" + u, y = "(?:(?:" + c + ":){0,4}" + c + ")?::" + u;
 					e.ipv4Cidr = "(?:\\d|[1-2]\\d|3[0-2])", e.ipv6Cidr = "(?:0{0,2}\\d|0?[1-9]\\d|1[01]\\d|12[0-8])", e.ipv6address = "(?:" + f + "|" + m + "|" + h + "|" + p + "|" + d + "|" + g + "|" + y + "|(?:(?:[\\dA-Fa-f]{1,4}:){0,5}[\\dA-Fa-f]{1,4})?::[\\dA-Fa-f]{1,4}|(?:(?:[\\dA-Fa-f]{1,4}:){0,6}[\\dA-Fa-f]{1,4})?::)", e.ipvFuture = "v" + r + "+\\.[" + s + n + ":]+", e.scheme = "[a-zA-Z][a-zA-Z\\d+-\\.]*", e.schemeRegex = new RegExp(e.scheme);
-					const _ = "[" + s + a + n + ":]*", S = "(?:\\[(?:" + e.ipv6address + "|" + e.ipvFuture + ")\\]|" + e.ipv4address + "|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=]{1,255})", E = "(?:" + _ + "@)?" + S + "(?::\\d*)?", O = "(?:" + _ + "@)?(" + S + ")(?::\\d*)?";
+					const v = "[" + s + a + n + ":]*", S = "(?:\\[(?:" + e.ipv6address + "|" + e.ipvFuture + ")\\]|" + e.ipv4address + "|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=]{1,255})", E = "(?:" + v + "@)?" + S + "(?::\\d*)?", O = "(?:" + v + "@)?(" + S + ")(?::\\d*)?";
 					return e.hierPart = "(?:(?:\\/\\/" + E + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|(?:\\/\\/\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*))", e.hierPartCapture = "(?:(?:\\/\\/" + O + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)", e.relativeRef = "(?:(?:\\/\\/" + E + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|)", e.relativeRefCapture = "(?:(?:\\/\\/" + O + "(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)|\\/(?:[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*)?|[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=@]+(?:\\/[\\w-\\.~%\\dA-Fa-f!\\$&'\\(\\)\\*\\+,;=:@]*)*|)", e.query = "[" + o + "\\/\\?]*(?=#|$)", e.queryWithSquareBrackets = "[" + o + "\\[\\]\\/\\?]*(?=#|$)", e.fragment = "[" + o + "\\/\\?]*", e;
 				}(), N = {
 					v4Cidr: R.ipv4Cidr,
@@ -5068,10 +5072,10 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					};
 				}
 				const $ = I({});
-				function T(e = {}) {
+				function C(e = {}) {
 					return e.scheme || e.allowRelative || e.relativeOnly || e.allowQuerySquareBrackets || e.domain ? I(e) : $;
 				}
-				function C(e = {}) {
+				function T(e = {}) {
 					const t = e.cidr || "optional";
 					S()([
 						"required",
@@ -7314,7 +7318,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			6913(e) {
 				"use strict";
-				e.exports = { version: "18.3.0" };
+				e.exports = { version: "18.3.1" };
 			}
 		};
 		const t = {};
