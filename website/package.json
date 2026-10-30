@@ -74,7 +74,7 @@
     "@tanstack/devtools-vite": "^0.8.5",
     "@types/d3": "^7.4.3",
     "@types/esquery": "^1.5.4",
-    "@types/estree": "^1.0.9",
+    "@types/estree": "^1.0.10",
     "@types/hast": "^3.0.5",
     "@types/hosted-git-info": "^3.0.5",
     "@types/mdx": "^2.0.14",
