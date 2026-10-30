@@ -212,7 +212,7 @@ importers:
         version: 0.0.13
       '@ata-project/keywords':
         specifier: ^0.3.3
-        version: 0.3.3(ata-validator@1.61.1(yaml@2.9.1))
+        version: 0.3.3(ata-validator@1.61.3(yaml@2.9.1))
       '@cfworker/json-schema':
         specifier: ^4.1.1
         version: 4.1.1
@@ -259,8 +259,8 @@ importers:
         specifier: ^2.2.9
         version: 2.2.9
       ata-validator:
-        specifier: ^1.61.1
-        version: 1.61.1(yaml@2.9.1)
+        specifier: ^1.61.3
+        version: 1.61.3(yaml@2.9.1)
       decoders:
         specifier: ^2.13.0
         version: 2.13.0
@@ -268,8 +268,8 @@ importers:
         specifier: 'catalog:'
         version: 1.7.2
       effect:
-        specifier: ^4.0.7
-        version: 4.0.7
+        specifier: ^4.1.0
+        version: 4.1.0
       fp-ts:
         specifier: ^2.16.11
         version: 2.16.11
@@ -280,8 +280,8 @@ importers:
         specifier: ^0.5.19
         version: 0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11)))
       joi:
-        specifier: ^18.3.0
-        version: 18.3.0
+        specifier: ^18.3.1
+        version: 18.3.1
       joi-to-json:
         specifier: ^5.0.6
         version: 5.0.6
@@ -338,8 +338,8 @@ importers:
         specifier: 'catalog:'
         version: 7.0.2
       unplugin-macros:
-        specifier: ^0.23.3
-        version: 0.23.3(@voidzero-dev/vite-plus-core@1.4.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)
+        specifier: ^0.23.4
+        version: 0.23.4(@voidzero-dev/vite-plus-core@1.4.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)(vitest@5.0.5)
       vite:
         specifier: 'catalog:'
         version: '@voidzero-dev/vite-plus-core@1.4.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1)'
@@ -549,8 +549,8 @@ importers:
         specifier: ^1.5.4
         version: 1.5.4
       '@types/estree':
-        specifier: ^1.0.9
-        version: 1.0.9
+        specifier: ^1.0.10
+        version: 1.0.10
       '@types/hast':
         specifier: ^3.0.5
         version: 3.0.5
@@ -708,42 +708,42 @@ packages:
     peerDependencies:
       ata-validator: '>=0.9.3'
 
-  '@ata-validator/native-darwin-arm64@1.61.1':
-    resolution: {integrity: sha512-Bgblzd3egxZG1XxDhdfmBX0+2B/kwo1RMsjAfHj4BixM8TPkRQG2MgSNCGgS+Xon7eecmSngs4k33NNC+yvQKg==}
+  '@ata-validator/native-darwin-arm64@1.61.3':
+    resolution: {integrity: sha512-DC+iozKe5mNpsmT4MLuMxG2pIeGPVR3YBYuBmops0AF5UG6eSxg/X0484hW/Nmc2dil54+b4N41hIhS5U9rExg==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ata-validator/native-darwin-x64@1.61.1':
-    resolution: {integrity: sha512-SSWsx0126nJiqDZoD07xd9a3MTyy6zv2h3DjWU06zzkzoF8pQk1KNlCqSzSVPAdEalpOYiZ5r9y9RUvggCTG/g==}
+  '@ata-validator/native-darwin-x64@1.61.3':
+    resolution: {integrity: sha512-q63+k48mWlvrNaUXmtGVxp2NWTl3wXlkkWkc2q4MerHzjIfeFBca30tfTRcyVXtDXPCj8BRJkrI69aJJXk+pLg==}
     cpu: [x64]
     os: [darwin]
 
-  '@ata-validator/native-linux-arm64-gnu@1.61.1':
-    resolution: {integrity: sha512-xRcEqL6sF0w0sZHBk8YLj1N1V1YSd6i6/le7cIEaYvkXgPFs09kv53dwF0SCIMobJMPid901rYSJO4I7aNDAJw==}
+  '@ata-validator/native-linux-arm64-gnu@1.61.3':
+    resolution: {integrity: sha512-D9OG2oKJd/hW9F8IFoqIfK+SDfyryzSGr5YRVJB39LwvvWNNfh6pxsYpjthEjwqGuJdoBtYIqOUFnjgBqDWh9w==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-arm64-musl@1.61.1':
-    resolution: {integrity: sha512-AANNZkZJfFCD774cpPUIRHgboEN6rSYDf3xwU3UgylQoKjdy6SZv6PXKmmy9FllUHQ+Lo2DsfEQvdtGRiGcCpg==}
+  '@ata-validator/native-linux-arm64-musl@1.61.3':
+    resolution: {integrity: sha512-L1NhRd5/i6v7VQw28gR5L53+Zlo09CnYfXBapgGUC9I3uNppOw56/dihU5cPrd5T/k9VeljosllOP+dWA9cLpA==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-linux-x64-gnu@1.61.1':
-    resolution: {integrity: sha512-nknFws4A38qwk06a7N5s22RcDN62F1Wjl4kw7742oTtIoMa9cS+TAsiblc12eqPbeDm6qtymXipBv72zKBBuwA==}
+  '@ata-validator/native-linux-x64-gnu@1.61.3':
+    resolution: {integrity: sha512-Dlp+hcvQqKkAQEyrr7RohCbYoLYHdSjeB5puU3Ju92kSeH4MaF451q0VqwOm3StaMQB3LrLA03GDb4/G3b5gsA==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-x64-musl@1.61.1':
-    resolution: {integrity: sha512-jONnXYasAKt+Pw2m/gRqp1AFek8mXhv1lzpy+59ODSyW8iVgn/PKv4Azvl5FwVa0aqmK/clCNnDxAOOYqYO3lw==}
+  '@ata-validator/native-linux-x64-musl@1.61.3':
+    resolution: {integrity: sha512-2TutVxyhzbpUyBFzuGNp4fjyC3Suhi1idFfbk883tPdfcmp2/j0Q5QT5ySk4LPLGrNzV2haqjESZvha/QKctkw==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-win32-x64@1.61.1':
-    resolution: {integrity: sha512-1ECPw54vOSOAEoHR86sceVmKMEW0I6cVBMWvzsT+6yxJvbqLho/AMceCl7QeIi81DLfd9LMpAvcJHWXBOrdPKw==}
+  '@ata-validator/native-win32-x64@1.61.3':
+    resolution: {integrity: sha512-Ac2fqD70b/lQSuLDdz03xiGPhn2FK7oKXdQ7JbCq9ZYiJBbymhFazMKkRaI+3Y5XKIV3zalAfNGzUJAzMUsXow==}
     cpu: [x64]
     os: [win32]
 
@@ -4538,6 +4538,9 @@ packages:
   '@types/estree-jsx@1.0.5':
     resolution: {integrity: sha512-52CcUVNFyfb1A2ALocQw/Dd1BQFNmSdkuC3BkZ6iqhdMfQz7JWOFRuJFloOzjk+6WijU56m9oKXFAXc7o3Towg==}
 
+  '@types/estree@1.0.10':
+    resolution: {integrity: sha512-lTyOMnOcmRBzdCv6/4zUZCrEhV0xrqQiUZBZtVcbmLHBXKLnN8q89v/wKRF/Q0HbwVsqbIG3o5HDoFl9sduM+g==}
+
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
 
@@ -5266,8 +5269,8 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
-  ata-validator@1.61.1:
-    resolution: {integrity: sha512-wPMAnwcAJg66c9CbfVIK8DBt+w1EEFCNk6QsSzgIg43zUKDpe2TLkl65w37b6zS1qFolzzy7WS/Z1vHCYlv1jw==}
+  ata-validator@1.61.3:
+    resolution: {integrity: sha512-6o3V8lpiVQzzHe6blbQZj9saD0Qxmhdv2TTyO5BgPcUWeP3EZj572f9w1b93E6c+BmUce0QOf7GvwOffRUf3tw==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -6052,8 +6055,8 @@ packages:
   ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
 
-  effect@4.0.7:
-    resolution: {integrity: sha512-47CiUzNAmeLr40pDT9vKMxxtB8o3bdpZEKU4IUM3fVxsK2GYzPsV7fQoZP0I41A308BZd71nMxqJ0KRh3s9u2g==}
+  effect@4.1.0:
+    resolution: {integrity: sha512-lGx2MJJyrXA8RZb2UpQ/0Nkb5Utaimby7oD92+18noBxLPE85IFOvptdzau8dvcxAOwfwHo9iqapbKeFzqQM/Q==}
 
   ejs@3.1.10:
     resolution: {integrity: sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==}
@@ -6994,8 +6997,8 @@ packages:
   joi-to-json@5.0.6:
     resolution: {integrity: sha512-A3FVU6RJWxZkXkRqt/tOzjdWnZtXKnAqyzPUwVtMg8QgY2JG3sExKWtwUB22ySDI/shtGHw4a2O2TQVEPV8HuQ==}
 
-  joi@18.3.0:
-    resolution: {integrity: sha512-/RwAK4BAfzcdbdFg073tzq4/xhY6Q7lMd5AmjqTL6pu0QFJdEmtswgm8BvgwXvOKuPNYQ8XrdQrrW/gF65LiNw==}
+  joi@18.3.1:
+    resolution: {integrity: sha512-mV9M4Llh4va3NT90p7KBtQhoZqjs8xLX7EWYE4y/GG3yLF6REbIBEHSUb0UX1JXRht2w5tiLSsvmpYc5akiqIw==}
     engines: {node: '>= 20'}
 
   js-tokens@10.0.0:
@@ -8981,13 +8984,16 @@ packages:
     resolution: {integrity: sha512-6bc58dPYhCMHHuwxldQxO3RRNZ4eCogZ/st++0+fcC1nr0jiGUtAdBJ2qzmLQWSxbtz42pWt4QQMiZ9HvZf5cg==}
     engines: {node: '>=0.10.0'}
 
-  unplugin-macros@0.23.3:
-    resolution: {integrity: sha512-WIGQraxQcgTAjU+SyR3+3FlY8Rkce1behk6+hBc4tatV8eJJV5R+6/qpYnGxvWoDDHjqVaBPInUyeict11+qLA==}
+  unplugin-macros@0.23.4:
+    resolution: {integrity: sha512-0nJ9W1d0dAIigE26K/6CKa1sbYioy5vWmMi+be2/H/muF7QF7cz7y5wFu9Q1Co3ExBpAgsBCAsxyQFoeAZwQeA==}
     engines: {node: ^22.18.0 || ^24.11.0 || >=26.0.0}
     peerDependencies:
       unrun: ^0.3.1
+      vitest: 5.0.5
     peerDependenciesMeta:
       unrun:
+        optional: true
+      vitest:
         optional: true
 
   unplugin@2.3.11:
@@ -9567,29 +9573,29 @@ snapshots:
 
   '@ark/util@0.56.8': {}
 
-  '@ata-project/keywords@0.3.3(ata-validator@1.61.1(yaml@2.9.1))':
+  '@ata-project/keywords@0.3.3(ata-validator@1.61.3(yaml@2.9.1))':
     dependencies:
-      ata-validator: 1.61.1(yaml@2.9.1)
+      ata-validator: 1.61.3(yaml@2.9.1)
 
-  '@ata-validator/native-darwin-arm64@1.61.1':
+  '@ata-validator/native-darwin-arm64@1.61.3':
     optional: true
 
-  '@ata-validator/native-darwin-x64@1.61.1':
+  '@ata-validator/native-darwin-x64@1.61.3':
     optional: true
 
-  '@ata-validator/native-linux-arm64-gnu@1.61.1':
+  '@ata-validator/native-linux-arm64-gnu@1.61.3':
     optional: true
 
-  '@ata-validator/native-linux-arm64-musl@1.61.1':
+  '@ata-validator/native-linux-arm64-musl@1.61.3':
     optional: true
 
-  '@ata-validator/native-linux-x64-gnu@1.61.1':
+  '@ata-validator/native-linux-x64-gnu@1.61.3':
     optional: true
 
-  '@ata-validator/native-linux-x64-musl@1.61.1':
+  '@ata-validator/native-linux-x64-musl@1.61.3':
     optional: true
 
-  '@ata-validator/native-win32-x64@1.61.1':
+  '@ata-validator/native-win32-x64@1.61.3':
     optional: true
 
   '@babel/code-frame@7.29.7':
@@ -10961,7 +10967,7 @@ snapshots:
 
   '@mdx-js/mdx@3.1.1(supports-color@7.2.0)':
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       '@types/estree-jsx': 1.0.5
       '@types/hast': 3.0.5
       '@types/mdx': 2.0.14
@@ -12139,7 +12145,7 @@ snapshots:
 
   '@rollup/pluginutils@5.4.0(rollup@4.62.2)':
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       estree-walker: 2.0.2
       picomatch: 4.0.7
     optionalDependencies:
@@ -13118,13 +13124,15 @@ snapshots:
 
   '@types/esquery@1.5.4':
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
 
   '@types/esrecurse@4.3.1': {}
 
   '@types/estree-jsx@1.0.5':
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
+
+  '@types/estree@1.0.10': {}
 
   '@types/estree@1.0.9': {}
 
@@ -13798,15 +13806,15 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
-  ata-validator@1.61.1(yaml@2.9.1):
+  ata-validator@1.61.3(yaml@2.9.1):
     optionalDependencies:
-      '@ata-validator/native-darwin-arm64': 1.61.1
-      '@ata-validator/native-darwin-x64': 1.61.1
-      '@ata-validator/native-linux-arm64-gnu': 1.61.1
-      '@ata-validator/native-linux-arm64-musl': 1.61.1
-      '@ata-validator/native-linux-x64-gnu': 1.61.1
-      '@ata-validator/native-linux-x64-musl': 1.61.1
-      '@ata-validator/native-win32-x64': 1.61.1
+      '@ata-validator/native-darwin-arm64': 1.61.3
+      '@ata-validator/native-darwin-x64': 1.61.3
+      '@ata-validator/native-linux-arm64-gnu': 1.61.3
+      '@ata-validator/native-linux-arm64-musl': 1.61.3
+      '@ata-validator/native-linux-x64-gnu': 1.61.3
+      '@ata-validator/native-linux-x64-musl': 1.61.3
+      '@ata-validator/native-win32-x64': 1.61.3
       yaml: 2.9.1
 
   atomically@2.1.1:
@@ -14577,7 +14585,7 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  effect@4.0.7: {}
+  effect@4.1.0: {}
 
   ejs@3.1.10:
     dependencies:
@@ -14839,7 +14847,7 @@ snapshots:
   eslint-scope@9.1.2:
     dependencies:
       '@types/esrecurse': 4.3.1
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       esrecurse: 4.3.0
       estraverse: 5.3.0
 
@@ -14858,7 +14866,7 @@ snapshots:
       '@humanfs/node': 0.16.8
       '@humanwhocodes/module-importer': 1.0.1
       '@humanwhocodes/retry': 0.4.3
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       ajv: 6.15.0
       cross-spawn: 7.0.6
       debug: 4.4.3(supports-color@7.2.0)
@@ -14904,7 +14912,7 @@ snapshots:
 
   estree-util-attach-comments@3.0.0:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
 
   estree-util-build-jsx@3.0.1:
     dependencies:
@@ -14917,7 +14925,7 @@ snapshots:
 
   estree-util-scope@1.0.0:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       devlop: 1.1.0
 
   estree-util-to-js@2.0.0:
@@ -14928,7 +14936,7 @@ snapshots:
 
   estree-util-value-to-estree@3.5.0:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
 
   estree-util-visit@2.0.0:
     dependencies:
@@ -14939,7 +14947,7 @@ snapshots:
 
   estree-walker@3.0.3:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
 
   esutils@2.0.3: {}
 
@@ -15332,7 +15340,7 @@ snapshots:
 
   hast-util-properties-to-mdx-jsx-attributes@1.1.1(supports-color@7.2.0):
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       '@types/hast': 3.0.5
       estree-util-value-to-estree: 3.5.0
       mdast-util-mdx-jsx: 3.2.0(supports-color@7.2.0)
@@ -15343,7 +15351,7 @@ snapshots:
 
   hast-util-to-estree@3.1.3(supports-color@7.2.0):
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       '@types/estree-jsx': 1.0.5
       '@types/hast': 3.0.5
       comma-separated-tokens: 2.0.3
@@ -15364,7 +15372,7 @@ snapshots:
 
   hast-util-to-jsx-runtime@2.3.6(supports-color@7.2.0):
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       '@types/hast': 3.0.5
       '@types/unist': 3.0.3
       comma-separated-tokens: 2.0.3
@@ -15747,7 +15755,7 @@ snapshots:
       combinations: 1.0.0
       lodash: 4.18.1
 
-  joi@18.3.0:
+  joi@18.3.1:
     dependencies:
       '@hapi/address': 5.1.1
       '@hapi/formula': 3.0.2
@@ -16177,7 +16185,7 @@ snapshots:
 
   micromark-extension-mdx-expression@3.0.1:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       devlop: 1.1.0
       micromark-factory-mdx-expression: 2.0.3
       micromark-factory-space: 2.0.1
@@ -16188,7 +16196,7 @@ snapshots:
 
   micromark-extension-mdx-jsx@3.0.2:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       devlop: 1.1.0
       estree-util-is-identifier-name: 3.0.0
       micromark-factory-mdx-expression: 2.0.3
@@ -16205,7 +16213,7 @@ snapshots:
 
   micromark-extension-mdxjs-esm@3.0.0:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       devlop: 1.1.0
       micromark-core-commonmark: 2.0.3
       micromark-util-character: 2.1.1
@@ -16241,7 +16249,7 @@ snapshots:
 
   micromark-factory-mdx-expression@2.0.3:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       devlop: 1.1.0
       micromark-factory-space: 2.0.1
       micromark-util-character: 2.1.1
@@ -16305,7 +16313,7 @@ snapshots:
 
   micromark-util-events-to-acorn@2.0.3:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       '@types/unist': 3.0.3
       devlop: 1.1.0
       estree-util-visit: 2.0.0
@@ -17199,7 +17207,7 @@ snapshots:
 
   recma-build-jsx@1.0.0:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       estree-util-build-jsx: 3.0.1
       vfile: 6.0.3
 
@@ -17214,14 +17222,14 @@ snapshots:
 
   recma-parse@1.0.0:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       esast-util-from-js: 2.0.1
       unified: 11.0.5
       vfile: 6.0.3
 
   recma-stringify@1.0.0:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       estree-util-to-js: 2.0.0
       unified: 11.0.5
       vfile: 6.0.3
@@ -17313,7 +17321,7 @@ snapshots:
 
   rehype-recma@1.0.0(supports-color@7.2.0):
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       '@types/hast': 3.0.5
       hast-util-to-estree: 3.1.3(supports-color@7.2.0)
     transitivePeerDependencies:
@@ -18182,7 +18190,7 @@ snapshots:
 
   unist-util-mdx-define@1.1.2:
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       '@types/hast': 3.0.5
       '@types/mdast': 4.0.4
       estree-util-is-identifier-name: 3.0.0
@@ -18224,7 +18232,7 @@ snapshots:
     dependencies:
       normalize-path: 2.1.1
 
-  unplugin-macros@0.23.3(@voidzero-dev/vite-plus-core@1.4.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2):
+  unplugin-macros@0.23.4(@voidzero-dev/vite-plus-core@1.4.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)(vitest@5.0.5):
     dependencies:
       import-without-cache: 0.4.1
       magic-string-ast: 2.1.1
@@ -18233,6 +18241,8 @@ snapshots:
       yuku-analyzer: 0.19.0
       yuku-ast: 0.19.0
       yuku-parser: 0.19.0
+    optionalDependencies:
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(@vitest/browser-playwright@5.0.5)(@vitest/browser-preview@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5(vitest@5.0.5))(@voidzero-dev/vite-plus-core@1.4.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(msw@3.0.3(@types/node@26.1.2)(@voidzero-dev/vite-plus-core@1.4.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(graphql@16.14.2)(supports-color@7.2.0)(typescript@7.0.2))
     transitivePeerDependencies:
       - '@farmfe/core'
       - '@rsbuild/core'
