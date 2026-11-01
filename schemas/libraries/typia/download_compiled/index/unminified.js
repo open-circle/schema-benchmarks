@@ -1,4 +1,4 @@
-// ../node_modules/.pnpm/typia@15.2.1_ttsc@0.34.2_typescript@7.0.2_/node_modules/typia/lib/internal/_isFormatUrl.mjs
+// ../node_modules/.pnpm/typia@15.2.2_ttsc@0.34.3_typescript@7.0.2_/node_modules/typia/lib/internal/_isFormatUrl.mjs
 /**
 * Checks the `url` format, which is stricter than a generic URI.
 *
@@ -16,43 +16,53 @@
 */
 const _isFormatUrl = (str) => PATTERN.test(str);
 const PATTERN = /^(?:https?|ftp):\/\/(?:[^\s/?#@]+(?::[^\s/?#@]*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?=.{1,253}(?::\d{2,5})?(?:\/[^\s]*)?$)(?:[a-z0-9\u00a1-\uffff](?:[-a-z0-9\u00a1-\uffff]{0,61}[a-z0-9\u00a1-\uffff])?\.)+(?:[a-z\u00a1-\uffff](?:[-a-z0-9\u00a1-\uffff]{0,61}[a-z0-9\u00a1-\uffff])))(?::\d{2,5})?(?:\/[^\s]*)?$/iu;
-// ../node_modules/.pnpm/typia@15.2.1_ttsc@0.34.2_typescript@7.0.2_/node_modules/typia/lib/internal/_stringLengthGte.mjs
+// ../node_modules/.pnpm/typia@15.2.2_ttsc@0.34.3_typescript@7.0.2_/node_modules/typia/lib/internal/_stringLengthGte.mjs
 /**
 * Test whether a string has at least the given number of code points.
 *
-* Iteration stops as soon as the count is reached, so a long string is not
-* scanned to its end.
+* Twice the requested minimum in UTF-16 units guarantees enough code points.
+* Other inputs are counted only until the minimum is reached.
 *
-* @evidence contracts/common.md#principled-implementation The iterator is consumed only until the count reaches the requested minimum, which decides the lower bound without scanning the whole string; a minimum of zero is true at once.
+* @evidence contracts/common.md#principled-implementation Each code point occupies at most two UTF-16 units, so code-unit length at least twice the minimum proves the code-point bound. Otherwise iteration stops at the minimum; nonpositive minima remain true and NaN remains false.
 * @evidence contracts/common.md#clear-and-simple-design One loop with an early return.
 * @evidence contracts/common.md#prohibited-implementation-shortcuts The unit is code points.
 * @evidence contracts/common.md#meaningful-documentation The doc states the early return and the code point unit.
+* @evidence contracts/performance.md#efficient-algorithms The code-unit lower bound accepts in constant time without allocating an iterator; ambiguous inputs retain the bounded code-point walk and constant auxiliary space.
+*
+* @evidenceExclude contracts/performance.md#reuse-equivalent-work Each call depends on its own primitive string and bound; this predicate coordinates no repeated requests or shared computation.
+* @evidenceExclude contracts/performance.md#bound-retention-and-release-resources The predicate retains no state or handles after returning; iteration and scalar counters are call-local.
 */
 const _stringLengthGte = (value, length) => {
+	if (value.length >= length * 2) return true;
 	let count = 0;
 	if (length <= count) return true;
 	for (const _ch of value) if (length <= ++count) return true;
 	return false;
 };
-// ../node_modules/.pnpm/typia@15.2.1_ttsc@0.34.2_typescript@7.0.2_/node_modules/typia/lib/internal/_stringLengthLte.mjs
+// ../node_modules/.pnpm/typia@15.2.2_ttsc@0.34.3_typescript@7.0.2_/node_modules/typia/lib/internal/_stringLengthLte.mjs
 /**
 * Test whether a string has at most the given number of code points.
 *
-* Iteration stops as soon as the count is exceeded, so a long string is not
-* scanned to its end.
+* UTF-16 length decides inputs whose code units already fit the bound. Other
+* inputs are counted only until the maximum is exceeded.
 *
-* @evidence contracts/common.md#principled-implementation The iterator is consumed until the count exceeds the maximum, which decides the upper bound without scanning past it; a negative maximum is false at once.
+* @evidence contracts/common.md#principled-implementation Each code point occupies one or two UTF-16 units, so code-unit length at most the maximum proves the code-point bound. Otherwise iteration stops once the maximum is exceeded; negative and NaN maxima remain false.
 * @evidence contracts/common.md#clear-and-simple-design One loop with an early return.
 * @evidence contracts/common.md#prohibited-implementation-shortcuts The unit is code points.
 * @evidence contracts/common.md#meaningful-documentation The doc states the early return and the code point unit.
+* @evidence contracts/performance.md#efficient-algorithms The code-unit upper bound accepts in constant time without allocating an iterator; ambiguous inputs retain the bounded code-point walk and constant auxiliary space.
+*
+* @evidenceExclude contracts/performance.md#reuse-equivalent-work Each call depends on its own primitive string and bound; this predicate coordinates no repeated requests or shared computation.
+* @evidenceExclude contracts/performance.md#bound-retention-and-release-resources The predicate retains no state or handles after returning; iteration and scalar counters are call-local.
 */
 const _stringLengthLte = (value, length) => {
+	if (value.length <= length) return true;
 	let count = 0;
 	if (!(count <= length)) return false;
 	for (const _ch of value) if (!(++count <= length)) return false;
 	return true;
 };
-// ../node_modules/.pnpm/typia@15.2.1_ttsc@0.34.2_typescript@7.0.2_/node_modules/typia/lib/internal/_validateReport.mjs
+// ../node_modules/.pnpm/typia@15.2.2_ttsc@0.34.3_typescript@7.0.2_/node_modules/typia/lib/internal/_validateReport.mjs
 /**
 * Create the reporter that validation functions use to collect errors.
 *
