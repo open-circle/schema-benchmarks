@@ -593,6 +593,9 @@ importers:
       ansi-styles:
         specifier: ^7.0.0
         version: 7.0.0
+      eslint:
+        specifier: ^10.14.0
+        version: 10.14.0(jiti@2.7.0)(supports-color@7.2.0)
       esquery:
         specifier: ^1.7.0
         version: 1.7.0
