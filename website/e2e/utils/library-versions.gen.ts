@@ -2,7 +2,7 @@
 
 /** Installed library versions, read from the built benchmark configs. */
 export const libraryVersions = {
-  "@cfworker/json-schema": "4.1.1",
+  "@cfworker/json-schema": "4.1.4",
   "@paseri/compiler": "0.7.7",
   "@paseri/paseri": "1.9.7",
   "@railway-ts/pipelines": "0.1.29",
@@ -12,7 +12,7 @@ export const libraryVersions = {
   arktype: "2.2.9",
   "ata-validator": "1.61.3",
   decoders: "2.13.0",
-  effect: "4.1.0",
+  effect: "4.1.1",
   "io-ts": "2.2.22",
   joi: "18.3.1",
   jsonschema: "1.5.0",
@@ -20,7 +20,7 @@ export const libraryVersions = {
   superstruct: "2.0.2",
   sury: "11.0.0",
   typebox: "1.4.3",
-  typia: "15.2.1",
+  typia: "15.2.2",
   valibot: "1.5.0",
   yup: "1.7.1",
   "z-schema": "12.5.0",
