@@ -1,6 +1,7 @@
 import { anyAbortSignal } from "@schema-benchmarks/utils";
 import { queryOptions } from "@tanstack/react-query";
 import hostedGitInfo from "hosted-git-info";
+import { isResponseError } from "up-fetch";
 import * as v from "valibot";
 
 import { isRetryableUpfetchError, upfetch } from "#src/shared/lib/fetch";
@@ -76,7 +77,8 @@ export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSign
             schema: jsrDownloadsSchema,
           });
         } catch (error) {
-          if (isRetryableUpfetchError(error)) return "n/a" as const;
+          if (isRetryableUpfetchError(error) || (isResponseError(error) && error.status === 404))
+            return "n/a" as const;
           throw error;
         }
       },
@@ -94,7 +96,8 @@ export const getAllWeeklyDownloads = (packageName: string, signalOpt?: AbortSign
           },
         );
       } catch (error) {
-        if (isRetryableUpfetchError(error)) return "n/a" as const;
+        if (isRetryableUpfetchError(error) || (isResponseError(error) && error.status === 404))
+          return "n/a" as const;
         throw error;
       }
     },
