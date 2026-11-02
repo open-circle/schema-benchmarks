@@ -2,6 +2,7 @@ import type { InferredDirection, InferredType, TypesResult } from "@schema-bench
 import { numFormatter } from "@schema-benchmarks/utils";
 import { useNavigate } from "@tanstack/react-router";
 import bem from "react-bem-helper";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { FromTypeCases } from "#src/routes/typescript/-components/from-type.tsx";
@@ -115,7 +116,9 @@ export function TypesDetail({ result }: TypesDetailProps) {
                 <div>
                   <dt>Downloads per week</dt>
                   <dd>
-                    <DownloadCount libraryName={result.libraryName} />
+                    <ErrorBoundary fallback={null}>
+                      <DownloadCount libraryName={result.libraryName} />
+                    </ErrorBoundary>
                   </dd>
                 </div>
               </dl>

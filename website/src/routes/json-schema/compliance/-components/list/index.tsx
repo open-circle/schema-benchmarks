@@ -1,6 +1,7 @@
 import type { JsonComplianceResult } from "@schema-benchmarks/bench";
 import { percentFormatter, shortNumFormatter } from "@schema-benchmarks/utils";
 import bem from "react-bem-helper";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import {
@@ -53,7 +54,9 @@ export function ComplianceList({ results }: ComplianceListProps) {
                 trailing={
                   <div {...cls({ element: "downloads", extra: "typo-caption" })}>
                     <MdSymbol>download</MdSymbol>
-                    <DownloadCount libraryName={result.libraryName} useLink={false} />
+                    <ErrorBoundary fallback={null}>
+                      <DownloadCount libraryName={result.libraryName} useLink={false} />
+                    </ErrorBoundary>
                   </div>
                 }
               />

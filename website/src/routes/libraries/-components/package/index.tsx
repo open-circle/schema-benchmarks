@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import bem from "react-bem-helper";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { getPackageMetadata, getRepoLink } from "#src/routes/_benchmarks/-query";
@@ -48,7 +49,9 @@ export function PackageCard({ pkgName, versions }: PackageCardProps) {
         <div {...cls({ element: "downloads", extra: "typo-caption" })}>
           <MdSymbol size={18}>download</MdSymbol>
           <span>
-            <DownloadCount libraryName={pkgName} />
+            <ErrorBoundary fallback={null}>
+              <DownloadCount libraryName={pkgName} />
+            </ErrorBoundary>
             /wk
           </span>
         </div>

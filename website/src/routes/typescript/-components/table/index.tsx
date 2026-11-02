@@ -2,6 +2,7 @@
 import type { TypesResult } from "@schema-benchmarks/bench";
 import { getTransitionName, numFormatter, shortNumFormatter } from "@schema-benchmarks/utils";
 import bem from "react-bem-helper";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { FromTypeText } from "#src/routes/typescript/-components/from-type.tsx";
@@ -92,7 +93,9 @@ export function TypesTable({
               <code className="language-text">{result.version}</code>
             </td>
             <td className="numeric">
-              <DownloadCount libraryName={result.libraryName} />
+              <ErrorBoundary fallback={null}>
+                <DownloadCount libraryName={result.libraryName} />
+              </ErrorBoundary>
             </td>
             <td className="action">
               {inference ? <MatchCheckbox match={inference.input.match} /> : null}
