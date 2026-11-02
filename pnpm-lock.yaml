@@ -216,6 +216,9 @@ importers:
       '@cfworker/json-schema':
         specifier: ^4.1.4
         version: 4.1.4
+      '@earendil-works/pi-schema':
+        specifier: ^1.5.0
+        version: 1.5.0
       '@paseri/compiler':
         specifier: jsr:^0.7.7
         version: '@jsr/paseri__compiler@0.7.7'
@@ -1325,6 +1328,10 @@ packages:
   '@dependents/detective-less@5.0.3':
     resolution: {integrity: sha512-v6oD9Ukp+N7V4n6p5I/+mM5fIohSfkrDSGlFm5w/pYmchvbk+sMIHsLxrFJ5Lnujewj1BzWL0K84d88lwZAMQA==}
     engines: {node: '>=18'}
+
+  '@earendil-works/pi-schema@1.5.0':
+    resolution: {integrity: sha512-RW0MbT2tR65OY6xMsgB/yVBb7m/RTNwA+9hurSN1vVXfHZRVmVnXbruBPrx/PzbrQnW5yLVlMRWxErGDQtF1Hg==}
+    engines: {node: '>=22.19.0'}
 
   '@electric-sql/pglite@0.3.16':
     resolution: {integrity: sha512-mZkZfOd9OqTMHsK+1cje8OSzfAQcpD7JmILXTl5ahdempjUDdmg4euf1biDex5/LfQIDJ3gvCu6qDgdnDxfJmA==}
@@ -10339,6 +10346,8 @@ snapshots:
     dependencies:
       gonzales-pe: 4.3.0
       node-source-walk: 7.0.2
+
+  '@earendil-works/pi-schema@1.5.0': {}
 
   '@electric-sql/pglite@0.3.16': {}
 
