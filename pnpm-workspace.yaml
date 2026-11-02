@@ -52,3 +52,5 @@ peerDependencyRules:
   allowedVersions:
     vite: "*"
     vitest: "*"
+minimumReleaseAgeExclude:
+  - "@earendil-works/pi-schema@1.5.0"
