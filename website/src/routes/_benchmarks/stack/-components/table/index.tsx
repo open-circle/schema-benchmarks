@@ -1,6 +1,7 @@
 // oxlint-disable jsx-a11y/control-has-associated-label
 import type { StackResult } from "@schema-benchmarks/bench";
 import { getTransitionName } from "@schema-benchmarks/utils";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count";
 import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet";
@@ -82,7 +83,9 @@ export function StackTable({ results, frameScale, lineCountScale, ...sortState }
               <code className="language-text">{result.version}</code>
             </td>
             <td className="numeric">
-              <DownloadCount libraryName={result.libraryName} />
+              <ErrorBoundary fallback={null}>
+                <DownloadCount libraryName={result.libraryName} />
+              </ErrorBoundary>
             </td>
             <td className="numeric">{result.frame}</td>
             <td className="bar-after">

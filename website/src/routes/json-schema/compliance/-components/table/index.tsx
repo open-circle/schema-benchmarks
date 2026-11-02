@@ -2,6 +2,7 @@
 import type { JsonComplianceResult } from "@schema-benchmarks/bench";
 import { shortNumFormatter, percentFormatter, getTransitionName } from "@schema-benchmarks/utils";
 import bem from "react-bem-helper";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { Snippet } from "#src/routes/_benchmarks/_runtime/-components/table/snippet.tsx";
@@ -113,7 +114,9 @@ export function ComplianceTable({ results, ...sortState }: ComplianceTableProps)
                 )}
               </td>
               <td className="numeric">
-                <DownloadCount libraryName={result.libraryName} />
+                <ErrorBoundary fallback={null}>
+                  <DownloadCount libraryName={result.libraryName} />
+                </ErrorBoundary>
               </td>
               <td className="numeric">
                 {formatPercentage(pct)} ({formatNumber(passed)} / {formatNumber(total)})

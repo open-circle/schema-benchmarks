@@ -4,6 +4,7 @@ import { percentFormatter, shortNumFormatter, partition } from "@schema-benchmar
 import { useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
 import bem from "react-bem-helper";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { DownloadCount } from "#src/routes/_benchmarks/-components/count.tsx";
 import { JsonSchemaSourceText } from "#src/routes/json-schema/-components/source.tsx";
@@ -89,7 +90,9 @@ export function ComplianceDetail({ result, target }: ComplianceDetailProps) {
                 <div>
                   <dt>Downloads per week</dt>
                   <dd>
-                    <DownloadCount libraryName={result.libraryName} />
+                    <ErrorBoundary fallback={null}>
+                      <DownloadCount libraryName={result.libraryName} />
+                    </ErrorBoundary>
                   </dd>
                 </div>
                 <div>
