@@ -59,7 +59,7 @@ export default defineConfig({
     ],
     overrides: [
       {
-        files: ["**/*.{browser,node}.test.ts", "**/*.{browser,node}.test.tsx"],
+        files: ["**/*.{browser,node,e2e}.test.ts", "**/*.{browser,node}.test.tsx"],
         plugins: ["vitest"],
         rules: {
           "vitest/no-standalone-expect": [
@@ -94,6 +94,26 @@ export default defineConfig({
           "playwright/no-skipped-test": ["warn", { allowConditional: true }],
           "playwright/expect-expect": ["error", { assertFunctionPatterns: ["^expect.*"] }],
           "playwright/require-to-pass-timeout": "error",
+          "no-restricted-properties": [
+            "error",
+            {
+              object: "expect",
+              property: "soft",
+              message: "Playwright soft assertions cannot report failures to Vitest.",
+            },
+            {
+              property: "toHaveScreenshot",
+              message: "Screenshot assertions require the Playwright Test runner.",
+            },
+            {
+              property: "toMatchSnapshot",
+              message: "Playwright snapshot assertions require the Playwright Test runner.",
+            },
+            {
+              property: "toMatchAriaSnapshot",
+              message: "ARIA snapshot assertions require the Playwright Test runner.",
+            },
+          ],
         },
       },
       { files: ["schemas/**"], ...schemasLint },

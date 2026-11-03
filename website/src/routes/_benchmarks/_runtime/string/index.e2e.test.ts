@@ -32,20 +32,20 @@ test("can toggle between valid and invalid results", async ({ page, stringPage }
 });
 
 test.describe("optimization filter", () => {
-  test.describe("desktop", { tag: "@desktop" }, () => {
+  test.describe("desktop", { tags: ["desktop"] }, () => {
     test("can be filtered by optimization type", async ({ stringPage }) => {
       await helpers.runtime.desktop.expectOptimizeFilter(stringPage);
     });
   });
 
-  test.describe("mobile", { tag: "@mobile" }, () => {
+  test.describe("mobile", { tags: ["mobile"] }, () => {
     test("can be filtered by optimization type", async ({ stringPage }) => {
       await helpers.runtime.mobile.expectOptimizeFilter(stringPage);
     });
   });
 });
 
-test.describe("desktop view", { tag: "@desktop" }, () => {
+test.describe("desktop view", { tags: ["desktop"] }, () => {
   test.beforeEach(async ({ stringPage }) => {
     await stringPage.desktop.tableHandle.init();
   });
@@ -62,7 +62,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 });
 
-test.describe("mobile view", { tag: "@mobile" }, () => {
+test.describe("mobile view", { tags: ["mobile"] }, () => {
   test("it displays results list items", async ({ stringPage }) => {
     await helpers.runtime.mobile.expectListDisplay(stringPage);
   });

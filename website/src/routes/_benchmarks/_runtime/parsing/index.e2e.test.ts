@@ -16,13 +16,13 @@ test("can toggle between valid and invalid results", async ({ page, parsingPage 
 });
 
 test.describe("optimization filter", () => {
-  test.describe("desktop", { tag: "@desktop" }, () => {
+  test.describe("desktop", { tags: ["desktop"] }, () => {
     test("can be filtered by optimization type", async ({ parsingPage }) => {
       await helpers.runtime.desktop.expectOptimizeFilter(parsingPage);
     });
   });
 
-  test.describe("mobile", { tag: "@mobile" }, () => {
+  test.describe("mobile", { tags: ["mobile"] }, () => {
     test("can be filtered by optimization type", async ({ parsingPage }) => {
       await helpers.runtime.mobile.expectOptimizeFilter(parsingPage);
     });
@@ -30,20 +30,20 @@ test.describe("optimization filter", () => {
 });
 
 test.describe("error type filter", () => {
-  test.describe("desktop", { tag: "@desktop" }, () => {
+  test.describe("desktop", { tags: ["desktop"] }, () => {
     test("can be filtered by error type", async ({ parsingPage }) => {
       await helpers.runtime.desktop.expectErrorTypeFilter(parsingPage);
     });
   });
 
-  test.describe("mobile", { tag: "@mobile" }, () => {
+  test.describe("mobile", { tags: ["mobile"] }, () => {
     test("can be filtered by error type", async ({ parsingPage }) => {
       await helpers.runtime.mobile.expectErrorTypeFilter(parsingPage);
     });
   });
 });
 
-test.describe("desktop view", { tag: "@desktop" }, () => {
+test.describe("desktop view", { tags: ["desktop"] }, () => {
   test.beforeEach(async ({ parsingPage }) => {
     await parsingPage.desktop.tableHandle.init();
   });
@@ -60,7 +60,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 });
 
-test.describe("mobile view", { tag: "@mobile" }, () => {
+test.describe("mobile view", { tags: ["mobile"] }, () => {
   test("it displays results list items", async ({ parsingPage }) => {
     await helpers.runtime.mobile.expectListDisplay(parsingPage);
   });

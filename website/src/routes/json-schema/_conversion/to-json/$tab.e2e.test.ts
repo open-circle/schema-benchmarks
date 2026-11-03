@@ -13,14 +13,14 @@ import { ToJsonPage } from "./$tab.e2e.model";
 
 const test = createTest({ toJsonPage: ToJsonPage });
 
-test.beforeEach("Go to JSON schema to-json page", async ({ toJsonPage, fontsLoaded }) => {
+test.beforeEach(async ({ toJsonPage, fontsLoaded }) => {
   await toJsonPage.goto();
 
   await fontsLoaded();
 });
 
 test.describe("support matrix tab", () => {
-  test.beforeEach("switch to support matrix tab", async ({ page, toJsonPage }) => {
+  test.beforeEach(async ({ page, toJsonPage }) => {
     await toJsonPage.supportMatrix.select();
 
     await expect(toJsonPage.supportMatrix.tabLink).toBeCurrent("page", { timeout: 15_000 });
@@ -30,7 +30,7 @@ test.describe("support matrix tab", () => {
     });
   });
 
-  test.describe("desktop view", { tag: "@desktop" }, () => {
+  test.describe("desktop view", { tags: ["desktop"] }, () => {
     test("it displays support matrix table", async ({ toJsonPage }) => {
       await expect(toJsonPage.supportMatrix.desktop.supportMatrixTable).toBeVisible();
       await expect(
@@ -39,7 +39,7 @@ test.describe("support matrix tab", () => {
     });
   });
 
-  test.describe("mobile view", { tag: "@mobile" }, () => {
+  test.describe("mobile view", { tags: ["mobile"] }, () => {
     test("it displays support matrix list", async ({ toJsonPage }) => {
       const item = toJsonPage.supportMatrix.mobile.getItemByLibraryName("arktype");
 
@@ -52,7 +52,7 @@ test.describe("support matrix tab", () => {
 });
 
 test.describe("benchmarks tab", () => {
-  test.beforeEach("switch to benchmarks tab", async ({ page, toJsonPage }) => {
+  test.beforeEach(async ({ page, toJsonPage }) => {
     await toJsonPage.benchmarks.select();
 
     await expect(toJsonPage.benchmarks.tabLink).toBeCurrent("page", { timeout: 15_000 });
@@ -74,7 +74,7 @@ test.describe("benchmarks tab", () => {
     }
   });
 
-  test.describe("desktop direction filtering", { tag: "@desktop" }, () => {
+  test.describe("desktop direction filtering", { tags: ["desktop"] }, () => {
     test("shows matching table rows", async ({ toJsonPage }) => {
       for (const direction of jsonSchemaDirectionSchema.options) {
         await toJsonPage.benchmarks.selectDirection(direction);
@@ -89,7 +89,7 @@ test.describe("benchmarks tab", () => {
     });
   });
 
-  test.describe("mobile direction filtering", { tag: "@mobile" }, () => {
+  test.describe("mobile direction filtering", { tags: ["mobile"] }, () => {
     test("shows matching list labels", async ({ toJsonPage }) => {
       for (const direction of jsonSchemaDirectionSchema.options) {
         await toJsonPage.benchmarks.selectDirection(direction);
@@ -108,7 +108,7 @@ test.describe("benchmarks tab", () => {
     });
   });
 
-  test.describe("desktop view", { tag: "@desktop" }, () => {
+  test.describe("desktop view", { tags: ["desktop"] }, () => {
     test.beforeEach(async ({ toJsonPage }) => {
       await toJsonPage.benchmarks.desktop.tableHandle.init();
     });
@@ -129,7 +129,7 @@ test.describe("benchmarks tab", () => {
     });
   });
 
-  test.describe("mobile view", { tag: "@mobile" }, () => {
+  test.describe("mobile view", { tags: ["mobile"] }, () => {
     test("it displays results list", async ({ toJsonPage }) => {
       const item = toJsonPage.benchmarks.mobile.getListItemByLibraryName("zod").first();
 

@@ -1,2 +1,2 @@
-export { createTest } from "./test";
+export { createTest } from "./vitest";
 export { expect } from "./expect";

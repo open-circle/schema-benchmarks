@@ -16,13 +16,13 @@ test("can toggle between valid and invalid results", async ({ page, standardSche
 });
 
 test.describe("optimization filter", () => {
-  test.describe("desktop", { tag: "@desktop" }, () => {
+  test.describe("desktop", { tags: ["desktop"] }, () => {
     test("can be filtered by optimization type", async ({ standardSchemaPage }) => {
       await helpers.runtime.desktop.expectOptimizeFilter(standardSchemaPage);
     });
   });
 
-  test.describe("mobile", { tag: "@mobile" }, () => {
+  test.describe("mobile", { tags: ["mobile"] }, () => {
     test("can be filtered by optimization type", async ({ standardSchemaPage }) => {
       await helpers.runtime.mobile.expectOptimizeFilter(standardSchemaPage);
     });
@@ -30,20 +30,20 @@ test.describe("optimization filter", () => {
 });
 
 test.describe("error type filter", () => {
-  test.describe("desktop", { tag: "@desktop" }, () => {
+  test.describe("desktop", { tags: ["desktop"] }, () => {
     test("can be filtered by error type", async ({ standardSchemaPage }) => {
       await helpers.runtime.desktop.expectErrorTypeFilter(standardSchemaPage);
     });
   });
 
-  test.describe("mobile", { tag: "@mobile" }, () => {
+  test.describe("mobile", { tags: ["mobile"] }, () => {
     test("can be filtered by error type", async ({ standardSchemaPage }) => {
       await helpers.runtime.mobile.expectErrorTypeFilter(standardSchemaPage);
     });
   });
 });
 
-test.describe("desktop view", { tag: "@desktop" }, () => {
+test.describe("desktop view", { tags: ["desktop"] }, () => {
   test.beforeEach(async ({ standardSchemaPage }) => {
     await standardSchemaPage.desktop.tableHandle.init();
   });
@@ -60,7 +60,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 });
 
-test.describe("mobile view", { tag: "@mobile" }, () => {
+test.describe("mobile view", { tags: ["mobile"] }, () => {
   test("it displays results list items", async ({ standardSchemaPage }) => {
     await helpers.runtime.mobile.expectListDisplay(standardSchemaPage);
   });

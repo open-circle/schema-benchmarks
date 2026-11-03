@@ -1,6 +1,6 @@
 import { minifyTypeSchema } from "@schema-benchmarks/bench";
 
-import { createTest, expect } from "#e2e/fixtures/vitest";
+import { createTest, expect } from "#e2e/fixtures";
 import * as desktopHelpers from "#e2e/helpers/desktop";
 import { libraryVersions } from "#e2e/utils/library-versions.gen.ts";
 

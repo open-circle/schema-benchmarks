@@ -12,20 +12,20 @@ test.beforeEach(async ({ fontsLoaded, initializationPage }) => {
 });
 
 test.describe("optimization filter", () => {
-  test.describe("desktop", { tag: "@desktop" }, () => {
+  test.describe("desktop", { tags: ["desktop"] }, () => {
     test("can be filtered by optimization type", async ({ initializationPage }) => {
       await helpers.runtime.desktop.expectOptimizeFilter(initializationPage);
     });
   });
 
-  test.describe("mobile", { tag: "@mobile" }, () => {
+  test.describe("mobile", { tags: ["mobile"] }, () => {
     test("can be filtered by optimization type", async ({ initializationPage }) => {
       await helpers.runtime.mobile.expectOptimizeFilter(initializationPage);
     });
   });
 });
 
-test.describe("desktop view", { tag: "@desktop" }, () => {
+test.describe("desktop view", { tags: ["desktop"] }, () => {
   test.beforeEach(async ({ initializationPage }) => {
     await initializationPage.desktop.tableHandle.init();
   });
@@ -42,7 +42,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 });
 
-test.describe("mobile view", { tag: "@mobile" }, () => {
+test.describe("mobile view", { tags: ["mobile"] }, () => {
   test("it displays results list items", async ({ initializationPage }) => {
     await helpers.runtime.mobile.expectListDisplay(initializationPage);
   });

@@ -5,13 +5,13 @@ import { StackPage } from "./index.e2e.model";
 
 const test = createTest({ stackPage: StackPage });
 
-test.beforeEach("Go to stack page", async ({ fontsLoaded, stackPage }) => {
+test.beforeEach(async ({ fontsLoaded, stackPage }) => {
   await stackPage.goto();
 
   await fontsLoaded();
 });
 
-test.describe("desktop view", { tag: "@desktop" }, () => {
+test.describe("desktop view", { tags: ["desktop"] }, () => {
   test.beforeEach(async ({ stackPage }) => {
     await expect(stackPage.desktop.table).toBeVisible();
     await stackPage.desktop.tableHandle.init();
@@ -32,7 +32,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 });
 
-test.describe("mobile view", { tag: "@mobile" }, () => {
+test.describe("mobile view", { tags: ["mobile"] }, () => {
   test("it displays result list and expands details", async ({ stackPage }) => {
     const item = stackPage.mobile.getListItemByLibraryName("@paseri/compiler").first();
     const details = item.locator("details");

@@ -5,7 +5,7 @@ import { BlogPage } from "./index.e2e.model";
 
 const test = createTest({ blogPage: BlogPage, header: Header });
 
-test.beforeEach("Go to blog page", async ({ blogPage, fontsLoaded }) => {
+test.beforeEach(async ({ blogPage, fontsLoaded }) => {
   await blogPage.goto();
 
   await fontsLoaded();
@@ -13,7 +13,7 @@ test.beforeEach("Go to blog page", async ({ blogPage, fontsLoaded }) => {
 
 test(
   "should navigate to blog post when clicking on card",
-  { tag: "@smoke" },
+  { tags: ["smoke"] },
   async ({ blogPage, page, header }) => {
     const card = blogPage.getBlogCardByTitle("Welcome");
 

@@ -5,13 +5,13 @@ import { TypescriptPage } from "./index.e2e.model";
 
 const test = createTest({ typescriptPage: TypescriptPage });
 
-test.beforeEach("Go to TypeScript page", async ({ fontsLoaded, typescriptPage }) => {
+test.beforeEach(async ({ fontsLoaded, typescriptPage }) => {
   await typescriptPage.goto();
 
   await fontsLoaded();
 });
 
-test.describe("desktop view", { tag: "@desktop" }, () => {
+test.describe("desktop view", { tags: ["desktop"] }, () => {
   test.beforeEach(async ({ typescriptPage }) => {
     await expect(typescriptPage.desktop.table).toBeVisible();
     await typescriptPage.desktop.tableHandle.init();
@@ -43,7 +43,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 });
 
-test.describe("mobile view", { tag: "@mobile" }, () => {
+test.describe("mobile view", { tags: ["mobile"] }, () => {
   test("it displays the result list", async ({ typescriptPage }) => {
     const item = typescriptPage.mobile.getListItemByLibraryName("zod").first();
 

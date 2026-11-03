@@ -9,7 +9,7 @@ import { complianceTypeLabels } from "./-constants";
 
 const test = createTest({ compliancePage: CompliancePage });
 
-test.beforeEach("Go to JSON schema compliance page", async ({ compliancePage, fontsLoaded }) => {
+test.beforeEach(async ({ compliancePage, fontsLoaded }) => {
   await compliancePage.goto();
 
   await fontsLoaded();
@@ -46,9 +46,7 @@ async function expectDetailsDialogToBeOpen(
   });
 }
 
-test("can toggle targets", async ({ page, compliancePage }) => {
-  test.setTimeout(90_000);
-
+test("can toggle targets", { timeout: 90_000 }, async ({ page, compliancePage }) => {
   for (const target of complianceTargetSchema.options) {
     await test.step(`Select ${compliancePage.getTargetLabel(target)} target`, async () => {
       const link = compliancePage.getTargetLink(target);
@@ -66,13 +64,13 @@ test("can toggle targets", async ({ page, compliancePage }) => {
 
 for (const complianceType of complianceTypeSchema.options) {
   test.describe(`${complianceTypeLabels[complianceType].label} tab`, () => {
-    test.beforeEach("switch to tab", async ({ compliancePage, fontsLoaded }) => {
+    test.beforeEach(async ({ compliancePage, fontsLoaded }) => {
       await compliancePage[complianceType].select();
 
       await fontsLoaded();
     });
 
-    test.describe("Desktop view", { tag: "@desktop" }, () => {
+    test.describe("Desktop view", { tags: ["desktop"] }, () => {
       test.beforeEach(async ({ compliancePage }) => {
         await compliancePage[complianceType].desktop.tableHandle.init();
       });
@@ -103,7 +101,7 @@ for (const complianceType of complianceTypeSchema.options) {
       });
     });
 
-    test.describe("Mobile view", { tag: "@mobile" }, () => {
+    test.describe("Mobile view", { tags: ["mobile"] }, () => {
       test("can open details dialog", async ({ compliancePage }) => {
         const tab = compliancePage[complianceType];
         const listItem = tab.mobile.getListItem(tab.libraries.first).first();

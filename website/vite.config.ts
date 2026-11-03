@@ -151,17 +151,14 @@ const config = defineConfig({
             test: {
               name: `e2e:${name}`,
               environment: "node" as const,
-              include: [
-                "src/routes/_benchmarks/download/index.e2e.test.ts",
-                "src/shared/components/dialog/pref.e2e.test.ts",
-              ],
+              include: ["src/**/*.e2e.test.ts"],
               globalSetup: ["./e2e/setup.ts"],
               testTimeout: 30_000,
               hookTimeout: 30_000,
               retry: process.env.CI ? 2 : 0,
               maxWorkers: 1,
               tags: [{ name: "smoke" }, { name: "desktop" }, { name: "mobile" }],
-              tagsFilter: [tagsFilter],
+              tagsFilter: [tagsFilter, ...(process.env.E2E_TAGS ? [process.env.E2E_TAGS] : [])],
               provide: {
                 e2e: {
                   browser,
@@ -236,11 +233,11 @@ const config = defineConfig({
         cache: false,
       },
       e2e: {
-        command: ["vpr e2e:gen-versions", "playwright test"],
+        command: ["vpr e2e:gen-versions", "VITEST_E2E=true vp test run --project 'e2e:*'"],
         cache: false,
       },
       "e2e:vitest": {
-        command: ["vpr e2e:gen-versions", "VITEST_E2E=true vp test run --project 'e2e:*'"],
+        command: "vpr e2e",
         cache: false,
       },
     },

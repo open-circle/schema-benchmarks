@@ -1,7 +1,7 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 
-import { test as pwTest, type Locator, type Page } from "@playwright/test";
 import type { Tail } from "@schema-benchmarks/utils";
+import type { Locator, Page } from "playwright";
 
 import { expect } from "#e2e/fixtures/expect";
 
@@ -69,21 +69,13 @@ export abstract class TabObjectModel<
   }
 }
 
-type StepOptions = Parameters<typeof pwTest.step>[2];
-
 export const stepContext = new AsyncLocalStorage<(title: string) => Promise<void>>();
 
-export async function runStep<Result>(
-  title: string,
-  body: () => Promise<Result>,
-  options?: StepOptions,
-): Promise<Result> {
+export async function runStep<Result>(title: string, body: () => Promise<Result>): Promise<Result> {
   const annotate = stepContext.getStore();
-  if (annotate) {
-    await annotate(title);
-    return body();
-  }
-  return pwTest.step(title, body, options);
+  if (!annotate) throw new Error("E2E steps must run inside a test created by createTest");
+  await annotate(title);
+  return body();
 }
 
 export const test = { step: runStep };

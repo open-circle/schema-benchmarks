@@ -38,7 +38,7 @@ Benchmark-relevant changes trigger the PR benchmark workflow. New commits replac
 
 Please open an issue for any bugs you find, or features you would like to see. Opening a PR without confirmation it's desired means it may not be merged.
 
-Make sure any changes meet our coding standards. We lint and format with [Vite+](https://viteplus.dev/), type check using [TypeScript](https://www.typescriptlang.org/) and test using [Vitest](https://vitest.dev/) for unit/integration tests and [Playwright](https://playwright.dev/) for end-to-end testing.
+Make sure any changes meet our coding standards. We lint and format with [Vite+](https://viteplus.dev/), type check using [TypeScript](https://www.typescriptlang.org/) and run tests using [Vitest](https://vitest.dev/), with [Playwright](https://playwright.dev/) driving browsers for end-to-end testing.
 
 Prefer browser tests (`*.browser.test.ts(x)`) for anything needing DOM specific features (e.g. React components), and Node tests (`*.node.test.ts`) for everything else. Include type tests (`*.test-d.ts`) for anything with complex typing.
 
@@ -50,17 +50,21 @@ The following commands will help you check your changes before opening a PR. Wit
 - `vpr e2e` - runs end-to-end tests
 - `vpr bench:all` - runs all benchmark suites
 
-To run end-to-end tests against an existing local server on a different port, set `E2E_BASE_URL`, for example `E2E_BASE_URL=http://localhost:3001 vpr e2e`. The default is `http://localhost:3000`.
+To run end-to-end tests against an existing local server, set `E2E_BASE_URL`, for example `E2E_BASE_URL=http://localhost:3001 vpr e2e`. Otherwise, the tests start the built website on an available port.
 
-### Vitest E2E Pilot
+### End-to-End Tests
 
-The download and preferences E2E tests run in Node-based Vitest projects driving Playwright, rather than in Browser Mode. Run them with `vpr e2e:vitest`; the remaining E2E tests still use `vpr e2e`. CI runs both suites. The pilot runs its full set of scenarios on every PR, independently of the remaining suite's smoke/full selection.
+All E2E tests run in Node-based Vitest projects driving Playwright, rather than in Browser Mode. Run them with `vpr e2e`; `vpr e2e:vitest` is an alias for the same suite.
 
-Build schemas and the website first with `vpr schemas:build` and `vpr website:build`. The pilot starts the production preview handler on an available port and closes it after testing. Set `E2E_BASE_URL` to use an existing server instead, or `HEADLESS=false` to watch the browser.
+Build schemas and the website first with `vpr schemas:build` and `vpr website:build`. Each E2E project starts the production preview handler on an available port and closes it after testing. Set `E2E_BASE_URL` to use an existing server instead, or `HEADLESS=false` to watch the browser. The E2E task regenerates library-version expectations from the installed schemas package; benchmark data must also match those library versions.
 
-The pilot preserves Desktop Chrome, Firefox, and Safari, plus Mobile Chrome and Safari emulation. To select a project or test, run from `website`, for example `VITEST_E2E=true vp test run --project 'e2e:Desktop Chrome' -t 'table can be sorted'`. Ordinary unit and component test runs do not include these projects.
+The suite covers Desktop Chrome, Firefox, and Safari, plus Mobile Chrome and Safari emulation. Mark device-specific suites with `{ tags: ["desktop"] }` or `{ tags: ["mobile"] }`. To select a project or test, run from `website`, for example `VITEST_E2E=true vp test run --project 'e2e:Desktop Chrome' -t 'table can be sorted'`. Ordinary unit and component test runs do not include these projects.
+
+Use `E2E_TAGS=smoke vpr e2e` for smoke tests and `E2E_TAGS='!smoke' vpr e2e` for the remaining scenarios. This filter is combined with each project's desktop/mobile filter. CI always runs smoke tests and runs the rest on main-branch pushes, Dependabot PRs, or PRs with the `full e2e` label.
 
 Tests keep the existing Playwright assertions and custom matchers. Each test receives a fresh browser context; failed tests save screenshots and Playwright traces under `website/test-results/vitest-e2e/`. Open a trace with `vp exec playwright show-trace <trace.zip>`.
+
+Import `createTest` and `expect` from `#e2e/fixtures`. Models and helpers can import the step-only `test` object from `#e2e/fixtures/base`; its `test.step` records a Vitest annotation and executes the callback. These annotations are breadcrumbs, not Playwright Test's timed, nested steps. Assertions retain Playwright's own retry timeouts. Do not use soft assertions (including `expect.configure({ soft: true })`) or runner-dependent screenshot, snapshot, or ARIA-snapshot assertions; lint rejects the unsupported assertion methods.
 
 ## PRs written by AI
 

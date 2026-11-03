@@ -4,21 +4,19 @@ import { Sidebar } from "./index.e2e.model";
 
 const test = createTest({ sidebar: Sidebar });
 
-test.beforeEach("Go to homepage", async ({ page, fontsLoaded }) => {
+test.beforeEach(async ({ page, fontsLoaded }) => {
   await page.goto("/");
 
   await fontsLoaded();
 });
 
-test("homepage is selected", { tag: "@smoke" }, async ({ sidebar }) => {
+test("homepage is selected", { tags: ["smoke"] }, async ({ sidebar }) => {
   await sidebar.open();
 
   await expect(sidebar.getLinkByName("Home")).toBeCurrent("page", { timeout: 15_000 });
 });
 
-test("navigation links work", { tag: "@smoke" }, async ({ page, sidebar }) => {
-  test.setTimeout(120_000);
-
+test("navigation links work", { tags: ["smoke"], timeout: 120_000 }, async ({ page, sidebar }) => {
   for (const [name, path] of [
     ["Download", "/download"],
     ["Initialization", "/initialization"],

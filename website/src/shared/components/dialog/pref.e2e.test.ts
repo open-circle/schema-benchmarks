@@ -1,4 +1,4 @@
-import { createTest, expect } from "#e2e/fixtures/vitest";
+import { createTest, expect } from "#e2e/fixtures";
 import {
   styleSchema,
   themeSchema,

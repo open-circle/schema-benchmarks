@@ -1,8 +1,8 @@
-import { test } from "@playwright/test";
 import { errorTypeSchema, optimizeTypeSchema } from "@schema-benchmarks/schemas";
 import { every } from "mix-n-matchers/utilities";
 
 import { expect } from "#e2e/fixtures";
+import { test } from "#e2e/fixtures/base";
 import type { RuntimePage, MixinInstanceType, withErrorTypeFilter } from "#e2e/fixtures/runtime.ts";
 import { libraryVersions } from "#e2e/utils/library-versions.gen";
 

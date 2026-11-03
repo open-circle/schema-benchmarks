@@ -6,13 +6,13 @@ import { FromJsonPage } from "./index.e2e.model";
 
 const test = createTest({ fromJsonPage: FromJsonPage });
 
-test.beforeEach("Go to JSON schema from-json page", async ({ fromJsonPage, fontsLoaded }) => {
+test.beforeEach(async ({ fromJsonPage, fontsLoaded }) => {
   await fromJsonPage.goto();
 
   await fontsLoaded();
 });
 
-test.describe("desktop view", { tag: "@desktop" }, () => {
+test.describe("desktop view", { tags: ["desktop"] }, () => {
   test.beforeEach(async ({ fromJsonPage }) => {
     await fromJsonPage.desktop.tableHandle.init();
   });
@@ -33,7 +33,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 });
 
-test.describe("mobile view", { tag: "@mobile" }, () => {
+test.describe("mobile view", { tags: ["mobile"] }, () => {
   test("it displays results list", async ({ fromJsonPage }) => {
     const item = fromJsonPage.mobile.getListItemByLibraryName("zod");
 
