@@ -130,6 +130,7 @@ const config = defineConfig({
     msw(),
   ]),
   test: {
+    ...(isE2E ? { maxWorkers: "50%" as const } : {}),
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "lcov"],
@@ -156,7 +157,6 @@ const config = defineConfig({
               testTimeout: 30_000,
               hookTimeout: 30_000,
               retry: process.env.CI ? 2 : 0,
-              maxWorkers: 1,
               tags: [{ name: "smoke" }, { name: "desktop" }, { name: "mobile" }],
               tagsFilter: [tagsFilter, ...(process.env.E2E_TAGS ? [process.env.E2E_TAGS] : [])],
               provide: {
