@@ -1,6 +1,7 @@
 import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
 
+import { getOrInsertComputed } from "@schema-benchmarks/utils";
 import type { Browser, BrowserContext, BrowserContextOptions, Page } from "playwright";
 import { chromium, firefox, webkit } from "playwright";
 import { inject, test as baseTest } from "vite-plus/test";
@@ -29,18 +30,29 @@ interface E2EFixtures {
   fontsLoaded: () => Promise<void>;
 }
 
+const workerBrowsers = new Map<E2EOptions["browser"], Promise<Browser>>();
+
 const test = baseTest.extend<E2EFixtures>({
   browser: [
     async ({}, provide) => {
       const { browser: browserName } = inject("e2e");
-      const browser = await { chromium, firefox, webkit }[browserName].launch({
-        headless: process.env.HEADLESS !== "false",
-        ...(browserName === "chromium" ? { channel: "chromium" } : {}),
+      const browserPromise = getOrInsertComputed(workerBrowsers, browserName, () =>
+        ({ chromium, firefox, webkit })[browserName].launch({
+          headless: process.env.HEADLESS !== "false",
+          ...(browserName === "chromium" ? { channel: "chromium" } : {}),
+        }),
+      );
+      const browser = await browserPromise.catch((error: unknown) => {
+        workerBrowsers.delete(browserName);
+        throw error;
       });
       try {
         await provide(browser);
       } finally {
-        await browser.close();
+        if (workerBrowsers.get(browserName) === browserPromise) {
+          workerBrowsers.delete(browserName);
+          await browser.close();
+        }
       }
     },
     { scope: "worker" },

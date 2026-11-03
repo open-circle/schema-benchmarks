@@ -152,6 +152,7 @@ const config = defineConfig({
             test: {
               name: `e2e:${name}`,
               environment: "node" as const,
+              isolate: false,
               include: ["src/**/*.e2e.test.ts"],
               globalSetup: ["./e2e/setup.ts"],
               testTimeout: 30_000,
