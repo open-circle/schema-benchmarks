@@ -33,16 +33,14 @@ test("navigation links work", { tags: ["smoke"], timeout: 120_000 }, async ({ pa
     ["Libraries", "/libraries"],
     ["Blog", "/blog"],
   ] as const) {
-    await test.step(`Navigate to ${name}`, async () => {
-      await sidebar.open();
+    await sidebar.open();
 
-      const link = sidebar.getLinkByName(name);
+    const link = sidebar.getLinkByName(name);
 
-      await link.click();
+    await link.click();
 
-      await expect(page).toHaveURL((url) => url.pathname === path, { timeout: 30_000 });
+    await expect(page).toHaveURL((url) => url.pathname === path, { timeout: 30_000 });
 
-      await expect(link).toBeCurrent("page", { timeout: 30_000 });
-    });
+    await expect(link).toBeCurrent("page", { timeout: 30_000 });
   }
 });

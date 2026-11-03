@@ -1,6 +1,5 @@
 import type { TableResult } from "@rickcedwhat/playwright-smart-table";
 
-import { runStep } from "#e2e/fixtures/base";
 import { expect } from "#e2e/fixtures/expect";
 
 export async function expectTableSorting(
@@ -13,22 +12,18 @@ export async function expectTableSorting(
   const firstRow = tableHandle.getRowByIndex(0);
   const firstRowLibraryCell = firstRow.getCell("library");
 
-  await runStep("Sort libraries ascending", async () => {
-    await librarySortLink.click();
+  await librarySortLink.click();
 
-    await expect(libraryHeaderCell).toHaveSort("ascending");
+  await expect(libraryHeaderCell).toHaveSort("ascending");
 
-    await expect(firstRowLibraryCell).toHaveText(patterns.first);
-  });
+  await expect(firstRowLibraryCell).toHaveText(patterns.first);
 
-  await runStep("Sort libraries descending", async () => {
-    await expect(async () => {
-      if ((await libraryHeaderCell.getAttribute("aria-sort")) !== "descending") {
-        await librarySortLink.click();
-      }
+  await expect(async () => {
+    if ((await libraryHeaderCell.getAttribute("aria-sort")) !== "descending") {
+      await librarySortLink.click();
+    }
 
-      await expect(libraryHeaderCell).toHaveSort("descending", { timeout: 500 });
-    }).toPass({ timeout: 5_000 });
-    await expect(firstRowLibraryCell).toHaveText(patterns.last);
-  });
+    await expect(libraryHeaderCell).toHaveSort("descending", { timeout: 500 });
+  }).toPass({ timeout: 5_000 });
+  await expect(firstRowLibraryCell).toHaveText(patterns.last);
 }

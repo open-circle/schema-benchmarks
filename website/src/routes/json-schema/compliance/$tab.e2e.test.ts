@@ -19,46 +19,38 @@ async function expectDetailsDialogToBeOpen(
   compliancePage: CompliancePage,
   libraryName: string | RegExp,
 ) {
-  await test.step("Verify dialog heading", async () => {
-    await expect(compliancePage.details.dialog).toBeVisible();
+  await expect(compliancePage.details.dialog).toBeVisible();
 
-    await expect(
-      compliancePage.details.dialog.getByRole("heading", { name: libraryName }),
-    ).toBeVisible();
+  await expect(
+    compliancePage.details.dialog.getByRole("heading", { name: libraryName }),
+  ).toBeVisible();
+
+  const additionalPropertiesResult = compliancePage.details.dialog.getByRole("listitem").filter({
+    hasText: /additionalProperties/,
   });
 
-  await test.step("Expand specification coverage", async () => {
-    const additionalPropertiesResult = compliancePage.details.dialog.getByRole("listitem").filter({
-      hasText: /additionalProperties/,
-    });
+  await expect(additionalPropertiesResult).toBeHidden();
 
-    await expect(additionalPropertiesResult).toBeHidden();
+  await compliancePage.details.dialog.getByText("Specification coverage").click();
 
-    await compliancePage.details.dialog.getByText("Specification coverage").click();
+  await expect(additionalPropertiesResult).toBeVisible();
 
-    await expect(additionalPropertiesResult).toBeVisible();
-  });
+  await compliancePage.details.close();
 
-  await test.step("Close the details dialog", async () => {
-    await compliancePage.details.close();
-
-    await expect(compliancePage.details.dialog).toBeHidden();
-  });
+  await expect(compliancePage.details.dialog).toBeHidden();
 }
 
 test("can toggle targets", { timeout: 90_000 }, async ({ page, compliancePage }) => {
   for (const target of complianceTargetSchema.options) {
-    await test.step(`Select ${compliancePage.getTargetLabel(target)} target`, async () => {
-      const link = compliancePage.getTargetLink(target);
+    const link = compliancePage.getTargetLink(target);
 
-      await link.click();
+    await link.click();
 
-      await expect(page).toHaveURL((url) => url.searchParams.get("target") === target, {
-        timeout: 30_000,
-      });
-
-      await expect(link).toBeCurrent("page", { timeout: 30_000 });
+    await expect(page).toHaveURL((url) => url.searchParams.get("target") === target, {
+      timeout: 30_000,
     });
+
+    await expect(link).toBeCurrent("page", { timeout: 30_000 });
   }
 });
 
@@ -89,13 +81,9 @@ for (const complianceType of complianceTypeSchema.options) {
 
         await expect(compliancePage.details.dialog).toBeHidden();
 
-        const libraryName = await test.step("Open details for the first library", async () => {
-          const firstRow = tableHandle.getRowByIndex(0);
-          const libraryName = await firstRow.getCell("library").innerText();
-          await firstRow.getByRole("link", { name: "Open details" }).click();
-
-          return libraryName;
-        });
+        const firstRow = tableHandle.getRowByIndex(0);
+        const libraryName = await firstRow.getCell("library").innerText();
+        await firstRow.getByRole("link", { name: "Open details" }).click();
 
         await expectDetailsDialogToBeOpen(compliancePage, libraryName);
       });
@@ -108,9 +96,7 @@ for (const complianceType of complianceTypeSchema.options) {
 
         await expect(compliancePage.details.dialog).toBeHidden();
 
-        await test.step("Open details from the first library card", async () => {
-          await listItem.getByRole("link").click();
-        });
+        await listItem.getByRole("link").click();
 
         await expectDetailsDialogToBeOpen(compliancePage, tab.libraries.first);
       });

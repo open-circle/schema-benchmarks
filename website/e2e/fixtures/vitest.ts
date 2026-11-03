@@ -7,7 +7,6 @@ import { chromium, firefox, webkit } from "playwright";
 import { inject, test as baseTest } from "vite-plus/test";
 import type { TestAPI } from "vite-plus/test";
 
-import { runStep, stepContext } from "#e2e/fixtures/base";
 import { waitForFontsLoaded } from "#e2e/utils";
 
 export { expect } from "./expect";
@@ -103,9 +102,7 @@ const test = baseTest.extend<E2EFixtures>({
 
 export function createTest<Models extends Record<string, new (page: Page) => unknown>>(
   models: Models,
-): TestAPI<E2EFixtures & { [Key in keyof Models]: InstanceType<Models[Key]> }> & {
-  step: typeof runStep;
-} {
+): TestAPI<E2EFixtures & { [Key in keyof Models]: InstanceType<Models[Key]> }> {
   const extended = test.extend<{ [Key in keyof Models]: InstanceType<Models[Key]> }>(
     Object.fromEntries(
       Object.entries(models).map(([name, Model]) => [
@@ -115,12 +112,5 @@ export function createTest<Models extends Record<string, new (page: Page) => unk
       ]),
     ) as never,
   );
-  extended.aroundEach(async (runTest, { annotate }) => {
-    await stepContext.run(async (title) => {
-      await annotate(title, "step");
-    }, runTest);
-  });
-  return Object.assign(extended, { step: runStep }) as TestAPI<
-    E2EFixtures & { [Key in keyof Models]: InstanceType<Models[Key]> }
-  > & { step: typeof runStep };
+  return extended as TestAPI<E2EFixtures & { [Key in keyof Models]: InstanceType<Models[Key]> }>;
 }

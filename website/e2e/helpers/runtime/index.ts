@@ -2,7 +2,6 @@ import type { Page } from "@playwright/test";
 import { dataTypeSchema } from "@schema-benchmarks/bench";
 
 import { expect } from "#e2e/fixtures";
-import { test } from "#e2e/fixtures/base";
 import type { MixinInstanceType, withDataToggle } from "#e2e/fixtures/runtime.ts";
 
 export * as desktop from "./desktop";
@@ -13,16 +12,14 @@ export async function expectDataTypeToggle(
   runtimePage: MixinInstanceType<typeof withDataToggle>,
 ) {
   for (const dataType of dataTypeSchema.options) {
-    await test.step(`Select ${dataType} data`, async () => {
-      const dataTypeLink = runtimePage.getDataTypeLink(dataType);
+    const dataTypeLink = runtimePage.getDataTypeLink(dataType);
 
-      await dataTypeLink.click();
+    await dataTypeLink.click();
 
-      await expect(page).toHaveURL((url) => url.searchParams.get("dataType") === dataType, {
-        timeout: 15_000,
-      });
-
-      await expect(dataTypeLink).toBeCurrent("page", { timeout: 15_000 });
+    await expect(page).toHaveURL((url) => url.searchParams.get("dataType") === dataType, {
+      timeout: 15_000,
     });
+
+    await expect(dataTypeLink).toBeCurrent("page", { timeout: 15_000 });
   }
 }

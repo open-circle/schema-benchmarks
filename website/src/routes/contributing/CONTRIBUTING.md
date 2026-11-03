@@ -64,7 +64,7 @@ Use `E2E_TAGS=smoke vp -C website test --project 'e2e:*'` for smoke tests and `E
 
 Tests keep the existing Playwright assertions and custom matchers. Each test receives a fresh browser context; failed tests save screenshots and Playwright traces under `website/test-results/vitest-e2e/`. Open a trace with `vp exec playwright show-trace <trace.zip>`.
 
-Import `createTest` and `expect` from `#e2e/fixtures`. Models and helpers can import the step-only `test` object from `#e2e/fixtures/base`; its `test.step` records a Vitest annotation and executes the callback. These annotations are breadcrumbs, not Playwright Test's timed, nested steps. Assertions retain Playwright's own retry timeouts. Do not use soft assertions (including `expect.configure({ soft: true })`) or runner-dependent screenshot, snapshot, or ARIA-snapshot assertions; lint rejects the unsupported assertion methods.
+Import `createTest` and `expect` from `#e2e/fixtures`. Use named model methods for reusable interactions and write assertions directly in test bodies and helpers. Assertions retain Playwright's own retry timeouts. Do not use soft assertions (including `expect.configure({ soft: true })`) or runner-dependent screenshot, snapshot, or ARIA-snapshot assertions; lint rejects the unsupported assertion methods.
 
 ## PRs written by AI
 

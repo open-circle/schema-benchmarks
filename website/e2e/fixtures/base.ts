@@ -1,5 +1,3 @@
-import { AsyncLocalStorage } from "node:async_hooks";
-
 import type { Tail } from "@schema-benchmarks/utils";
 import type { Locator, Page } from "playwright";
 
@@ -60,25 +58,12 @@ export abstract class TabObjectModel<
   }
 
   async select() {
-    await test.step(`Select ${this.tabName} tab`, async () => {
-      await this.tabLink.click();
-      await expect(this.page).toHaveURL((url) => this.matchesUrl(url), { timeout: 15_000 });
-      await expect(this.tabLink).toHaveAttribute("aria-selected", "true", { timeout: 15_000 });
-      await expect(this.tabPanel).toBeVisible({ timeout: 15_000 });
-    });
+    await this.tabLink.click();
+    await expect(this.page).toHaveURL((url) => this.matchesUrl(url), { timeout: 15_000 });
+    await expect(this.tabLink).toHaveAttribute("aria-selected", "true", { timeout: 15_000 });
+    await expect(this.tabPanel).toBeVisible({ timeout: 15_000 });
   }
 }
-
-export const stepContext = new AsyncLocalStorage<(title: string) => Promise<void>>();
-
-export async function runStep<Result>(title: string, body: () => Promise<Result>): Promise<Result> {
-  const annotate = stepContext.getStore();
-  if (!annotate) throw new Error("E2E steps must run inside a test created by createTest");
-  await annotate(title);
-  return body();
-}
-
-export const test = { step: runStep };
 
 export function withFilters<
   Constructor extends abstract new (...args: Array<any>) => ComponentObjectModel,

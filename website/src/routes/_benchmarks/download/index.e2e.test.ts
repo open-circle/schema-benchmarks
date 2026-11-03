@@ -19,79 +19,67 @@ test(
   { tags: ["smoke"] },
   async ({ page, downloadPage }) => {
     for (const minifyType of minifyTypeSchema.options) {
-      await test.step(`Select ${minifyType} results`, async () => {
-        const link = downloadPage.getMinifyTypeLink(minifyType);
+      const link = downloadPage.getMinifyTypeLink(minifyType);
 
-        await link.click();
+      await link.click();
 
-        await expect(page).toHaveURL((url) => url.searchParams.get("minifyType") === minifyType, {
-          timeout: 15_000,
-        });
-
-        await expect(link).toBeCurrent("page", { timeout: 15_000 });
+      await expect(page).toHaveURL((url) => url.searchParams.get("minifyType") === minifyType, {
+        timeout: 15_000,
       });
+
+      await expect(link).toBeCurrent("page", { timeout: 15_000 });
     }
   },
 );
 
 test("it can use speed presets", async ({ page, downloadPage }) => {
-  await test.step("Select 3G preset", async () => {
-    const threeGButton = downloadPage.getSpeedPresetButtonByLabel("3G");
-    await threeGButton.click();
+  const threeGButton = downloadPage.getSpeedPresetButtonByLabel("3G");
+  await threeGButton.click();
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "3g", {
-      timeout: 15_000,
-    });
-    await expect(downloadPage.downloadSpeedInput).toHaveValue("6");
-    await expect(threeGButton).toBeCurrent("page", { timeout: 15_000 });
+  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "3g", {
+    timeout: 15_000,
   });
+  await expect(downloadPage.downloadSpeedInput).toHaveValue("6");
+  await expect(threeGButton).toBeCurrent("page", { timeout: 15_000 });
 
-  await test.step("Select 4G preset", async () => {
-    const fourGButton = downloadPage.getSpeedPresetButtonByLabel("4G");
-    await fourGButton.click();
+  const fourGButton = downloadPage.getSpeedPresetButtonByLabel("4G");
+  await fourGButton.click();
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "4g", {
-      timeout: 15_000,
-    });
-    await expect(downloadPage.downloadSpeedInput).toHaveValue("32");
-    await expect(fourGButton).toBeCurrent("page", { timeout: 15_000 });
+  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "4g", {
+    timeout: 15_000,
   });
+  await expect(downloadPage.downloadSpeedInput).toHaveValue("32");
+  await expect(fourGButton).toBeCurrent("page", { timeout: 15_000 });
 
-  await test.step("Select WiFi preset", async () => {
-    const wifiButton = downloadPage.getSpeedPresetButtonByLabel("WiFi");
-    await wifiButton.click();
+  const wifiButton = downloadPage.getSpeedPresetButtonByLabel("WiFi");
+  await wifiButton.click();
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi", {
-      timeout: 15_000,
-    });
-    await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
-    await expect(wifiButton).toBeCurrent("page", { timeout: 15_000 });
+  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi", {
+    timeout: 15_000,
   });
+  await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
+  await expect(wifiButton).toBeCurrent("page", { timeout: 15_000 });
 });
 
 test("it can set a custom download speed", async ({ page, downloadPage }) => {
   const wifiButton = downloadPage.getSpeedPresetButtonByLabel("WiFi");
 
-  await test.step("Start from the WiFi preset", async () => {
-    await wifiButton.click();
+  await wifiButton.click();
 
-    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi", {
-      timeout: 15_000,
-    });
-    await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
-    await expect(wifiButton).toBeCurrent("page", { timeout: 15_000 });
+  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "wifi", {
+    timeout: 15_000,
   });
+  await expect(downloadPage.downloadSpeedInput).toHaveValue("240");
+  await expect(wifiButton).toBeCurrent("page", { timeout: 15_000 });
 
-  await test.step("Enter a custom speed", async () => {
-    await downloadPage.downloadSpeedInput.fill("241");
+  await downloadPage.downloadSpeedInput.fill("241");
 
-    await expect(downloadPage.downloadSpeedInput).toHaveValue("241");
-    await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "241", {
-      timeout: 15_000,
-    });
-    // custom value should not keep the preset as current
-    await expect(wifiButton).not.toBeCurrent("page", { timeout: 15_000 });
+  await expect(downloadPage.downloadSpeedInput).toHaveValue("241");
+  await expect(page).toHaveURL((url) => url.searchParams.get("mbps") === "241", {
+    timeout: 15_000,
   });
+  // custom value should not keep the preset as current
+  await expect(wifiButton).not.toBeCurrent("page", { timeout: 15_000 });
 });
 
 test.describe("desktop view", { tags: ["desktop"] }, () => {

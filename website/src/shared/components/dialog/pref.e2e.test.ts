@@ -47,21 +47,19 @@ test("it can pick style options, persisting after refresh", async ({ page, prefs
   await prefs.openDialog();
 
   for (const option of styleSchema.options) {
-    await test.step(`Pick ${option} style`, async () => {
-      const button = await prefs.getStyleOption(option);
-      await button.click();
-      await expect(button).toBePressed();
+    const button = await prefs.getStyleOption(option);
+    await button.click();
+    await expect(button).toBePressed();
 
-      await expect(prefs.documentElement).toHaveAttribute("data-style", option);
+    await expect(prefs.documentElement).toHaveAttribute("data-style", option);
 
-      await page.reload();
+    await page.reload();
 
-      await prefs.openDialog();
+    await prefs.openDialog();
 
-      await expect(button).toBePressed();
+    await expect(button).toBePressed();
 
-      await expect(prefs.documentElement).toHaveAttribute("data-style", option);
-    });
+    await expect(prefs.documentElement).toHaveAttribute("data-style", option);
   }
 });
 
@@ -69,22 +67,20 @@ test("it can pick theme options, persisting after refresh", async ({ page, prefs
   await prefs.openDialog();
 
   for (const option of themeSchema.options) {
-    await test.step(`Pick ${option} theme`, async () => {
-      const button = await prefs.getThemeOption(option);
-      await button.click();
+    const button = await prefs.getThemeOption(option);
+    await button.click();
 
-      await expect(button).toBePressed();
+    await expect(button).toBePressed();
 
-      await expect(prefs.documentElement).toHaveAttribute("data-theme", option);
+    await expect(prefs.documentElement).toHaveAttribute("data-theme", option);
 
-      await page.reload();
+    await page.reload();
 
-      await prefs.openDialog();
+    await prefs.openDialog();
 
-      await expect(button).toBePressed();
+    await expect(button).toBePressed();
 
-      await expect(prefs.documentElement).toHaveAttribute("data-theme", option);
-    });
+    await expect(prefs.documentElement).toHaveAttribute("data-theme", option);
   }
 });
 
@@ -92,37 +88,35 @@ test("it can pick npm site options, persisting after refresh", async ({ page, pr
   const downloadCount = page.getByRole("link", { name: "Download count for ajv:" }).first();
 
   for (const option of npmSiteSchema.options) {
-    await test.step(`Pick ${option} npm link target`, async () => {
-      await prefs.openDialog();
+    await prefs.openDialog();
 
-      const button = await prefs.getNpmSiteOption(option);
+    const button = await prefs.getNpmSiteOption(option);
 
-      await button.click();
+    await button.click();
 
-      await expect(button).toBePressed();
+    await expect(button).toBePressed();
 
-      await page.goto("/libraries");
+    await page.goto("/libraries");
 
-      await downloadCount.scrollIntoViewIfNeeded({ timeout: 1_000 });
+    await downloadCount.scrollIntoViewIfNeeded({ timeout: 1_000 });
 
-      await expect(downloadCount).toBeVisible();
+    await expect(downloadCount).toBeVisible();
 
-      await expect(downloadCount).toHaveAttribute("href", `https://www.${option}/package/ajv`);
+    await expect(downloadCount).toHaveAttribute("href", `https://www.${option}/package/ajv`);
 
-      await page.reload();
+    await page.reload();
 
-      await prefs.openDialog();
+    await prefs.openDialog();
 
-      await expect(button).toBePressed();
+    await expect(button).toBePressed();
 
-      await page.goto("/libraries");
+    await page.goto("/libraries");
 
-      await downloadCount.scrollIntoViewIfNeeded({ timeout: 1_000 });
+    await downloadCount.scrollIntoViewIfNeeded({ timeout: 1_000 });
 
-      await expect(downloadCount).toBeVisible();
+    await expect(downloadCount).toBeVisible();
 
-      await expect(downloadCount).toHaveAttribute("href", `https://www.${option}/package/ajv`);
-    });
+    await expect(downloadCount).toHaveAttribute("href", `https://www.${option}/package/ajv`);
   }
 });
 
@@ -130,21 +124,19 @@ test("it can pick ligature options, persisting after refresh", async ({ page, pr
   await prefs.openDialog();
 
   for (const option of ligatureSchema.options) {
-    await test.step(`Pick ${option} ligature option`, async () => {
-      const button = await prefs.getLigatureOption(option);
-      await button.click();
+    const button = await prefs.getLigatureOption(option);
+    await button.click();
 
-      await expect(button).toBePressed();
+    await expect(button).toBePressed();
 
-      await expect(prefs.documentElement).toHaveAttribute("data-liga", option);
+    await expect(prefs.documentElement).toHaveAttribute("data-liga", option);
 
-      await page.reload();
+    await page.reload();
 
-      await prefs.openDialog();
+    await prefs.openDialog();
 
-      await expect(button).toBePressed();
+    await expect(button).toBePressed();
 
-      await expect(prefs.documentElement).toHaveAttribute("data-liga", option);
-    });
+    await expect(prefs.documentElement).toHaveAttribute("data-liga", option);
   }
 });
