@@ -1,4 +1,4 @@
-import { createTest, expect } from "#e2e/fixtures";
+import { createTest, expect } from "#e2e/fixtures/vitest";
 import {
   styleSchema,
   themeSchema,
@@ -10,13 +10,13 @@ import { PrefsDialog } from "./pref.e2e.model";
 
 const test = createTest({ prefs: PrefsDialog });
 
-test.beforeEach("Go to homepage", async ({ page, fontsLoaded }) => {
+test.beforeEach(async ({ page, fontsLoaded }) => {
   await page.goto("/");
 
   await fontsLoaded();
 });
 
-test("dialog opens", { tag: "@smoke" }, async ({ prefs }) => {
+test("dialog opens", { tags: ["smoke"] }, async ({ prefs }) => {
   await prefs.openDialog();
 
   await expect(prefs.dialog).toBeVisible();

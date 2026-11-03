@@ -115,6 +115,8 @@ jobs:
         run: vp exec playwright install-deps chromium firefox webkit
       - name: Install Playwright browsers
         run: vp exec playwright install --no-shell chromium firefox webkit
+      - name: Vitest E2E pilot
+        run: vpr e2e:vitest
       - name: E2E Smoke tests
         run: vpr e2e --workers 50% --grep @smoke
       - name: E2E Full tests
@@ -129,6 +131,14 @@ jobs:
         with:
           name: playwright-report
           path: "*/playwright-report/"
+          retention-days: 30
+      - name: Upload Vitest E2E failure artifacts
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() }}
+        with:
+          name: vitest-e2e-failures
+          path: website/test-results/vitest-e2e/
+          if-no-files-found: ignore
           retention-days: 30
   storybook-build:
     runs-on: ubuntu-latest

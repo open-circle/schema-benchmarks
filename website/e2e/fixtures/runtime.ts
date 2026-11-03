@@ -1,7 +1,6 @@
 import { useTable as createTableHandle } from "@rickcedwhat/playwright-smart-table";
 import type { DataType } from "@schema-benchmarks/bench";
 import type { OptimizeType, ErrorType } from "@schema-benchmarks/schemas";
-import { lazy } from "@schema-benchmarks/utils";
 
 import { PageObjectModel, withFilters } from "#e2e/fixtures/base";
 import { expect } from "#e2e/fixtures/expect";
@@ -38,18 +37,18 @@ export abstract class RuntimePage extends withFilters(PageObjectModel) {
     await expect(link).toBeCurrent("page", { timeout: 15_000 });
   }
 
-  @lazy
+  #desktopTableHandle?: ReturnType<typeof createTableHandle>;
+
   get desktop() {
     const table = this.main.getByRole("table", { name: "Results" });
     return {
       table,
-      tableHandle: createTableHandle(table, {
+      tableHandle: (this.#desktopTableHandle ??= createTableHandle(table, {
         headerTransformer: ({ text }) => trimSortLabels(text),
-      }),
+      })),
     };
   }
 
-  @lazy
   get mobile() {
     const list = this.main.getByRole("list", { name: "Results" });
     const items = list.getByRole("listitem");

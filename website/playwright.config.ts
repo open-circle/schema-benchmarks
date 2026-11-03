@@ -9,6 +9,7 @@ const baseURL = process.env.E2E_BASE_URL ?? "http://localhost:3000";
 export default defineConfig({
   testDir: ".",
   testMatch: "**/*.e2e.test.ts",
+  testIgnore: ["**/download/index.e2e.test.ts", "**/dialog/pref.e2e.test.ts"],
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

@@ -1,14 +1,14 @@
 import { minifyTypeSchema } from "@schema-benchmarks/bench";
 
-import { createTest, expect } from "#e2e/fixtures";
-import * as helpers from "#e2e/helpers";
+import { createTest, expect } from "#e2e/fixtures/vitest";
+import * as desktopHelpers from "#e2e/helpers/desktop";
 import { libraryVersions } from "#e2e/utils/library-versions.gen.ts";
 
 import { DownloadPage } from "./index.e2e.model";
 
 const test = createTest({ downloadPage: DownloadPage });
 
-test.beforeEach("Go to download page", async ({ fontsLoaded, downloadPage }) => {
+test.beforeEach(async ({ fontsLoaded, downloadPage }) => {
   await downloadPage.goto();
 
   await fontsLoaded();
@@ -16,7 +16,7 @@ test.beforeEach("Go to download page", async ({ fontsLoaded, downloadPage }) => 
 
 test(
   "it can switch between minified and unminified results",
-  { tag: "@smoke" },
+  { tags: ["smoke"] },
   async ({ page, downloadPage }) => {
     for (const minifyType of minifyTypeSchema.options) {
       await test.step(`Select ${minifyType} results`, async () => {
@@ -94,7 +94,7 @@ test("it can set a custom download speed", async ({ page, downloadPage }) => {
   });
 });
 
-test.describe("desktop view", { tag: "@desktop" }, () => {
+test.describe("desktop view", { tags: ["desktop"] }, () => {
   test.beforeEach(async ({ downloadPage }) => {
     await downloadPage.desktop.tableHandle.init();
   });
@@ -108,14 +108,14 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
   });
 
   test("table can be sorted by column", async ({ downloadPage }) => {
-    await helpers.desktop.expectTableSorting(downloadPage.desktop.tableHandle, {
+    await desktopHelpers.expectTableSorting(downloadPage.desktop.tableHandle, {
       first: /@paseri/i,
       last: /zod/i,
     });
   });
 });
 
-test.describe("mobile view", { tag: "@mobile" }, () => {
+test.describe("mobile view", { tags: ["mobile"] }, () => {
   test("it displays results list", async ({ downloadPage }) => {
     await expect(downloadPage.mobile.list).toBeVisible();
 

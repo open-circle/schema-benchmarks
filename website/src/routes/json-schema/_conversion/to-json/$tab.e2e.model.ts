@@ -1,6 +1,5 @@
 import { useTable as createTableHandle } from "@rickcedwhat/playwright-smart-table";
 import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-benchmarks/schemas";
-import { lazy } from "@schema-benchmarks/utils";
 
 import { PageObjectModel, TabObjectModel, withFilters } from "#e2e/fixtures/base.ts";
 import { expect } from "#e2e/fixtures/expect";
@@ -52,18 +51,18 @@ class BenchmarksTab extends withFilters(TabObjectModel<ToJsonPage>) {
     });
   }
 
-  @lazy
+  #desktopTableHandle?: ReturnType<typeof createTableHandle>;
+
   get desktop() {
     const table = this.page.getByRole("table", { name: "Results" });
     return {
       table,
-      tableHandle: createTableHandle(table, {
+      tableHandle: (this.#desktopTableHandle ??= createTableHandle(table, {
         headerTransformer: ({ text }) => trimSortLabels(text),
-      }),
+      })),
     };
   }
 
-  @lazy
   get mobile() {
     const items = this.page.getByRole("list", { name: "Results" }).getByRole("listitem");
     return {
@@ -78,7 +77,6 @@ class SupportMatrixTab extends TabObjectModel<ToJsonPage> {
   url = "/json-schema/to-json/matrix";
   tabName = "Support Matrix";
 
-  @lazy
   get desktop() {
     const supportMatrixTable = this.page.getByRole("table", { name: "Support Matrix" });
     return {
@@ -90,7 +88,6 @@ class SupportMatrixTab extends TabObjectModel<ToJsonPage> {
     };
   }
 
-  @lazy
   get mobile() {
     const items = this.page.getByRole("list", { name: "Support Matrix" }).getByRole("listitem");
     return {

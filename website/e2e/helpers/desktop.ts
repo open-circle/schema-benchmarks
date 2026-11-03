@@ -1,7 +1,7 @@
-import { test } from "@playwright/test";
 import type { TableResult } from "@rickcedwhat/playwright-smart-table";
 
-import { expect } from "#e2e/fixtures";
+import { runStep } from "#e2e/fixtures/base";
+import { expect } from "#e2e/fixtures/expect";
 
 export async function expectTableSorting(
   tableHandle: TableResult,
@@ -13,7 +13,7 @@ export async function expectTableSorting(
   const firstRow = tableHandle.getRowByIndex(0);
   const firstRowLibraryCell = firstRow.getCell("library");
 
-  await test.step("Sort libraries ascending", async () => {
+  await runStep("Sort libraries ascending", async () => {
     await librarySortLink.click();
 
     await expect(libraryHeaderCell).toHaveSort("ascending");
@@ -21,7 +21,7 @@ export async function expectTableSorting(
     await expect(firstRowLibraryCell).toHaveText(patterns.first);
   });
 
-  await test.step("Sort libraries descending", async () => {
+  await runStep("Sort libraries descending", async () => {
     await expect(async () => {
       if ((await libraryHeaderCell.getAttribute("aria-sort")) !== "descending") {
         await librarySortLink.click();

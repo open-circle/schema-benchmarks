@@ -21,7 +21,8 @@
     "json-schema-tests:bump": "vpr --filter json-schema-tests bump:test-suite-commit",
     "postinstall": "vp config --no-agent",
     "knip": "knip",
-    "e2e": "vpr -r e2e"
+    "e2e": "vpr -r e2e",
+    "e2e:vitest": "vpr --filter website e2e:vitest"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.105.1",

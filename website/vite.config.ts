@@ -1,10 +1,12 @@
 import contentCollections from "@content-collections/vite";
 import mdx from "@mdx-js/rollup";
 import netlify from "@netlify/vite-plugin-tanstack-start";
+import { getSystemColorScheme } from "@schema-benchmarks/utils/node";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { msw } from "msw/vite";
+import { devices } from "playwright";
 import rehypeCodeProps from "rehype-mdx-code-props";
 import rehypePrism from "rehype-prism-plus";
 import rehypeSlug from "rehype-slug";
@@ -40,6 +42,7 @@ import rehypeResponsiveCode from "./vite/rehype-responsive-code.ts";
 import materialSymbols from "./vite/symbols.ts";
 
 const isStorybook = !!process.env.STORYBOOK;
+const isE2E = process.env.VITEST_E2E === "true";
 
 const config = defineConfig({
   build: {
@@ -135,6 +138,44 @@ const config = defineConfig({
       exclude: ["**/*.test.ts", "**/*.test.tsx", "**/*.test-d.ts", "**/*.test-d.tsx"],
     },
     projects: [
+      ...(isE2E
+        ? (
+            [
+              ["Desktop Chrome", "chromium", "Desktop Chrome", "!mobile"],
+              ["Desktop Firefox", "firefox", "Desktop Firefox", "!mobile"],
+              ["Desktop Safari", "webkit", "Desktop Safari", "!mobile"],
+              ["Mobile Chrome", "chromium", "Pixel 5", "!desktop"],
+              ["Mobile Safari", "webkit", "iPhone 12", "!desktop"],
+            ] as const
+          ).map(([name, browser, device, tagsFilter]) => ({
+            test: {
+              name: `e2e:${name}`,
+              environment: "node" as const,
+              include: [
+                "src/routes/_benchmarks/download/index.e2e.test.ts",
+                "src/shared/components/dialog/pref.e2e.test.ts",
+              ],
+              globalSetup: ["./e2e/setup.ts"],
+              testTimeout: 30_000,
+              hookTimeout: 30_000,
+              retry: process.env.CI ? 2 : 0,
+              maxWorkers: 1,
+              tags: [{ name: "smoke" }, { name: "desktop" }, { name: "mobile" }],
+              tagsFilter: [tagsFilter],
+              provide: {
+                e2e: {
+                  browser,
+                  contextOptions: {
+                    ...devices[device],
+                    baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3000",
+                    colorScheme: getSystemColorScheme(),
+                    serviceWorkers: "block" as const,
+                  },
+                },
+              },
+            },
+          }))
+        : []),
       {
         test: {
           name: "node",
@@ -196,6 +237,10 @@ const config = defineConfig({
       },
       e2e: {
         command: ["vpr e2e:gen-versions", "playwright test"],
+        cache: false,
+      },
+      "e2e:vitest": {
+        command: ["vpr e2e:gen-versions", "VITEST_E2E=true vp test run --project 'e2e:*'"],
         cache: false,
       },
     },

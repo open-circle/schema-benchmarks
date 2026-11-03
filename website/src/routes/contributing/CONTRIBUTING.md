@@ -52,6 +52,16 @@ The following commands will help you check your changes before opening a PR. Wit
 
 To run end-to-end tests against an existing local server on a different port, set `E2E_BASE_URL`, for example `E2E_BASE_URL=http://localhost:3001 vpr e2e`. The default is `http://localhost:3000`.
 
+### Vitest E2E Pilot
+
+The download and preferences E2E tests run in Node-based Vitest projects driving Playwright, rather than in Browser Mode. Run them with `vpr e2e:vitest`; the remaining E2E tests still use `vpr e2e`. CI runs both suites. The pilot runs its full set of scenarios on every PR, independently of the remaining suite's smoke/full selection.
+
+Build schemas and the website first with `vpr schemas:build` and `vpr website:build`. The pilot starts the production preview handler on an available port and closes it after testing. Set `E2E_BASE_URL` to use an existing server instead, or `HEADLESS=false` to watch the browser.
+
+The pilot preserves Desktop Chrome, Firefox, and Safari, plus Mobile Chrome and Safari emulation. To select a project or test, run from `website`, for example `VITEST_E2E=true vp test run --project 'e2e:Desktop Chrome' -t 'table can be sorted'`. Ordinary unit and component test runs do not include these projects.
+
+Tests keep the existing Playwright assertions and custom matchers. Each test receives a fresh browser context; failed tests save screenshots and Playwright traces under `website/test-results/vitest-e2e/`. Open a trace with `vp exec playwright show-trace <trace.zip>`.
+
 ## PRs written by AI
 
 Please do not submit PRs solely written by AI. There's nothing wrong with using an assistant to speed up the process, but you should (at the very least) always review and test the changes yourself before submitting.

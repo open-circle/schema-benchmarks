@@ -1,4 +1,4 @@
-import { ComponentObjectModel, step } from "#e2e/fixtures/base";
+import { ComponentObjectModel, test } from "#e2e/fixtures/base";
 import { expect } from "#e2e/fixtures/expect";
 import type { Style, Theme, NpmSite, Ligature } from "#src/shared/lib/prefs/constants";
 import { styleLabels, themeLabels } from "#src/shared/lib/prefs/constants";
@@ -11,20 +11,22 @@ export class PrefsDialog extends ComponentObjectModel {
   npmSiteOptions = this.dialog.getByRole("toolbar", { name: "NPM browser" });
   ligatureOptions = this.dialog.getByRole("toolbar", { name: "Code ligatures" });
 
-  @step("Open preferences dialog")
   async openDialog() {
-    await expect(async () => {
-      if (!(await this.dialog.isVisible())) {
-        await this.openButton.click();
-      }
-      await expect(this.dialog).toBeVisible({ timeout: 1_000 });
-    }).toPass({ timeout: 5_000 });
+    await test.step("Open preferences dialog", async () => {
+      await expect(async () => {
+        if (!(await this.dialog.isVisible())) {
+          await this.openButton.click();
+        }
+        await expect(this.dialog).toBeVisible({ timeout: 1_000 });
+      }).toPass({ timeout: 5_000 });
+    });
   }
 
-  @step("Close preferences dialog")
   async closeDialog() {
-    await this.page.mouse.click(0, 0);
-    await expect(this.dialog).toBeHidden();
+    await test.step("Close preferences dialog", async () => {
+      await this.page.mouse.click(0, 0);
+      await expect(this.dialog).toBeHidden();
+    });
   }
 
   async getStyleOption(style: Style) {

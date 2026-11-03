@@ -1,6 +1,7 @@
-import { test, type Locator, type Page } from "@playwright/test";
+import { AsyncLocalStorage } from "node:async_hooks";
+
+import { test as pwTest, type Locator, type Page } from "@playwright/test";
 import type { Tail } from "@schema-benchmarks/utils";
-import { lazy } from "@schema-benchmarks/utils";
 
 import { expect } from "#e2e/fixtures/expect";
 
@@ -50,44 +51,42 @@ export abstract class TabObjectModel<
 
   abstract tabName: string;
 
-  @lazy
   get tabLink() {
     return this.parent.tabs.getByRole("tab", { name: this.tabName });
   }
 
-  @lazy
   get tabPanel() {
     return this.page.getByRole("tabpanel", { name: this.tabName, includeHidden: true });
   }
 
-  @step(({ tabName }) => `Select ${tabName} tab`)
   async select() {
-    await this.tabLink.click();
-    await expect(this.page).toHaveURL((url) => this.matchesUrl(url), { timeout: 15_000 });
-    await expect(this.tabLink).toHaveAttribute("aria-selected", "true", { timeout: 15_000 });
-    await expect(this.tabPanel).toBeVisible({ timeout: 15_000 });
+    await test.step(`Select ${this.tabName} tab`, async () => {
+      await this.tabLink.click();
+      await expect(this.page).toHaveURL((url) => this.matchesUrl(url), { timeout: 15_000 });
+      await expect(this.tabLink).toHaveAttribute("aria-selected", "true", { timeout: 15_000 });
+      await expect(this.tabPanel).toBeVisible({ timeout: 15_000 });
+    });
   }
 }
 
-type StepOptions = Parameters<typeof test.step>[2];
+type StepOptions = Parameters<typeof pwTest.step>[2];
 
-export function step<TThis>(
-  title: string | ((this: TThis, target: TThis) => string),
+export const stepContext = new AsyncLocalStorage<(title: string) => Promise<void>>();
+
+export async function runStep<Result>(
+  title: string,
+  body: () => Promise<Result>,
   options?: StepOptions,
-) {
-  return function decorator<TArgs extends Array<any>, TReturn>(
-    target: (this: TThis, ...args: TArgs) => Promise<TReturn>,
-    _context: ClassMethodDecoratorContext<TThis, (this: TThis, ...args: TArgs) => Promise<TReturn>>,
-  ) {
-    return function decoratedFunction(this: TThis, ...args: TArgs): Promise<TReturn> {
-      return test.step(
-        typeof title === "function" ? title.call(this, this) : title,
-        () => target.apply(this, args),
-        options,
-      );
-    };
-  };
+): Promise<Result> {
+  const annotate = stepContext.getStore();
+  if (annotate) {
+    await annotate(title);
+    return body();
+  }
+  return pwTest.step(title, body, options);
 }
+
+export const test = { step: runStep };
 
 export function withFilters<
   Constructor extends abstract new (...args: Array<any>) => ComponentObjectModel,
