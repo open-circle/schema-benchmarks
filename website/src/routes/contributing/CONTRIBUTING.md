@@ -46,21 +46,21 @@ The following commands will help you check your changes before opening a PR. Wit
 
 - `vp check` - runs formatting, lint, and type checks
 - `vpr typecheck` - runs TypeScript project checks
-- `vpr test` - runs unit and integration tests
-- `vpr e2e` - runs end-to-end tests
+- `vpr test` - runs all package tests, including website E2E tests
+- `vp -C website test --project 'e2e:*'` - runs end-to-end tests
 - `vpr bench:all` - runs all benchmark suites
 
-To run end-to-end tests against an existing local server, set `E2E_BASE_URL`, for example `E2E_BASE_URL=http://localhost:3001 vpr e2e`. Otherwise, the tests start the built website on an available port.
+To run end-to-end tests against an existing local server, set `E2E_BASE_URL`, for example `E2E_BASE_URL=http://localhost:3001 vp -C website test --project 'e2e:*'`. Otherwise, the tests start the built website on an available port.
 
 ### End-to-End Tests
 
-All E2E tests run in Node-based Vitest projects driving Playwright, rather than in Browser Mode. Run them with `vpr e2e`; `vpr e2e:vitest` is an alias for the same suite.
+All E2E tests run in Node-based Vitest projects driving Playwright, rather than in Browser Mode. `vp -C website test` includes Node, browser, type, and E2E tests by default. Run only E2E tests with `vp -C website test --project 'e2e:*'`. Use `vp -C website test --project '!e2e:*'` to omit E2E tests.
 
-Build schemas and the website first with `vpr schemas:build` and `vpr website:build`. Each E2E project starts the production preview handler on an available port and closes it after testing. Set `E2E_BASE_URL` to use an existing server instead, or `HEADLESS=false` to watch the browser. The E2E task regenerates library-version expectations from the installed schemas package; benchmark data must also match those library versions.
+Build schemas and the website first with `vpr schemas:build` and `vpr website:build`. Each E2E project starts the production preview handler on an available port and closes it after testing. Set `E2E_BASE_URL` to use an existing server instead, or `HEADLESS=false` to watch the browser. E2E setup regenerates library-version expectations from the installed schemas package; benchmark data must also match those library versions.
 
-The suite covers Desktop Chrome, Firefox, and Safari, plus Mobile Chrome and Safari emulation. Mark device-specific suites with `{ tags: ["desktop"] }` or `{ tags: ["mobile"] }`. To select a project or test, run from `website`, for example `VITEST_E2E=true vp test run --project 'e2e:Desktop Chrome' -t 'table can be sorted'`. Ordinary unit and component test runs do not include these projects.
+The suite covers Desktop Chrome, Firefox, and Safari, plus Mobile Chrome and Safari emulation. Mark device-specific suites with `{ tags: ["desktop"] }` or `{ tags: ["mobile"] }`. To select a project or test, run `vp -C website test run --project 'e2e:Desktop Chrome' -t 'table can be sorted'`.
 
-Use `E2E_TAGS=smoke vpr e2e` for smoke tests and `E2E_TAGS='!smoke' vpr e2e` for the remaining scenarios. This filter is combined with each project's desktop/mobile filter. CI always runs smoke tests and runs the rest on main-branch pushes, Dependabot PRs, or PRs with the `full e2e` label.
+Use `E2E_TAGS=smoke vp -C website test --project 'e2e:*'` for smoke tests and `E2E_TAGS='!smoke' vp -C website test --project 'e2e:*'` for the remaining scenarios. Add `run` (`vp -C website test run --project 'e2e:*'`) for a single non-watch run. The tag filter is combined with each project's desktop/mobile filter. CI always runs smoke tests and runs the rest on main-branch pushes, Dependabot PRs, or PRs with the `full e2e` label.
 
 Tests keep the existing Playwright assertions and custom matchers. Each test receives a fresh browser context; failed tests save screenshots and Playwright traces under `website/test-results/vitest-e2e/`. Open a trace with `vp exec playwright show-trace <trace.zip>`.
 

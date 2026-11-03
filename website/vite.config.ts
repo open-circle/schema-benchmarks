@@ -42,7 +42,6 @@ import rehypeResponsiveCode from "./vite/rehype-responsive-code.ts";
 import materialSymbols from "./vite/symbols.ts";
 
 const isStorybook = !!process.env.STORYBOOK;
-const isE2E = process.env.VITEST_E2E === "true";
 
 const config = defineConfig({
   build: {
@@ -130,7 +129,7 @@ const config = defineConfig({
     msw(),
   ]),
   test: {
-    ...(isE2E ? { maxWorkers: "50%" as const } : {}),
+    maxWorkers: "50%",
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "lcov"],
@@ -139,41 +138,39 @@ const config = defineConfig({
       exclude: ["**/*.test.ts", "**/*.test.tsx", "**/*.test-d.ts", "**/*.test-d.tsx"],
     },
     projects: [
-      ...(isE2E
-        ? (
-            [
-              ["Desktop Chrome", "chromium", "Desktop Chrome", "!mobile"],
-              ["Desktop Firefox", "firefox", "Desktop Firefox", "!mobile"],
-              ["Desktop Safari", "webkit", "Desktop Safari", "!mobile"],
-              ["Mobile Chrome", "chromium", "Pixel 5", "!desktop"],
-              ["Mobile Safari", "webkit", "iPhone 12", "!desktop"],
-            ] as const
-          ).map(([name, browser, device, tagsFilter]) => ({
-            test: {
-              name: `e2e:${name}`,
-              environment: "node" as const,
-              isolate: false,
-              include: ["src/**/*.e2e.test.ts"],
-              globalSetup: ["./e2e/setup.ts"],
-              testTimeout: 30_000,
-              hookTimeout: 30_000,
-              retry: process.env.CI ? 2 : 0,
-              tags: [{ name: "smoke" }, { name: "desktop" }, { name: "mobile" }],
-              tagsFilter: [tagsFilter, ...(process.env.E2E_TAGS ? [process.env.E2E_TAGS] : [])],
-              provide: {
-                e2e: {
-                  browser,
-                  contextOptions: {
-                    ...devices[device],
-                    baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3000",
-                    colorScheme: getSystemColorScheme(),
-                    serviceWorkers: "block" as const,
-                  },
-                },
+      ...(
+        [
+          ["Desktop Chrome", "chromium", "Desktop Chrome", "!mobile"],
+          ["Desktop Firefox", "firefox", "Desktop Firefox", "!mobile"],
+          ["Desktop Safari", "webkit", "Desktop Safari", "!mobile"],
+          ["Mobile Chrome", "chromium", "Pixel 5", "!desktop"],
+          ["Mobile Safari", "webkit", "iPhone 12", "!desktop"],
+        ] as const
+      ).map(([name, browser, device, tagsFilter]) => ({
+        test: {
+          name: `e2e:${name}`,
+          environment: "node" as const,
+          isolate: false,
+          include: ["src/**/*.e2e.test.ts"],
+          globalSetup: ["./e2e/setup.ts"],
+          testTimeout: 30_000,
+          hookTimeout: 30_000,
+          retry: process.env.CI ? 2 : 0,
+          tags: [{ name: "smoke" }, { name: "desktop" }, { name: "mobile" }],
+          tagsFilter: [tagsFilter, ...(process.env.E2E_TAGS ? [process.env.E2E_TAGS] : [])],
+          provide: {
+            e2e: {
+              browser,
+              contextOptions: {
+                ...devices[device],
+                baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3000",
+                colorScheme: getSystemColorScheme(),
+                serviceWorkers: "block" as const,
               },
             },
-          }))
-        : []),
+          },
+        },
+      })),
       {
         test: {
           name: "node",
@@ -231,14 +228,6 @@ const config = defineConfig({
       },
       dev: {
         command: ["vpr copy-results", "vp dev --port 3000"],
-        cache: false,
-      },
-      e2e: {
-        command: ["vpr e2e:gen-versions", "VITEST_E2E=true vp test run --project 'e2e:*'"],
-        cache: false,
-      },
-      "e2e:vitest": {
-        command: "vpr e2e",
         cache: false,
       },
     },

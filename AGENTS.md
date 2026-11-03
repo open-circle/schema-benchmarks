@@ -6,8 +6,8 @@ Use Vite+ (`vp`) for project commands and package management. Use `vpr <script-o
 
 - `vp check` runs formatting, lint, and type checks; use `vp lint --format=github` for GitHub Actions annotations.
 - `vpr typecheck` runs the workspace TypeScript checks.
-- `vpr test` runs unit and integration tests.
-- `vpr e2e` runs Playwright end-to-end tests.
+- `vpr test` runs all package tests, including website end-to-end tests.
+- `vp -C website test --project 'e2e:*'` runs end-to-end tests across all browser projects.
 - `vpr schemas:build` builds the schemas package.
 - `vpr bench:all` runs all benchmark suites through Vite Task.
 - `vpr website:dev` starts the website locally.

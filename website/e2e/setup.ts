@@ -3,6 +3,8 @@ import { staticMiddleware } from "srvx/static";
 import type { TestProject } from "vite-plus/test/node";
 
 export default async function setup(project: TestProject) {
+  await import("./scripts/gen-library-versions.ts");
+
   if (process.env.E2E_BASE_URL) {
     const response = await fetch(process.env.E2E_BASE_URL, { signal: AbortSignal.timeout(10_000) });
     if (!response.ok) throw new Error(`E2E server returned ${response.status}`);

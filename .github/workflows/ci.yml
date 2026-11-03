@@ -93,7 +93,7 @@ jobs:
       - name: Install Playwright browsers
         run: vp exec playwright install --no-shell chromium
       - name: Test
-        run: vpr test
+        run: vpr test --project '!e2e:*'
   e2e:
     runs-on: ubuntu-latest
     needs: build
@@ -118,7 +118,7 @@ jobs:
       - name: E2E Smoke tests
         env:
           E2E_TAGS: smoke
-        run: vpr e2e
+        run: vp -C website test run --project 'e2e:*'
       - name: E2E Full tests
         if: >-
           github.event_name == 'push' ||
@@ -126,7 +126,7 @@ jobs:
           contains(github.event.pull_request.labels.*.name, 'full e2e')
         env:
           E2E_TAGS: "!smoke"
-        run: vpr e2e
+        run: vp -C website test run --project 'e2e:*'
       - name: Upload Vitest E2E failure artifacts
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ !cancelled() }}
