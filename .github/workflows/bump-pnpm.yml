@@ -40,7 +40,7 @@ jobs:
 
             const ignore = new Set(["created", "modified"]);
             const versions = Object.entries(time)
-              .filter(([version]) => !ignore.has(version) && !version.includes("-"))
+              .filter(([version]) => !ignore.has(version) && !version.includes("-") && version.startsWith("12."))
               .map(([version, publishedAt]) => ({
                 version,
                 publishedAt: new Date(publishedAt),
