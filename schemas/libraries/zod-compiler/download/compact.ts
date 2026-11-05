@@ -1,3 +1,3 @@
-import { compiledProductSchema } from "../compiled/compact/index.mjs";
+import { compiledProductSchema } from "../compiled/compact/mini.mjs";
 
 compiledProductSchema.parse({});
