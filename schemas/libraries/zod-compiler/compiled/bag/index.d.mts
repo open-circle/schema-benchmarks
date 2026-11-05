@@ -1,4 +1,5 @@
 import * as z from "zod";
+import "zod/mini";
 interface SafeParseSuccess<T> {
   success: true;
   data: T;

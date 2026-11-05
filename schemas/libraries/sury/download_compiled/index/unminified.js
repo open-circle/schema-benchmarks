@@ -1,12 +1,36 @@
-// ../node_modules/.pnpm/sury@11.0.0/node_modules/sury/index.mjs
+// ../node_modules/.pnpm/sury@11.1.0/node_modules/sury/index.mjs
 var pathEmpty = [];
-var pathDynamic = ["[]"];
+var hasPathDyn = (path) => {
+	for (let i = 0; i < path.length; i++) if (typeof path[i] === "object") return true;
+	return false;
+};
 var inlineUnsafeRe = /["\\\n\r]/;
 var inlinedValueFromString = (str) => inlineUnsafeRe.test(str) ? JSON.stringify(str) : `"${str}"`;
 var jsIdentRe = /^[A-Za-z_$][\w$]*$/;
 var inlinedObjectKey = (key) => key === "__proto__" ? "[\"__proto__\"]" : jsIdentRe.test(key) ? key : inlinedValueFromString(key);
 var inlinedProperty = (obj, key, numeric) => numeric && /^\d+$/.test(key) ? `${obj}[${key}]` : key === "__proto__" || !jsIdentRe.test(key) ? `${obj}[${inlinedValueFromString(key)}]` : `${obj}.${key}`;
-var pathConcat = /* @__NO_SIDE_EFFECTS__ */ (path, concatedPath) => path.length ? concatedPath.length ? path.concat(concatedPath) : path : concatedPath;
+function pathConcat(path, concatedPath) {
+	return path.length ? concatedPath.length ? path.concat(concatedPath) : path : concatedPath;
+}
+var pathExpr = (path, rest) => {
+	let out = "[";
+	for (let i = 0; i < path.length; i++) {
+		if (i) out += ",";
+		const s2 = path[i];
+		out += typeof s2 === "object" ? s2.e : typeof s2 === "string" ? inlinedValueFromString(s2) : s2;
+	}
+	if (rest) out += (path.length ? "," : "") + rest;
+	return out + "]";
+};
+var compilePath = (path) => {
+	if (!hasPathDyn(path)) return path;
+	const out = [];
+	for (let i = 0; i < path.length; i++) {
+		const s2 = path[i];
+		out.push(typeof s2 === "object" ? "[]" : s2);
+	}
+	return out;
+};
 var pathToText = /* @__NO_SIDE_EFFECTS__ */ (path) => {
 	let text = "";
 	for (let idx = 0; idx < path.length; idx++) {
@@ -58,22 +82,22 @@ var immutableEmptyObject = /* @__PURE__ */ Object.create(null);
 var isSchemaObject = (obj) => typeof obj === objectTag && obj !== null && "~standard" in obj;
 var isLiteral = (schema) => "const" in schema;
 var isOptional = (schema) => schema.type === undefinedTag || schema.type === anyOfTag && undefinedTag in schema.has;
-var namedConstructor = (unknown2) => {
-	const ctor = Object.getPrototypeOf(unknown2)?.constructor;
+var namedConstructor = (unknown3) => {
+	const ctor = Object.getPrototypeOf(unknown3)?.constructor;
 	return ctor !== Object && ctor?.name;
 };
-var stringifyLeaf = (unknown2) => {
-	const tagFlag = tagFlags[typeof unknown2];
+var stringifyLeaf = (unknown3) => {
+	const tagFlag = tagFlags[typeof unknown3];
 	if (tagFlag & 16) return undefinedTag;
-	else if (tagFlag & 4160) return unknown2 === null ? nullTag : Array.isArray(unknown2) ? `Array(${unknown2.length})` : namedConstructor(unknown2) || objectTag;
-	else if (tagFlag & 2) return `"${unknown2}"`;
-	else if (tagFlag & 1024) return `${unknown2}n`;
-	else return unknown2.toString();
+	else if (tagFlag & 4160) return unknown3 === null ? nullTag : Array.isArray(unknown3) ? `Array(${unknown3.length})` : namedConstructor(unknown3) || objectTag;
+	else if (tagFlag & 2) return `"${unknown3}"`;
+	else if (tagFlag & 1024) return `${unknown3}n`;
+	else return unknown3.toString();
 };
-var stringify = (unknown2) => {
-	if (unknown2 !== null && typeof unknown2 === objectTag) {
-		if (Array.isArray(unknown2)) {
-			const items = unknown2;
+var stringify = (unknown3) => {
+	if (unknown3 !== null && typeof unknown3 === objectTag) {
+		if (Array.isArray(unknown3)) {
+			const items = unknown3;
 			let body = "";
 			for (let idx = 0; idx < items.length; idx++) {
 				if (idx === 5) {
@@ -84,8 +108,8 @@ var stringify = (unknown2) => {
 			}
 			return `[${body}]`;
 		}
-		if (!namedConstructor(unknown2)) {
-			const dict2 = unknown2;
+		if (!namedConstructor(unknown3)) {
+			const dict2 = unknown3;
 			let body = "";
 			let count = 0;
 			for (const key in dict2) {
@@ -98,24 +122,18 @@ var stringify = (unknown2) => {
 			return body ? `{ ${body}}` : "{}";
 		}
 	}
-	return stringifyLeaf(unknown2);
+	return stringifyLeaf(unknown3);
 };
 var inputExpression = /* @__NO_SIDE_EFFECTS__ */ (schema, skipOverride) => {
 	if (schema.name) return schema.name;
 	else if (schema.const !== U) return stringify(schema.const);
 	else if (schema.expression && !skipOverride) return schema.expression(schema);
 	else if (schema.anyOf !== U) {
-		const anyOf = schema.anyOf;
 		const seen = /* @__PURE__ */ new Set();
-		let body = "";
-		for (let idx = 0; idx < anyOf.length; idx++) {
-			const expression = /* @__PURE__ */ inputExpression(anyOf[idx]);
-			if (!seen.has(expression)) {
-				seen.add(expression);
-				body += (body ? " | " : "") + expression;
-			}
-		}
-		return body;
+		const add = (s2) => s2.anyOf !== U && !s2.name && !s2.expression ? s2.anyOf.forEach(add) : seen.add(/* @__PURE__ */ inputExpression(s2));
+		schema.anyOf.forEach(add);
+		for (const e of ["null", "undefined"]) seen.delete(e) && seen.add(e);
+		return [...seen].join(" | ");
 	} else if (schema.type === objectTag) {
 		const properties = schema.properties;
 		const additionalItems = schema.additionalItems;
@@ -128,7 +146,7 @@ var inputExpression = /* @__NO_SIDE_EFFECTS__ */ (schema, skipOverride) => {
 		if (typeof additionalItems === objectTag) {
 			const item = additionalItems;
 			const itemName = /* @__PURE__ */ inputExpression(item);
-			return (item.type === anyOfTag || item.bounds !== U || item.multipleOf !== U ? `(${itemName})` : itemName) + "[]";
+			return (item.type === anyOfTag || item.flags & 30720 || item.multipleOf !== U ? `(${itemName})` : itemName) + "[]";
 		}
 		const items = schema.items;
 		let body = "";
@@ -143,6 +161,10 @@ var schemaPrototype = /* @__PURE__ */ Object.create(null);
 Object.defineProperty(schemaPrototype, "with", { value(fn, ...args) {
 	return fn(this, ...args);
 } });
+Object.defineProperty(schemaPrototype, "flags", {
+	value: 0,
+	writable: true
+});
 Schema.prototype = schemaPrototype;
 var reversedKey = "r";
 var SelfReverseSchema = function() {};
@@ -159,10 +181,12 @@ var isOwnSchema = (value) => {
 var panicNotSchema = () => panic("Expected a Sury schema");
 var seq = 1;
 var exnId = {};
+var constructed = /* @__PURE__ */ new WeakSet();
 var SuryError = class extends Error {
 	constructor(params) {
 		super();
 		Object.assign(this, params);
+		constructed.add(this);
 	}
 	get message() {
 		return formatErrorMessage(this);
@@ -174,8 +198,80 @@ var SuryError = class extends Error {
 		return exnId;
 	}
 };
-Object.defineProperty(SuryError.prototype, "name", { value: "SuryError" });
-Object.defineProperty(SuryError.prototype, "s", { value: s });
+var errorPrototype = SuryError.prototype;
+Object.defineProperty(errorPrototype, "name", { value: "SuryError" });
+Object.defineProperty(errorPrototype, "s", { value: s });
+var toError = (details) => details.s === s ? details : Object.setPrototypeOf(details, errorPrototype);
+var renderReason = (error, expectedExpression) => {
+	const receivedExpression = stringify(error.input);
+	let reason = `Expected ${expectedExpression}, received ${expectedExpression === receivedExpression ? "invalid " : ""}${receivedExpression}`;
+	const unionErrors = error.unionErrors;
+	if (unionErrors) {
+		const seenReasons = /* @__PURE__ */ new Set();
+		for (let idx = 0; idx < unionErrors.length; idx++) {
+			const caseError = unionErrors[idx];
+			const line = `
+- ${caseError.path.length ? `At ${/* @__PURE__ */ pathToText(caseError.path)}: ` : ""}${caseError.reason.split("\n").join("\n  ")}`;
+			if (!seenReasons.has(line)) {
+				seenReasons.add(line);
+				reason += line;
+			}
+		}
+	}
+	return reason;
+};
+var reasonSet = function(reason) {
+	Object.defineProperty(this, "reason", {
+		value: reason,
+		configurable: true,
+		enumerable: true,
+		writable: true
+	});
+};
+Object.defineProperty(errorPrototype, "reason", {
+	configurable: true,
+	set: reasonSet,
+	get() {
+		return renderReason(this, /* @__PURE__ */ inputExpression(this.expected));
+	}
+});
+var sitePrototype = Object.create(errorPrototype);
+Object.defineProperty(sitePrototype, "reason", {
+	configurable: true,
+	set: reasonSet,
+	get() {
+		let site = Object.getPrototypeOf(this);
+		if (Object.hasOwn(this, "cause") && this.cause === site) site = Object.getPrototypeOf(site);
+		return renderReason(this, site.expectedExpression ?? (site.expectedExpression = /* @__PURE__ */ inputExpression(site.expected)));
+	}
+});
+var errorSite = (expected, received, reasonOverride) => {
+	const site = Object.create(sitePrototype);
+	site.expected = expected;
+	site.received = received;
+	if (reasonOverride !== U) site.reason = reasonOverride;
+	return site;
+};
+var conversionPrototype = Object.create(errorPrototype);
+Object.defineProperty(conversionPrototype, "reason", {
+	value: U,
+	writable: true,
+	enumerable: true
+});
+var conversionSite = (from, to2) => {
+	const site = Object.create(conversionPrototype);
+	site.from = from;
+	site.to = to2;
+	return site;
+};
+var errorAt = (site, path, input, unionErrors) => {
+	const error = Object.create(site);
+	error.code = "invalid_input";
+	error.path = path;
+	error.input = input;
+	if (unionErrors) error.unionErrors = unionErrors;
+	return error;
+};
 var getOrRethrow = (exn) => {
 	if (exn && exn.s === s) return exn;
 	throw exn;
@@ -185,8 +281,6 @@ var panic = (message) => {
 };
 var formatErrorMessage = (error) => `${error.path.length ? `Failed at ${/* @__PURE__ */ pathToText(error.path)}: ` : ""}${error.reason}`;
 var globalConfig = {
-	m: formatErrorMessage,
-	d: U,
 	a: "strip",
 	f: 0
 };
@@ -209,22 +303,12 @@ var unknown = baseSchema(unknownTag, true, noopDecoder);
 var copySchema = (schema) => {
 	const c = Object.assign(new Schema(), schema);
 	c.seq = seq++;
-	if (schema.content !== U) setContent(c, schema.content);
-	if (schema.bc !== U) setBytesCodec(c, schema.bc);
 	return c;
 };
 var copyTo = (from, to2) => {
 	const mut = copySchema(from);
 	mut.to = to2;
 	return mut;
-};
-var setContent = (schema, content) => {
-	valueOptions[valKey] = content;
-	Object.defineProperty(schema, "content", valueOptions);
-};
-var setBytesCodec = (schema, codec) => {
-	valueOptions[valKey] = codec;
-	Object.defineProperty(schema, "bc", valueOptions);
 };
 var updateOutput = (schema, fn) => {
 	const root = copySchema(schema);
@@ -237,8 +321,9 @@ var updateOutput = (schema, fn) => {
 	fn(mut);
 	return root;
 };
-var setHas = (has, tag) => {
-	has[tagFlags[tag] & 768 ? unknownTag : tag] = true;
+var setHas = (has, member) => {
+	if (member.has) Object.assign(has, member.has);
+	else has[tagFlags[member.type] & 768 ? unknownTag : member.type] = true;
 };
 function _var() {
 	return this.i;
@@ -249,7 +334,7 @@ var _linkVar = function() {
 function _notVarBeforeValidation() {
 	const val = this;
 	const v = B_varWithoutAllocation(val.g);
-	val.cp = `let ${v}=${val.i};`;
+	val.cp = B_let(val.g, v, val.i, val);
 	val.i = v;
 	val.v = _var;
 	return v;
@@ -262,7 +347,7 @@ function _notVarAtParent() {
 		return val.i;
 	}
 	const v = B_varWithoutAllocation(val.g);
-	B_hoistDecl(parent, `${v}=${val.i}`);
+	B_hoistDecl(parent, v, val.i);
 	val.v = _var;
 	val.i = v;
 	return v;
@@ -276,9 +361,9 @@ function _notVar() {
 	}
 	const v = B_varWithoutAllocation(val.g);
 	if (val.prev !== U) {
-		if (val.i === "") val.cp = `let ${v};` + val.cp;
-		else val.cp += `let ${v}=${val.i};`;
-	} else B_hoistDecl(val, val.i === "" ? v : `${v}=${val.i}`);
+		if (val.i === "") val.cp = B_let(val.g, v, U, val) + val.cp;
+		else val.cp += B_let(val.g, v, val.i, val);
+	} else B_hoistDecl(val, v, val.i === "" ? U : val.i);
 	val.v = _var;
 	val.i = v;
 	return v;
@@ -295,10 +380,27 @@ var B_inlineConst = (b, schema) => {
 	return tagFlag & 16 ? "void 0" : tagFlag & 2 ? inlinedValueFromString(const_) : tagFlag & 1024 ? const_ + "n" : tagFlag & 28672 ? B_embedPure(b, schema.const) : const_;
 };
 var B_varWithoutAllocation = (g) => `v${++g.v}`;
-var B_hoistDecl = (owner, decl) => {
-	owner.hd += (owner.hd && ",") + decl;
+var B_let = (g, name, init, owner) => {
+	if (!g.c) return `let ${name}${init === U ? "" : `=${init}`};`;
+	(owner ? owner.hn || (owner.hn = []) : g.l).push(name);
+	return init === U ? "" : `${name}=${init};`;
 };
-var B_operationArg = (schema, expected, flag, defs) => {
+var B_sink = (g, emit) => {
+	const outer = g.l;
+	if (!outer) return emit();
+	const l = g.l = [];
+	try {
+		const code = emit();
+		return code && l.length ? `let ${[...new Set(l)]};${code}` : code;
+	} finally {
+		g.l = outer;
+	}
+};
+var B_hoistDecl = (owner, name, init) => {
+	if (owner.g.c) owner.ha = (owner.ha || "") + B_let(owner.g, name, init, owner);
+	else owner.hd += (owner.hd && ",") + (init === U ? name : `${name}=${init}`);
+};
+var B_operationArg = (schema, expected, flag) => {
 	return {
 		b: U,
 		p: U,
@@ -312,6 +414,8 @@ var B_operationArg = (schema, expected, flag, defs) => {
 		d: U,
 		fv: U,
 		cp: "",
+		fu: U,
+		fs: U,
 		hd: "",
 		fz: U,
 		vc: U,
@@ -319,95 +423,145 @@ var B_operationArg = (schema, expected, flag, defs) => {
 		t: U,
 		path: pathEmpty,
 		g: {
-			d: defs,
 			o: flag,
 			e: [],
 			v: -1,
-			t: 0
+			t: 0,
+			j: 0,
+			x: U
 		},
 		o: U
 	};
 };
 var B_throw = (errorDetails) => {
-	throw new SuryError(errorDetails);
+	throw toError(errorDetails);
 };
 var B_unsupportedDecode = (b, from, target) => B_throw({
 	code: "unsupported_decode",
 	from,
 	to: target,
 	reason: `Can't decode ${/* @__PURE__ */ inputExpression(from)} -> ${/* @__PURE__ */ inputExpression(target)}. Define custom codec with S.to`,
-	path: b.path
+	path: compilePath(b.path)
 });
-var B_failWithArg = (b, fn, arg) => `${B_embed(b, (a) => {
-	B_throw(fn(a));
-})}(${arg})`;
+var B_pathArg = (b) => hasPathDyn(b.path) ? "," + pathExpr(b.path) : "";
+var B_pathSnap = (b) => hasPathDyn(b.path) ? U : b.path;
+var B_fail = (b, fn, arg, cond) => {
+	const exit = b.g.x;
+	let jump;
+	if (exit) {
+		const path = B_pathArg(b);
+		let embedded = "";
+		jump = exit((unbuilt) => `${embedded || (embedded = B_embedPure(b, fn))}${unbuilt ? `,${arg}${path}` : `(${arg}${path})`}`);
+	}
+	if (jump === U) {
+		const raise = B_failWithArg(b, fn, arg);
+		return cond ? `${cond}||${raise};` : raise;
+	}
+	b.g.j++;
+	return cond ? `if(!(${cond}))${jump}${jump[0] === "{" ? "" : ";"}` : jump;
+};
+var B_childExit = (g, label) => {
+	const exit = ((record) => {
+		const jump = `break ${label.l || (label.l = `c${++g.v}`)}`;
+		if (!record) return jump;
+		g.kj = (g.kj || 0) + 1;
+		return `{${g.k}=[${g.k},${record(true)}];${jump}}`;
+	});
+	exit.k = 1;
+	return exit;
+};
+var B_collects = (g) => {
+	const k = g.x?.k;
+	return typeof k === "function" ? k() : !!k;
+};
+var B_child = (g, emit) => {
+	const x = g.x;
+	const y = g.y;
+	const raises = g.t;
+	const label = {};
+	g.x = B_childExit(g, label);
+	g.y = () => `break ${label.l || (label.l = `c${++g.v}`)}`;
+	g.c = (g.c || 0) + 1;
+	try {
+		emit();
+	} finally {
+		g.x = x;
+		g.y = y;
+		g.c--;
+	}
+	return (code, val) => {
+		if (!code) return code;
+		if (g.t !== raises) {
+			g.kj = (g.kj || 0) + 1;
+			const e = B_varWithoutAllocation(g);
+			const errorOf = B_errorOf(val);
+			code = `try{${code}}catch(${e}){${g.k}=${B_embedPure(val, (list2, thrown) => thrown?.t === settledTag ? list2 : [list2, errorOf(thrown)])}(${g.k},${e})}`;
+		}
+		return label.l ? `${label.l}:{${code}}` : code;
+	};
+};
+var B_block = (statement) => statement[0] === "{" ? statement : `{${statement}}`;
+var B_detached = (g, body) => {
+	const x = g.x, y = g.y;
+	g.x = g.y = U;
+	try {
+		return B_sink(g, body);
+	} finally {
+		g.x = x;
+		g.y = y;
+	}
+};
+var B_then = (param, body, ret) => (settle2) => `${param}=>{${settle2 ? `try{${body}}catch(x){return ${settle2}(x)}` : body}return ${ret}}`;
+Promise.prototype.then;
+var B_raiser = (b, fn) => B_embed(b, (a, p) => {
+	B_throw(fn(a, p));
+});
+var B_failWithArg = (b, fn, arg) => `${B_raiser(b, fn)}(${arg}${B_pathArg(b)})`;
 var B_markThrow = (b) => {
 	b.g.t++;
 };
-var B_foreignDetails = (input, to2, cause) => ({
-	code: "invalid_conversion",
-	from: input.s,
-	to: to2,
-	cause,
-	path: input.path,
-	reason: cause instanceof Error ? ("" + cause).replace(/^Error: /, "") : stringify(cause)
-});
+var B_foreignFail = (input, to2) => {
+	let site;
+	return (cause, path) => {
+		const error = Object.create(site ?? (site = conversionSite(input.s, to2)));
+		error.code = "invalid_conversion";
+		error.path = path;
+		error.cause = cause;
+		error.reason = cause instanceof Error ? ("" + cause).replace(/^Error: /, "") : stringify(cause);
+		return error;
+	};
+};
 var B_errorOf = (input) => {
 	let to2 = input.e;
 	while (to2.to) to2 = to2.to;
-	return (e) => e && e.s === s ? e : new SuryError(B_foreignDetails(input, to2, e));
-};
-var B_makeInvalidInputDetails = (expected, received, path, input, unionErrors, reasonOverride) => {
-	let reasonRef = reasonOverride;
-	if (reasonRef === U) {
-		const expectedExpression = /* @__PURE__ */ inputExpression(expected);
-		const receivedExpression = stringify(input);
-		reasonRef = `Expected ${expectedExpression}, received ${expectedExpression === receivedExpression ? "invalid " : ""}${receivedExpression}`;
-	}
-	if (unionErrors) {
-		const seenReasons = /* @__PURE__ */ new Set();
-		for (let idx = 0; idx < unionErrors.length; idx++) {
-			const caseError = unionErrors[idx];
-			const line = `
-- ${caseError.path.length ? `At ${/* @__PURE__ */ pathToText(caseError.path)}: ` : ""}${caseError.reason.split("\n").join("\n  ")}`;
-			if (!seenReasons.has(line)) {
-				seenReasons.add(line);
-				reasonRef += line;
-			}
-		}
-	}
-	return {
-		code: "invalid_input",
-		expected,
-		received,
-		path,
-		reason: reasonRef,
-		unionErrors,
-		input
-	};
+	const foreign = B_foreignFail(input, to2);
+	const path = compilePath(input.path);
+	return (e) => e && e.s === s ? e : toError(foreign(e, path));
 };
 var B_invalidInputBuilder = (expected, extraPath = pathEmpty, reasonOverride) => (input) => {
-	const path = /* @__PURE__ */ pathConcat(input.path, extraPath);
-	return (value) => B_makeInvalidInputDetails(expected ?? input.e, (input.prev || input).s, path, value, U, reasonOverride);
+	const snap = B_pathSnap(input);
+	const staticPath = snap !== U ? pathConcat(snap, extraPath) : U;
+	let site;
+	return (value, path) => errorAt(site ?? (site = errorSite(expected ?? input.e, (input.prev || input).s, reasonOverride)), staticPath ?? pathConcat(path ?? pathEmpty, extraPath), value);
 };
 var B_failWithErrorMessage = (key, defaultMessage) => (input) => {
 	const em = input.e.errorMessage;
 	const m = em?.[key] ?? em?.["_"] ?? defaultMessage;
 	return m !== U ? B_invalidInputBuilder(U, U, m)(input) : failInvalidType(input);
 };
-var B_embedInvalidInput = (input, expected = input.e) => B_failWithArg(input, B_invalidInputBuilder(expected)(input), input.v());
+var B_failInvalidInput = (input, expected = input.e, cond) => B_fail(input, B_invalidInputBuilder(expected)(input), input.v(), cond);
 var B_emitChecks = (val, inputVar) => {
 	const checks = val.vc;
 	let out = "", i = 0, len = checks.length;
 	while (i < len) {
-		const head = checks[i], fail = head.f;
+		const head = checks[i], fail2 = head.f;
 		let cond = head.c(inputVar);
 		i++;
-		while (i < len && checks[i].f === fail) {
+		while (i < len && checks[i].f === fail2) {
 			cond += "&&" + checks[i].c(inputVar);
 			i++;
 		}
-		out += `${cond}||${B_failWithArg(val, fail(val), inputVar)};`;
+		out += B_fail(val, fail2(val), inputVar, cond);
 	}
 	return out;
 };
@@ -418,7 +572,7 @@ var B_merge = (val, out) => {
 		current = val2.prev;
 		let currentCode = "";
 		if (val2.vc) {
-			if (out && (!val2.t || !val2.prev.t && val2.cp === "")) {
+			if (out && (!val2.t || val2.cp === "" && val2.prev !== U && (!val2.prev.t || val2.prev.w))) {
 				const inputVar = (current || val2).v();
 				const checks = val2.vc;
 				let hoisted = "";
@@ -426,7 +580,7 @@ var B_merge = (val, out) => {
 					const check = checks[i];
 					const condCode = check.c(inputVar);
 					if (check.f === failInvalidType) hoisted = hoisted ? `${hoisted}&&${condCode}` : condCode;
-					else if (val2.e.noValidation !== true) currentCode += `${condCode}||${B_failWithArg(val2, check.f(val2), inputVar)};`;
+					else if (val2.e.noValidation !== true) currentCode += B_fail(val2, check.f(val2), inputVar, condCode);
 				}
 				if (hoisted) {
 					out.c = out.c ? `${hoisted}&&${out.c}` : hoisted;
@@ -438,9 +592,15 @@ var B_merge = (val, out) => {
 				}
 			} else if (val2.e.noValidation !== true) currentCode = B_emitChecks(val2, (current || val2).v());
 		}
+		if (val2.hn) val2.g.l.push(...val2.hn);
 		if (val2.hd) currentCode += `let ${val2.hd};`;
+		if (val2.ha) currentCode += val2.ha;
 		val2.fz = true;
-		code = val2.cp + currentCode + code;
+		const k = val2.g.k;
+		if (val2.k && k && code !== "" && val2.g.y) {
+			const m = B_varWithoutAllocation(val2.g);
+			code = B_let(val2.g, m, k) + val2.cp + currentCode + `if(${k}!==${m})${val2.g.y()};` + code;
+		} else code = val2.cp + currentCode + code;
 	}
 	return code;
 };
@@ -462,6 +622,8 @@ var B_next = (prev, initial, schema, expected = prev.e) => {
 		d: U,
 		fv: U,
 		cp: "",
+		fu: U,
+		fs: U,
 		hd: "",
 		fz: U,
 		vc: U,
@@ -487,6 +649,8 @@ var B_refine = (val, schema = val.s, checks, expected = val.e) => {
 		d: val.d,
 		fv: U,
 		cp: "",
+		fu: U,
+		fs: U,
 		hd: "",
 		fz: U,
 		vc: checks,
@@ -503,22 +667,23 @@ var B_pushCheck = (val, check) => {
 	(val.vc ?? (val.vc = [])).push(check);
 };
 var B_markOutput = (val, valInput) => {
-	let outC;
-	const ir = valInput.e.inputRefiner;
-	if (ir) {
-		const c = ir(valInput);
-		if (c.length) (valInput.vc ?? (valInput.vc = [])).push(...c);
+	const from = valInput || val;
+	const ir = from.e.inputRefiner;
+	let outC = ir ? ir(from) : [];
+	if (valInput) {
+		if (outC.length) (valInput.vc ?? (valInput.vc = [])).push(...outC);
+		outC = [];
 	}
 	const rf = val.e.refiner;
-	if (rf) {
-		const c = rf(val);
-		if (c.length) outC = c;
-	}
-	if (outC && val.f & 1) {
+	if (rf) outC = outC.concat(rf(val));
+	if (outC.length && val.f & 1) {
 		const v = val.v();
-		val.i = `${v}.then(${v}=>{${B_merge(B_refine(B_scope(val), U, outC))}return ${v}})`;
-		val.v = _notVar;
-	} else if (outC) val = B_refine(val, U, outC);
+		const then = B_then(v, B_detached(val.g, () => B_merge(B_refine(B_scope(val), U, outC))), v);
+		if (!val.fu?.(then, true)) {
+			val.i = `${v}.then(${then()})`;
+			val.v = _notVar;
+		}
+	} else if (outC.length) val = B_refine(val, U, outC);
 	val.io = true;
 	return val;
 };
@@ -552,12 +717,14 @@ var B_dynamicScope = (from, locationVar) => {
 		d: U,
 		fv: U,
 		cp: "",
+		fu: U,
+		fs: U,
 		hd: "",
 		fz: U,
 		vc: U,
 		u: U,
 		t: U,
-		path: pathEmpty,
+		path: pathConcat(from.path, [{ e: locationVar }]),
 		g: from.g,
 		o: U
 	};
@@ -574,6 +741,33 @@ var B_nextVarOutput = (input, initial, schema, expected = schema) => {
 	output.io = true;
 	return output;
 };
+var settledTag = {};
+var settle = (thrown) => thrown?.t === settledTag ? thrown : {
+	t: settledTag,
+	l: [thrown]
+};
+var B_settle = (container, child, guard) => child.fs?.(child) ? child.i : `${guard ? `${child.i}&&` : ""}${child.i}.then(void 0,${B_embedPure(container, settle)})`;
+var B_join = (container, slots) => {
+	const g = container.g, k = g.k;
+	let failed = "0";
+	if (container.k) {
+		failed = B_varWithoutAllocation(g);
+		container.cp = B_let(g, failed, k) + container.cp;
+		failed = `${k}!==${failed}`;
+		container.k = U;
+	}
+	return `${B_embedPure(container, (was, values) => {
+		let found;
+		for (let idx = 0; idx < values.length; idx++) {
+			const value = values[idx];
+			if (value?.t === settledTag) (found || (found = [])).push(...value.l);
+		}
+		if (found || was) throw {
+			t: settledTag,
+			l: found || []
+		};
+	})}(${failed},${slots});`;
+};
 var B_asyncVal = (from, initial) => {
 	const v = B_next(from, initial, from.s);
 	v.f = 1;
@@ -585,9 +779,22 @@ var B_addObjectField = (objectVal, location, val) => {
 		if (!val.o) objectVal.s.required.push(location);
 		objectVal.s.properties[location] = val.s;
 	}
-	if (val.f & 1) val.v();
+	if (val.f & 1) {
+		val.v();
+		if (B_collects(val.g) && val.g.k) val.fs?.(val, true);
+	}
 	objectVal.cp += B_merge(val);
 	objectVal.d[location] = val;
+};
+var B_field = (container, location, produce) => {
+	let val;
+	const emit = () => B_addObjectField(container, location, val = produce());
+	const g = container.g;
+	if (!B_collects(g)) return emit();
+	const start = container.cp.length, collected = g.kj;
+	const wrap = B_child(g, emit);
+	container.cp = container.cp.slice(0, start) + wrap(container.cp.slice(start), val);
+	if (g.kj !== collected) container.k = true;
 };
 var B_addKey = (objVal, key, value) => `${objVal.v()}[${key}]=${value.i}`;
 var B_scope = (val) => {
@@ -605,6 +812,8 @@ var B_scope = (val) => {
 		d: val.d,
 		fv: U,
 		cp: "",
+		fu: U,
+		fs: U,
 		hd: "",
 		fz: U,
 		vc: U,
@@ -621,27 +830,8 @@ var B_neverSlot = (input) => B_invalidOperation(input, `Nothing decodes ${/* @__
 var B_invalidOperation = (val, description) => B_throw({
 	code: "invalid_operation",
 	reason: description,
-	path: val.path
+	path: compilePath(val.path)
 });
-var B_mergeWithCatch = (val, catchFn, appendSafe, pureSince) => {
-	const valCode = B_merge(val);
-	const pure = pureSince !== U && val.g.t === pureSince;
-	if ((valCode === "" || pure) && !(val.f & 1)) return appendSafe ? valCode + appendSafe() : pure ? "" : valCode;
-	const errorVar = B_varWithoutAllocation(val.g);
-	B_markThrow(val);
-	const catchCode = `${catchFn(errorVar)};throw ${errorVar}`;
-	if (val.f & 1) val.i = `${val.i}.catch(${errorVar}=>{${catchCode}})`;
-	return `try{${valCode}${appendSafe ? appendSafe() : ""}}catch(${errorVar}){${catchCode}}`;
-};
-var B_mergeWithPathPrepend = (val, parent, locationVar, appendSafe, pureSince) => !val.path.length && locationVar === U ? B_merge(val) : B_mergeWithCatch(val, (errorVar) => {
-	let segments = "";
-	for (let idx = 0; idx < parent.path.length; idx++) {
-		const segment = parent.path[idx];
-		segments += `${typeof segment === "string" ? inlinedValueFromString(segment) : segment},`;
-	}
-	if (locationVar !== U) segments += `${locationVar},`;
-	return `${errorVar}.path=[${segments}...${errorVar}.path]`;
-}, appendSafe, pureSince);
 var noopOperation = (i) => i;
 noopOperation["embedded"] = immutableEmptyArray;
 var int32FormatValidation = (inputVar) => `${inputVar}<=2147483647&&${inputVar}>=-2147483648&&${inputVar}%1==0`;
@@ -655,7 +845,7 @@ var numberTagCond = (inputVar, allowNaN) => {
 	const t = typeofCond(numberTag)(inputVar);
 	return allowNaN ? t : `${t}&&${inputVar}==${inputVar}`;
 };
-var instanceofCond = (b, class_, inputVar) => `${inputVar} instanceof ${B_embed(b, class_)}`;
+var instanceofCond = (b, class_, inputVar) => `${inputVar} instanceof ${(class_[Symbol.hasInstance] === Function.prototype[Symbol.hasInstance] && Object(class_.prototype) === class_.prototype ? B_embedPure : B_embed)(b, class_)}`;
 var typeofCheckCache = {};
 var typeofCheck = (tag) => typeofCheckCache[tag] || (typeofCheckCache[tag] = {
 	c: typeofCond(tag),
@@ -681,7 +871,7 @@ var numberDecoder = (input) => {
 	} else if (inputTagFlag & 2) {
 		const output = B_nextVar(input);
 		const inputVar = input.v();
-		output.cp = `let ${output.i}=+${inputVar};`;
+		output.cp = B_let(input.g, output.i, `+${inputVar}`);
 		output.vc = [{
 			c: (_inputVar) => `${expectedFormat === "int32" ? int32FormatValidation(output.i) : expectedFormat === "integer" ? integerFormatValidation(output.i) : `${output.i}==${output.i}`}&&(${output.i}||${inputVar}.trim())`,
 			f: failInvalidType
@@ -721,8 +911,13 @@ var literalDecoder = (input) => {
 	const expectedSchema = input.e;
 	if (expectedSchema.noValidation && !input.u) return B_nextConst(input, expectedSchema);
 	else if (isLiteral(input.s)) {
-		if (input.s.const === expectedSchema.const) return input;
-		else return B_nextConst(input, expectedSchema);
+		const from = input.s.const, to2 = expectedSchema.const;
+		if (from === to2 || from !== from && to2 !== to2) return input;
+		if (!input.u || tagFlags[input.s.type] & 48) return B_nextConst(input, expectedSchema);
+		return B_refine(input, expectedSchema, [{
+			c: (inputVar) => `${inputVar}===${B_inlineConst(input, expectedSchema)}`,
+			f: failInvalidType
+		}]);
 	} else {
 		const schemaTagFlag = tagFlags[expectedSchema.type];
 		if (tagFlags[input.s.type] & 2 && schemaTagFlag & 3132) {
@@ -738,6 +933,7 @@ var literalDecoder = (input) => {
 			c: nanCond,
 			f: failInvalidType
 		}]);
+		else if (tagFlags[input.s.type] & 12480 && input.s.type !== expectedSchema.type) return B_unsupportedDecode(input, input.s, expectedSchema);
 		else return B_refine(input, expectedSchema, [{
 			c: (inputVar) => `${inputVar}===${B_inlineConst(input, expectedSchema)}`,
 			f: failInvalidType
@@ -780,22 +976,25 @@ var parse = (input) => {
 		appliedEncoderRef = U;
 		const loopInput = result;
 		if (++loopCount > 50) panic("Loop count exceeded 50");
-		const defs = loopInput.e["$defs"];
-		if (defs) loopInput.g.d ? Object.assign(loopInput.g.d, defs) : loopInput.g.d = defs;
 		if (loopInput.f & 1) {
 			const operationInputVar = loopInput.v();
 			const operationInput = B_scope(loopInput);
-			const operationOutput = parse(operationInput);
-			const operationCode = B_merge(operationOutput);
-			result = operationInput.i !== operationOutput.i || operationCode !== "" ? B_next(loopInput, `${operationInputVar}.then(${operationInputVar}=>{${operationCode}return ${operationOutput.i}})`, operationOutput.s, operationOutput.e) : B_refine(loopInput, operationOutput.s, U, operationOutput.e);
+			let operationOutput;
+			const operationCode = B_detached(loopInput.g, () => B_merge(operationOutput = parse(operationInput)));
+			const then = B_then(operationInputVar, operationCode, operationOutput.i);
+			if (operationInput.i === operationOutput.i && operationCode === "" || loopInput.fu?.(then, !operationOutput.t && !(operationOutput.f & 1))) {
+				result = B_refine(loopInput, operationOutput.s, U, operationOutput.e);
+				result.fs = loopInput.fs;
+			} else result = B_next(loopInput, `${operationInputVar}.then(${then()})`, operationOutput.s, operationOutput.e);
 			result.f |= 1;
 			result.io = true;
 		} else if (loopInput.io) {
 			const to2 = loopInput.e.to;
+			if (loopInput.e.flags & 32768) loopInput.g.o |= 32;
 			result = loopInput.e.parser ? loopInput.e.parser(loopInput) : B_refine(result, U, U, to2);
 		} else {
 			const maybeEncoder = loopInput.s.encoder;
-			if (maybeEncoder && maybeEncoder !== appliedEncoder && loopInput.s !== loopInput.e && loopInput.e.type !== unknownTag && !(loopInput.e.noValidation && (loopInput.e.isJson || loopInput.e.type === undefinedTag))) result = maybeEncoder(loopInput, loopInput.e);
+			if (maybeEncoder && maybeEncoder !== appliedEncoder && loopInput.s !== loopInput.e && loopInput.e.type !== unknownTag && !(loopInput.e.noValidation && (loopInput.e.flags & 16 || loopInput.e.type === undefinedTag))) result = maybeEncoder(loopInput, loopInput.e);
 			if (loopInput !== result) appliedEncoderRef = maybeEncoder;
 			else {
 				result = loopInput.e.decoder(loopInput);
@@ -805,36 +1004,117 @@ var parse = (input) => {
 	}
 	return result;
 };
-var parseDynamic = (input) => {
-	try {
-		return parse(input);
-	} catch (exn) {
-		const error = getOrRethrow(exn);
-		error.path = /* @__PURE__ */ pathConcat(input.p ? input.p.path : pathEmpty, /* @__PURE__ */ pathConcat(/* @__PURE__ */ pathConcat(input.path, pathDynamic), error.path));
-		throw error;
-	}
-};
-var throwTail = (input, code, out, isAsync, flag, hasDefs) => {
-	if (flag & 1024) {
-		const errorOf = B_errorOf(input);
-		const issues = B_embedPure(input, (e2) => {
-			const error = errorOf(e2);
-			return { issues: [{
-				message: error.reason,
-				path: error.path.length ? error.path : U
-			}] };
+var captureStackAt = (thrown, cut) => {
+	if (thrown && thrown.s === s && !Object.hasOwn(thrown, "stack") && !constructed.has(thrown) && Object.isExtensible(thrown)) {
+		const capture = Error.captureStackTrace;
+		if (capture) capture(thrown, cut);
+		else Object.defineProperty(thrown, "stack", {
+			value: (/* @__PURE__ */ new Error()).stack,
+			configurable: true,
+			writable: true
 		});
-		const v = isAsync ? B_varWithoutAllocation(input.g) : "";
-		const body = isAsync ? `${code}return ${out}.then(${v}=>({value:${v}}),${issues})` : `${code}return {value:${out}}`;
-		if (!input.g.t) return body;
-		const e = B_varWithoutAllocation(input.g);
-		return `try{${body}}catch(${e}){return ${isAsync ? `Promise.resolve(${issues}(${e}))` : `${issues}(${e})`}}`;
 	}
-	return code === "" && out === operationArgVar && !(flag & 1) ? U : `${code}return ${flag & 1 && !isAsync && !hasDefs ? `Promise.resolve(${out})` : out}`;
+	return thrown;
 };
-var emitTail = throwTail;
-var compileDecoder = (schema, expected, flag, defs, node) => {
-	const input = B_operationArg(isLiteral(schema) ? unknown : schema, expected, flag, defs);
+var rejectionBoundary = (thrown) => {
+	throw captureStackAt(thrown, rejectionBoundary);
+};
+var throwTail = (input, code, out, isAsync, flag, nested) => {
+	if (code === "" && out === operationArgVar && !(flag & 1)) return U;
+	const body = `${code}return ${flag & 1 && !isAsync && !nested ? `Promise.resolve(${out})` : isAsync && !nested && input.g.t ? `${out}.catch(${B_embedPure(input, rejectionBoundary)})` : out}`;
+	if (!(input.g.t || flag & 1 && !(flag & 512) && code) || nested) return body;
+	const g = input.g;
+	const e = B_varWithoutAllocation(g);
+	return `try{${body}}catch(${e}){${flag & 1 && !(flag & 512) ? `return ${B_embedPure(input, (thrown) => Promise.reject(captureStackAt(thrown, g.f)))}` : B_embedPure(input, (thrown) => {
+		throw captureStackAt(thrown, g.f);
+	})}(${e})}`;
+};
+var okResult = (flag, value) => flag & 256 ? `{TAG:"Ok",_0:${value}}` : flag & 128 ? `{success:true,value:${value},error:void 0,issues:void 0}` : value;
+var failureOf = (errorOf, lift) => (list2, raised, thrown) => {
+	const late = raised ? thrown?.t === settledTag ? thrown.l : [thrown] : [];
+	let size2 = late.length;
+	for (let n = list2; n; n = n[0]) size2++;
+	const issues = new Array(size2);
+	let error;
+	const add = (e) => {
+		issues[--size2] = {
+			message: e.reason,
+			path: e.path.length ? e.path : U
+		};
+		error = e;
+	};
+	for (let idx = late.length; idx--;) add(errorOf(late[idx]));
+	for (let n = list2; n; n = n[0]) add(n.length < 3 ? n[1] : n[1](n[2], n[3]));
+	const result = {
+		success: false,
+		value: U,
+		error,
+		issues
+	};
+	return lift.a ? Promise.resolve(result) : result;
+};
+var outcomeOf = (input, flag, nested) => {
+	const g = input.g;
+	const given = (code) => {
+		if (!g.r) return [code, operationArgVar];
+		const value = B_varWithoutAllocation(g);
+		return [B_let(g, value, operationArgVar) + code, value];
+	};
+	if (!(flag & 4480) || nested) return {
+		x: U,
+		t: (code, out, isAsync) => {
+			if (flag & 2048) {
+				const [body, value] = given(code);
+				return throwTail(input, body, isAsync ? `${out}.then(()=>${value})` : value, isAsync, flag, nested);
+			}
+			return throwTail(input, code, out, isAsync, flag, nested);
+		}
+	};
+	const lift = {};
+	const lifted = (value) => flag & 1 && !(flag & 512) ? `Promise.resolve(${value})` : value;
+	let x, failure2, list2;
+	let named = false;
+	if (flag & 128) {
+		list2 = g.k = B_varWithoutAllocation(g);
+		g.l = [];
+		failure2 = B_embedPure(input, failureOf(B_errorOf(input), lift));
+		x = (record) => (named = true, `return ${failure2}(${record ? `[${list2},${record(true)}]` : list2})`);
+		x.k = 1;
+		g.y = () => `return ${failure2}(${list2})`;
+	} else if (flag & 4096) {
+		failure2 = "false";
+		const no = `return ${lifted(failure2)}`;
+		x = () => no;
+	} else {
+		const errorOf = B_errorOf(input);
+		failure2 = B_embedPure(input, (e) => ({
+			TAG: "Error",
+			_0: errorOf(e)
+		}));
+		x = (record) => `return ${lifted(`${failure2}(${record()})`)}`;
+	}
+	const failOf = (e) => list2 ? `${failure2}(${g.kj ? list2 : 0}${e ? `,1,${e}` : ""})` : flag & 4096 ? failure2 : `${failure2}(${e})`;
+	const done = (success) => g.kj ? `${list2}?${failOf()}:${success}` : success;
+	return {
+		x,
+		t: (code, out, isAsync) => {
+			const errVar = B_varWithoutAllocation(g);
+			let value = out;
+			if (flag & 2048) [code, value] = given(code);
+			lift.a = !!(flag & 1) && (isAsync || !(flag & 512));
+			const valueVar = isAsync ? B_varWithoutAllocation(g) : value;
+			const success = okResult(flag, flag & 4096 ? "true" : flag & 2048 ? value : valueVar);
+			let body = isAsync ? `${code}return ${out}.then(${valueVar}=>${done(`(${success})`)},${errVar}=>(${failOf(errVar)}))` : `${code}return ${done(lifted(success))}`;
+			if (code) body = `try{${body}}catch(${errVar}){return ${list2 ? failOf(errVar) : lifted(failOf(errVar))}}`;
+			const names = g.kj || named ? [list2, ...g.l] : g.l || [];
+			return names.length ? `let ${[...new Set(names)]};${body}` : body;
+		}
+	};
+};
+var compileDecoder = (schema, expected, flag, node) => {
+	const input = B_operationArg(isLiteral(schema) ? unknown : schema, expected, flag);
+	const outcome = outcomeOf(input, flag, !!node);
+	input.g.x = outcome.x;
 	const output = parse(input);
 	const code = B_merge(output);
 	const isAsync = !!(output.f & 1);
@@ -842,10 +1122,11 @@ var compileDecoder = (schema, expected, flag, defs, node) => {
 		node.y = isAsync;
 		node.t = output.t === true;
 	}
-	const body = emitTail(input, code, output.i, isAsync, flag, !!defs);
+	const body = outcome.t(code, output.i, isAsync);
 	if (!body) return noopOperation;
 	const fn = new Function("e", "s", `return ${operationArgVar}=>{${body}}`)(input.g.e, s);
 	fn.embedded = input.g.e;
+	input.g.f = fn;
 	return fn;
 };
 var getOutputSchema = (schema) => {
@@ -873,26 +1154,30 @@ Object.defineProperty(schemaPrototype, reversedKey, { get() {
 		const record = mut;
 		reverseSwap(record, "parser", "serializer");
 		reverseSwap(record, "refiner", "inputRefiner");
-		next && next.opens !== U ? mut.opens = !next.opens : delete mut.opens;
+		const reverseReading = mut.reverseReading || next && (next.reverseReading || next.anyOf?.find((arm) => arm.reverseReading)?.reverseReading);
+		const flags = mut.flags & -13 | (reverseReading ? reverseReading(mut, next) : 0);
+		flags ? mut.flags = flags : delete record["flags"];
 		delete record["default"];
 		delete record["examples"];
 		if (mut.items) mut.items = mut.items.map(reverse);
 		if (mut.properties) mut.properties = reverseDict(mut.properties);
 		if (typeof mut.additionalItems === objectTag) mut.additionalItems = /* @__PURE__ */ reverse(mut.additionalItems);
 		if (mut.anyOf) {
-			const anyOf = mut.anyOf;
+			const anyOf2 = mut.anyOf;
 			const has = {};
 			const newAnyOf = [];
-			for (let idx = 0; idx < anyOf.length; idx++) {
-				const s2 = anyOf[idx];
+			for (let idx = 0; idx < anyOf2.length; idx++) {
+				const s2 = anyOf2[idx];
 				const reversed = /* @__PURE__ */ reverse(s2);
 				newAnyOf.push(reversed);
-				setHas(has, reversed.type);
+				setHas(has, reversed);
 			}
 			mut.has = has;
 			mut.anyOf = newAnyOf;
 		}
 		if (mut["$defs"]) mut["$defs"] = reverseDict(mut["$defs"]);
+		const definition = mut.definition;
+		if (definition) mut.definition = () => definition()?.r;
 		reversedHead = mut;
 		current = next;
 	}
@@ -904,6 +1189,21 @@ Object.defineProperty(schemaPrototype, reversedKey, { get() {
 	return r;
 } });
 var reverse = /* @__NO_SIDE_EFFECTS__ */ (schema) => schema.r;
+var decodeOutput = (output) => {
+	try {
+		return /* @__PURE__ */ getOp(0, 2, unknown, output);
+	} catch (exn) {
+		if (getOrRethrow(exn).code !== "invalid_operation") throw exn;
+	}
+};
+var setDefault = (owner, original, v) => {
+	const decode = decodeOutput(/* @__PURE__ */ reverse(original));
+	if (decode) try {
+		owner.default = decode(v);
+	} catch (exn) {
+		panic(`Invalid default for ${/* @__PURE__ */ inputExpression(owner)}: ${getOrRethrow(exn)["message"]}`);
+	}
+};
 var memoKey = "c";
 var addOpNode = (schema, a, f, v) => {
 	const created = {
@@ -916,16 +1216,22 @@ var addOpNode = (schema, a, f, v) => {
 	Object.defineProperty(schema, memoKey, configurableValueOptions);
 	return created;
 };
-var compileChain = (cacheTarget, args, flag) => {
-	let schema = args[args.length - 1];
-	for (let i = args.length - 2; i >= 0; i--) {
+var compileChain = (cacheTarget, args, flag, tail) => {
+	const chain = tail ? [...args, tail] : args;
+	let schema = chain[chain.length - 1];
+	for (let i = chain.length - 2; i >= 0; i--) {
 		const to2 = schema;
-		schema = updateOutput(args[i], (mut) => {
+		schema = updateOutput(chain[i], (mut) => {
 			mut.to = to2;
-			if (mut.content !== U && mut.opens === U) mut.opens = true;
+			if (mut.flags & 3 && !(mut.flags & 12) && to2.type !== undefinedTag) mut.flags |= 4;
 		});
 	}
-	const f = compileDecoder(flag & 8 ? unknown : schema, schema, flag, U);
+	let f;
+	try {
+		f = compileDecoder(flag & 8 ? unknown : schema, schema, flag);
+	} catch (thrown) {
+		throw captureStackAt(thrown, getOp);
+	}
 	addOpNode(cacheTarget, args, flag, f);
 	return f;
 };
@@ -946,17 +1252,18 @@ var getOp = /* @__NO_SIDE_EFFECTS__ */ (opFlag, n, a0, a1, a2, a3) => {
 		if (node.f === flag && a.length === n && a[0] === a0 && (n < 2 || a[1] === a1) && (n < 3 || a[2] === a2) && (n < 4 || a[3] === a3)) return node.v;
 		node = node.n;
 	}
-	return compileChain(cacheTarget, [
+	const all = [
 		a0,
 		a1,
 		a2,
 		a3
-	].slice(0, n), flag);
+	];
+	return compileChain(cacheTarget, all.slice(0, n), flag, all[n]);
 };
 var nestedLoc = "BS_PRIVATE_NESTED_SOME_NONE";
 var never_ = /* @__PURE__ */ initSchema(neverTag, (input) => {
 	const output = B_refine(input, never_, U, never_);
-	output.cp = B_embedInvalidInput(input) + ";";
+	output.cp = B_failInvalidInput(input) + ";";
 	return output;
 });
 var instanceDecoder = (input) => {
@@ -978,26 +1285,36 @@ var typeCheckCond = (input, schema, inputVar) => {
 	return "";
 };
 var isItemSchema = (x) => x !== U && typeof x !== "string";
-var B_unrecognizedKeys = (input, keys, keyVar, decl) => {
-	const fail = B_failWithArg(input, (key) => ({
-		code: "unrecognized_key",
-		path: input.path,
-		reason: `Unrecognized key ${stringify(key)}`,
-		key
-	}), keyVar);
+var B_unrecognizedKeys = (input, keys, keyVar, decl, container) => {
+	const snap = B_pathSnap(input);
+	let fail2 = "";
+	const emit = () => {
+		fail2 = B_fail(input, (key, path) => toError({
+			code: "unrecognized_key",
+			path: path ?? snap ?? pathEmpty,
+			reason: `Unrecognized key ${stringify(key)}`,
+			key
+		}), keyVar);
+	};
+	const collected = input.g.kj;
+	const wrap = container && B_collects(input.g) ? B_child(input.g, emit) : (emit(), U);
 	let cond = "";
 	for (let idx = 0; idx < keys.length; idx++) {
 		if (idx) cond += "&&";
 		cond += `${keyVar}!==${inlinedValueFromString(keys[idx])}`;
 	}
-	return `for(${decl}${keyVar} in ${input.v()})` + (cond ? `if(${cond})` : "") + fail + ";";
+	const body = (cond ? `if(${cond})` : "") + fail2;
+	if (!wrap) return `for(${decl}${keyVar} in ${input.v()})${body};`;
+	const code = wrap(body, input);
+	if (input.g.kj !== collected) container.k = true;
+	return `for(${decl}${keyVar} in ${input.v()})${code === body ? body + ";" : code}`;
 };
 var B_fused = (input, expectedSchema, item) => {
 	const to2 = expectedSchema.to;
-	return to2 !== U && to2.fz !== U ? to2.fz(input, expectedSchema, item) : U;
+	return to2 !== U && to2.fuse !== U ? to2.fuse(input, expectedSchema, item) : U;
 };
 var B_narrowJsonSourcedJsonString = (itemInput) => {
-	if (itemInput.s.isJson && itemInput.e.format === "json") itemInput.s = unknown;
+	if (itemInput.s.flags & 16 && itemInput.e.format === "json") itemInput.s = unknown;
 };
 var B_makeContainerVal = (prev, schema) => ({
 	b: U,
@@ -1012,6 +1329,8 @@ var B_makeContainerVal = (prev, schema) => ({
 	d: /* @__PURE__ */ Object.create(null),
 	fv: U,
 	cp: "",
+	fu: U,
+	fs: U,
 	hd: "",
 	fz: U,
 	vc: U,
@@ -1023,6 +1342,7 @@ var B_makeContainerVal = (prev, schema) => ({
 });
 var makeObjectVal = (prev) => B_makeContainerVal(prev, {
 	type: objectTag,
+	flags: 0,
 	required: [],
 	properties: /* @__PURE__ */ Object.create(null),
 	additionalItems: "strict",
@@ -1030,20 +1350,58 @@ var makeObjectVal = (prev) => B_makeContainerVal(prev, {
 });
 var makeArrayVal = (prev) => B_makeContainerVal(prev, {
 	type: arrayTag,
+	flags: 0,
 	items: [],
 	additionalItems: "strict",
 	decoder: arrayDecoder
 });
-var completeObjectVal = (objectVal) => {
+var resolveAsyncFields = (val) => {
+	const fields = val.d;
+	for (const k in fields) {
+		const field = fields[k];
+		const resolved = {
+			...field,
+			b: U,
+			v: _var,
+			i: val.i + inlinedProperty("", k, val.s.type === arrayTag),
+			prev: U,
+			f: 0,
+			d: field.d && Object.assign(/* @__PURE__ */ Object.create(null), field.d),
+			cp: "",
+			fu: U,
+			fs: U,
+			hd: "",
+			vc: U,
+			k: U,
+			hn: U,
+			ha: U
+		};
+		resolveAsyncFields(resolved);
+		fields[k] = resolved;
+	}
+};
+var literalRead = (output, input) => {
+	let val = output;
+	if (!val.vc) while (val.prev !== U && val.prev !== input) val = val.prev;
+	return val.prev === input ? val : output;
+};
+var completeObjectVal = (objectVal, inUnion) => {
 	const isArray = objectVal.s.type === arrayTag;
 	let inline = "";
-	let promiseAllContent = "";
+	const promised = [];
 	let optionalSettingCode = U;
 	const keys = Object.keys(objectVal.d);
+	const joins = inUnion && keys.some((key) => objectVal.d[key].f & 1);
 	for (let idx = 0; idx < keys.length; idx++) {
 		const key = keys[idx];
 		const val = objectVal.d[key];
-		if (val.f & 1) promiseAllContent += val.i + ",";
+		if (val.f & 1) {
+			promised.push(val);
+			resolveAsyncFields(val);
+		} else if (joins) {
+			if (isLiteral(val.s) && !val.vc) val.i = B_inlineConst(val, val.s);
+			else val.v();
+		}
 		if (val.o) {
 			const existingFn = optionalSettingCode;
 			optionalSettingCode = (objectVar) => {
@@ -1052,23 +1410,30 @@ var completeObjectVal = (objectVal) => {
 		} else inline = inline + (isArray ? `${val.i}` : `${inlinedObjectKey(key)}:${val.i}`) + ",";
 	}
 	objectVal.i = isArray ? "[" + inline.slice(0, -1) + "]" : "{" + inline.slice(0, -1) + "}";
-	if (promiseAllContent) {
-		promiseAllContent = promiseAllContent.slice(0, -1);
+	if (promised.length) {
+		const promiseAllContent = promised.map((val) => val.i).join(",");
+		const g = objectVal.g;
+		const collects = B_collects(g) && g.k;
+		const joinCode = collects ? B_join(objectVal, `[${promiseAllContent}]`) : "";
 		const operationInput = B_scope(objectVal);
 		operationInput.io = true;
-		const operationOutput = parse(operationInput);
-		let operationCode = B_merge(operationOutput);
-		let result = operationOutput.i;
-		if (optionalSettingCode !== U) {
-			const objectVar = B_varWithoutAllocation(objectVal.g);
-			operationCode = operationCode + `let ${objectVar}=${result};` + optionalSettingCode(objectVar);
-			result = objectVar;
-		}
-		if (operationCode === "" && promiseAllContent === result) objectVal.i = result;
-		else objectVal.i = `Promise.all([${promiseAllContent}]).then(([${promiseAllContent}])=>{${operationCode}return ${result}})`;
+		let result = "";
+		let operationCode = B_detached(objectVal.g, () => {
+			const operationOutput = parse(operationInput);
+			let code = B_merge(operationOutput);
+			result = operationOutput.i;
+			objectVal.s = operationOutput.s;
+			objectVal.e = operationOutput.e;
+			if (optionalSettingCode !== U) {
+				const objectVar = B_varWithoutAllocation(objectVal.g);
+				code += B_let(objectVal.g, objectVar, result) + optionalSettingCode(objectVar);
+				result = objectVar;
+			}
+			return code;
+		});
+		if (operationCode === "" && promiseAllContent === result && !collects) objectVal.i = result;
+		else objectVal.i = `Promise.all([${collects ? promised.map((val) => B_settle(objectVal, val, true)).join(",") : promiseAllContent}]).then(([${promiseAllContent}])=>{${joinCode}${operationCode}return ${result}})`;
 		objectVal.f |= 1;
-		objectVal.s = operationOutput.s;
-		objectVal.e = operationOutput.e;
 		objectVal.io = true;
 		return objectVal;
 	} else if (optionalSettingCode === U) return objectVal;
@@ -1129,16 +1494,37 @@ var arrayDecoder = (unknownInput) => {
 			}
 			const inputVar = input.v();
 			const iteratorVar = B_varWithoutAllocation(input.g);
-			const raiseCountBefore = input.g.t;
+			const failCountBefore = input.g.t + input.g.j;
 			const itemInput = B_dynamicScope(input, iteratorVar);
+			itemInput.u = isUnion;
 			B_narrowJsonSourcedJsonString(itemInput);
-			const itemOutput = parseDynamic(itemInput);
-			const hasTransform = itemOutput.t;
-			const output2 = hasTransform ? B_next(input, `new Array(${inputVar}.length)`, arrayFactory(itemOutput.s)) : B_refine(input, expectedSchema);
-			const itemCode = B_mergeWithPathPrepend(itemOutput, input, iteratorVar, hasTransform ? () => B_addKey(output2, iteratorVar, itemOutput) : U, hasTransform ? U : raiseCountBefore);
-			if (hasTransform || itemCode !== "") output2.cp = output2.cp + `for(let ${iteratorVar}=${expectedLength};${iteratorVar}<${inputVar}.length;++${iteratorVar}){${itemCode}}`;
-			if (itemOutput.f & 1) output = B_asyncVal(output2, `Promise.all(${output2.i})`);
-			else output = output2;
+			let itemOutput, output2;
+			const collected = input.g.kj;
+			const itemCode = B_sink(input.g, () => {
+				let itemMerge = "", settles = false;
+				const collects = B_collects(input.g);
+				const emit = () => {
+					itemOutput = parse(itemInput);
+					output2 = itemOutput.t ? B_next(input, `new Array(${inputVar}.length)`, arrayFactory(itemOutput.s)) : B_refine(input, expectedSchema);
+					settles = !!(itemOutput.t && itemOutput.f & 1 && collects && input.g.k);
+					if (settles) itemOutput.fs?.(itemOutput, true);
+					itemMerge = B_merge(itemOutput);
+				};
+				const wrap = collects ? B_child(input.g, emit) : (emit(), U);
+				const code = itemOutput.t ? itemMerge + (settles ? `${output2.v()}[${iteratorVar}]=${B_settle(output2, itemOutput)}` : B_addKey(output2, iteratorVar, itemOutput)) : input.g.t + input.g.j === failCountBefore ? "" : itemMerge;
+				return wrap ? wrap(code, itemOutput) : code;
+			});
+			if (itemOutput.t || itemCode !== "") output2.cp = output2.cp + `for(let ${iteratorVar}=${expectedLength};${iteratorVar}<${inputVar}.length;++${iteratorVar}){${itemCode}}`;
+			if (input.g.kj !== collected) output2.k = true;
+			if (itemOutput.f & 1) {
+				const g = input.g, k = B_collects(g) && g.k;
+				let all = `Promise.all(${output2.i})`;
+				if (k) {
+					const items = B_varWithoutAllocation(g);
+					all += `.then(${items}=>{${B_join(output2, items)}return ${items}})`;
+				}
+				output = B_asyncVal(output2, all);
+			} else output = output2;
 		}
 	} else {
 		const objectVal = makeArrayVal(input);
@@ -1157,16 +1543,20 @@ var arrayDecoder = (unknownInput) => {
 				continue;
 			}
 			B_narrowJsonSourcedJsonString(itemInput);
-			const itemOutput = parse(itemInput);
-			if (isUnion && isLiteral(schema)) B_hoistChildChecks(input, itemOutput, key);
-			B_addObjectField(objectVal, key, itemOutput);
-			if (!shouldRecreateInput) shouldRecreateInput = itemOutput.t;
+			B_field(objectVal, key, () => {
+				const itemOutput = parse(itemInput);
+				if (isUnion && isLiteral(schema)) B_hoistChildChecks(input, literalRead(itemOutput, itemInput), key);
+				if (!shouldRecreateInput) shouldRecreateInput = itemOutput.t;
+				return itemOutput;
+			});
 		}
-		if (shouldRecreateInput) output = completeObjectVal(objectVal);
+		if (shouldRecreateInput) output = completeObjectVal(objectVal, isUnion);
 		else {
 			const o = B_refine(input, fused || expectedSchema);
 			o.cp = objectVal.cp;
+			if (objectVal.hn) o.hn = objectVal.hn;
 			o.d = objectVal.d;
+			o.k = objectVal.k;
 			output = o;
 		}
 	}
@@ -1175,6 +1565,14 @@ var arrayDecoder = (unknownInput) => {
 var objectTypeCheck = {
 	c: objectTagCond,
 	f: failInvalidType
+};
+var keepAbsent = (union2, to2) => {
+	const target = copySchema(union2);
+	target.anyOf = union2.anyOf.map((variant) => variant.type === undefinedTag ? variant : isOptional(variant) && variant.to === U ? keepAbsent(variant, to2) : updateOutput(variant, (mut) => {
+		mut.to = to2;
+	}));
+	target.flags |= 64;
+	return target;
 };
 var objectDecoder = (unknownInput) => {
 	const isUnion = unknownInput.u;
@@ -1203,21 +1601,40 @@ var objectDecoder = (unknownInput) => {
 		if (fused !== U) return B_markOutput(B_refine(input, fused), input);
 		const inputVar = input.v();
 		const keyVar = B_varWithoutAllocation(input.g);
-		const raiseCountBefore = input.g.t;
+		const failCountBefore = input.g.t + input.g.j;
 		const itemInput = B_dynamicScope(input, keyVar);
 		B_narrowJsonSourcedJsonString(itemInput);
-		const itemOutput = parseDynamic(itemInput);
-		const hasTransform = itemOutput.t;
-		const output2 = hasTransform ? B_next(input, "{}", dictFactory(itemOutput.s)) : B_refine(input, expectedSchema);
-		const itemCode = B_mergeWithPathPrepend(itemOutput, input, keyVar, hasTransform ? () => B_addKey(output2, keyVar, itemOutput) : U, hasTransform ? U : raiseCountBefore);
-		if (hasTransform || itemCode !== "") output2.cp = output2.cp + `for(let ${keyVar} in ${inputVar}){${itemCode}}`;
+		let itemOutput, output2;
+		const collected = input.g.kj;
+		const itemCode = B_sink(input.g, () => {
+			let itemMerge = "", settles = false;
+			const collects = B_collects(input.g);
+			const emit = () => {
+				itemOutput = parse(itemInput);
+				output2 = itemOutput.t ? B_next(input, "{}", dictFactory(itemOutput.s)) : B_refine(input, expectedSchema);
+				settles = !!(itemOutput.t && itemOutput.f & 1 && collects && input.g.k);
+				if (settles) itemOutput.fs?.(itemOutput, true);
+				itemMerge = B_merge(itemOutput);
+			};
+			const wrap = collects ? B_child(input.g, emit) : (emit(), U);
+			const code = itemOutput.t ? itemMerge + (settles ? `${output2.v()}[${keyVar}]=${B_settle(output2, itemOutput)}` : B_addKey(output2, keyVar, itemOutput)) : input.g.t + input.g.j === failCountBefore ? "" : itemMerge;
+			return wrap ? wrap(code, itemOutput) : code;
+		});
+		if (itemOutput.t || itemCode !== "") output2.cp = output2.cp + `for(let ${keyVar} in ${inputVar}){${itemCode}}`;
+		if (input.g.kj !== collected) output2.k = true;
 		if (itemOutput.f & 1) {
 			const resolveVar = B_varWithoutAllocation(output2.g);
 			const rejectVar = B_varWithoutAllocation(output2.g);
 			const asyncParseResultVar = B_varWithoutAllocation(output2.g);
 			const counterVar = B_varWithoutAllocation(output2.g);
 			const outputVar = output2.v();
-			output = B_asyncVal(output2, `new Promise((${resolveVar},${rejectVar})=>{let ${counterVar}=Object.keys(${outputVar}).length;if(!${counterVar}){${resolveVar}(${outputVar})}for(let ${keyVar} in ${outputVar}){${outputVar}[${keyVar}].then(${asyncParseResultVar}=>{${outputVar}[${keyVar}]=${asyncParseResultVar};if(${counterVar}--===1){${resolveVar}(${outputVar})}},${rejectVar})}})`);
+			const g = input.g, k = B_collects(g) && g.k;
+			let all = `new Promise((${resolveVar},${rejectVar})=>{let ${counterVar}=Object.keys(${outputVar}).length;if(!${counterVar}){${resolveVar}(${outputVar})}for(let ${keyVar} in ${outputVar}){${outputVar}[${keyVar}].then(${asyncParseResultVar}=>{${outputVar}[${keyVar}]=${asyncParseResultVar};if(${counterVar}--===1){${resolveVar}(${outputVar})}},${rejectVar})}})`;
+			if (k) {
+				const entries = B_varWithoutAllocation(g);
+				all += `.then(${entries}=>{${B_join(output2, `Object.values(${entries})`)}return ${entries}})`;
+			}
+			output = B_asyncVal(output2, all);
 		} else output = output2;
 	} else if (dictItem !== U) {
 		const itemSchema = dictItem;
@@ -1228,22 +1645,17 @@ var objectDecoder = (unknownInput) => {
 			const itemInput = valGet(input, key);
 			const source = itemInput.s;
 			const absent = source.type === anyOfTag && source.has[undefinedTag] && !(tagFlags[itemSchema.type] & 817) && itemSchema.format !== "json";
-			if (absent) {
-				const target = copySchema(source);
-				target.anyOf = source.anyOf.map((variant) => variant.type === undefinedTag ? variant : updateOutput(variant, (mut) => {
-					mut.to = itemSchema;
-				}));
-				target.perVariant = true;
-				itemInput.e = target;
-			} else itemInput.e = itemSchema;
+			itemInput.e = absent ? keepAbsent(source, itemSchema) : itemSchema;
 			itemInput.io = false;
 			itemInput.u = isUnion;
 			B_narrowJsonSourcedJsonString(itemInput);
-			const itemOutput = parse(itemInput);
-			if (absent) itemOutput.o = true;
-			B_addObjectField(objectVal, key, itemOutput);
+			B_field(objectVal, key, () => {
+				const itemOutput = parse(itemInput);
+				if (absent) itemOutput.o = true;
+				return itemOutput;
+			});
 		}
-		output = completeObjectVal(objectVal);
+		output = completeObjectVal(objectVal, isUnion);
 	} else {
 		const properties = expectedSchema.properties;
 		const keys = Object.keys(properties);
@@ -1252,7 +1664,7 @@ var objectDecoder = (unknownInput) => {
 		const ai = expectedSchema.additionalItems;
 		const fused = B_fused(input, expectedSchema);
 		let shouldRecreateInput = fused === U && ai !== "strict" && (ai !== "strip" || sourceIsDict || Object.keys(input.s.properties).length !== keysCount);
-		const isJsonParent = isItemSchema(inputAdditionalItems) && inputAdditionalItems.isJson;
+		const isJsonParent = isItemSchema(inputAdditionalItems) && inputAdditionalItems.flags & 16;
 		for (let idx = 0; idx < keysCount; idx++) {
 			const key = keys[idx];
 			const schema = properties[key];
@@ -1260,27 +1672,31 @@ var objectDecoder = (unknownInput) => {
 			itemInput.e = schema;
 			itemInput.io = false;
 			itemInput.u = isUnion;
-			if (isJsonParent && schema.type === anyOfTag && schema.has[undefinedTag]) itemInput.i = `(${itemInput.i}??null)`;
+			if (isJsonParent && isOptional(schema)) itemInput.s = wrapDictMissingKeyLight(itemInput.s);
 			if (fused !== U && !(isUnion && isLiteral(schema))) {
 				B_addObjectField(objectVal, key, itemInput);
 				continue;
 			}
 			B_narrowJsonSourcedJsonString(itemInput);
-			const itemOutput = parse(itemInput);
-			if (isUnion && isLiteral(schema)) B_hoistChildChecks(input, itemOutput, key);
-			B_addObjectField(objectVal, key, itemOutput);
-			if (!shouldRecreateInput) shouldRecreateInput = itemOutput.t;
+			B_field(objectVal, key, () => {
+				const itemOutput = parse(itemInput);
+				if (isUnion && isLiteral(schema)) B_hoistChildChecks(input, literalRead(itemOutput, itemInput), key);
+				if (!shouldRecreateInput) shouldRecreateInput = itemOutput.t;
+				return itemOutput;
+			});
 		}
 		if (ai === "strict" && isItemSchema(inputAdditionalItems) && fused === U) {
 			const keyVar = B_varWithoutAllocation(objectVal.g);
 			B_hoistDecl(input, keyVar);
-			objectVal.cp += B_unrecognizedKeys(input, keys, keyVar, "");
+			objectVal.cp += B_unrecognizedKeys(input, keys, keyVar, "", objectVal);
 		}
-		if (shouldRecreateInput) output = completeObjectVal(objectVal);
+		if (shouldRecreateInput) output = completeObjectVal(objectVal, isUnion);
 		else {
 			const o = B_refine(input, fused || expectedSchema);
 			o.cp = objectVal.cp;
+			if (objectVal.hn) o.hn = objectVal.hn;
 			o.d = objectVal.d;
+			o.k = objectVal.k;
 			output = o;
 		}
 	}
@@ -1332,27 +1748,74 @@ var traverseDefinition = (definition, onNode) => {
 var missingKeyEncoder = (input, target) => {
 	const item = input.s.anyOf[0];
 	const v = input.v();
-	const presentIn = B_scope(input);
-	presentIn.io = false;
-	presentIn.s = item;
-	presentIn.e = target;
-	presentIn.u = true;
-	const presentOut = parse(presentIn);
-	const presentCode = B_merge(presentOut);
-	const presentAssign = presentOut.i === v ? "" : `${v}=${presentOut.i};`;
-	const absentCode2 = isOptional(target) ? "" : B_embedInvalidInput(input, target);
-	const output = B_nextVarOutput(input, v, getOutputSchema(target), target);
-	const presentBody = presentCode + presentAssign;
-	output.cp = presentBody === "" ? absentCode2 === "" ? "" : `${v}!==void 0||${absentCode2};` : absentCode2 === "" ? `if(${v}!==void 0){${presentBody}}` : `if(${v}!==void 0){${presentBody}}else{${absentCode2}}`;
+	const unsetIsInput = item.format === "env";
+	const output = B_nextVarOutput(input, v, getOutputSchema(target));
+	const body = (source, u, e = target) => {
+		const scope = B_scope(input);
+		scope.io = false;
+		scope.s = source;
+		scope.e = e;
+		scope.u = u;
+		B_narrowJsonSourcedJsonString(scope);
+		const out = parse(scope);
+		output.f |= out.f & 1;
+		return B_merge(out) + (out.i === v ? "" : `${v}=${out.i};`);
+	};
+	const present2 = item.flags & 16 ? presentTarget(target) : target;
+	const presentBody = present2 ? body(item, !unsetIsInput, present2) : B_failInvalidInput(input, target) + ";";
+	const absentBody = !unsetIsInput && readsAbsent(target) ? body(target.decoder === noopDecoder ? unit : unknown, false) : "";
+	const noAbsentCheck = isOptional(target) || unsetIsInput;
+	output.cp = absentBody ? presentBody === "" ? `if(${v}===void 0){${absentBody}}` : `if(${v}!==void 0){${presentBody}}else{${absentBody}}` : presentBody === "" ? noAbsentCheck ? "" : B_failInvalidInput(input, target, `${v}!==void 0`) : unsetIsInput ? presentBody : noAbsentCheck ? `if(${v}!==void 0){${presentBody}}` : `if(${v}!==void 0){${presentBody}}else${B_block(B_failInvalidInput(input, target))}`;
 	return output;
+};
+var presentTarget = (s2) => {
+	const anyOf2 = s2.anyOf;
+	if (anyOf2 === U || !s2.has[undefinedTag]) return s2;
+	let mut;
+	if (s2.decoder === noopDecoder) {
+		const item = presentTarget(anyOf2[0]);
+		if (item === U) return U;
+		mut = item === anyOf2[0] ? copySchema(item) : item;
+	} else {
+		const arms = anyOf2.filter((arm) => arm.type !== undefinedTag);
+		if (!arms.length) return U;
+		mut = copySchema(s2);
+		mut.anyOf = arms;
+		mut.has = {};
+		arms.forEach((arm) => setHas(mut.has, arm));
+		const to2 = s2.to;
+		if (to2 !== U && to2.type === anyOfTag && (to2.has[nullTag] || to2.has[undefinedTag])) {
+			const toArms = to2.anyOf.filter((arm) => arm.type !== undefinedTag && (arm.type !== nullTag || mut.has[nullTag]));
+			if (!toArms.length) return s2;
+			const toMut = copySchema(to2);
+			toMut.anyOf = toArms;
+			toMut.has = {};
+			toArms.forEach((arm) => setHas(toMut.has, arm));
+			mut.to = toMut;
+		}
+	}
+	mut.expression = () => /* @__PURE__ */ inputExpression(s2);
+	return mut;
+};
+var envDefaults = (s2) => s2.format === "env" && s2.to !== U;
+var readsAbsent = (s2) => {
+	if (envDefaults(s2)) return true;
+	if (!isOptional(s2)) return s2.type === refTag;
+	if (s2.to !== U || s2.refiner !== U) return true;
+	for (const arm of s2.anyOf || [s2]) {
+		if (envDefaults(arm)) return true;
+		if (arm.type === undefinedTag) return arm.to !== U || arm.refiner !== U;
+		if (isOptional(arm) || arm.type === unknownTag && (arm.to !== U || arm.parser !== U || arm.refiner !== U)) return true;
+	}
+	return true;
 };
 var wrapDictMissingKeyLight = (s2) => {
 	const mut = baseSchema(anyOfTag, false, noopDecoder);
 	mut.anyOf = [s2, unit];
 	mut.has = { [undefinedTag]: true };
-	setHas(mut.has, s2.type);
+	setHas(mut.has, s2);
 	mut.encoder = missingKeyEncoder;
-	mut.perVariant = true;
+	mut.flags = 64;
 	return mut;
 };
 var valGet = (parent, location) => {
@@ -1378,7 +1841,7 @@ var valGet = (parent, location) => {
 			b: U,
 			p: parent,
 			v: _notVarAtParent,
-			i: isLiteral(schema) ? B_inlineConst(parent, schema) : parent.s.type === objectTag && location in Object.prototype ? `(Object.hasOwn(${parent.v()},${inlinedValueFromString(location)})?${parent.v()}${accessor}:void 0)` : `${parent.v()}${accessor}`,
+			i: isLiteral(schema) && !schema.openLiteral ? B_inlineConst(parent, schema) : parent.s.type === objectTag && location in Object.prototype ? `(Object.hasOwn(${parent.v()},${inlinedValueFromString(location)})?${parent.v()}${accessor}:void 0)` : `${parent.v()}${accessor}`,
 			s: schema,
 			io: U,
 			e: schema,
@@ -1387,12 +1850,14 @@ var valGet = (parent, location) => {
 			d: U,
 			fv: U,
 			cp: "",
+			fu: U,
+			fs: U,
 			hd: "",
 			fz: U,
 			vc: U,
 			u: U,
 			t: U,
-			path: /* @__PURE__ */ pathConcat(parent.path, [location]),
+			path: pathConcat(parent.path, [location]),
 			g: parent.g,
 			o: U
 		};
@@ -1403,6 +1868,17 @@ var valGet = (parent, location) => {
 var unionRuntimeSame = (a, b) => a.type === b.type && a.class === b.class;
 var unionSameType = (a, b) => a === b || unionRuntimeSame(a, b) && !(tagFlags[a.type] & 768) && a.format === b.format;
 var unionLiteralEqual = (a, b) => a === b || a !== a && b !== b;
+var unionConstMismatch = (a, b) => isLiteral(a) && isLiteral(b) && !unionLiteralEqual(a.const, b.const);
+var unionShapeMismatch = (target, source, held) => {
+	if (unionConstMismatch(target, source)) return true;
+	const fields = target.properties || target.items;
+	const others = source.properties || source.items;
+	if (fields && others) {
+		for (const key in fields) if (others[key] !== U && unionShapeMismatch(fields[key], unionOutput(others[key]), held)) return true;
+	}
+	return !held && typeof target.additionalItems === objectTag && typeof source.additionalItems === objectTag && unionShapeMismatch(target.additionalItems, unionOutput(source.additionalItems));
+};
+var unionShaped = (schema) => !!(schema.properties || schema.items) || typeof schema.additionalItems === objectTag;
 var unionOutput = (schema) => {
 	let output = schema;
 	while (output.type !== neverTag && output.to !== U) {
@@ -1411,15 +1887,27 @@ var unionOutput = (schema) => {
 	}
 	return output;
 };
+var unionHoldsNone = (schema) => schema.type === neverTag || schema.type !== refTag && (!!schema.required?.some((key) => unionHoldsNone(schema.properties[key])) || Array.isArray(schema.items) && schema.items.some(unionHoldsNone));
 var unionNeverLink = (schema) => {
-	for (let node = schema; node !== U && node.type !== neverTag; node = node.to) if (node.parser === B_neverSlot) return true;
+	for (let node = schema; node !== U && node.type !== neverTag; node = node.to) if (node.parser === B_neverSlot || unionHoldsNone(node)) return true;
 	return false;
 };
-var unionIsTransparent = (schema) => {
+var unionIsTransparent = (schema, converts) => {
 	if (schema.type !== anyOfTag) return false;
 	let fields = 0;
-	for (const _key in schema) fields++;
-	return fields === 6;
+	for (const key in schema) if (!converts || !(key in unionDescribing)) fields++;
+	return fields === 6 && (!converts || schema.encoder !== U);
+};
+var unionDescribing = {
+	name: 1,
+	title: 1,
+	description: 1,
+	deprecated: 1,
+	examples: 1,
+	protobufField: 1,
+	protobufTypeName: 1,
+	parser: 1,
+	to: 1
 };
 var unionTraits = (schema) => {
 	const tag = tagFlags[schema.type];
@@ -1448,50 +1936,6 @@ var unionIsNoop = (schema) => {
 	for (const key in fields) if (!unionIsNoop(fields[key])) return false;
 	return typeof schema.additionalItems !== "object" || unionIsNoop(schema.additionalItems);
 };
-var unionFail = (schema, path, input, ...unionErrors) => B_throw(B_makeInvalidInputDetails(schema, unknown, path, input, unionErrors.length ? unionErrors : U));
-var unionEmitChain = (cases, ctx) => {
-	if (cases.length === 1) {
-		const c = cases[0];
-		if (c.b === "" && c.c === "") return "";
-		if (c.b === "") return `if(!(${c.c})){${ctx.f("")}}`;
-		if (c.c === "") return c.b.endsWith(";") ? c.b : c.b + ";";
-		return `if(${c.c}){${c.b}}else{${ctx.f("")}}`;
-	}
-	let code = "";
-	let caught = false;
-	let exhaustive = false;
-	let open = false;
-	const attempt = (c, idx) => {
-		open = false;
-		if (c.b === "") return "break";
-		const body = c.b.endsWith(";") ? c.b : `${c.b};`;
-		if (c.f & 1 && (c.f & 8 || caught)) {
-			caught = open = true;
-			return `try{${body}break}catch(x){${c.f & 4 ? `x=${ctx.r()}(x);if(x.expected===${ctx.s()}){x=x.unionErrors;x&&(r||(r=[])).push(...x)}else{(r||(r=[])).push(x)}` : `(r||(r=[])).push(${ctx.r()}(x))`}${!(c.f & 8) && unconditional > idx ? `;${ctx.f(",...(r||[])")}` : ""}}`;
-		}
-		return `${body}break`;
-	};
-	let unconditional = -1;
-	for (let idx = 0; idx < cases.length; idx++) if (cases[idx].c === "") unconditional = idx;
-	let last = "";
-	for (let idx = 0; idx < cases.length; idx++) {
-		const c = cases[idx];
-		const shared = c.c !== "" && c.c === last;
-		if (shared && !open) continue;
-		const arm = attempt(c, idx);
-		last = c.c;
-		if (shared) code = `${code.slice(0, -1)}${arm}}`;
-		else if (c.c === "") {
-			code += open ? arm : `${arm};`;
-			if (!open) {
-				exhaustive = true;
-				break;
-			}
-		} else code += arm === "break" ? `if(${c.c})break;` : `if(${c.c}){${arm}}`;
-	}
-	if (!exhaustive) code += ctx.f(caught ? ",...(r||[])" : "");
-	return `for(;;){${caught ? "let r;" : ""}${code}}`;
-};
 var unionOr = (cs) => {
 	const s2 = cs.map((c) => c.c).join("||");
 	return cs.length > 1 ? `(${s2})` : s2;
@@ -1514,7 +1958,11 @@ var unionNarrowSchema = (schema) => {
 		return schema.decoder(input);
 	});
 	narrow.encoder = schema.encoder;
-	if (schema.content !== U) setContent(narrow, schema.content);
+	if (schema.flags & 3) {
+		narrow.flags = schema.flags & 3;
+		const stored = schema.bytesCodec ? schema : schema.storedAs;
+		if (stored) narrow.storedAs = stored;
+	}
 	if (tagFlag & 8192) narrow.class = schema.class;
 	else if (tagFlag & container) {
 		narrow.additionalItems = unknown;
@@ -1523,17 +1971,27 @@ var unionNarrowSchema = (schema) => {
 	} else if (tagFlag & 2096) narrow.const = schema.const;
 	else if (tagFlag & 2 && schema.format !== U && schema.format !== "json") {
 		narrow.format = schema.format;
-		narrow.formatFlag = schema.formatFlag;
+		if (schema.flags & 32) narrow.flags = narrow.flags | 32;
 		narrow.noValidation = schema.noValidation;
 	}
 	return narrow;
 };
 var unionWiden = (tagFlag, nan2) => tagFlag | (tagFlag & 8256 ? 8256 : tagFlag & tagFlags[numberTag] ? nan2 : 0);
 var unionRefDef = (schema) => {
-	const defs = schema["$defs"], ref = schema["$ref"];
-	if (defs === U || ref === U) return U;
-	const resolved = defs[ref.slice(ref.lastIndexOf("/") + 1)];
-	return resolved !== U && resolved !== schema ? resolved : U;
+	const resolved = schema["$defs"] && schema.definition?.();
+	return resolved !== schema ? resolved : U;
+};
+var unionRaw = (schema) => {
+	let mask = schema.has ? 0 : -1;
+	for (const tag in schema.has) {
+		const flag = tagFlags[tag];
+		mask |= flag & 1 ? -1 : flag;
+	}
+	return mask;
+};
+var refDefinition = (ref) => {
+	const def = ref.definition();
+	return def?.type === refTag ? refDefinition(def) : def;
 };
 var unionMask = (schema, mode, nan2) => {
 	if (mode === 2) {
@@ -1548,7 +2006,7 @@ var unionMask = (schema, mode, nan2) => {
 		for (let i = 0; i < variants.length; i++) mask |= unionMask(variants[i], 1, nan2);
 		return mask;
 	}
-	return tagFlag & 769 ? -1 : unionWiden(tagFlag, nan2);
+	return tagFlag & 769 ? -1 : unionWiden(tagFlag, nan2) | (mode && schema.format === "env" ? 16 : 0);
 };
 var unionGroup = (member) => ({
 	m: member.m,
@@ -1575,26 +2033,39 @@ var unionCheckPartial = (input, source, target, variants, outputSide) => {
 	const other = outputSide ? target : source;
 	let matched = U;
 	let unmatched = U;
+	let byConst = false;
 	for (let idx = 0; idx < variants.length; idx++) {
 		const variant = variants[idx];
 		const match = outputSide ? unionOutput(variant) : variant;
 		if (variant.type === neverTag || (outputSide ? match.type === neverTag : unionNeverLink(variant))) continue;
-		if (unionSameType(other, match)) matched || (matched = variant);
-		else unmatched || (unmatched = variant);
+		const same = unionSameType(other, match);
+		const differs = outputSide && same && unionShapeMismatch(other, match);
+		if (same && !differs) matched || (matched = variant);
+		else if (unmatched === U) unmatched = variant, byConst = differs;
 	}
-	if (matched !== U && unmatched !== U) unionInvalid(input, source, target, unmatched, outputSide);
+	if (matched !== U && unmatched !== U) {
+		const it = /* @__PURE__ */ inputExpression(unmatched);
+		if (byConst) unionAmbiguous(input, source, target, `${it} isn't ${/* @__PURE__ */ inputExpression(target)}. Choose with S.to for ${it} -> ${/* @__PURE__ */ inputExpression(target)}, or S.never -> ${it}${input.path.length && input.g.o & 4 ? ", or split what holds it into a union with a member per value" : ""}`);
+		unionInvalid(input, source, target, unmatched, outputSide);
+	}
 };
 var unionPeer = (schema) => schema.anyOf?.find((variant) => !(tagFlags[variant.type] & 32816)) || schema;
 var unionInvalid = (input, source, target, member, onSource) => {
 	const it = /* @__PURE__ */ inputExpression(member);
-	const conversion = onSource ? `${it} -> ${/* @__PURE__ */ inputExpression(unionPeer(target))}` : `${/* @__PURE__ */ inputExpression(unionPeer(source))} -> ${it}`;
-	return B_invalidOperation(input, `Ambiguous ${/* @__PURE__ */ inputExpression(source)} -> ${/* @__PURE__ */ inputExpression(target)}. Should ${it} be decoded or ignored? Choose with S.to for ${conversion}, or S.never -> ${it}`);
+	return unionAmbiguous(input, source, target, `Should ${it} be decoded or ignored? Choose with S.to for ${onSource ? `${it} -> ${/* @__PURE__ */ inputExpression(unionPeer(target))}` : `${/* @__PURE__ */ inputExpression(unionPeer(source))} -> ${it}`}, or S.never -> ${it}`);
 };
+var unionChoose = (source, consts) => {
+	const to2 = `S.literal(${/* @__PURE__ */ inputExpression(source)}).with(S.to, S.literal(${/* @__PURE__ */ inputExpression(consts[0])}))`;
+	return `Choose one with S.to, such as ${consts.length > 1 ? `S.union([${to2}${consts.slice(1).map((other) => `, S.never.with(S.to, S.literal(${/* @__PURE__ */ inputExpression(other)}))`).join("")}])` : to2}`;
+};
+var unionAmbiguous = (input, source, target, why) => B_invalidOperation(input, `Ambiguous ${/* @__PURE__ */ inputExpression(source)} -> ${/* @__PURE__ */ inputExpression(target)}. ${why}`);
+var unionHoists = (schema) => unionIsNoop(schema) && schema.anyOf.every((arm) => !arm.refiner && !arm.inputRefiner && !arm.format && (arm.anyOf ? unionHoists(arm) : !!(tagFlags[arm.type] & 19518)));
 var unionAnalyze = (sourceMask, flags, sourceTag, variants, source, nan2) => {
 	const out = [];
 	const unknownSource = sourceTag & 1;
 	const sourceBoundary = sourceTag & 768;
 	const unionSource = sourceBoundary && sourceMask !== -1;
+	const sourceRaw = unionSource ? unionRaw(unionRefDef(source) || source) : 0;
 	const sourceDiscriminator = unionDiscriminator(source);
 	const exact = flags & 1;
 	const broadObject = flags & 64;
@@ -1602,13 +2073,18 @@ var unionAnalyze = (sourceMask, flags, sourceTag, variants, source, nan2) => {
 	const numberish = tagFlags[numberTag] | 2048;
 	for (let i = 0; i < variants.length; i++) {
 		const s2 = variants[i];
-		const tag = tagFlags[s2.type];
-		const inputMask = unionMask(s2, 1, nan2);
-		const d = unionDiscriminator(s2);
-		const same = unionRuntimeSame(source, s2);
+		const def = s2.type === refTag ? refDefinition(s2) : U;
+		const defTag = def === U ? 0 : tagFlags[def.type];
+		const view = def !== U && !(defTag & 769) ? def : s2;
+		const tag = tagFlags[view.type];
+		const inputMask = unionMask(defTag & 256 ? def : view, 1, nan2);
+		let d = unionDiscriminator(s2);
+		if (source.flags & 16 && d !== U && d[1] === U) d = U;
+		const same = unionRuntimeSame(source, s2) && !(s2.type === refTag && s2 !== source);
 		const discriminatorDisjoint = sourceDiscriminator !== U && d !== U && same && sourceDiscriminator[0] === d[0] && !unionLiteralEqual(sourceDiscriminator[1], d[1]);
 		const accepts = !(tag & 32768) && !unionNeverLink(s2) && !discriminatorDisjoint && (!exact || (isLiteral(s2) ? unionLiteralEqual(s2.const, source.const) : sourceMask & inputMask));
-		const native = sourceMask & tag;
+		const native = (unionSource ? sourceRaw : sourceMask) & tag;
+		const raw = tag & 769 ? unionRaw(defTag & 256 ? def : view) : 0;
 		const coerces = accepts && !unknownSource && !(unionSource ? native : same);
 		const output = unionOutput(s2);
 		const traits = unionTraits(s2);
@@ -1617,13 +2093,13 @@ var unionAnalyze = (sourceMask, flags, sourceTag, variants, source, nan2) => {
 		out[i] = {
 			i,
 			s: s2,
-			m: accepts ? unknownSource ? inputMask : unionSource ? native ? inputMask : s2.type === undefinedTag && sourceMask & 32 ? 32 : s2.type === nullTag && sourceMask & 16 ? 16 : sourceMask & 2 ? 2 : sourceMask : sourceMask : 0,
+			m: accepts ? unknownSource ? inputMask : unionSource ? native ? inputMask : s2.type === undefinedTag && sourceMask & 32 ? 32 : s2.type === nullTag && sourceMask & 16 ? 16 : raw & sourceRaw | (raw & 2096 ? sourceMask & 48 : 0) | (sourceMask & 2 ? 2 : sourceMask) : sourceMask : 0,
 			o: !!accepts && output.type !== neverTag,
 			e: effect,
-			f: traits & 7 | (effect ? 1 : 0) | (sourceDeopt ? 4 : 0) | (!unknownSource && same || tag & 37633 ? 16 : 0),
+			f: traits & 7 | (effect ? 1 : 0) | (sourceDeopt ? 4 : 0) | (!unknownSource && same || tag & 37633 ? 16 : 0) | (unknownSource && s2.type === anyOfTag && unionHoists(s2) ? 32 : 0),
 			p: s2.type === objectTag && nestedLoc in s2.properties || broadObject && tag & 8320 || broadNumber && tag & 2048 ? 0 : d !== U ? 1 : 2,
-			k: tag & 8192 ? s2.class : s2.format === "env" ? s2.format : s2.type,
-			n: unionNarrowSchema(s2),
+			k: tag & 8192 ? view.class : view.format === "env" ? view.format : view.type,
+			n: unionNarrowSchema(view),
 			r: tag & 8256 ? 8256 : tag & numberish ? numberish : unionWiden(tag, nan2),
 			d
 		};
@@ -1697,6 +2173,15 @@ var unionPlan = (members) => {
 		if ("a" in item) plan.push(item);
 		else plan.push(...item.t.sort((a, b) => a.p - b.p));
 	}
+	for (let i = plan.length; i--;) {
+		const group = plan[i];
+		const head = group.a[0];
+		if (group.a[1] || !(head.n.type === refTag || head.n.type === anyOfTag && !(head.f & 32)) || group.m === -1) continue;
+		group.f |= 10;
+		let to2 = i;
+		while (plan[to2 + 1] && !(plan[to2 + 1].m & group.m)) to2++;
+		plan.splice(to2, 0, ...plan.splice(i, 1));
+	}
 	const later = [];
 	let laterMask = 0;
 	let laterBroad = 0;
@@ -1722,13 +2207,13 @@ var unionPlan = (members) => {
 		const route = head.r;
 		const semantic = later[route];
 		let overlaps = !!(laterMask & group.m) && (!!(laterBroad & group.m) || key === false || semantic === U || semantic === false || semantic[0] !== key);
-		if (!overlaps && semantic !== U && semantic !== false) {
+		if (!overlaps && key !== false && semantic !== U && semantic !== false) {
 			for (const value of values) if (semantic[1].has(value)) {
 				overlaps = true;
 				break;
 			}
 		}
-		if (overlaps || laterMask && tagFlags[head.s.type] & 37633 && (head.s.to !== U || head.s.parser !== U)) group.f |= 10;
+		if (overlaps || laterMask && tagFlags[head.n.type] & 37633 && (head.s.to !== U || head.s.parser !== U)) group.f |= 10;
 		if (route !== -1 && (group.m & ~route) === 0) {
 			if (key === false) later[route] = false;
 			else if (semantic === U) later[route] = [key, values];
@@ -1747,14 +2232,118 @@ var unionEmit = (input, self, expectedSchema, plan, toPerCase, trustedSelf) => {
 	let output = B_refine(input);
 	const awaitAsync = plan.some((group) => group.f & 2);
 	const outputBySource = [];
-	let salvaged = "";
-	let rethrow = "";
-	let expected = "";
-	const ctx = {
-		f: (caught) => `${B_embed(input, unionFail.bind(U, expectedSchema, input.path))}(${input.v()}${salvaged}${caught})`,
-		r: () => rethrow || (rethrow = B_embed(input, getOrRethrow)),
-		s: () => expected || (expected = B_embed(input, expectedSchema))
+	const salvaged = [];
+	let rethrowEmbed = "";
+	const g = input.g;
+	const wanted = !(g.o & 4096);
+	const outer = g.o & 1 && awaitAsync ? U : g.x;
+	let failures = "";
+	const failuresVar = () => failures || (failures = B_varWithoutAllocation(g));
+	let aggregate = "";
+	const unionFailure = () => {
+		if (!aggregate) {
+			let site;
+			const snap = B_pathSnap(input);
+			aggregate = B_embedPure(input, (v, found, path2) => {
+				const errors = [];
+				for (let n = found; n; n = n[0]) errors.unshift(n.length < 3 ? n[1] : n[1](n[2], n[3]));
+				errors.unshift(...salvaged);
+				return errorAt(site ?? (site = errorSite(expectedSchema, unknown)), path2 ?? snap, v, errors.length ? errors : U);
+			});
+		}
+		const path = B_pathArg(input);
+		return `${aggregate}(${input.v()}${failures ? `,${failures}` : path ? ",void 0" : ""}${path})`;
 	};
+	const final = () => {
+		const jump = outer?.(unionFailure);
+		if (jump !== U) return g.j++, jump;
+		B_markThrow(input);
+		return `throw ${unionFailure()}`;
+	};
+	const jumpOut = (label) => (error) => `${wanted && error ? `{${keep(error(true))};` : ""}break ${label.l || (label.l = `l${++g.v}`)}${wanted && error ? "}" : ""}`;
+	const end = {};
+	const toEnd = jumpOut(end);
+	const fail2 = (error) => recorded ? toEnd(error) : error ? outer?.(error) : final();
+	const collects = B_collects(g);
+	if (collects && outer === U) {
+		const nothingMore = B_embedPure(input, {
+			t: settledTag,
+			l: []
+		});
+		g.y = () => (B_markThrow(input), `throw ${nothingMore}`);
+	}
+	fail2.k = () => collects && !recorded;
+	const collected = g.kj;
+	const rethrow = () => rethrowEmbed || (rethrowEmbed = B_embed(input, getOrRethrow));
+	const keep = (error) => wanted ? `${failuresVar()}=[${failures},${error}]` : error;
+	const emitChain = (cases2, top) => {
+		const ending = top ? final : () => g.x();
+		if (cases2.length === 1 && !cases2[0].l && !(top && end.l)) {
+			const c = cases2[0];
+			if (c.b === "" && c.c === "") return "";
+			if (c.b === "") return `if(!(${c.c}))${B_block(ending())}`;
+			if (c.c === "") return c.b;
+			return `if(${c.c}){${c.b}}else${B_block(ending())}`;
+		}
+		let code = "";
+		let caught = false;
+		let exhaustive = false;
+		let open = false;
+		const attempt = (c, idx) => {
+			open = false;
+			if (c.b === "") return "break";
+			let arm = `${c.b}break`;
+			if (c.f & 1 && (c.f & 8 || caught)) {
+				caught = open = true;
+				arm = `try{${arm}}catch(x){${keep(`${rethrow()}(x)`)}${!(c.f & 8) && unconditional > idx ? `;${g.x()}` : ""}}`;
+			}
+			if (c.l) {
+				open = true;
+				arm = `${c.l}:{${arm}}`;
+				if (!(c.f & 8) && unconditional > idx) arm += `${g.x()};`;
+			}
+			if (c.f & 8 && c.f & 4) caught = true;
+			return arm;
+		};
+		let unconditional = -1;
+		for (let idx = 0; idx < cases2.length; idx++) if (cases2[idx].c === "") unconditional = idx;
+		let last = "";
+		for (let idx = 0; idx < cases2.length; idx++) {
+			const c = cases2[idx];
+			const shared = c.c !== "" && c.c === last;
+			if (shared && !open) continue;
+			const arm = attempt(c, idx);
+			last = c.c;
+			if (shared) code = `${code.slice(0, -1)}${arm}}`;
+			else if (c.c === "") {
+				code += arm;
+				if (!open) {
+					exhaustive = true;
+					break;
+				}
+			} else code += arm === "break" ? `if(${c.c})break;` : `if(${c.c}){${arm}}`;
+		}
+		const label = top ? end.l || "" : "";
+		const tail = !exhaustive || label ? ending() : "";
+		return `for(;;){${label ? `${label}:{${code}}` : code}${tail[0] === "{" ? tail.slice(1, -1) : tail}}`;
+	};
+	const enter = (falls) => {
+		const x = g.x, label = {};
+		if (falls) g.x = jumpOut(label);
+		return () => (g.x = x, label.l);
+	};
+	let recorded = false;
+	const settle2 = (c, chain) => {
+		let last;
+		for (let i = chain.length; !last && i--;) if (!(chain[i].f & 16)) last = chain[i];
+		if (last && c.c !== "" && c.c === last.c && (last.b === "" || !(last.l || last.f & 1 && (last.f & 8 || recorded)))) {
+			c.f |= 16;
+			recorded = c.s;
+		} else if (c.f & 8 && c.f & 5) recorded = true;
+		chain.push(c);
+		return c;
+	};
+	g.x = fail2;
 	const unionDTrusted = (member) => {
 		const d = member.d;
 		const tag = tagFlags[member.s.type];
@@ -1764,14 +2353,18 @@ var unionEmit = (input, self, expectedSchema, plan, toPerCase, trustedSelf) => {
 		}
 		return true;
 	};
-	const compile2 = (member, source, target) => {
-		const mark = input.g.t;
+	const compile2 = (member, source, target, falls, inherit) => {
+		const mark = input.g.t, jumps = g.j, snap = recorded;
+		const leave = inherit ? () => U : enter(falls || +recorded);
 		const caseInput = B_scope(source);
 		caseInput.u = true;
 		caseInput.t = source.t;
+		if (isLiteral(member.s)) caseInput.w = true;
 		caseInput.io = false;
 		caseInput.e = member.s;
-		if (source.s === target.e) caseInput.s = member.n;
+		const sole = trustedSelf && !isLiteral(member.s) && plan.every((group) => group.a.every((m) => m === member || !(m.m & member.m)));
+		if (member.s.type === refTag && member.n.type !== refTag) caseInput.s = sole ? member.s : input.s;
+		else if (source.s === target.e) caseInput.s = sole && source !== input ? member.s : member.n;
 		const trustedD = trustedSelf && member.p === 1 && !(member.f & 8) && member.d[0] !== "" && unionDTrusted(member) ? member.d : U;
 		if (trustedD !== U) caseInput.s = member.s;
 		let caseOut;
@@ -1780,8 +2373,9 @@ var unionEmit = (input, self, expectedSchema, plan, toPerCase, trustedSelf) => {
 		try {
 			caseOut = parse(caseInput);
 		} catch (exn) {
-			if (!self.perVariant) throw exn;
-			salvaged += `,${B_embed(input, getOrRethrow(exn))}`;
+			leave();
+			if (!(self.flags & 64)) throw exn;
+			salvaged.push(getOrRethrow(exn));
 			return U;
 		} finally {
 			input.g.o = options;
@@ -1792,13 +2386,14 @@ var unionEmit = (input, self, expectedSchema, plan, toPerCase, trustedSelf) => {
 			h: []
 		};
 		let body = B_merge(caseOut, cond);
+		const label = leave();
 		const async = caseOut.f & 1;
 		output.f |= async;
 		if (caseOut.t) {
 			output.t = true;
 			const itemVar = target.v();
 			if (async || caseOut.i !== itemVar) {
-				body += `${itemVar}=${async && awaitAsync ? "await " : ""}${caseOut.i}`;
+				body += `${itemVar}=${async && awaitAsync ? "await " : ""}${caseOut.i};`;
 				if (itemVar === operationArgVar) input.g.r = true;
 			}
 		}
@@ -1811,22 +2406,33 @@ var unionEmit = (input, self, expectedSchema, plan, toPerCase, trustedSelf) => {
 		return {
 			c: cond.c,
 			b: body,
-			f: (body !== "" && input.g.t !== mark ? 1 : 0) | (async && awaitAsync ? 2 : 0) | member.f & 8
+			f: (body !== "" && input.g.t !== mark ? 1 : 0) | (async && awaitAsync ? 2 : 0) | (g.j !== jumps ? 4 : 0) | falls,
+			l: label,
+			s: snap
 		};
 	};
 	const cases = [];
 	for (let i = 0; i < plan.length; i++) {
 		const group = plan[i];
 		if (group.a.length === 1 && group.f & 16) {
-			const c = compile2(group.a[0], input, input);
+			const c = compile2(group.a[0], input, input, (group.a[0].f | group.f) & 8);
 			if (c !== U) {
-				c.f |= group.f & 8;
-				cases.push(c);
+				settle2(c, cases);
 				if (c.c === "" && c.b === "") break;
 			}
 			continue;
 		}
-		const mark = input.g.t;
+		const mark = input.g.t, jumps = g.j, snap = recorded;
+		const labelled = group.f & 8 || +recorded;
+		const leave = enter(labelled);
+		const before = recorded;
+		const mergeNarrow = (val) => {
+			const members = recorded;
+			recorded = before;
+			const code = B_merge(val, cond);
+			recorded = members;
+			return code;
+		};
 		const groupNarrow = group.a[0].n;
 		const narrowInput = B_scope(input);
 		narrowInput.io = false;
@@ -1839,30 +2445,33 @@ var unionEmit = (input, self, expectedSchema, plan, toPerCase, trustedSelf) => {
 		}
 		const inner = [];
 		for (let j = 0; j < group.a.length; j++) {
-			const c = compile2(group.a[j], narrow, narrowInput);
+			const c = compile2(group.a[j], narrow, narrowInput, group.a[j].f & 8, !!labelled && group.a.length === 1);
 			if (c !== U) {
-				inner.push(c);
+				settle2(c, inner);
 				if (c.c === "" && c.b === "") break;
 			}
 		}
-		if (!inner.length) continue;
+		if (!inner.length) {
+			leave();
+			continue;
+		}
 		const cond = {
 			c: "",
 			h: []
 		};
 		let body;
-		let grouped = false;
+		let only;
 		if (inner.every((c) => c.b === "")) {
 			if (!inner.some((c) => c.c === "")) {
 				const fused = unionOr(inner);
-				body = B_merge(B_refine(narrow, narrow.s, [{
+				body = mergeNarrow(B_refine(narrow, narrow.s, [{
 					c: () => fused,
 					f: failInvalidType
-				}]), cond);
-			} else body = B_merge(narrow, cond);
+				}]));
+			} else body = mergeNarrow(narrow);
 		} else {
-			const narrowCode = B_merge(narrow, cond);
-			const only = inner.length === 1 ? inner[0] : U;
+			const narrowCode = mergeNarrow(narrow);
+			only = inner.length === 1 ? inner[0] : U;
 			if (only !== U && narrowCode === "") {
 				if (only.c !== "") cond.c = cond.c ? `${cond.c}&&${only.c}` : only.c;
 				body = only.b;
@@ -1871,15 +2480,18 @@ var unionEmit = (input, self, expectedSchema, plan, toPerCase, trustedSelf) => {
 					const fused = unionOr(inner);
 					cond.c = cond.c ? `${cond.c}&&${fused}` : fused;
 				}
-				body = narrowCode + unionEmitChain(inner, ctx);
-				grouped = inner.length > 1;
+				body = narrowCode + emitChain(inner);
 			}
 		}
-		cases.push({
+		const label = leave();
+		recorded = before || recorded && !!(group.f & 8);
+		settle2({
 			c: cond.c,
 			b: body,
-			f: (body !== "" && input.g.t !== mark ? 1 : 0) | (inner.some((c) => c.f & 2) ? 2 : 0) | group.f & 8 | (grouped ? 4 : 0)
-		});
+			f: (body !== "" && input.g.t !== mark ? 1 : 0) | (inner.some((c) => c.f & 2) ? 2 : 0) | (g.j !== jumps ? 4 : 0) | group.f & 8,
+			l: label || (only && body === only.b ? only.l : U),
+			s: snap
+		}, cases);
 		if (body === "" && cond.c === "") break;
 	}
 	const noop = cases.every((c) => c.b === "") && cases.some((c) => c.c === "");
@@ -1892,7 +2504,8 @@ var unionEmit = (input, self, expectedSchema, plan, toPerCase, trustedSelf) => {
 			f: failInvalidType
 		}], expectedSchema));
 	} else if (!noop) {
-		const dispatch2 = unionEmitChain(cases, ctx);
+		let dispatch2 = emitChain(cases, true);
+		if (failures) dispatch2 = B_let(input.g, failures) + dispatch2;
 		if (asyncDispatch) {
 			const itemVar = input.v();
 			output.i = `(async(${itemVar})=>{${dispatch2};return ${itemVar}})(${itemVar})`;
@@ -1910,6 +2523,7 @@ var unionEmit = (input, self, expectedSchema, plan, toPerCase, trustedSelf) => {
 		input.i = initialInline;
 		out = input;
 	} else out = output;
+	if (g.kj !== collected) out.k = true;
 	const outputAnyOf = outputBySource.filter(Boolean);
 	out.s = outputAnyOf.length ? unionFactory(outputAnyOf) : never_;
 	if (toPerCase !== U) {
@@ -1929,7 +2543,7 @@ var unionDecoder = (input) => {
 		return s2 !== U && !(tagFlags[inS.type] & 9152) && inS.type === s2.type && unionLiteralEqual(inS.const, s2.const) && inS.to === U && s2.to === U;
 	})) return input;
 	const initialTagFlag = tagFlags[input.s.type];
-	const trustedSelf = input.s === self || self.tr;
+	const trustedSelf = input.s === self || !!(self.flags & 128);
 	if (initialTagFlag & 256 || input.s.encoder === U && initialTagFlag & 512) input.s = unknown;
 	if (variants.every(unionNeverLink)) B_invalidOperation(input, `Nothing decodes ${/* @__PURE__ */ inputExpression(self)}. Every member is S.never`);
 	const source = input.s;
@@ -1939,16 +2553,29 @@ var unionDecoder = (input) => {
 		expected = copySchema(self);
 		expected.anyOf = variants;
 	}
+	if (!(tagFlags[source.type] & 1) && unionShaped(source)) {
+		const fit = variants.filter((variant) => !unionShapeMismatch(variant, source, true));
+		if (!fit.length && !(input.g.o & 32)) B_invalidOperation(input, `Can't decode ${/* @__PURE__ */ inputExpression(source)} -> ${/* @__PURE__ */ inputExpression(self)}: it holds a value none of them does. Choose one with S.to, such as ${/* @__PURE__ */ inputExpression(source)} -> ${/* @__PURE__ */ inputExpression(variants[0])}`);
+		if (fit.length < variants.length) variants = fit;
+	}
 	const nan2 = input.g.o & 2 ? 2048 : 0;
 	let flags = 0;
 	const sourceLiteral = isLiteral(source);
 	for (let i = 0; i < variants.length; i++) {
 		const member = variants[i];
 		if (sourceLiteral && isLiteral(member) && unionLiteralEqual(member.const, source.const)) flags |= 1;
-		flags |= tagFlags[member.type] & (64 | tagFlags[numberTag]);
+		const def = member.type === refTag ? refDefinition(member) : U;
+		flags |= tagFlags[(def || member).type] & (64 | tagFlags[numberTag]);
 	}
 	const sourceTag = tagFlags[source.type];
-	if (!(sourceTag & 1) && !(flags & 1)) unionCheckPartial(input, source, self, variants, false);
+	if (!(sourceTag & 1) && !(flags & 1)) {
+		unionCheckPartial(input, source, self, variants, false);
+		const live = sourceLiteral && !(sourceTag & 48) ? variants.filter((variant) => variant.type !== neverTag && !unionNeverLink(variant)) : [];
+		const consts = live.filter(isLiteral);
+		const own2 = consts.filter((variant) => unionSameType(source, variant));
+		if (consts.length > 1 && !own2.length) unionAmbiguous(input, source, self, `${/* @__PURE__ */ inputExpression(source)} could become any of them. ${unionChoose(source, consts)}`);
+		if (live.length && own2.length === live.length && !(input.g.o & 32)) B_invalidOperation(input, `Can't decode ${/* @__PURE__ */ inputExpression(source)} -> ${/* @__PURE__ */ inputExpression(self)}: it is none of them. ${unionChoose(source, own2)}`);
+	}
 	if (toPerCase !== U) {
 		const perCase = unionTargetOwns(toPerCase) ? variants.map((v) => unionOutput(v).type === neverTag ? U : toPerCase) : unionResolve(input, self, variants, toPerCase);
 		const attach = self.refiner !== U || self.inputRefiner !== U ? unionRefinerAttacher(self) : U;
@@ -1956,11 +2583,27 @@ var unionDecoder = (input) => {
 			const to2 = perCase[idx];
 			return to2 === U && attach === U ? variant : updateOutput(variant, (mut) => {
 				if (attach !== U) attach(mut);
-				if (to2 !== U) mut.to = to2;
+				if (to2 !== U) unionHand(mut, to2);
 			});
 		});
 	}
-	return unionEmit(input, self, expected, unionPlan(unionAnalyze(unionMask(source, 2, nan2), flags, sourceTag, variants, source, nan2)), toPerCase, trustedSelf);
+	for (let read2 = input; read2; read2 = read2.b || read2.prev) if (read2.sp > 1) {
+		const own2 = B_next(input, input.v(), input.s, input.e);
+		own2.v();
+		input = own2;
+		break;
+	}
+	const exit = input.g.x, y = input.g.y;
+	try {
+		return unionEmit(input, self, expected, unionPlan(unionAnalyze(unionMask(source, 2, nan2), flags, sourceTag, variants, source, nan2)), toPerCase, trustedSelf);
+	} finally {
+		input.g.x = exit;
+		input.g.y = y;
+	}
+};
+var unionHand = (link2, to2) => {
+	link2.to = to2;
+	link2.flags |= 32768;
 };
 var unionRefinerAttacher = (self) => {
 	const cached = [];
@@ -1979,19 +2622,18 @@ var unionRefinerAttacher = (self) => {
 	};
 };
 var unionRewrite = (input, variants, map) => {
-	const anyOf = [];
+	const anyOf2 = [];
 	const has = {};
 	for (let idx = 0; idx < variants.length; idx++) {
 		const rewritten = map(variants[idx], idx);
-		anyOf.push(rewritten);
-		setHas(has, rewritten.type);
+		anyOf2.push(rewritten);
+		setHas(has, rewritten);
 	}
 	const mut = baseSchema(anyOfTag, false, unionDecoder);
-	mut.anyOf = anyOf;
+	mut.anyOf = anyOf2;
 	mut.has = has;
 	mut.encoder = unionEncoder;
-	mut.perVariant = input.s.perVariant;
-	mut.tr = true;
+	mut.flags = input.s.flags & 64 | 128;
 	return B_refine(input, unknown, U, mut);
 };
 var unionTargetOwns = (target) => target.noValidation === true || tagFlags[unionOutput(target).type] & 512 || target.type === anyOfTag && target.anyOf.some((v) => tagFlags[v.type] & 512);
@@ -1999,7 +2641,11 @@ var unionEncoder = (input, target) => {
 	input.s;
 	if (unionTargetOwns(target)) return input;
 	const variants = unionDropNullish(input.s.anyOf, target, true);
-	if (target.perVariant && target.anyOf.length === variants.length) {
+	if (input.u && isLiteral(target) && variants.every((variant) => isLiteral(variant) && !(tagFlags[variant.type] & 48))) {
+		unionCheckPartial(input, input.s, target, variants, true);
+		return input;
+	}
+	if (target.flags & 64 && target.anyOf.length === variants.length) {
 		const targets = target.anyOf;
 		return targets.every((tv, idx) => tv === variants[idx]) ? input : unionRewrite(input, variants, (_variant, idx) => targets[idx]);
 	}
@@ -2007,19 +2653,21 @@ var unionEncoder = (input, target) => {
 	if (resolved.every((to2) => to2 === U)) return input;
 	return unionRewrite(input, variants, (variant, idx) => {
 		const to2 = resolved[idx];
-		return to2 === U ? variant : updateOutput(variant, (mut) => {
-			mut.to = to2;
-		});
+		return to2 === U ? variant : updateOutput(variant, (mut) => unionHand(mut, to2));
 	});
 };
 var unionOpposite = (schema) => schema.type === undefinedTag ? nullTag : schema.type === nullTag ? undefinedTag : U;
 var unionResolve = (input, source, variants, target) => {
-	if (source.perVariant) return variants.map(() => target);
-	if (unionIsTransparent(target)) return unionResolveToUnion(input, source, variants, target);
+	if (source.flags & 64) return variants.map(() => target);
+	if (unionIsTransparent(target, true)) return unionResolveToUnion(input, source, variants, target);
 	if (!(tagFlags[target.type] & 1) && !target.noValidation) unionCheckPartial(input, source, target, variants, true);
 	return variants.map((variant) => unionOutput(variant).type === neverTag ? U : target);
 };
 var unionResolveToUnion = (input, source, variants, target) => {
+	const attach = target.parser !== U || target.to !== U ? (mut) => {
+		if (target.parser !== U) mut.parser = target.parser;
+		if (target.to !== U) mut.to = target.to;
+	} : U;
 	const targets = target.anyOf;
 	const matches = [];
 	const covered = [];
@@ -2032,8 +2680,16 @@ var unionResolveToUnion = (input, source, variants, target) => {
 			for (let t = 0; t < targets.length; t++) covered[t] = true;
 			continue;
 		}
-		const sameTyped = targets.filter((targetVariant, t) => targetVariant.type !== neverTag && !unionNeverLink(targetVariant) && unionSameType(sourceOut, targetVariant) && (covered[t] = true));
+		let sameTyped = targets.filter((targetVariant, t) => targetVariant.type !== neverTag && !unionNeverLink(targetVariant) && unionSameType(sourceOut, targetVariant) && (covered[t] = true));
 		sourceNullish |= tagFlags[sourceOut.type] & 48;
+		if (isLiteral(sourceOut) || unionShaped(sourceOut)) {
+			const identical = sameTyped.filter((targetVariant) => !unionShapeMismatch(targetVariant, sourceOut));
+			if (!identical.length && sameTyped.length) {
+				matches[s2] = unionOf(sameTyped);
+				continue;
+			}
+			sameTyped = identical;
+		}
 		if (sameTyped.length === 1) matches[s2] = sameTyped[0];
 		else if (sameTyped.length > 1) matches[s2] = tagFlags[sourceOut.type] & 9152 && sameTyped.includes(sourceOut) ? sourceOut : unionFactory(sameTyped);
 		if (matches[s2] !== U) continue;
@@ -2048,29 +2704,58 @@ var unionResolveToUnion = (input, source, variants, target) => {
 	}
 	return matches.map((matched, idx) => {
 		if (matched === U) return matched;
+		if (attach !== U) return updateOutput(matched, attach);
 		const sourceOut = unionOutput(variants[idx]);
 		return matched === sourceOut || unionIsNoop(matched) && matched.refiner === U && matched.inputRefiner === U && matched.noValidation === U && (matched.const === U || unionLiteralEqual(matched.const, sourceOut.const)) && !(tagFlags[matched.type] & 9152) && unionSameType(matched, sourceOut) ? U : matched;
 	});
 };
-var unionFactory = (schemas) => {
-	if (!schemas.length) return panic("S.union requires at least one item");
-	if (schemas.length === 1) return schemas[0];
+var unionChanges = (s2, tag, refs) => {
+	if (!(unionMask(s2, 1, 0) & tagFlags[tag])) return false;
+	if (s2.type === refTag) {
+		if (refs?.includes(s2)) return false;
+		const def = s2.definition();
+		return def === U || unionChanges(def, tag, [...refs || [], s2]);
+	}
+	if (s2.type !== anyOfTag) return !!(unionTraits(s2) & 12);
+	if (s2.to !== U || s2.parser !== U) return true;
+	for (const arm of s2.anyOf) {
+		if (arm.type === tag) return arm.to !== U;
+		if (!(unionMask(arm, 1, 0) & tagFlags[tag])) continue;
+		if (unionChanges(arm, tag, refs)) return true;
+		if (!(unionTraits(arm) & 3)) return false;
+	}
+	return false;
+};
+var unionWrap = (inner, empties) => {
+	if (!(unionMask(inner, 1, 0) & 48)) return unionFactory([inner, ...empties]);
+	const arms = unionIsTransparent(inner) ? [...inner.anyOf] : [inner];
+	for (const empty of empties) {
+		const at = arms.findIndex((arm) => unionChanges(arm, empty.type));
+		at < 0 ? arms.push(empty) : arms.splice(at, 0, empty);
+	}
+	return unionFactory(arms);
+};
+var unionOf = (schemas) => {
 	const has = {};
-	const anyOf = [];
+	const anyOf2 = [];
 	for (let idx = 0; idx < schemas.length; idx++) {
 		const schema = schemas[idx];
 		const nested = unionIsTransparent(schema) ? schema.anyOf : [schema];
 		for (let j = 0; j < nested.length; j++) {
 			const member = nested[j];
-			anyOf.push(member);
-			setHas(has, member.type);
+			anyOf2.push(member);
+			setHas(has, member);
 		}
 	}
 	const mut = baseSchema(anyOfTag, false, unionDecoder);
-	mut.anyOf = anyOf;
+	mut.anyOf = anyOf2;
 	mut.encoder = unionEncoder;
 	mut.has = has;
 	return mut;
+};
+var unionFactory = (schemas) => {
+	if (!schemas.length) return panic("S.union requires at least one item");
+	return schemas.length === 1 ? schemas[0] : unionOf(schemas);
 };
 var internalRefine = (schema, makeRefiner) => {
 	return updateOutput(schema, (mut) => {
@@ -2097,58 +2782,54 @@ var codecTo = (schema, target, decode, encode) => {
 		if (serializer !== U || opened) {
 			const targetMut = copySchema(target);
 			if (serializer !== U) targetMut.serializer = serializer;
-			if (opened) targetMut.opens = decode;
+			if (opened) {
+				targetMut.flags = targetMut.flags & -13 | (decode ? 4 : 8);
+				if (targetMut.anyOf?.some((arm) => arm.flags & 3)) targetMut.anyOf = targetMut.anyOf.map((arm) => {
+					if (!(arm.flags & 3)) return arm;
+					const armMut = copySchema(arm);
+					armMut.flags = arm.flags & -13 | (decode ? 4 : 8);
+					return armMut;
+				});
+			}
 			mut.to = targetMut;
 		} else mut.to = target;
-		if (mut.content !== U && mut.opens === U) mut.opens = true;
+		if (mut.flags & 3 && !(mut.flags & 12)) mut.flags |= 4;
 		if (parser !== U) mut.parser = parser;
 	});
 };
 var nullAsUnit = /* @__PURE__ */ copyTo(nullLiteral, unit);
-var Option_getWithDefault = (schema, default_) => {
+var getOrArms = (schema, default_, peel) => {
 	return updateOutput(schema, (mut) => {
-		const anyOf = mut.anyOf;
-		if (anyOf === U) return panic(`Can't set default for ${/* @__PURE__ */ inputExpression(mut)}`);
+		const anyOf2 = mut.anyOf;
+		if (anyOf2 === U) return panic(`Can't set default for ${/* @__PURE__ */ inputExpression(mut)}`);
+		const items = peel ? peel(anyOf2, mut, default_) : anyOf2;
+		if (items === U) return;
 		const outputItems = [];
 		const originalItems = [];
-		for (let idx = 0; idx < anyOf.length; idx++) {
-			const variant = anyOf[idx];
+		for (let idx = 0; idx < anyOf2.length; idx++) if (getOutputSchema(anyOf2[idx]).type !== undefinedTag) {
+			const variant = items[idx];
 			const outputSchema = getOutputSchema(variant);
-			if (outputSchema.type !== undefinedTag) {
-				if (!outputItems.includes(outputSchema)) outputItems.push(outputSchema);
-				originalItems.push(variant);
-			}
+			if (outputSchema.type === refTag && !outputSchema.definition()) panic(`Can't set default for ${/* @__PURE__ */ inputExpression(mut)}: the default is read as ${outputSchema.name}, which would need a default of its own`);
+			if (!outputItems.includes(outputSchema)) outputItems.push(outputSchema);
+			originalItems.push(variant);
 		}
 		const item = outputItems.length === 0 ? panic(`Can't set default for ${/* @__PURE__ */ inputExpression(mut)}`) : outputItems.length === 1 ? outputItems[0] : unionFactory(outputItems);
-		if (default_.type === "value") {
-			const v = default_.value;
-			try {
-				(/* @__PURE__ */ getOp(0, 2, unknown, item))(v);
-			} catch (exn) {
-				const error = getOrRethrow(exn);
-				panic(`Invalid default for ${/* @__PURE__ */ inputExpression(mut)}: ${error["message"]}`);
-			}
-			const originalItem = originalItems.length === 1 ? originalItems[0] : unionFactory(originalItems);
-			try {
-				mut.default = (/* @__PURE__ */ getOp(0, 1, /* @__PURE__ */ reverse(originalItem)))(v);
-			} catch (_exn) {}
-		}
+		if (default_.type === "value") setDefault(mut, originalItems.length === 1 ? originalItems[0] : unionFactory(originalItems), default_.value);
 		const decodeB = (input) => {
 			const target = input.e.to;
-			const output = B_next(input, default_.type === "value" ? B_inlineConst(input, Literal_parse(default_.value)) : `${B_embed(input, default_.callback)}()`, target, target);
-			if (default_.type === "value") output.v = _var;
-			return B_refine(output);
+			const result = B_refine(B_next(input, default_.type === "value" ? B_inlineConst(input, Literal_parse(default_.value)) : `${B_embed(input, default_.callback)}()`, target, target));
+			result.io = true;
+			return result;
 		};
-		mut.anyOf = anyOf.map((variant) => getOutputSchema(variant).type === undefinedTag ? codecTo(variant, item, decodeB, B_neverSlot) : variant);
+		mut.anyOf = anyOf2.map((variant, idx) => getOutputSchema(variant).type === undefinedTag ? codecTo(variant, item, decodeB, B_neverSlot) : items[idx]);
 	});
 };
-var Option_getOr = /* @__NO_SIDE_EFFECTS__ */ (schema, defaultValue) => Option_getWithDefault(schema, {
-	type: "value",
-	value: defaultValue
-});
-var Option_getOrWith = /* @__NO_SIDE_EFFECTS__ */ (schema, defaultCb) => Option_getWithDefault(schema, {
+var emptyOr = (schema, or) => getOrArms(schema, typeof or === functionTag ? {
 	type: "callback",
-	callback: defaultCb
+	callback: or
+} : {
+	type: "value",
+	value: or
 });
 var expects = (fnName, expected, got) => `S.${fnName} expects ${expected}, got ${got}`;
 var assertNumericBound = (fnName, root, value) => {
@@ -2179,7 +2860,7 @@ var sizeMember = (schema) => {
 	return tag === instanceTag ? ".size" : tag === stringTag || tag === arrayTag ? ".length" : U;
 };
 var withBounds = (schema, base) => {
-	const written = schema.bounds ?? 0;
+	const written = schema.flags >> 11 & 15;
 	const member = sizeMember(schema);
 	const sized = member !== U;
 	const minKey = sized ? sizeKey(schema, false) : "minimum";
@@ -2197,7 +2878,7 @@ var withBounds = (schema, base) => {
 	return exMin === U && exMax === U && low === high ? `${subject} == ${lit(low)}` : `${lit(low)} ${exMin !== U ? "<" : "<="} ${subject} ${exMax !== U ? "<" : "<="} ${lit(high)}`;
 };
 var setBoundExpression = (mut, schema) => {
-	if (schema.bounds === U && schema.multipleOf === U) {
+	if (!(schema.flags & 30720) && schema.multipleOf === U) {
 		const base = schema.expression;
 		mut.expression = (s2) => withBounds(s2, base !== U ? base(s2) : /* @__PURE__ */ inputExpression(s2, true));
 	}
@@ -2209,7 +2890,7 @@ var multipleOfValidator = (d) => (value) => {
 };
 var boundsRefiner = (input) => {
 	const s2 = input.e;
-	const written = s2.bounds ?? 0;
+	const written = s2.flags >> 11 & 15;
 	const checks = [];
 	const member = sizeMember(s2);
 	if (member !== U) {
@@ -2262,7 +2943,7 @@ var boundsRefiner = (input) => {
 	}
 	return checks;
 };
-var updateBounds = (schema, update) => schema.bounds !== U || schema.multipleOf !== U ? updateOutput(schema, update) : internalRefine(schema, (mut) => {
+var updateBounds = (schema, update) => schema.flags & 30720 || schema.multipleOf !== U ? updateOutput(schema, update) : internalRefine(schema, (mut) => {
 	update(mut);
 	return boundsRefiner;
 });
@@ -2294,7 +2975,7 @@ var conflict = (incoming, existing) => {
 var asBound = (schema, key, bit, value) => {
 	const mut = {
 		...schema,
-		bounds: bit
+		flags: schema.flags & -30721 | bit << 11
 	};
 	mut[key] = value;
 	setBoundExpression(mut, schema);
@@ -2327,12 +3008,12 @@ var gte = /* @__NO_SIDE_EFFECTS__ */ (root, minValue, maybeMessage) => {
 	const schema = assertNumericBound("gte", root, minValue);
 	assertLower(schema, minValue, false);
 	if (!narrowsLower(schema, minValue, false)) {
-		const written = schema.bounds ?? 0;
+		const written = schema.flags >> 11 & 15;
 		return carryMessage(root, written & 4 ? "exclusiveMinimum" : written & 1 ? "minimum" : U, maybeMessage);
 	}
 	return updateBounds(root, (mut) => {
 		setBoundExpression(mut, schema);
-		mut.bounds = (schema.bounds ?? 0) & -5 | 1;
+		mut.flags = schema.flags & -8193 | 2048;
 		mut.minimum = minValue;
 		mut.exclusiveMinimum = U;
 		setBoundMessage(mut, schema, "minimum", maybeMessage, "exclusiveMinimum");
@@ -2342,12 +3023,12 @@ var lte = /* @__NO_SIDE_EFFECTS__ */ (root, maxValue, maybeMessage) => {
 	const schema = assertNumericBound("lte", root, maxValue);
 	assertUpper(schema, maxValue, false);
 	if (!narrowsUpper(schema, maxValue, false)) {
-		const written = schema.bounds ?? 0;
+		const written = schema.flags >> 11 & 15;
 		return carryMessage(root, written & 8 ? "exclusiveMaximum" : written & 2 ? "maximum" : U, maybeMessage);
 	}
 	return updateBounds(root, (mut) => {
 		setBoundExpression(mut, schema);
-		mut.bounds = (schema.bounds ?? 0) & -9 | 2;
+		mut.flags = schema.flags & -16385 | 4096;
 		mut.maximum = maxValue;
 		mut.exclusiveMaximum = U;
 		setBoundMessage(mut, schema, "maximum", maybeMessage, "exclusiveMaximum");
@@ -2357,10 +3038,10 @@ var minLength = /* @__NO_SIDE_EFFECTS__ */ (root, length2, maybeMessage) => {
 	const schema = assertLengthBound("minLength", root, length2);
 	assertSize(schema, length2, false);
 	const key = sizeKey(schema, false);
-	if (!narrowsSize(schema[key], length2, false) && !(length2 === 0 && schema[key] === U)) return carryMessage(root, (schema.bounds ?? 0) & 1 ? key : U, maybeMessage);
+	if (!narrowsSize(schema[key], length2, false) && !(length2 === 0 && schema[key] === U)) return carryMessage(root, schema.flags & 2048 ? key : U, maybeMessage);
 	return updateBounds(root, (mut) => {
 		setBoundExpression(mut, schema);
-		mut.bounds = (schema.bounds ?? 0) | 1;
+		mut.flags = schema.flags | 2048;
 		mut[key] = length2;
 		setBoundMessage(mut, schema, key, maybeMessage);
 	});
@@ -2369,10 +3050,10 @@ var maxLength = /* @__NO_SIDE_EFFECTS__ */ (root, length2, maybeMessage) => {
 	const schema = assertLengthBound("maxLength", root, length2);
 	assertSize(schema, length2, true);
 	const key = sizeKey(schema, true);
-	if (!narrowsSize(schema[key], length2, true)) return carryMessage(root, (schema.bounds ?? 0) & 2 ? key : U, maybeMessage);
+	if (!narrowsSize(schema[key], length2, true)) return carryMessage(root, schema.flags & 4096 ? key : U, maybeMessage);
 	return updateBounds(root, (mut) => {
 		setBoundExpression(mut, schema);
-		mut.bounds = (schema.bounds ?? 0) | 2;
+		mut.flags = schema.flags | 4096;
 		mut[key] = length2;
 		setBoundMessage(mut, schema, key, maybeMessage);
 	});
@@ -2382,10 +3063,10 @@ var stringFormat = /* @__NO_SIDE_EFFECTS__ */ (format, test, flag, expression) =
 	const re = typeof test === "string" ? new RegExp(test, "i") : test;
 	s2.format = format;
 	if (expression) s2.expression = () => expression;
-	if (flag) s2.formatFlag = flag;
+	if (flag) s2.flags = s2.flags | 32;
 	s2.refiner = (input) => {
 		return [{
-			c: (inputVar) => `${B_embed(input, re)}${re instanceof RegExp ? ".test" : ""}(${inputVar})`,
+			c: (inputVar) => `${B_embedPure(input, re)}${re instanceof RegExp ? ".test" : ""}(${inputVar})`,
 			f: B_failWithErrorMessage("format")
 		}];
 	};
@@ -2394,6 +3075,7 @@ var ipv4Pattern = "(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}(?:25[0-5]|2
 var ipv6Pattern = /* @__NO_SIDE_EFFECTS__ */ () => "(?:(?:(?:[0-9a-f]{1,4}:){6}|::(?:[0-9a-f]{1,4}:){5}|(?:[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){4}|(?:(?:[0-9a-f]{1,4}:){0,1}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){3}|(?:(?:[0-9a-f]{1,4}:){0,2}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){2}|(?:(?:[0-9a-f]{1,4}:){0,3}[0-9a-f]{1,4})?::[0-9a-f]{1,4}:|(?:(?:[0-9a-f]{1,4}:){0,4}[0-9a-f]{1,4})?::)(?:[0-9a-f]{1,4}:[0-9a-f]{1,4}|" + ipv4Pattern + ")|(?:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4})?::[0-9a-f]{1,4}|(?:(?:[0-9a-f]{1,4}:){0,6}[0-9a-f]{1,4})?::)";
 var uriPattern = /* @__NO_SIDE_EFFECTS__ */ (schemeOptional, scheme) => "^(?:" + (scheme || "[a-z][a-z0-9+\\-.]*") + ":)" + schemeOptional + "(?:\\/\\/(?:(?:[a-z0-9\\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?(?:\\[(?:" + /* @__PURE__ */ ipv6Pattern() + "|[Vv][0-9a-f]+\\.[a-z0-9\\-._~!$&'()*+,;=:]+)\\]|" + ipv4Pattern + "|(?:[a-z0-9\\-._~!$&'()*+,;=]|%[0-9a-f]{2})*)(?::\\d*)?(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*|\\/(?:(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)?|(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)?(?:\\?(?:[a-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?(?:#(?:[a-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?$";
 var uri = /* @__PURE__ */ stringFormat("uri", /* @__PURE__ */ uriPattern(""), 1);
+(/* @__PURE__ */ new Uint8Array(8)).buffer;
 var invalidDateRefine = (input) => {
 	return B_refine(input, input.e, [{
 		c: (inputVar) => `!Number.isNaN(${inputVar}.getTime())`,
@@ -2402,12 +3084,21 @@ var invalidDateRefine = (input) => {
 };
 var dateTimeString = /* @__PURE__ */ initSchema(stringTag, stringDecoderFn, (s2) => {
 	s2.format = "date-time";
-	s2.formatFlag = 1;
+	s2.flags = s2.flags | 32;
 });
 var date = /* @__PURE__ */ initSchema(instanceTag, (input) => {
 	const inputTagFlag = tagFlags[input.s.type];
-	if (inputTagFlag & 2) return invalidDateRefine(B_next(input, `new Date(${input.i})`, date));
-	else if (inputTagFlag & 1) return invalidDateRefine(instanceDecoder(input));
+	if (inputTagFlag & 2) {
+		if (input.e.noValidation) return B_next(input, `new Date(${input.i})`, date);
+		const output = B_nextVar(input, date, input.e);
+		const inputVar = input.v();
+		output.cp = B_let(input.g, output.i, `new Date(${inputVar})`);
+		output.vc = [{
+			c: () => `!Number.isNaN(${output.i}.getTime())`,
+			f: failInvalidType
+		}];
+		return output;
+	} else if (inputTagFlag & 1) return invalidDateRefine(instanceDecoder(input));
 	else if (inputTagFlag & 8192 && input.s.class === date.class) return input;
 	else return B_unsupportedDecode(input, input.s, input.e);
 }, (s2) => {
@@ -2416,7 +3107,7 @@ var date = /* @__PURE__ */ initSchema(instanceTag, (input) => {
 		if (tagFlags[target.type] & 2) {
 			if (input.s.noValidation) return parse(B_refine(B_next(input, `${input.i}.toISOString()`, dateTimeString, target)));
 			const output = B_nextVar(input, dateTimeString, target);
-			output.cp = `let ${output.i};try{${output.i}=${input.v()}.toISOString()}catch(_){${B_embedInvalidInput(input, input.s)}}`;
+			output.cp = `${B_let(input.g, output.i)}try{${output.i}=${input.v()}.toISOString()}catch(_)${B_block(B_failInvalidInput(input, input.s))}`;
 			return parse(B_refine(output));
 		} else return input;
 	};
@@ -2437,7 +3128,7 @@ var dispatch = (n, a, b, c, d, tail, rev, flag) => {
 		immediate = true;
 	}
 	const first = rev ? /* @__PURE__ */ reverse(a) : a;
-	const op = k > 2 ? /* @__PURE__ */ getOp(flag, tail ? 4 : 3, first, b, c, tail) : k > 1 ? /* @__PURE__ */ getOp(flag, tail ? 3 : 2, first, b, tail) : /* @__PURE__ */ getOp(flag, tail ? 2 : 1, first, tail);
+	const op = k > 2 ? /* @__PURE__ */ getOp(flag, 3, first, b, c, tail) : k > 1 ? /* @__PURE__ */ getOp(flag, 2, first, b, tail) : /* @__PURE__ */ getOp(flag, 1, first, tail);
 	return immediate ? op(data) : op;
 };
 // @__NO_SIDE_EFFECTS__
@@ -2465,7 +3156,7 @@ Object.defineProperty(schemaPrototype, "~standard", { get: function() {
 		vendor,
 		validate: (input) => {
 			if (opFlag !== globalConfig.f) {
-				validateOp = /* @__PURE__ */ getOp(1537, 2, unknown, schema);
+				validateOp = /* @__PURE__ */ getOp(641, 2, unknown, schema);
 				opFlag = globalConfig.f;
 			}
 			return validateOp(input);
@@ -2480,13 +3171,9 @@ Object.defineProperty(schemaPrototype, "~standard", { get: function() {
 	return standard;
 } });
 var union = /* @__NO_SIDE_EFFECTS__ */ (values) => unionFactory(values.map(definitionToSchema));
-var nullable2 = /* @__NO_SIDE_EFFECTS__ */ (definition, maybeOr) => {
-	const schema = /* @__PURE__ */ definitionToSchema(definition);
-	if (maybeOr !== U) {
-		const schema2 = unionFactory([schema, nullAsUnit]);
-		if (typeof maybeOr === functionTag) return /* @__PURE__ */ Option_getOrWith(schema2, maybeOr);
-		else return /* @__PURE__ */ Option_getOr(schema2, maybeOr);
-	} else return unionFactory([schema, nullLiteral]);
+var nullable = /* @__NO_SIDE_EFFECTS__ */ (definition, maybeOr) => {
+	const schema = unionWrap(/* @__PURE__ */ definitionToSchema(definition), [maybeOr === U ? nullLiteral : nullAsUnit]);
+	return maybeOr === U ? schema : emptyOr(schema, maybeOr);
 };
 // ../schemas/libraries/sury/download/index.ts
 const imageSchema = /* @__PURE__ */ definitionToSchema({
@@ -2511,7 +3198,7 @@ const ratingSchema = /* @__PURE__ */ definitionToSchema({
 	brand: string.with(nonEmpty).with(maxLength, 30),
 	description: string.with(nonEmpty).with(maxLength, 500),
 	price: float.with(gte, 1).with(lte, 1e4),
-	discount: float.with(gte, 1).with(lte, 100).with(nullable2),
+	discount: float.with(gte, 1).with(lte, 100).with(nullable),
 	quantity: float.with(gte, 0).with(lte, 10),
 	tags: /* @__PURE__ */ array(string.with(nonEmpty).with(maxLength, 30)),
 	images: /* @__PURE__ */ array(imageSchema),

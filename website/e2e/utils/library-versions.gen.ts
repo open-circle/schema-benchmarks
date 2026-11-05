@@ -2,7 +2,7 @@
 
 /** Installed library versions, read from the built benchmark configs. */
 export const libraryVersions = {
-  "@cfworker/json-schema": "4.1.4",
+  "@cfworker/json-schema": "4.1.6",
   "@earendil-works/pi-schema": "1.5.0",
   "@paseri/compiler": "0.7.7",
   "@paseri/paseri": "1.9.7",
@@ -19,7 +19,7 @@ export const libraryVersions = {
   jsonschema: "1.5.0",
   runtypes: "7.0.5",
   superstruct: "2.0.2",
-  sury: "11.0.0",
+  sury: "11.1.0",
   typebox: "1.4.3",
   typia: "15.2.2",
   valibot: "1.5.0",
@@ -28,5 +28,5 @@ export const libraryVersions = {
   zod: "4.6.7",
   "zod/mini": "4.6.7",
   "zod/v3": "4.6.7",
-  "zod-compiler": "2.0.7",
+  "zod-compiler": "2.0.8",
 } as const satisfies Record<string, string>;
