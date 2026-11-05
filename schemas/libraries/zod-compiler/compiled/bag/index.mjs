@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { ZodRealError, config } from "zod";
+import "zod/v4/core";
 // \0zod-compiler-runtime
 function __zcUw(m) {
 	return typeof m === "string" ? m : m === void 0 || m === null ? void 0 : m.message;
@@ -16,27 +17,30 @@ var __zcMsg = function(iss) {
 	}
 	return "Invalid input";
 };
-function __ZcFail(e, f, i) {
-	this.success = false;
-	this._e = e;
-	this._f = f;
-	this._i = i;
-	this._c = void 0;
-}
-Object.defineProperty(__ZcFail.prototype, "error", {
-	configurable: true,
-	get: function() {
-		if (this._c) return this._c;
-		var e = this._f !== null ? this._f(this._i) : this._e;
-		for (var i = 0; i < e.length; i++) {
-			var s = e[i], o = {}, k;
-			if (s.message === void 0 && typeof __zcMsg === "function") s.message = __zcMsg(s);
-			for (k in s) if (k !== "input" && k !== "continue" && Object.prototype.hasOwnProperty.call(s, k)) o[k] = s[k];
-			e[i] = o;
-		}
-		return this._c = new ZodRealError(e);
+var __ZcFail = /* @__PURE__ */ (function() {
+	function __ZcFail(e, f, i) {
+		this.success = false;
+		this._e = e;
+		this._f = f;
+		this._i = i;
+		this._c = void 0;
 	}
-});
+	Object.defineProperty(__ZcFail.prototype, "error", {
+		configurable: true,
+		get: function() {
+			if (this._c) return this._c;
+			var e = this._f !== null ? this._f(this._i) : this._e;
+			for (var i = 0; i < e.length; i++) {
+				var s = e[i], o = {}, k;
+				if (s.message === void 0 && typeof __zcMsg === "function") s.message = __zcMsg(s);
+				for (k in s) if (k !== "input" && k !== "continue" && Object.prototype.hasOwnProperty.call(s, k)) o[k] = s[k];
+				e[i] = o;
+			}
+			return this._c = new ZodRealError(e);
+		}
+	});
+	return __ZcFail;
+})();
 function __ZcFailZ(z, r, i) {
 	this.success = false;
 	this._z = z;
