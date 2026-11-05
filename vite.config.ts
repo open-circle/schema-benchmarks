@@ -56,6 +56,7 @@ export default defineConfig({
       "schemas/libraries/**/compiled/**",
       "website/**/routeTree.gen.ts",
       "website/public/mockServiceWorker.js",
+      ".agents/skills/**",
     ],
     overrides: [
       {
@@ -115,6 +116,7 @@ export default defineConfig({
       "schemas/libraries/**/*.gen.ts",
       "website/**/routeTree.gen.ts",
       "website/src/routes/blog/-content/assets/**/*.json",
+      ".agents/skills/**",
     ],
     sortImports: {},
   },
