@@ -9,7 +9,10 @@ import baseTsdownConfig from "../../tsdown.config.ts";
 
 const sharedConfig: UserConfig = {
   ...baseTsdownConfig,
-  entry: [path.resolve(import.meta.dirname, "./index.ts")],
+  entry: [
+    path.resolve(import.meta.dirname, "./index.ts"),
+    path.resolve(import.meta.dirname, "./mini.ts"),
+  ],
 };
 
 await promiseAllKeyed({
