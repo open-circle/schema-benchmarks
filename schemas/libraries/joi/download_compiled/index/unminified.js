@@ -2586,8 +2586,8 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 								} else r.comparator = e;
 								return this.$_addRule(r);
 							},
-							validate(e, { state: t, error: r, schema: o }, { comparator: i, options: l }, { comparator: c, path: u }) {
-								const f = {
+							validate(e, { state: t, error: r, schema: o }, { comparator: i, options: l }, { comparator: u, path: f }) {
+								const m = {
 									string: Object.create(null),
 									number: Object.create(null),
 									undefined: Object.create(null),
@@ -2596,31 +2596,36 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 									object: /* @__PURE__ */ new Map(),
 									function: /* @__PURE__ */ new Map(),
 									custom: /* @__PURE__ */ new Map()
-								}, m = c || n, h = l.ignoreUndefined;
+								}, h = u || n, p = l.ignoreUndefined;
 								for (let n = 0; n < e.length; ++n) {
-									const o = u ? a(e[n], u) : e[n], l = c ? f.custom : f[typeof o];
-									if (s(l, "Failed to find unique map container for type", typeof o), l instanceof Map) {
+									const o = f ? a(e[n], f) : e[n];
+									let l = u ? m.custom : m[typeof o];
+									if (s(l, "Failed to find unique map container for type", typeof o), l === m.object) {
+										const e = c.bucketKey(o);
+										l.has(e) || l.set(e, /* @__PURE__ */ new Map()), l = l.get(e);
+									}
+									if (l instanceof Map) {
 										const s = l.entries();
 										let a;
-										for (; !(a = s.next()).done;) if (m(a.value[0], o)) {
+										for (; !(a = s.next()).done;) if (h(a.value[0], o)) {
 											const s = t.localize([...t.path, n], [e, ...t.ancestors]), o = {
 												pos: n,
 												value: e[n],
 												dupePos: a.value[1],
 												dupeValue: e[a.value[1]]
 											};
-											return u && (o.path = i), r("array.unique", o, s);
+											return f && (o.path = i), r("array.unique", o, s);
 										}
 										l.set(o, n);
 									} else {
-										if ((!h || void 0 !== o) && void 0 !== l[o]) {
+										if ((!p || void 0 !== o) && void 0 !== l[o]) {
 											const s = {
 												pos: n,
 												value: e[n],
 												dupePos: l[o],
 												dupeValue: e[l[o]]
 											};
-											return u && (s.path = i), r("array.unique", s, t.localize([...t.path, n], [e, ...t.ancestors]));
+											return f && (s.path = i), r("array.unique", s, t.localize([...t.path, n], [e, ...t.ancestors]));
 										}
 										l[o] = n;
 									}
@@ -2705,6 +2710,25 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 					let r = t;
 					for (; r < e.length;) e[r++] = e[r];
 					--e.length;
+				}, c.bucketKey = function(e) {
+					try {
+						return c.canonical(e, /* @__PURE__ */ new Set());
+					} catch {
+						return "";
+					}
+				}, c.canonical = function(e, t) {
+					if ("string" == typeof e) return JSON.stringify(e);
+					if (null === e || "number" == typeof e || "boolean" == typeof e || void 0 === e) return String(e);
+					s("object" == typeof e, "Not JSON-shaped");
+					const r = Object.getPrototypeOf(e);
+					if (r === Date.prototype) {
+						const t = e.valueOf();
+						return s("number" == typeof t, "Not JSON-shaped"), `date:${t}`;
+					}
+					const n = Array.isArray(e) && r === Array.prototype;
+					s(n || r === Object.prototype || null === r, "Not JSON-shaped"), s(!t.has(e), "Not JSON-shaped"), t.add(e);
+					const a = n ? `[${Array.from(e, (e) => c.canonical(e, t)).join(",")}]` : `{${Object.keys(e).sort().map((r) => `${JSON.stringify(r)}:${c.canonical(e[r], t)}`).join(",")}}`;
+					return t.delete(e), a;
 				}, c.validateSingle = function(e, t) {
 					("array" === e.type || e._flags._arrayItems) && (s(!t._flags.single, "Cannot specify array item with single rule enabled"), t.$_setFlag("_arrayItems", !0, { clone: !1 }));
 				}, c.sort = function(e, t, r, s, n) {
@@ -7318,7 +7342,7 @@ var import_joi_browser_min = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJS
 			},
 			6913(e) {
 				"use strict";
-				e.exports = { version: "18.3.1" };
+				e.exports = { version: "18.3.2" };
 			}
 		};
 		const t = {};
