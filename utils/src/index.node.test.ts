@@ -16,7 +16,6 @@ import {
   range,
   getOrInsert,
   getOrInsertComputed,
-  getOrInsertComputedAsync,
   getCyrb53Hash,
   isPlainObject,
   lazy,
@@ -244,24 +243,6 @@ describe("getOrInsert", () => {
       const fn = vi.fn<(key: string) => number>(() => 2);
       const map = new Map<string, number>();
       const result = getOrInsertComputed(map, "a", fn);
-      expect(result).toBe(2);
-      expect(map.get("a")).toBe(2);
-      expect(fn).toHaveBeenCalledOnce();
-      expect(fn).toHaveBeenCalledWith("a");
-    });
-  });
-
-  describe("getOrInsertComputedAsync", () => {
-    it("should return the existing value if present", async () => {
-      const map = new Map([["a", 1]]);
-      const result = await getOrInsertComputedAsync(map, "a", async () => 2);
-      expect(result).toBe(1);
-      expect(map.get("a")).toBe(1);
-    });
-    it("should compute, insert and return the new value if not present", async () => {
-      const fn = vi.fn<(key: string) => Promise<number>>(async () => 2);
-      const map = new Map<string, number>();
-      const result = await getOrInsertComputedAsync(map, "a", fn);
       expect(result).toBe(2);
       expect(map.get("a")).toBe(2);
       expect(fn).toHaveBeenCalledOnce();

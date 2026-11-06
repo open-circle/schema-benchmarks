@@ -4,7 +4,7 @@ import { promisify } from "node:util";
 
 import * as v from "valibot";
 
-import { getOrInsertComputedAsync } from "./index.ts";
+import { getOrInsertComputed } from "./index.ts";
 
 const execFile = promisify(child_process.execFile);
 
@@ -33,7 +33,7 @@ const pnpmListSchema = v.pipe(
   ),
 );
 
-const versionCache = new Map<string, string>();
+const versionCache = new Map<string, Promise<string>>();
 
 const getPnpmExec = () => {
   const npmExecPath = process.env.npm_execpath;
@@ -58,7 +58,7 @@ const getPnpmExec = () => {
 };
 
 export async function getVersion(libraryName: string) {
-  return getOrInsertComputedAsync(versionCache, libraryName, async () => {
+  return getOrInsertComputed(versionCache, libraryName, async () => {
     const pnpm = getPnpmExec();
     const { stdout } = await execFile(pnpm.command, [
       ...pnpm.args,
@@ -71,7 +71,6 @@ export async function getVersion(libraryName: string) {
     const data = v.parse(pnpmListSchema, stdout);
     const dep = data[0]?.dependencies?.[libraryName] ?? data[0]?.devDependencies?.[libraryName];
     if (!dep) throw new Error(`No version found for ${libraryName}`);
-    versionCache.set(libraryName, dep.version);
     return dep.version;
   });
 }
