@@ -164,6 +164,12 @@ settings:
 
 catalogs:
   default:
+    '@mionjs/bin-compiler':
+      specifier: 0.14.0
+      version: 0.14.0
+    '@mionjs/devtools':
+      specifier: 0.14.0
+      version: 0.14.0
     '@oxfmt/binding-linux-x64-gnu':
       specifier: ^0.78.0
       version: 0.78.0
@@ -279,6 +285,12 @@ importers:
 
   bench:
     dependencies:
+      '@mionjs/bin-compiler':
+        specifier: 'catalog:'
+        version: 0.14.0
+      '@mionjs/devtools':
+        specifier: 'catalog:'
+        version: 0.14.0(@mionjs/bin-compiler@0.14.0)(@voidzero-dev/vite-plus-core@1.5.1(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)
       '@schema-benchmarks/json-schema-tests':
         specifier: workspace:*
         version: link:../json-schema-tests
@@ -377,6 +389,9 @@ importers:
       '@earendil-works/pi-schema':
         specifier: ^1.5.1
         version: 1.5.1
+      '@mionjs/run-types':
+        specifier: ^0.14.0
+        version: 0.14.0
       '@paseri/compiler':
         specifier: jsr:^0.7.7
         version: '@jsr/paseri__compiler@0.7.7'
@@ -483,6 +498,12 @@ importers:
         specifier: ^3.25.2
         version: 3.25.2(zod@4.6.7)
     devDependencies:
+      '@mionjs/bin-compiler':
+        specifier: 'catalog:'
+        version: 0.14.0
+      '@mionjs/devtools':
+        specifier: 'catalog:'
+        version: 0.14.0(@mionjs/bin-compiler@0.14.0)(@voidzero-dev/vite-plus-core@1.5.1(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)
       '@ttsc/unplugin':
         specifier: 'catalog:'
         version: 0.36.3(ttsc@0.36.3(typescript@7.0.2))
@@ -2335,9 +2356,6 @@ packages:
   '@jridgewell/source-map@0.3.11':
     resolution: {integrity: sha512-ZMp1V8ZFcPG5dIWnQLr3NSI1MiCU7UETdS/A0G8V/XWHvJv3ZsFqutJn1Y5RPmAPX6F3BiE397OqveU/9NCuIA==}
 
-  '@jridgewell/sourcemap-codec@1.5.5':
-    resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
-
   '@jridgewell/sourcemap-codec@1.6.0':
     resolution: {integrity: sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw==}
 
@@ -2390,6 +2408,61 @@ packages:
     resolution: {integrity: sha512-v8satFmBB+DqDzYohnm1u2JOvxx6Hl3pUvqzJvfs2Zk/ngZ1aRUhsWpXvwPkNeGN9c2NCm/38H29ZqXQUjf8dw==}
     peerDependencies:
       rollup: '>=2'
+
+  '@mionjs/bin-compiler@0.14.0':
+    resolution: {integrity: sha512-vFjPXBb1iFsasOuMXhc5EGlR8ZEBY4OWbvaoZQIIRzoUxu9+wHmR3lc//31mWUiUB1GKCRmFttQ90PzP5AH9xA==}
+    engines: {node: '>=24'}
+    hasBin: true
+
+  '@mionjs/devtools@0.14.0':
+    resolution: {integrity: sha512-9vYS0QkMG/YyC6f9AaoP85KXxieOyrz3/mFrxpk7+wQuchG+6vnN0F77p2ARZYtSveyVLR05t9A0tER01HO9mg==}
+    engines: {node: '>=24'}
+    peerDependencies:
+      '@mionjs/bin-compiler': 0.14.0
+      vite: '>=5.0.0'
+    peerDependenciesMeta:
+      vite:
+        optional: true
+
+  '@mionjs/native-compiler-darwin-arm64@0.14.0':
+    resolution: {integrity: sha512-vCjLzQqdqFFviyaj2jiXbTa1nzkNm9NkSEFzVaY6fzLYsBTbCK5NvcpdXXz/F1sB0MJ/4XIBQZXAO5rykBKrog==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@mionjs/native-compiler-darwin-x64@0.14.0':
+    resolution: {integrity: sha512-g06gZ4/nDqJnSri2vYgZiRBuK/iK2vLW8xIV2Z1lFJoQdgIaO3bby9a+JimcMqdIudz61m3mlTS6oCRUg5Y8bA==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@mionjs/native-compiler-linux-arm64@0.14.0':
+    resolution: {integrity: sha512-MQisWPO3VVtdKoozeMbAUhq4bF1IGQ5fQ/9g205BBwSrEHoD5T55GIM29r08Dx1g5GKliEVHQhIj133peABnwA==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@mionjs/native-compiler-linux-arm@0.14.0':
+    resolution: {integrity: sha512-J4JNYxqDxkCz6qgPa7Efutr0zGqQOM1U1brRLX++fjn53XoeAk2UfxmUzS/bsXOdswZ+nPdDzbXwRI/GqU9etA==}
+    cpu: [arm]
+    os: [linux]
+
+  '@mionjs/native-compiler-linux-x64@0.14.0':
+    resolution: {integrity: sha512-XR1rpTtngrArbSgAl9vs34QW/z68g1ngh5Phb/Qqdp3wPKD7Ah1rlvYfoMGyZPhQxPBYHszYMBMrDZCtx1IbJg==}
+    cpu: [x64]
+    os: [linux]
+
+  '@mionjs/native-compiler-win32-arm64@0.14.0':
+    resolution: {integrity: sha512-KRXuX5T8mLp3EHVFkq2LUUQlZV9fMwI1xbkA7Hwx7rkiPkPKKJj0j7gQvaA+BrRSbPbuln9UiSl9rO6UnqzVgQ==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@mionjs/native-compiler-win32-x64@0.14.0':
+    resolution: {integrity: sha512-PeeFqh0gBv1Te6w3vAbI+Og1PsD4IaDdVqR3cxRWfgz+wLVJDUd3InkUcqAsvBSsF9RiwGyfrEo84TbCVNXQWQ==}
+    cpu: [x64]
+    os: [win32]
+
+  '@mionjs/run-types@0.14.0':
+    resolution: {integrity: sha512-gnlboD8tZhh1GqfIFIeRUMNC521LCThdxfheP3sQeExdoFZGmmcB0lwGTiduLHx1jaIC+kVLS/ogNAfPr3pZAA==}
+    engines: {node: '>=24'}
+    hasBin: true
 
   '@msw/url@0.1.2':
     resolution: {integrity: sha512-DdeBLQxQ+ZrtmwEmaj7GQ7lbzPCgbbbyAqOz/I4ulo68hwBpfdNvQJ5bmihJUkAAKOeCmqCIG3OFZGosqFN4mA==}
@@ -7484,9 +7557,6 @@ packages:
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
-  magic-string@1.2.3:
-    resolution: {integrity: sha512-Bpb0W2TbLKOZ7vJnOUnVRGq3WL2p+ISV29M6hYPL1AFCpyKZpdr5ytiXoTSSxRVhg8YW7f65+6gbG8WG6PCa/g==}
-
   magic-string@1.4.3:
     resolution: {integrity: sha512-z12OxmaPGE0F4xlpGdjuAUckipLpQlTAuAmyGhNoD7ODpYUzvDfvtxUbjM/jwznyP178oju/KDdyi220wNJ0RQ==}
 
@@ -7758,11 +7828,6 @@ packages:
   mute-stream@3.0.0:
     resolution: {integrity: sha512-dkEJPVvun4FryqBmZ5KhDo0K9iDXAwn08tMLDinNdRBNPcYEDiWYysLcc6k3mjTMlbP9KyylvRpd4wFtwrT9rw==}
     engines: {node: ^20.17.0 || >=22.9.0}
-
-  nanoid@3.3.18:
-    resolution: {integrity: sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==}
-    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
-    hasBin: true
 
   nanoid@3.3.20:
     resolution: {integrity: sha512-uKdg2G3GNCKQn9byYOpxbGqrT2fGO5KRt5J/8b3pok8rT6qxGWF6hxMyJiEYtAf+FVyYuD9hRaDqX5uPFYJ4ZQ==}
@@ -8177,10 +8242,6 @@ packages:
     engines: {node: '>=10'}
     peerDependencies:
       postcss: ^8.2.9
-
-  postcss@8.5.28:
-    resolution: {integrity: sha512-RRuzqDtt5Y9h3quz5hWhK+TPnsmVs6WwSU6LkJMeY4HstUEDuYTG8UJSdawMRzmzAtV+KEoG8N3Qg2qLy5vM/A==}
-    engines: {node: ^10 || ^12 || >=14}
 
   postcss@8.5.32:
     resolution: {integrity: sha512-LJlKCCAUFKOuZxipUdYw1NzIITEsPcgyOG9LkvRJvuKj/bRzbuRY0ARXvL0pWGpsZvn8jku+LMep2eU0seHp8g==}
@@ -8746,9 +8807,6 @@ packages:
   stack-trace@0.0.10:
     resolution: {integrity: sha512-KGzahc7puUKkzyMt+IqAep+TVNbKP+k2Lmwhub39m1AsTSkaDutx56aDCo+HLDzf/D26BIHTJWNiTG1KAJiQCg==}
 
-  std-env@4.2.0:
-    resolution: {integrity: sha512-oCUKSupKTHX53EyjDtuZQ64pjLJ6yYCtpmEw0goYxtjG9KpbRe8KAsl2tBUGU9DyMcJ0RwJ8GqJAFzMXcXW1Rw==}
-
   std-env@4.3.0:
     resolution: {integrity: sha512-OtU/EgQ1kIm5KwqQpBC6ZEMXrZRui11w8zgfTWp8cdO9B8OaPsbA8bTHO2P+HNo1VlUTGMVBwPhydu6poeXiag==}
 
@@ -9182,9 +9240,6 @@ packages:
   unist-util-stringify-position@4.0.0:
     resolution: {integrity: sha512-0ASV06AAoKCDkS2+xw5RXJywruurpbC4JZSm7nr7MOt1ojAzvyyaO+UxZf18j8FCF6kmzCZKcAgN/yu2gm2XgQ==}
 
-  unist-util-visit-parents@6.0.2:
-    resolution: {integrity: sha512-goh1s1TBrqSqukSc8wrjwWhL0hiJxgA8m4kFxGlQ+8FYQ3C/m11FcTs4YYem7V664AhHVvgoQLk890Ssdsr2IQ==}
-
   unist-util-visit-parents@6.1.0:
     resolution: {integrity: sha512-vKXxz6O38sKDj1mtx/k2cWvkkFBuYGx6uGrlzBkVeWCRF/F8sdI0j3Wbkz/5rVNRRuVc8UrgRdbCxNhmYXgP3w==}
 
@@ -9215,12 +9270,11 @@ packages:
     resolution: {integrity: sha512-5uKD0nqiYVzlmCRs01Fhs2BdkEgBS3SAVP6ndrBsuK42iC2+JHyxM05Rm9G8+5mkmRtzMZGY8Ct5+mliZxU/Ww==}
     engines: {node: '>=18.12.0'}
 
-  unplugin@3.4.0:
-    resolution: {integrity: sha512-9skdIFlCsPdFV7wUfZxNsFInlW+7nJmGu2gkTu0OUhF56aXGsHab9x52/QhdJ4lC7ZDPWTxbiC4ANqVlsuaW3w==}
+  unplugin@3.3.0:
+    resolution: {integrity: sha512-qa66K+crbfyE6JK10GjvbJeRrOsuC/JpbnHctfyp/i4oBTxWOzJfRZyDiOk1PtErMFRu8JhsU/wPvOdBNWe5Rg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@farmfe/core': '*'
-      '@rsbuild/core': '*'
       '@rspack/core': '*'
       bun-types-no-globals: '*'
       esbuild: '*'
@@ -9231,8 +9285,6 @@ packages:
       webpack: '*'
     peerDependenciesMeta:
       '@farmfe/core':
-        optional: true
-      '@rsbuild/core':
         optional: true
       '@rspack/core':
         optional: true
@@ -9664,18 +9716,6 @@ packages:
 
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
-
-  ws@8.21.3:
-    resolution: {integrity: sha512-201TZ/kPWxoPr/OKWjquZR1SWKXcvxdH+e1xrx89b3YbmzLMFCLfnaG1HFIgWzJOEWZ7MvpK++odZufgYR50Rw==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
 
   ws@8.22.0:
     resolution: {integrity: sha512-Ydggc987+RO0AnWtZ/7Wq9FtNvcrL1b/RO0ud9mWjUPgDrsAAwQSF51sm2hm1XofbU/4jkpGEsLFsZZxU+1DOg==}
@@ -11138,7 +11178,7 @@ snapshots:
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
       '@jridgewell/trace-mapping': 0.3.31
 
   '@jridgewell/remapping@2.3.5':
@@ -11152,8 +11192,6 @@ snapshots:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
-
-  '@jridgewell/sourcemap-codec@1.5.5': {}
 
   '@jridgewell/sourcemap-codec@1.6.0': {}
 
@@ -11263,6 +11301,55 @@ snapshots:
       vfile: 6.0.3
     transitivePeerDependencies:
       - supports-color
+
+  '@mionjs/bin-compiler@0.14.0':
+    optionalDependencies:
+      '@mionjs/native-compiler-darwin-arm64': 0.14.0
+      '@mionjs/native-compiler-darwin-x64': 0.14.0
+      '@mionjs/native-compiler-linux-arm': 0.14.0
+      '@mionjs/native-compiler-linux-arm64': 0.14.0
+      '@mionjs/native-compiler-linux-x64': 0.14.0
+      '@mionjs/native-compiler-win32-arm64': 0.14.0
+      '@mionjs/native-compiler-win32-x64': 0.14.0
+
+  '@mionjs/devtools@0.14.0(@mionjs/bin-compiler@0.14.0)(@voidzero-dev/vite-plus-core@1.5.1(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)':
+    dependencies:
+      '@mionjs/bin-compiler': 0.14.0
+      unplugin: 3.3.0(@voidzero-dev/vite-plus-core@1.5.1(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)
+    optionalDependencies:
+      vite: '@voidzero-dev/vite-plus-core@1.5.1(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1)'
+    transitivePeerDependencies:
+      - '@farmfe/core'
+      - '@rspack/core'
+      - bun-types-no-globals
+      - esbuild
+      - rolldown
+      - rollup
+      - unloader
+      - webpack
+
+  '@mionjs/native-compiler-darwin-arm64@0.14.0':
+    optional: true
+
+  '@mionjs/native-compiler-darwin-x64@0.14.0':
+    optional: true
+
+  '@mionjs/native-compiler-linux-arm64@0.14.0':
+    optional: true
+
+  '@mionjs/native-compiler-linux-arm@0.14.0':
+    optional: true
+
+  '@mionjs/native-compiler-linux-x64@0.14.0':
+    optional: true
+
+  '@mionjs/native-compiler-win32-arm64@0.14.0':
+    optional: true
+
+  '@mionjs/native-compiler-win32-x64@0.14.0':
+    optional: true
+
+  '@mionjs/run-types@0.14.0': {}
 
   '@msw/url@0.1.2': {}
 
@@ -12778,7 +12865,7 @@ snapshots:
 
   '@tanstack/devtools-event-bus@0.4.3':
     dependencies:
-      ws: 8.21.3
+      ws: 8.22.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -13836,7 +13923,7 @@ snapshots:
       '@vue/shared': 3.5.40
       estree-walker: 2.0.2
       magic-string: 0.30.21
-      postcss: 8.5.28
+      postcss: 8.5.32
       source-map-js: 1.2.2
 
   '@vue/compiler-ssr@3.5.40':
@@ -14811,11 +14898,11 @@ snapshots:
     dependencies:
       node-source-walk: 7.0.2
 
-  detective-postcss@8.0.4(postcss@8.5.28):
+  detective-postcss@8.0.4(postcss@8.5.32):
     dependencies:
       is-url-superb: 4.0.0
-      postcss: 8.5.28
-      postcss-values-parser: 6.0.2(postcss@8.5.28)
+      postcss: 8.5.32
+      postcss-values-parser: 6.0.2(postcss@8.5.32)
 
   detective-sass@6.0.2:
     dependencies:
@@ -16267,7 +16354,7 @@ snapshots:
       jiti: 2.7.0
       node-forge: 1.4.2
       pathe: 2.0.3
-      std-env: 4.2.0
+      std-env: 4.3.0
       tinyclip: 0.1.15
       ufo: 1.6.4
       untun: 0.2.2
@@ -16334,15 +16421,11 @@ snapshots:
 
   magic-string-ast@2.1.1:
     dependencies:
-      magic-string: 1.2.3
+      magic-string: 1.4.3
 
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
-
-  magic-string@1.2.3:
-    dependencies:
-      '@jridgewell/sourcemap-codec': 1.5.5
 
   magic-string@1.4.3:
     dependencies:
@@ -16788,8 +16871,6 @@ snapshots:
   mutative@2.0.2: {}
 
   mute-stream@3.0.0: {}
-
-  nanoid@3.3.18: {}
 
   nanoid@3.3.20: {}
 
@@ -17310,18 +17391,12 @@ snapshots:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
-  postcss-values-parser@6.0.2(postcss@8.5.28):
+  postcss-values-parser@6.0.2(postcss@8.5.32):
     dependencies:
       color-name: 1.1.4
       is-url-superb: 4.0.0
-      postcss: 8.5.28
+      postcss: 8.5.32
       quote-unquote: 1.0.0
-
-  postcss@8.5.28:
-    dependencies:
-      nanoid: 3.3.18
-      picocolors: 1.1.1
-      source-map-js: 1.2.2
 
   postcss@8.5.32:
     dependencies:
@@ -17336,7 +17411,7 @@ snapshots:
       detective-amd: 6.1.0
       detective-cjs: 6.1.1
       detective-es6: 5.0.2
-      detective-postcss: 8.0.4(postcss@8.5.28)
+      detective-postcss: 8.0.4(postcss@8.5.32)
       detective-sass: 6.0.2
       detective-scss: 5.0.2
       detective-stylus: 5.0.1
@@ -17344,7 +17419,7 @@ snapshots:
       detective-vue2: 2.3.0(supports-color@7.2.0)(typescript@5.9.3)
       module-definition: 6.0.2
       node-source-walk: 7.0.2
-      postcss: 8.5.28
+      postcss: 8.5.32
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
@@ -17627,7 +17702,7 @@ snapshots:
       mdast-util-mdx: 3.0.0(supports-color@7.2.0)
       micromark-extension-mdxjs: 3.0.0
       unified: 11.0.5
-      unist-util-visit-parents: 6.0.2
+      unist-util-visit-parents: 6.1.0
     transitivePeerDependencies:
       - supports-color
 
@@ -17761,7 +17836,7 @@ snapshots:
 
   rolldown-string@0.3.1:
     dependencies:
-      magic-string: 1.2.3
+      magic-string: 1.4.3
 
   rollup@4.62.2:
     dependencies:
@@ -18028,8 +18103,6 @@ snapshots:
   srvx@1.0.8: {}
 
   stack-trace@0.0.10: {}
-
-  std-env@4.2.0: {}
 
   std-env@4.3.0: {}
 
@@ -18507,7 +18580,7 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.1
-      unist-util-visit-parents: 6.0.2
+      unist-util-visit-parents: 6.1.0
 
   unist-util-is@6.0.1:
     dependencies:
@@ -18535,11 +18608,6 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
 
-  unist-util-visit-parents@6.0.2:
-    dependencies:
-      '@types/unist': 3.0.3
-      unist-util-is: 6.0.1
-
   unist-util-visit-parents@6.1.0:
     dependencies:
       '@types/unist': 3.0.3
@@ -18562,7 +18630,7 @@ snapshots:
       import-without-cache: 0.4.1
       magic-string-ast: 2.1.1
       rolldown-string: 0.3.1
-      unplugin: 3.4.0(@voidzero-dev/vite-plus-core@1.5.1(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)
+      unplugin: 3.7.0(@voidzero-dev/vite-plus-core@1.5.1(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)
       yuku-analyzer: 0.19.0
       yuku-ast: 0.19.0
       yuku-parser: 0.19.0
@@ -18587,7 +18655,7 @@ snapshots:
       picomatch: 4.0.7
       webpack-virtual-modules: 0.6.2
 
-  unplugin@3.4.0(@voidzero-dev/vite-plus-core@1.5.1(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2):
+  unplugin@3.3.0(@voidzero-dev/vite-plus-core@1.5.1(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2):
     dependencies:
       '@jridgewell/remapping': 2.3.5
       picomatch: 4.0.7
@@ -19041,8 +19109,6 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  ws@8.21.3: {}
-
   ws@8.22.0: {}
 
   wsl-utils@0.1.0:
@@ -19163,7 +19229,7 @@ snapshots:
       jiti: 2.7.0
       magic-string: 0.30.21
       picomatch: 4.0.7
-      unplugin: 3.4.0(@voidzero-dev/vite-plus-core@1.5.1(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)
+      unplugin: 3.7.0(@voidzero-dev/vite-plus-core@1.5.1(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)
       zod: 4.6.7
     transitivePeerDependencies:
       - '@farmfe/core'

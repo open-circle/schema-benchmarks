@@ -26,6 +26,8 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@mionjs/bin-compiler": "catalog:",
+    "@mionjs/devtools": "catalog:",
     "@schema-benchmarks/json-schema-tests": "workspace:*",
     "@schema-benchmarks/schemas": "workspace:*",
     "@schema-benchmarks/utils": "workspace:*",

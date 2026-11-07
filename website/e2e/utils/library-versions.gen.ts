@@ -4,6 +4,7 @@
 export const libraryVersions = {
   "@cfworker/json-schema": "4.1.6",
   "@earendil-works/pi-schema": "1.5.1",
+  "@mionjs/run-types": "0.14.0",
   "@paseri/compiler": "0.7.7",
   "@paseri/paseri": "1.9.7",
   "@railway-ts/pipelines": "0.1.29",

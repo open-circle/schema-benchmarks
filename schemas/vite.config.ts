@@ -1,14 +1,20 @@
+import runtypes from "@mionjs/devtools/runtypes/vite";
 import { filterTransform } from "@schema-benchmarks/utils/rolldown";
 import ttsc from "@ttsc/unplugin/vite";
 import macros from "unplugin-macros/vite";
-import { defineConfig, lazyPlugins } from "vite-plus";
+import { defineConfig, lazyPlugins, type Plugin } from "vite-plus";
 
 import tsdownConfig from "./tsdown.config.js";
-import { typiaPathPattern } from "./tsdown.config.ts";
+import { mionOptions, mionPathPattern, typiaPathPattern } from "./tsdown.config.ts";
 
 export default defineConfig({
   pack: tsdownConfig,
-  plugins: lazyPlugins(() => [filterTransform(ttsc(), typiaPathPattern), macros()]),
+  plugins: lazyPlugins(() => [
+    filterTransform(ttsc(), typiaPathPattern),
+    // typed as `Plugin | Plugin[]`, but returns a single plugin
+    filterTransform(runtypes(mionOptions) as Plugin, mionPathPattern),
+    macros(),
+  ]),
   test: {
     coverage: {
       provider: "v8",

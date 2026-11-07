@@ -12,6 +12,8 @@ allowBuilds:
   msw: false
   sharp: false
 catalog:
+  "@mionjs/bin-compiler": "0.14.0"
+  "@mionjs/devtools": "0.14.0"
   "@oxfmt/binding-linux-x64-gnu": ^0.78.0
   "@ttsc/unplugin": "0.36.3"
   "@types/node": ^26
@@ -52,5 +54,3 @@ peerDependencyRules:
   allowedVersions:
     vite: "*"
     vitest: "*"
-minimumReleaseAgeExclude:
-  - "@earendil-works/pi-schema@1.5.0"
