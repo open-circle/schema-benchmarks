@@ -14,6 +14,12 @@ import type { JsonSchemaDirection, JsonSchemaConversionTarget } from "@schema-be
 export const acceptedJsonSchemas = {
   "draft-2020-12": {
     input: [
+      // @mionjs/run-types
+      {
+        type: "object",
+        properties: { id: { type: "number" }, name: { type: "string" }, price: { type: "string" } },
+        required: ["id", "name", "price"],
+      },
       // arktype, zod, zod/mini
       {
         $schema: "https://json-schema.org/draft/2020-12/schema",

@@ -1,6 +1,7 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
+import runtypes from "@mionjs/devtools/runtypes/rolldown";
 import { unsafeFromEntries } from "@schema-benchmarks/utils";
 import { getSigintSignal, getVersion } from "@schema-benchmarks/utils/node";
 import ttsc from "@ttsc/unplugin/rolldown";
@@ -42,10 +43,24 @@ function getPackageName(libraryName: string) {
   return libraryName;
 }
 
+function getPlugins(filePath: string) {
+  if (filePath.includes("typia")) return [ttsc()];
+  if (filePath.includes("@mionjs")) {
+    return [
+      runtypes({
+        cwd: path.resolve(process.cwd(), "../schemas"),
+        tsconfig: "tsconfig.json",
+        emitMode: "functions",
+      }),
+    ];
+  }
+  return [];
+}
+
 async function measureFile(file: FileDescription, minify: MinifyType): Promise<DownloadResult> {
   const bundle = await Rolldown.rolldown({
     input: file.path,
-    plugins: file.path.includes("typia") ? [ttsc()] : [],
+    plugins: getPlugins(file.path),
     external: [/node:/],
   });
   const output = await bundle.generate({
