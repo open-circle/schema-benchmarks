@@ -24,7 +24,7 @@ catalog:
   dedent: ^1.7.2
   "mix-n-matchers": "^3.0.0"
   mutative: "^2.0.2"
-  playwright: ^1.64.1
+  playwright: ^1.65.0
   react: ^19.3.1
   react-dom: ^19.3.1
   ttsc: "0.36.2"
