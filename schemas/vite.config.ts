@@ -5,14 +5,14 @@ import macros from "unplugin-macros/vite";
 import { defineConfig, lazyPlugins, type Plugin } from "vite-plus";
 
 import tsdownConfig from "./tsdown.config.js";
-import { mionOptions, mionPathPattern, typiaPathPattern } from "./tsdown.config.ts";
+import { mionPathPattern, mionTsconfig, typiaPathPattern } from "./tsdown.config.ts";
 
 export default defineConfig({
   pack: tsdownConfig,
   plugins: lazyPlugins(() => [
     filterTransform(ttsc(), typiaPathPattern),
     // typed as `Plugin | Plugin[]`, but returns a single plugin
-    filterTransform(runtypes(mionOptions) as Plugin, mionPathPattern),
+    filterTransform(runtypes({ tsconfig: mionTsconfig }) as Plugin, mionPathPattern),
     macros(),
   ]),
   test: {

@@ -1,0 +1,14 @@
+{
+  "extends": "../../../tsconfig.json",
+  "include": ["./**/*", "../../../src/**/*"],
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "mion",
+        "emitMode": "functions",
+        "inlineMode": "allInternal",
+        "validate": { "numberMode": "typeof" }
+      }
+    ]
+  }
+}
