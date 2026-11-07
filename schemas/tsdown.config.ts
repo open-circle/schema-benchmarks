@@ -8,8 +8,8 @@ import { defineConfig } from "vite-plus/pack";
 
 export const typiaPathPattern = /[\\/]libraries[\\/]typia[\\/]/;
 export const mionPathPattern = /[\\/]libraries[\\/]@mionjs[\\/]/;
-// ship real validator functions instead of code strings compiled with `new Function` on first use
-export const mionOptions = { emitMode: "functions" } as const;
+// its own tsconfig, as typia's ttsc rejects a `mion` entry in the shared `plugins` list
+export const mionTsconfig = "libraries/@mionjs/run-types/tsconfig.json";
 
 export default defineConfig({
   entry: ["libraries/index.ts"],
@@ -22,7 +22,7 @@ export default defineConfig({
   },
   plugins: [
     filterTransform(ttsc(), typiaPathPattern),
-    filterTransform(runtypes(mionOptions), mionPathPattern),
+    filterTransform(runtypes({ tsconfig: mionTsconfig }), mionPathPattern),
     macros(),
   ],
   deps: {

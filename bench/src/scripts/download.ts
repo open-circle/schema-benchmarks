@@ -49,8 +49,7 @@ function getPlugins(filePath: string) {
     return [
       runtypes({
         cwd: path.resolve(process.cwd(), "../schemas"),
-        tsconfig: "tsconfig.json",
-        emitMode: "functions",
+        tsconfig: "libraries/@mionjs/run-types/tsconfig.json",
       }),
     ];
   }
