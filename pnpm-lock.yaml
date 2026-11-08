@@ -165,11 +165,11 @@ settings:
 catalogs:
   default:
     '@oxfmt/binding-linux-x64-gnu':
-      specifier: ^0.76.0
-      version: 0.76.0
+      specifier: ^0.77.0
+      version: 0.77.0
     '@ttsc/unplugin':
-      specifier: 0.36.2
-      version: 0.36.2
+      specifier: 0.36.3
+      version: 0.36.3
     '@types/react':
       specifier: ^19.3.0
       version: 19.3.0
@@ -207,11 +207,11 @@ catalogs:
       specifier: ^19.3.1
       version: 19.3.1
     ttsc:
-      specifier: 0.36.2
-      version: 0.36.2
+      specifier: 0.36.3
+      version: 0.36.3
     typebox:
-      specifier: ^1.4.4
-      version: 1.4.4
+      specifier: ^1.4.5
+      version: 1.4.5
     typescript:
       specifier: 7.0.2
       version: 7.0.2
@@ -244,8 +244,8 @@ importers:
   .:
     devDependencies:
       '@tanstack/eslint-plugin-query':
-        specifier: ^5.106.1
-        version: 5.106.1(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)
+        specifier: ^5.107.1
+        version: 5.107.1(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)
       '@tanstack/eslint-plugin-router':
         specifier: ^1.162.0
         version: 1.162.0(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)
@@ -290,7 +290,7 @@ importers:
         version: link:../utils
       '@ttsc/unplugin':
         specifier: 'catalog:'
-        version: 0.36.2(ttsc@0.36.2(typescript@7.0.2))
+        version: 0.36.3(ttsc@0.36.3(typescript@7.0.2))
       gzip-size:
         specifier: ^7.0.0
         version: 7.0.0
@@ -302,10 +302,10 @@ importers:
         version: 6.2.3
       ttsc:
         specifier: 'catalog:'
-        version: 0.36.2(typescript@7.0.2)
+        version: 0.36.3(typescript@7.0.2)
       typebox:
         specifier: 'catalog:'
-        version: 1.4.4
+        version: 1.4.5
       valibot:
         specifier: 'catalog:'
         version: 1.5.0(typescript@7.0.2)
@@ -463,10 +463,10 @@ importers:
         version: 11.1.0
       typebox:
         specifier: 'catalog:'
-        version: 1.4.4
+        version: 1.4.5
       typia:
-        specifier: ^15.2.2
-        version: 15.2.2(ttsc@0.36.2(typescript@7.0.2))
+        specifier: ^15.3.0
+        version: 15.3.0(ttsc@0.36.3(typescript@7.0.2))
       valibot:
         specifier: 'catalog:'
         version: 1.5.0(typescript@7.0.2)
@@ -485,7 +485,7 @@ importers:
     devDependencies:
       '@ttsc/unplugin':
         specifier: 'catalog:'
-        version: 0.36.2(ttsc@0.36.2(typescript@7.0.2))
+        version: 0.36.3(ttsc@0.36.3(typescript@7.0.2))
       '@types/node':
         specifier: ^26
         version: 26.1.2
@@ -494,7 +494,7 @@ importers:
         version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.0)
       ttsc:
         specifier: 'catalog:'
-        version: 0.36.2(typescript@7.0.2)
+        version: 0.36.3(typescript@7.0.2)
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -580,11 +580,11 @@ importers:
         specifier: ^0.24.1
         version: 0.24.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@tanstack/react-query':
-        specifier: ^5.106.1
-        version: 5.106.1(@types/react@19.3.0)(react@19.3.1)
+        specifier: ^5.107.1
+        version: 5.107.1(@types/react@19.3.0)(react@19.3.1)
       '@tanstack/react-query-devtools':
-        specifier: ^5.106.1
-        version: 5.106.1(@tanstack/react-query@5.106.1(@types/react@19.3.0)(react@19.3.1))(@types/react@19.3.0)(csstype@3.2.3)(react@19.3.1)
+        specifier: ^5.107.1
+        version: 5.107.1(@tanstack/react-query@5.107.1(@types/react@19.3.0)(react@19.3.1))(@types/react@19.3.0)(csstype@3.2.3)(react@19.3.1)
       '@tanstack/react-router':
         specifier: ^1.170.46
         version: 1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -593,7 +593,7 @@ importers:
         version: 1.167.2(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.39)(csstype@3.2.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@tanstack/react-router-ssr-query':
         specifier: ^1.167.3
-        version: 1.167.3(@tanstack/query-core@5.106.1)(@tanstack/react-query@5.106.1(@types/react@19.3.0)(react@19.3.1))(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.39)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 1.167.3(@tanstack/query-core@5.107.1)(@tanstack/react-query@5.107.1(@types/react@19.3.0)(react@19.3.1))(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.39)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@tanstack/react-start':
         specifier: ^1.169.4
         version: 1.169.4(@voidzero-dev/vite-plus-core@1.5.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rollup@4.62.2)(supports-color@7.2.0)
@@ -838,7 +838,7 @@ importers:
     optionalDependencies:
       '@oxfmt/binding-linux-x64-gnu':
         specifier: 'catalog:'
-        version: 0.76.0
+        version: 0.77.0
 
 packages:
 
@@ -3447,6 +3447,13 @@ packages:
     os: [linux]
     libc: [glibc]
 
+  '@oxfmt/binding-linux-x64-gnu@0.77.0':
+    resolution: {integrity: sha512-5JbOT3ucC/2kROUjyyOW06FjXO8trPjYb+kE7E7cLxmpGAnw0jjeU4Tjg4C8H9JR1MZ2oH4fXE1NqLNZ89ISnw==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
   '@oxfmt/binding-linux-x64-musl@0.76.0':
     resolution: {integrity: sha512-JNk/7HaPDJjy5kih3vq6b71Qif3tHx1ZFACGBzeHeNzyKaIpar4eFGya89GR398K2rwX0eEVmEq1npBPlEkkmg==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -4263,8 +4270,8 @@ packages:
     peerDependencies:
       solid-js: ^1.9.13
 
-  '@tanstack/eslint-plugin-query@5.106.1':
-    resolution: {integrity: sha512-wNCdC4uMHpEDP3GnylIUiBOco+NS53/OJiV17Of64Leg+YF4GbnLiMycVLsXMFW9iVKpnklPDt2ENkPIR0DB8A==}
+  '@tanstack/eslint-plugin-query@5.107.1':
+    resolution: {integrity: sha512-ouojB8ML40E9+Kbxao52IKU0x3528FXHnQlMS5d8fpV/fVnsCRYmfg2PMaMzYEvgCqdxTtvZfrfbSOGf2qoCpw==}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: ^5.6.0 || ^6.0.0 || ^7.0.0
@@ -4289,11 +4296,11 @@ packages:
     resolution: {integrity: sha512-ROZj19aPPGYebeRPhFZNRlqNaR2e4vkcLbgiXfbi5uJu8WiW/etsYmkcAcoSQRGOwGZbbioWRX7xssewDRVRhw==}
     engines: {node: '>=20'}
 
-  '@tanstack/query-core@5.106.1':
-    resolution: {integrity: sha512-erYv/UACddcdgjOL2ixmFdK6tO/AVBeUcTCOtX2N51yZpDQ2U7KJ+xgB/bCNfsF3uoCDTqGHEEbDiFsIO9YUmQ==}
+  '@tanstack/query-core@5.107.1':
+    resolution: {integrity: sha512-PSyAik11oQBEVOiVy5hjZWHmoUqOXqK1WYy4v55mcxozEfKaQgpUMsgnXhWjuESzSht8JfzqMS1m6M/9CpNgvg==}
 
-  '@tanstack/query-devtools@5.106.1':
-    resolution: {integrity: sha512-SEDgVRKVTGS4mjhylu3pjIIy9waf7r6se64yoe99hFZUAumbEsuzjVz896wJMvAWGZmxjfIDPrjBad4Gri20fg==}
+  '@tanstack/query-devtools@5.107.1':
+    resolution: {integrity: sha512-cZvgIPNvsh57mM3yTTwuL2GUMmMp5XR+3k5r2UJDyStmPYCqSwZf8z7OulgA4X8vISziAG5PoykbQ1q+2zemdA==}
 
   '@tanstack/react-devtools@0.10.14':
     resolution: {integrity: sha512-wFoNpqiU03MDbY1RljhX4vMUoGWwqpa5AZthWEaJRrojBFWFoB57lzzIM5r+EPGi+BsEX+OcXkn8Zkfoe4hGiA==}
@@ -4311,18 +4318,18 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
-  '@tanstack/react-query-devtools@5.106.1':
-    resolution: {integrity: sha512-onUerFS3Ig/g+hcT08Dlb+p+rDORlBHyZCGj1mqJC7dgA5wZyw/XAdhdPFqDFRcZfPNwIJRBkuAL6BZzHacO7A==}
+  '@tanstack/react-query-devtools@5.107.1':
+    resolution: {integrity: sha512-A3q9X3iOxtlz1jU/ou7t9CFvNHT84rTMofS1YEkFcBalvwotZ/RJKPDsX1NsQVl10J8XwN0OYMSfdjgIElt0sg==}
     peerDependencies:
-      '@tanstack/react-query': ^5.106.1
+      '@tanstack/react-query': ^5.107.1
       '@types/react': ^18 || ^19
       react: ^18 || ^19
     peerDependenciesMeta:
       '@types/react':
         optional: true
 
-  '@tanstack/react-query@5.106.1':
-    resolution: {integrity: sha512-ORDvJG/DSfmlFL9lQ8GDkE0VjtQbLeRDY7BL8xjKkQFGLfjFGfNWNuteWgPqA2gPJgLLuWfQ7IX0FlsHCJriyg==}
+  '@tanstack/react-query@5.107.1':
+    resolution: {integrity: sha512-udCOOLp3ZAheUrIHLCe+ZZge6nr2ZUrGMSWcCuXsjY1Bf2JeeE09oxst97PILiCY6N8xo/7bIo3Hvz13zh06FA==}
     peerDependencies:
       '@types/react': ^18 || ^19
       react: ^18 || ^19
@@ -4524,43 +4531,43 @@ packages:
     resolution: {integrity: sha512-/67zpWDBLV+oYAEL682s1ktXL0HgqX76f6gaVGkGnVZlBbm1zd0v4Bz8MFF2GGhoX9rvfq3KSQHubFHwa6w6/Q==}
     engines: {node: '>=12'}
 
-  '@ttsc/darwin-arm64@0.36.2':
-    resolution: {integrity: sha512-Qbck749YyeDliSQN11fDZicoF2ugKsdMuLhMnZKQ5jVTlCDtxTESj+DEfPVRjrI1O8+VPZZ1ktWYNT3M+RBTAg==}
+  '@ttsc/darwin-arm64@0.36.3':
+    resolution: {integrity: sha512-TlCI9q2W19cdV6UQRUgUOVS4KNqZ7e9d9eCh1UA8zU/y6qLKfXu/QhfhTGE5f4LItali0f20c5tU0GZ9I0XPBQ==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ttsc/darwin-x64@0.36.2':
-    resolution: {integrity: sha512-YqA71ZEu9OXo8kjs0t0hAJOgGzGaNFbxQkcG9uSsR07IeFgyisFg9bX5HBWPr/5fNqJRIa+MNWoR8vEiijjdVQ==}
+  '@ttsc/darwin-x64@0.36.3':
+    resolution: {integrity: sha512-tD+bqY1D4PVfmBxn16YMC5iE4tgfw83RIsWzVT+HBt9EuHbR/LylFDaSZ0VO2dvLwN0t674qcuHBaQUjXvDm7g==}
     cpu: [x64]
     os: [darwin]
 
-  '@ttsc/linux-arm64@0.36.2':
-    resolution: {integrity: sha512-qtQvYVYwNOTOOgbHl8WVAdwPMGGrPiGmaaaXtD6AP5orP5j6HYQFpEPKFJUiWL8MnJV4Sed1hJgIgLeeXveQIA==}
+  '@ttsc/linux-arm64@0.36.3':
+    resolution: {integrity: sha512-aq5dcul6xAjOxXD/Z3Tp14h62IhYnpKg868OBV+b9bHuHPKtldif55tVgtSpjoqzN9d62X1usqUcYQUy40yxgw==}
     cpu: [arm64]
     os: [linux]
 
-  '@ttsc/linux-arm@0.36.2':
-    resolution: {integrity: sha512-f2gn8X+M4vvQh4GLf8aeQTBmbqtbEvj2K4FdMWZFpUvVCJ/1pk84w6HowGaHYX9JZaLjnSzm5wxg5br874hJCA==}
+  '@ttsc/linux-arm@0.36.3':
+    resolution: {integrity: sha512-aCFnDybIJu6Bs09Pud3Nh0rQseMv6HfA8oCkSKB9DpyE7pQok4J6n25zlt+5O6iksaaDfJRPU/VSqUO5cZDnzg==}
     cpu: [arm]
     os: [linux]
 
-  '@ttsc/linux-x64@0.36.2':
-    resolution: {integrity: sha512-eyJ/fAfqFBXaHeHk4eh4HKiPQgMhOjcsWV7PGVUs9Ex2IU1hlgPL0VZr0w2zELIXQ1vusfOZdwJRFyTtrLCM1g==}
+  '@ttsc/linux-x64@0.36.3':
+    resolution: {integrity: sha512-7P5FhwpHDoNs7cWUGUU+LQopR0hhJiLKrzPUktWWOXXWWRAIDfsydpReW45I/6NhzcE8tvbrR7iodEstHXly2g==}
     cpu: [x64]
     os: [linux]
 
-  '@ttsc/unplugin@0.36.2':
-    resolution: {integrity: sha512-Mu594d8MpgoOvl3b07EcGz3dzHDogHvoDqLI/WrfK5KlJGLHFbKXX+RNtdJTVaOcW61fC7pmEhlBr+WsNKKZbQ==}
+  '@ttsc/unplugin@0.36.3':
+    resolution: {integrity: sha512-GEPvJidCdWp0JodWFlkGdG8JPCCNe4Eqq63Lav0yDlV6kDkEb++uzJjMgaik/Z9Ns0swGY24NYLpleTQ12/XpA==}
     peerDependencies:
-      ttsc: ^0.36.2
+      ttsc: ^0.36.3
 
-  '@ttsc/win32-arm64@0.36.2':
-    resolution: {integrity: sha512-K8f5s5tKLXBfF4x8KCZhFsgVXxv/WpbAus7s1YptX2oJkX3Gj2ePW8Ft1N2axFT2JOv4l45DqcZqzDAte89VFA==}
+  '@ttsc/win32-arm64@0.36.3':
+    resolution: {integrity: sha512-FEH6CzNr0sZzlUufnuogzaujOC/uiiHyEGatoF/wcwsIe3XuTux1p/qvA9wXGMs+IVzFB6y83ypfNxWa/eVQHg==}
     cpu: [arm64]
     os: [win32]
 
-  '@ttsc/win32-x64@0.36.2':
-    resolution: {integrity: sha512-sKrXyXo/RboAGpiwKVgT30/5uriBJXz7R6QwCq8uQXTDi2yco7tpJTni3WLPuuRh84ZhP+xQQdZo+g47GvsBSA==}
+  '@ttsc/win32-x64@0.36.3':
+    resolution: {integrity: sha512-jC//8uyaq6QSjVHheqy2ivyTynyZ9kLOQ+pT9d8Zrh2gyC6H7iVllehwdGTpIczKyD4YOrtSZN23dROLIcBeYQ==}
     cpu: [x64]
     os: [win32]
 
@@ -4933,11 +4940,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@typia/interface@15.2.2':
-    resolution: {integrity: sha512-X0KBxTzqBP1wn5Hv6nUS0ixd6XFmew0/7TMQOigqYJwuqiZOP+6P8LYVIN1h1elgjaWUprQxriB9S64A9VYUEg==}
+  '@typia/interface@15.3.0':
+    resolution: {integrity: sha512-bVGiBz7fYXd1HiUp9Imnz63vtKLabdBfhfue5buE4EN2NnhlekmebD5YMyc5b4wC7jwOKtv7WKNwc5Zlr1Mr7w==}
 
-  '@typia/utils@15.2.2':
-    resolution: {integrity: sha512-Kt6eng7lHcG6EN+vGPjp8DvHtrcrsINs6J5W2QDkOrKCrqk1gX56U9U+DAXsk7+kzQlRYYFChAnwdRsk0QHPhA==}
+  '@typia/utils@15.3.0':
+    resolution: {integrity: sha512-th8jdVJs37gyDz5MqXsBLnUBpzp4nXTXwnnYCoGsE/gLsTlafUFkXd0nvw5EMGW0AzOb+0bgr6CjqsCC1Xj+0Q==}
 
   '@ungap/structured-clone@1.3.3':
     resolution: {integrity: sha512-60YRaenCQcVjYEKOcG824+DRGGIQ3VKErcBoAEDJZz5bKIs2ZG+X/H9Nk+Q6EVkwJk5QNApxbrc5QtBSwtrXAg==}
@@ -9036,8 +9043,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  ttsc@0.36.2:
-    resolution: {integrity: sha512-PHrhee2UsDqUFBzMYOfcMHy1os9oCGUYAbZzyVHGOPDKapYDiN7kBSlX18UVHPE4eUgJ0XBzZuhbjDyWBKvwmA==}
+  ttsc@0.36.3:
+    resolution: {integrity: sha512-NTVLerVhyzLw/+PUEGDgFCmyiduLno40Fw8+fd9+NcJ56aIKmuaycDBe13hXeXWpB9Oddg9pSaS6htLu93/KZg==}
     engines: {node: '>=22.15.0'}
     hasBin: true
     peerDependencies:
@@ -9063,8 +9070,8 @@ packages:
     resolution: {integrity: sha512-YGYEVz3Fm5iy/AybuA0oyNFq7H4CgQNfRp/qfe8nurE1kuCeNm3/vfm9X4Mtl+qLyaKJUh5xrFZwogr41SMjYA==}
     engines: {node: '>=20'}
 
-  typebox@1.4.4:
-    resolution: {integrity: sha512-ctPyL8BZibv6HYU6cE3ldDtfCTh7nXM7WPuL3KQVyRRhMnZEzU3o2yLVywxEEFmKEx+8EdeqG1/uTNzazRbxLA==}
+  typebox@1.4.5:
+    resolution: {integrity: sha512-cRcb2hVtmv4XEQlXpKsEHYAjCHMKrhl1DFnCR50JiqUsd54OGkipWGgeedUVbAzBlbIFnQN9AULbcIe2mRuVnA==}
 
   typed-array-buffer@1.0.3:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
@@ -9097,10 +9104,10 @@ packages:
     engines: {node: '>=16.20.0'}
     hasBin: true
 
-  typia@15.2.2:
-    resolution: {integrity: sha512-RAwYQD3bsuVhAC8l2TPv+yL/+rUjmtqzByp4pWd1uXL5wIjgD7L7X/+Grpm+peD/eNbqganubTaLVnCi3FSTAQ==}
+  typia@15.3.0:
+    resolution: {integrity: sha512-tgFX1Kcd0/wuLVtYA9xbTuKnkLJeC7TPS86WIea1K7kUQuCICuxksTddtw9F/qxUjvMZEJLNJ1V4bNm4lk/HVA==}
     peerDependencies:
-      ttsc: '>=0.34.1'
+      ttsc: '>=0.36.3'
     peerDependenciesMeta:
       ttsc:
         optional: true
@@ -12135,6 +12142,9 @@ snapshots:
   '@oxfmt/binding-linux-x64-gnu@0.76.0':
     optional: true
 
+  '@oxfmt/binding-linux-x64-gnu@0.77.0':
+    optional: true
+
   '@oxfmt/binding-linux-x64-musl@0.76.0':
     optional: true
 
@@ -12779,7 +12789,7 @@ snapshots:
       - csstype
       - utf-8-validate
 
-  '@tanstack/eslint-plugin-query@5.106.1(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)':
+  '@tanstack/eslint-plugin-query@5.107.1(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)':
     dependencies:
       '@typescript-eslint/utils': 8.71.2(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@7.0.2)
       eslint: 10.14.0(jiti@2.7.0)(supports-color@7.2.0)
@@ -12807,16 +12817,16 @@ snapshots:
       '@tanstack/devtools-event-client': 0.5.0
       '@tanstack/store': 0.11.2
 
-  '@tanstack/query-core@5.106.1': {}
+  '@tanstack/query-core@5.107.1': {}
 
-  '@tanstack/query-devtools@5.106.1(csstype@3.2.3)':
+  '@tanstack/query-devtools@5.107.1(csstype@3.2.3)':
     dependencies:
       '@kobalte/core': 0.13.14(solid-js@1.9.15)
       '@solid-primitives/keyed': 1.5.3(solid-js@1.9.15)
       '@solid-primitives/resize-observer': 2.2.0(solid-js@1.9.15)
       '@solid-primitives/storage': 1.3.11(solid-js@1.9.15)
       '@tanstack/match-sorter-utils': 9.1.2
-      '@tanstack/query-core': 5.106.1
+      '@tanstack/query-core': 5.107.1
       '@tanstack/solid-virtual': 3.13.53(solid-js@1.9.15)
       clsx: 2.1.1
       goober: 2.1.19(csstype@3.2.3)
@@ -12846,19 +12856,19 @@ snapshots:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  '@tanstack/react-query-devtools@5.106.1(@tanstack/react-query@5.106.1(@types/react@19.3.0)(react@19.3.1))(@types/react@19.3.0)(csstype@3.2.3)(react@19.3.1)':
+  '@tanstack/react-query-devtools@5.107.1(@tanstack/react-query@5.107.1(@types/react@19.3.0)(react@19.3.1))(@types/react@19.3.0)(csstype@3.2.3)(react@19.3.1)':
     dependencies:
-      '@tanstack/query-devtools': 5.106.1(csstype@3.2.3)
-      '@tanstack/react-query': 5.106.1(@types/react@19.3.0)(react@19.3.1)
+      '@tanstack/query-devtools': 5.107.1(csstype@3.2.3)
+      '@tanstack/react-query': 5.107.1(@types/react@19.3.0)(react@19.3.1)
       react: 19.3.1
     optionalDependencies:
       '@types/react': 19.3.0
     transitivePeerDependencies:
       - csstype
 
-  '@tanstack/react-query@5.106.1(@types/react@19.3.0)(react@19.3.1)':
+  '@tanstack/react-query@5.107.1(@types/react@19.3.0)(react@19.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.106.1
+      '@tanstack/query-core': 5.107.1
       react: 19.3.1
     optionalDependencies:
       '@types/react': 19.3.0
@@ -12874,12 +12884,12 @@ snapshots:
     transitivePeerDependencies:
       - csstype
 
-  '@tanstack/react-router-ssr-query@1.167.3(@tanstack/query-core@5.106.1)(@tanstack/react-query@5.106.1(@types/react@19.3.0)(react@19.3.1))(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.39)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@tanstack/react-router-ssr-query@1.167.3(@tanstack/query-core@5.107.1)(@tanstack/react-query@5.107.1(@types/react@19.3.0)(react@19.3.1))(@tanstack/react-router@1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@tanstack/router-core@1.171.39)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.106.1
-      '@tanstack/react-query': 5.106.1(@types/react@19.3.0)(react@19.3.1)
+      '@tanstack/query-core': 5.107.1
+      '@tanstack/react-query': 5.107.1(@types/react@19.3.0)(react@19.3.1)
       '@tanstack/react-router': 1.170.46(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      '@tanstack/router-ssr-query-core': 1.169.3(@tanstack/query-core@5.106.1)(@tanstack/router-core@1.171.39)
+      '@tanstack/router-ssr-query-core': 1.169.3(@tanstack/query-core@5.107.1)(@tanstack/router-core@1.171.39)
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
     transitivePeerDependencies:
@@ -13022,9 +13032,9 @@ snapshots:
       - supports-color
       - unloader
 
-  '@tanstack/router-ssr-query-core@1.169.3(@tanstack/query-core@5.106.1)(@tanstack/router-core@1.171.39)':
+  '@tanstack/router-ssr-query-core@1.169.3(@tanstack/query-core@5.107.1)(@tanstack/router-core@1.171.39)':
     dependencies:
-      '@tanstack/query-core': 5.106.1
+      '@tanstack/query-core': 5.107.1
       '@tanstack/router-core': 1.171.39
 
   '@tanstack/router-utils@1.162.4(supports-color@7.2.0)':
@@ -13143,32 +13153,32 @@ snapshots:
       magic-string: 0.30.21
       string.prototype.matchall: 4.0.12
 
-  '@ttsc/darwin-arm64@0.36.2':
+  '@ttsc/darwin-arm64@0.36.3':
     optional: true
 
-  '@ttsc/darwin-x64@0.36.2':
+  '@ttsc/darwin-x64@0.36.3':
     optional: true
 
-  '@ttsc/linux-arm64@0.36.2':
+  '@ttsc/linux-arm64@0.36.3':
     optional: true
 
-  '@ttsc/linux-arm@0.36.2':
+  '@ttsc/linux-arm@0.36.3':
     optional: true
 
-  '@ttsc/linux-x64@0.36.2':
+  '@ttsc/linux-x64@0.36.3':
     optional: true
 
-  '@ttsc/unplugin@0.36.2(ttsc@0.36.2(typescript@7.0.2))':
+  '@ttsc/unplugin@0.36.3(ttsc@0.36.3(typescript@7.0.2))':
     dependencies:
-      ttsc: 0.36.2(typescript@7.0.2)
+      ttsc: 0.36.3(typescript@7.0.2)
       unplugin: 2.3.11
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@ttsc/win32-arm64@0.36.2':
+  '@ttsc/win32-arm64@0.36.3':
     optional: true
 
-  '@ttsc/win32-x64@0.36.2':
+  '@ttsc/win32-x64@0.36.3':
     optional: true
 
   '@tybys/wasm-util@0.10.3':
@@ -13549,11 +13559,11 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@typia/interface@15.2.2': {}
+  '@typia/interface@15.3.0': {}
 
-  '@typia/utils@15.2.2':
+  '@typia/utils@15.3.0':
     dependencies:
-      '@typia/interface': 15.2.2
+      '@typia/interface': 15.3.0
 
   '@ungap/structured-clone@1.3.3': {}
 
@@ -18312,19 +18322,19 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  ttsc@0.36.2(typescript@7.0.2):
+  ttsc@0.36.3(typescript@7.0.2):
     dependencies:
       acorn: 8.16.0
       cjs-module-lexer: 2.2.1
       typescript: 7.0.2
     optionalDependencies:
-      '@ttsc/darwin-arm64': 0.36.2
-      '@ttsc/darwin-x64': 0.36.2
-      '@ttsc/linux-arm': 0.36.2
-      '@ttsc/linux-arm64': 0.36.2
-      '@ttsc/linux-x64': 0.36.2
-      '@ttsc/win32-arm64': 0.36.2
-      '@ttsc/win32-x64': 0.36.2
+      '@ttsc/darwin-arm64': 0.36.3
+      '@ttsc/darwin-x64': 0.36.3
+      '@ttsc/linux-arm': 0.36.3
+      '@ttsc/linux-arm64': 0.36.3
+      '@ttsc/linux-x64': 0.36.3
+      '@ttsc/win32-arm64': 0.36.3
+      '@ttsc/win32-x64': 0.36.3
       fsevents: 2.3.3
 
   type-check@0.4.0:
@@ -18341,7 +18351,7 @@ snapshots:
     dependencies:
       tagged-tag: 1.0.0
 
-  typebox@1.4.4: {}
+  typebox@1.4.5: {}
 
   typed-array-buffer@1.0.3:
     dependencies:
@@ -18403,13 +18413,13 @@ snapshots:
       '@typescript/typescript-win32-arm64': 7.0.2
       '@typescript/typescript-win32-x64': 7.0.2
 
-  typia@15.2.2(ttsc@0.36.2(typescript@7.0.2)):
+  typia@15.3.0(ttsc@0.36.3(typescript@7.0.2)):
     dependencies:
-      '@typia/interface': 15.2.2
-      '@typia/utils': 15.2.2
+      '@typia/interface': 15.3.0
+      '@typia/utils': 15.3.0
       randexp: 0.5.3
     optionalDependencies:
-      ttsc: 0.36.2(typescript@7.0.2)
+      ttsc: 0.36.3(typescript@7.0.2)
 
   ufo@1.6.4: {}
 
