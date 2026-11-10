@@ -54,3 +54,34 @@ peerDependencyRules:
   allowedVersions:
     vite: "*"
     vitest: "*"
+permissions:
+  "@mionjs/run-types":
+    skills: [rt-enrich-types, runtypes-friendly-text, runtypes-mock-data]
+  "@tanstack/charts":
+    skills:
+      [
+        build-chart-interactions,
+        compose-marks-and-views,
+        configure-scales-guides-color,
+        coordinate-charts-with-tanstack,
+        debug-and-verify-charts,
+        design-a-chart,
+        design-responsive-charts,
+        extend-tanstack-charts,
+        prepare-chart-data,
+        ship-accessible-charts,
+        update-and-animate-charts,
+      ]
+  "@tanstack/devtools-vite":
+    skills: true
+  "@tanstack/react-router":
+    skills: [router-query, react-router]
+  "@tanstack/react-start":
+    skills: [react-start]
+  arktype:
+    skills: true
+  up-fetch:
+    skills: true
+skills:
+  dirs:
+    - .agents/skills
