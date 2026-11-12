@@ -56,7 +56,7 @@ peerDependencyRules:
     vitest: "*"
 permissions:
   "@mionjs/run-types":
-    skills: [ rt-enrich-types, runtypes-friendly-text, runtypes-mock-data ]
+    skills: [rt-enrich-types, runtypes-friendly-text, runtypes-mock-data]
   "@tanstack/charts":
     skills:
       [
@@ -70,14 +70,14 @@ permissions:
         extend-tanstack-charts,
         prepare-chart-data,
         ship-accessible-charts,
-        update-and-animate-charts
+        update-and-animate-charts,
       ]
   "@tanstack/devtools-vite":
     skills: true
   "@tanstack/react-router":
-    skills: [ router-query, react-router ]
+    skills: [router-query, react-router]
   "@tanstack/react-start":
-    skills: [ react-start ]
+    skills: [react-start]
   arktype:
     skills: true
   up-fetch:
