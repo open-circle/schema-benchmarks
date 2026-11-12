@@ -3,7 +3,7 @@
 /** Installed library versions, read from the built benchmark configs. */
 export const libraryVersions = {
   "@cfworker/json-schema": "4.1.6",
-  "@earendil-works/pi-schema": "1.5.1",
+  "@earendil-works/pi-schema": "1.5.2",
   "@mionjs/run-types": "0.14.0",
   "@paseri/compiler": "0.7.7",
   "@paseri/paseri": "1.9.7",
@@ -14,7 +14,7 @@ export const libraryVersions = {
   arktype: "2.2.9",
   "ata-validator": "1.63.1",
   decoders: "2.13.0",
-  effect: "4.1.3",
+  effect: "4.1.4",
   "io-ts": "2.2.22",
   joi: "18.3.2",
   jsonschema: "1.5.0",
