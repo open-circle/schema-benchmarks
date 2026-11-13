@@ -183,8 +183,8 @@ catalogs:
       specifier: ^0.78.0
       version: 0.78.0
     '@ttsc/unplugin':
-      specifier: 0.36.4
-      version: 0.36.4
+      specifier: 0.37.0
+      version: 0.37.0
     '@types/react':
       specifier: ^19.3.0
       version: 19.3.0
@@ -222,8 +222,8 @@ catalogs:
       specifier: ^19.3.1
       version: 19.3.1
     ttsc:
-      specifier: 0.36.4
-      version: 0.36.4
+      specifier: 0.37.0
+      version: 0.37.0
     typebox:
       specifier: ^1.4.6
       version: 1.4.6
@@ -311,7 +311,7 @@ importers:
         version: link:../utils
       '@ttsc/unplugin':
         specifier: 'catalog:'
-        version: 0.36.4(ttsc@0.36.4(typescript@7.0.2))
+        version: 0.37.0(ttsc@0.37.0(typescript@7.0.2))
       gzip-size:
         specifier: ^7.0.0
         version: 7.0.0
@@ -323,7 +323,7 @@ importers:
         version: 6.2.3
       ttsc:
         specifier: 'catalog:'
-        version: 0.36.4(typescript@7.0.2)
+        version: 0.37.0(typescript@7.0.2)
       typebox:
         specifier: 'catalog:'
         version: 1.4.6
@@ -369,8 +369,8 @@ importers:
         specifier: ^8.0.1
         version: 8.0.1
       tar:
-        specifier: ^7.5.22
-        version: 7.5.22
+        specifier: ^7.5.23
+        version: 7.5.23
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -490,7 +490,7 @@ importers:
         version: 1.4.6
       typia:
         specifier: ^15.3.1
-        version: 15.3.1(ttsc@0.36.4(typescript@7.0.2))
+        version: 15.3.1(ttsc@0.37.0(typescript@7.0.2))
       valibot:
         specifier: 'catalog:'
         version: 1.5.0(typescript@7.0.2)
@@ -515,7 +515,7 @@ importers:
         version: 0.14.0(@mionjs/bin-compiler@0.14.0)(@voidzero-dev/vite-plus-core@1.6.0(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)
       '@ttsc/unplugin':
         specifier: 'catalog:'
-        version: 0.36.4(ttsc@0.36.4(typescript@7.0.2))
+        version: 0.37.0(ttsc@0.37.0(typescript@7.0.2))
       '@types/node':
         specifier: ^26
         version: 26.1.2
@@ -524,7 +524,7 @@ importers:
         version: 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.0)
       ttsc:
         specifier: 'catalog:'
-        version: 0.36.4(typescript@7.0.2)
+        version: 0.37.0(typescript@7.0.2)
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -4606,43 +4606,43 @@ packages:
     resolution: {integrity: sha512-/67zpWDBLV+oYAEL682s1ktXL0HgqX76f6gaVGkGnVZlBbm1zd0v4Bz8MFF2GGhoX9rvfq3KSQHubFHwa6w6/Q==}
     engines: {node: '>=12'}
 
-  '@ttsc/darwin-arm64@0.36.4':
-    resolution: {integrity: sha512-zwKaEUmeKJ91MDlAus9YSW2tngWCWlwS8WXpqEKePXu4yhySMrqOz6W5ibYyDMxSu2Zxt97rYUjjQu7+NqoaTg==}
+  '@ttsc/darwin-arm64@0.37.0':
+    resolution: {integrity: sha512-bV0yB28PAf2KuclI7zEK6NGfo8gMEkFFBewJ7bBZ4DmZoztZ7x6abn6lNPlrRXu0KFGXD2sG7ZGva2nIdIBqaw==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ttsc/darwin-x64@0.36.4':
-    resolution: {integrity: sha512-llG2SpTB8Ck7bN3lCk9bXXrZR3auyAHUc0k7AY+A4pIXD00xdZX3yYrzCjHwzT0qpBsGBL2XICzt3T1lRfbDUQ==}
+  '@ttsc/darwin-x64@0.37.0':
+    resolution: {integrity: sha512-UaFSSd9o774RN8/7/rkL0cLKNMJLx8c+RrJVFtUpAW92V8qB0MOPvG8n0rDbiq3uWVRFb3sKOUE5z9kkDdi6CA==}
     cpu: [x64]
     os: [darwin]
 
-  '@ttsc/linux-arm64@0.36.4':
-    resolution: {integrity: sha512-l2YHxb1/fUTobDktx51MqsbaEGhl0nFX//EhJMzlcEMCLgN3x2HQVV1xz0uWhkAUmu0UAVhLmZYGsRoGROQl1A==}
+  '@ttsc/linux-arm64@0.37.0':
+    resolution: {integrity: sha512-3d8ohZF/cAdFB1K/3m+S9q802wpfzE0EE1vJL29ojOuXgB+uSjcbuWiBy3d4kMBAeeTAIkDwVkD5jn6cKo10Ew==}
     cpu: [arm64]
     os: [linux]
 
-  '@ttsc/linux-arm@0.36.4':
-    resolution: {integrity: sha512-K9tkHeoBc1FupUQ5MJgc4CjEqq0F+TQ7FV39wtILdSNi/NvA0bEHsAVU0Co/N2Zv6GWYn0BIog6Un5X5DOqPvQ==}
+  '@ttsc/linux-arm@0.37.0':
+    resolution: {integrity: sha512-VgytEknw8iLA/XkQfAUX77TKnfrjf2JZvD+7WT5+EzNVd3Jn71aL7icGIUJBi3ocmCMDOXMULVUN8YBny2Vu3g==}
     cpu: [arm]
     os: [linux]
 
-  '@ttsc/linux-x64@0.36.4':
-    resolution: {integrity: sha512-RoB0OldeHPn+f5ijQZ5kb4wXlN3OuS6gfpX52oSnLabeRvRr+eb0kC40oOuiszYS40U+klv10nkGs0gEyhx7ig==}
+  '@ttsc/linux-x64@0.37.0':
+    resolution: {integrity: sha512-B7nClpvsHZKWw4BtfIvfF6dkMPMaMwsMWueGbxI5u/7F04gIi9ILgqqpl2fAjl31HjgnNqHwjR2weaK6LHoBmA==}
     cpu: [x64]
     os: [linux]
 
-  '@ttsc/unplugin@0.36.4':
-    resolution: {integrity: sha512-SwPUtaFTS3Ic68hxMy0PyK2ZOG8xVZAMsHg22DqQjOQil0cmJ99Hnh1p5advtoksZiE6+DKuj1k6yTyLfMe9pg==}
+  '@ttsc/unplugin@0.37.0':
+    resolution: {integrity: sha512-OKEEPjlLvc5Y0+RSMj0aa4a1PP4h4S+WhoEJ1vpCTuBAOe0XBR8K4oJdXq1nS9Rmj+nQOANW/YYxGbXuR2CevA==}
     peerDependencies:
-      ttsc: ^0.36.4
+      ttsc: ^0.37.0
 
-  '@ttsc/win32-arm64@0.36.4':
-    resolution: {integrity: sha512-qBwH+3CWgUzmUGvpiPQpUH91a+ma/hHmZYoURUmXEsbtIyiUGBqkwL2f+j1dqLDgXjLKh/69WVf7xNNhsrzr5Q==}
+  '@ttsc/win32-arm64@0.37.0':
+    resolution: {integrity: sha512-4ijHOfePR5avdb+PwZKcXZiAM7J8w/5U4WS3KGD8wubYAqNFHKcxAYSPak9qkt3zoaw19SfS19Uscu+5xX2FRQ==}
     cpu: [arm64]
     os: [win32]
 
-  '@ttsc/win32-x64@0.36.4':
-    resolution: {integrity: sha512-YNZqAs/ts4YplBThxwEVS27jCMMOU213BTmS+8DAzV36Pt/+MvEQ6Y9NVdXilHKpIJbsOStL9ldl7H8yCxWN6g==}
+  '@ttsc/win32-x64@0.37.0':
+    resolution: {integrity: sha512-Me0gidCsLdutYL+5PvgBp5xnQDYcCTkaylxkFxpGzYcLGI58tWpSbmSQkTPKerkUamRqva5zFV9r/IZF1ygWeQ==}
     cpu: [x64]
     os: [win32]
 
@@ -8978,8 +8978,8 @@ packages:
   tar-stream@3.2.0:
     resolution: {integrity: sha512-ojzvCvVaNp6aOTFmG7jaRD0meowIAuPc3cMMhSgKiVWws1GyHbGd/xvnyuRKcKlMpt3qvxx6r0hreCNITP9hIg==}
 
-  tar@7.5.22:
-    resolution: {integrity: sha512-MFO/QzvtAOmJbkhOaCTvbGcFN9L9b+JunIsDwaKljSOdcLMea3NJ1k9Usz/rjdfSXTq4dfzfeS7W4p4YOAAHeA==}
+  tar@7.5.23:
+    resolution: {integrity: sha512-lkukzdoGngZHJZXxW4S/E4Fp9ghTDlyZXrQGRNoJ/LXvDKcXUTq2sg5yQe74po7Voea6n/IN09+wE/QvJMiifA==}
     engines: {node: '>=18'}
 
   teex@1.0.1:
@@ -9107,8 +9107,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  ttsc@0.36.4:
-    resolution: {integrity: sha512-uBSL9r0ONxBW8WfUSUDCFuopLOtQenAUAlcHs5Ov53xMxnMyWDn0wRpfUYc5MntzIXKwUa53oqUaqH+HN/MoCg==}
+  ttsc@0.37.0:
+    resolution: {integrity: sha512-5oGuBM1WA1nrbE2WJS3fBgph+qr5MkP/yNNIgkgGtGbR1E43RFGYv0LCEuHrk3ctXVqAh67FPkgDooHKPnf/Pw==}
     engines: {node: '>=22.15.0'}
     hasBin: true
     peerDependencies:
@@ -11257,7 +11257,7 @@ snapshots:
       node-fetch: 2.7.0
       nopt: 8.1.0
       semver: 7.8.5
-      tar: 7.5.22
+      tar: 7.5.23
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -11527,7 +11527,7 @@ snapshots:
       p-retry: 6.2.1
       parse-imports: 2.2.1
       semver: 7.8.5
-      tar: 7.5.22
+      tar: 7.5.23
       tmp-promise: 3.0.3
       urlpattern-polyfill: 8.0.2
 
@@ -13279,32 +13279,32 @@ snapshots:
       magic-string: 0.30.21
       string.prototype.matchall: 4.0.12
 
-  '@ttsc/darwin-arm64@0.36.4':
+  '@ttsc/darwin-arm64@0.37.0':
     optional: true
 
-  '@ttsc/darwin-x64@0.36.4':
+  '@ttsc/darwin-x64@0.37.0':
     optional: true
 
-  '@ttsc/linux-arm64@0.36.4':
+  '@ttsc/linux-arm64@0.37.0':
     optional: true
 
-  '@ttsc/linux-arm@0.36.4':
+  '@ttsc/linux-arm@0.37.0':
     optional: true
 
-  '@ttsc/linux-x64@0.36.4':
+  '@ttsc/linux-x64@0.37.0':
     optional: true
 
-  '@ttsc/unplugin@0.36.4(ttsc@0.36.4(typescript@7.0.2))':
+  '@ttsc/unplugin@0.37.0(ttsc@0.37.0(typescript@7.0.2))':
     dependencies:
-      ttsc: 0.36.4(typescript@7.0.2)
+      ttsc: 0.37.0(typescript@7.0.2)
       unplugin: 2.3.11
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@ttsc/win32-arm64@0.36.4':
+  '@ttsc/win32-arm64@0.37.0':
     optional: true
 
-  '@ttsc/win32-x64@0.36.4':
+  '@ttsc/win32-x64@0.37.0':
     optional: true
 
   '@tybys/wasm-util@0.10.3':
@@ -18457,7 +18457,7 @@ snapshots:
       - bare-buffer
       - react-native-b4a
 
-  tar@7.5.22:
+  tar@7.5.23:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
@@ -18573,19 +18573,19 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  ttsc@0.36.4(typescript@7.0.2):
+  ttsc@0.37.0(typescript@7.0.2):
     dependencies:
       acorn: 8.16.0
       cjs-module-lexer: 2.2.1
       typescript: 7.0.2
     optionalDependencies:
-      '@ttsc/darwin-arm64': 0.36.4
-      '@ttsc/darwin-x64': 0.36.4
-      '@ttsc/linux-arm': 0.36.4
-      '@ttsc/linux-arm64': 0.36.4
-      '@ttsc/linux-x64': 0.36.4
-      '@ttsc/win32-arm64': 0.36.4
-      '@ttsc/win32-x64': 0.36.4
+      '@ttsc/darwin-arm64': 0.37.0
+      '@ttsc/darwin-x64': 0.37.0
+      '@ttsc/linux-arm': 0.37.0
+      '@ttsc/linux-arm64': 0.37.0
+      '@ttsc/linux-x64': 0.37.0
+      '@ttsc/win32-arm64': 0.37.0
+      '@ttsc/win32-x64': 0.37.0
       fsevents: 2.3.3
 
   type-check@0.4.0:
@@ -18664,13 +18664,13 @@ snapshots:
       '@typescript/typescript-win32-arm64': 7.0.2
       '@typescript/typescript-win32-x64': 7.0.2
 
-  typia@15.3.1(ttsc@0.36.4(typescript@7.0.2)):
+  typia@15.3.1(ttsc@0.37.0(typescript@7.0.2)):
     dependencies:
       '@typia/interface': 15.3.1
       '@typia/utils': 15.3.1
       randexp: 0.5.3
     optionalDependencies:
-      ttsc: 0.36.4(typescript@7.0.2)
+      ttsc: 0.37.0(typescript@7.0.2)
 
   ufo@1.6.4: {}
 
