@@ -225,8 +225,8 @@ catalogs:
       specifier: 0.37.0
       version: 0.37.0
     typebox:
-      specifier: ^1.4.6
-      version: 1.4.6
+      specifier: ^1.4.7
+      version: 1.4.7
     typescript:
       specifier: 7.0.2
       version: 7.0.2
@@ -323,7 +323,7 @@ importers:
         version: 0.37.0(typescript@7.0.2)
       typebox:
         specifier: 'catalog:'
-        version: 1.4.6
+        version: 1.4.7
       valibot:
         specifier: 'catalog:'
         version: 1.5.0(typescript@7.0.2)
@@ -388,7 +388,7 @@ importers:
         version: 0.0.13
       '@ata-project/keywords':
         specifier: ^0.3.3
-        version: 0.3.3(ata-validator@1.63.1(yaml@2.9.1))
+        version: 0.3.3(ata-validator@1.63.2(yaml@2.9.1))
       '@cfworker/json-schema':
         specifier: ^4.1.6
         version: 4.1.6
@@ -441,8 +441,8 @@ importers:
         specifier: ^2.2.9
         version: 2.2.9
       ata-validator:
-        specifier: ^1.63.1
-        version: 1.63.1(yaml@2.9.1)
+        specifier: ^1.63.2
+        version: 1.63.2(yaml@2.9.1)
       decoders:
         specifier: ^2.13.0
         version: 2.13.0
@@ -484,10 +484,10 @@ importers:
         version: 11.1.0
       typebox:
         specifier: 'catalog:'
-        version: 1.4.6
+        version: 1.4.7
       typia:
-        specifier: ^15.3.1
-        version: 15.3.1(ttsc@0.37.0(typescript@7.0.2))
+        specifier: ^15.4.0
+        version: 15.4.0(ttsc@0.37.0(typescript@7.0.2))
       valibot:
         specifier: 'catalog:'
         version: 1.5.0(typescript@7.0.2)
@@ -896,42 +896,42 @@ packages:
     peerDependencies:
       ata-validator: '>=0.9.3'
 
-  '@ata-validator/native-darwin-arm64@1.63.1':
-    resolution: {integrity: sha512-HR3OvvrxlWMgYXH3YET6ydi/NZUtZsA7DXGOlJfV4xzLq1N9brhpuiejAg6GIptUjy2JttPyDHNrJzikp4A9Yw==}
+  '@ata-validator/native-darwin-arm64@1.63.2':
+    resolution: {integrity: sha512-tffrhEEMSDYk3M61B2iWUOdD4w4QZsO/PG7WSsQPGW8M7+LHzlBUKUukGILKYas+6NqdAO9+gO4O7XFS8GhjZQ==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ata-validator/native-darwin-x64@1.63.1':
-    resolution: {integrity: sha512-wXgCC5fG5/45d2RZCHBuWqe92ePoTugLchNeP3NStOE4yYB2ulc5+N0L1MUx3yh6kx/oAzBGG7Ga4Dvmx8lE8g==}
+  '@ata-validator/native-darwin-x64@1.63.2':
+    resolution: {integrity: sha512-2m3dhlouOAzGu1TKYs0XrdtIkEb41B7lDIMSpinTRYYv7mB1sVguHECeHHKINHBvDs11ycdKa5H5P8f40Us6Qg==}
     cpu: [x64]
     os: [darwin]
 
-  '@ata-validator/native-linux-arm64-gnu@1.63.1':
-    resolution: {integrity: sha512-4I9D8jEqOYYWUh0NxdtIsi5+h5n9bm1OFBH7hIvyp0oaANhKmGjC1C5BrVb4o6Tt0pj81kxq+q8WNtgZD0/vHA==}
+  '@ata-validator/native-linux-arm64-gnu@1.63.2':
+    resolution: {integrity: sha512-HzCttfZjvvVM0QSAl9Jftj7BdmVqM/UCIVGVngIhFZIbZA83aQzCtJ/CE6IR5pGDjXqNYS/N3ym6HPneJddE5Q==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-arm64-musl@1.63.1':
-    resolution: {integrity: sha512-AJ/PpaFvH/9mrv6yXGTc/fcZmizQW6Qx0PoqXu+8St/Sh1yERAZpWmdE/ckPivckNQ3y/Ud33urp0yPZhMd93w==}
+  '@ata-validator/native-linux-arm64-musl@1.63.2':
+    resolution: {integrity: sha512-PvGsH4TjWRylZOz/4/kVOptFym8tN8FESF/h2+q01A9TkVeUuWigt6agMcYUa0m6A7bSUBirOodqj019OWbX/Q==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-linux-x64-gnu@1.63.1':
-    resolution: {integrity: sha512-G+Qr5OiiDNbHgty4JYaiWLxmjMvXlWP4r4wz0tAqM8LW91pgLW2+zlektrvBeMN07uGPCRSuP8so+FqqUW6XWA==}
+  '@ata-validator/native-linux-x64-gnu@1.63.2':
+    resolution: {integrity: sha512-2TROZCcqzdSmn0qxJFH1Pnsx0fN8WCtLZ02XnWAnq/HOLq1OJ8WbpCbNdiER4Hrj8/21pFqdMi+UhmLKuHcHnw==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@ata-validator/native-linux-x64-musl@1.63.1':
-    resolution: {integrity: sha512-P8RaHqgdE2XFIiPj/P3SrlQNO4QERpMd41Rkvl4BYMQObW7nm0g9VMPsAZfP7KhVe3sBTD0yRdfohBO3I3Zn1w==}
+  '@ata-validator/native-linux-x64-musl@1.63.2':
+    resolution: {integrity: sha512-UNG4zACqm0aN7GDiHiQH77fwkeJF73K2st9MSC4xrCNyo+b/+q66N9AUwM+hvEDo5YC7+NiQy0ea/GNlpWgFCQ==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@ata-validator/native-win32-x64@1.63.1':
-    resolution: {integrity: sha512-rP29SSjjyxp3oWxSNCt6FtfesETpDIwdwSj8NtdiHi9AQrc7S2hufEYUsojfRfxxW9klbKt7Gkb3E6/Agri1eQ==}
+  '@ata-validator/native-win32-x64@1.63.2':
+    resolution: {integrity: sha512-lPs8BeUR3kedySkVuh4mBanfi4T9wi3pfqaCmFdozdZ2xobP5cthxtA1rG2PRnLyKdJwjpkwMy7pzDD6m3/jjA==}
     cpu: [x64]
     os: [win32]
 
@@ -5012,11 +5012,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@typia/interface@15.3.1':
-    resolution: {integrity: sha512-cquxvEJ31LmPTwqwQoRPm5wOFup1Ew8wZpB2OsDHZQXDwBT0e77JOoPAWYc+g99ovLT/WUaB/Yty2u/Fi0hV0w==}
+  '@typia/interface@15.4.0':
+    resolution: {integrity: sha512-6D9pv0ex8128ntxAg4CybmCtyw8T+akDx3SqXG5anH5NwE1SauS1PGWwDybK03UoIlDlhzCUTg+VleBn1iVcjg==}
 
-  '@typia/utils@15.3.1':
-    resolution: {integrity: sha512-yuMKrCsLk+gez5Supj0F/SVJJ5wdsTLOrQsPxx9PTWh1gYzRyFDlVGShJw8nyGckWOls+IROEAkfJWBZzfQcRQ==}
+  '@typia/utils@15.4.0':
+    resolution: {integrity: sha512-Zmxd9ayFXc53yELoPu/3Y0BtEuw+x6ezrXfz7VUtZ7iGNm9W/8ltGAnmloq89luhWD3x1uKQ7ztQ2FXEzIzvUQ==}
 
   '@ungap/structured-clone@1.3.3':
     resolution: {integrity: sha512-60YRaenCQcVjYEKOcG824+DRGGIQ3VKErcBoAEDJZz5bKIs2ZG+X/H9Nk+Q6EVkwJk5QNApxbrc5QtBSwtrXAg==}
@@ -5515,8 +5515,8 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
-  ata-validator@1.63.1:
-    resolution: {integrity: sha512-AP9775u72OAjAO/l3Ne+Ro+4+ytx9k7aHdJfG94/wyX/xau5h5VowesGYyHaHi8QccdSRcpPv7I+JWqKPXf2JA==}
+  ata-validator@1.63.2:
+    resolution: {integrity: sha512-n6irsnCEZDBCNVndPiaitXXcjF62uKRj0re8ZOXZFh8SZhX3FFXrAq54trHsy2L6kx+aPENxgkrbWd5hQTl7hw==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -9131,8 +9131,8 @@ packages:
     resolution: {integrity: sha512-YGYEVz3Fm5iy/AybuA0oyNFq7H4CgQNfRp/qfe8nurE1kuCeNm3/vfm9X4Mtl+qLyaKJUh5xrFZwogr41SMjYA==}
     engines: {node: '>=20'}
 
-  typebox@1.4.6:
-    resolution: {integrity: sha512-Yh8Mi4hzD7gqcuv9ZIk6HK1KVJKubTlfxaNxkrYK35HCvxoCjCuWVr8cBjQ/ChfA7yliPteJEBWHGFVGWDuF5Q==}
+  typebox@1.4.7:
+    resolution: {integrity: sha512-KonYdBj3gOgG/rH96TlUs/f+eaEDqiKRW7KU4/LE/tEjEnRCcfpYLofBfHfNMBAiBosmY55e4YeCPuE+NXmJtg==}
 
   typed-array-buffer@1.0.3:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
@@ -9165,10 +9165,10 @@ packages:
     engines: {node: '>=16.20.0'}
     hasBin: true
 
-  typia@15.3.1:
-    resolution: {integrity: sha512-YGDGM4EzhOu8yfVRwkU3H5COoOnCZCM8i5QAkZnCgn+3viJHqDDlpF3o9U4Czz5kv254HobWe+pFO5SZqSInCQ==}
+  typia@15.4.0:
+    resolution: {integrity: sha512-0mzoDaMoxOdRFka4PPI9ZUJmwbRe1/ort05hFxytqSF0xxjETGMrjmX/cWTcXZeQ080DSDjh3c93xN+8OhYjSA==}
     peerDependencies:
-      ttsc: '>=0.36.3'
+      ttsc: '>=0.37.0'
     peerDependenciesMeta:
       ttsc:
         optional: true
@@ -9867,29 +9867,29 @@ snapshots:
 
   '@ark/util@0.56.8': {}
 
-  '@ata-project/keywords@0.3.3(ata-validator@1.63.1(yaml@2.9.1))':
+  '@ata-project/keywords@0.3.3(ata-validator@1.63.2(yaml@2.9.1))':
     dependencies:
-      ata-validator: 1.63.1(yaml@2.9.1)
+      ata-validator: 1.63.2(yaml@2.9.1)
 
-  '@ata-validator/native-darwin-arm64@1.63.1':
+  '@ata-validator/native-darwin-arm64@1.63.2':
     optional: true
 
-  '@ata-validator/native-darwin-x64@1.63.1':
+  '@ata-validator/native-darwin-x64@1.63.2':
     optional: true
 
-  '@ata-validator/native-linux-arm64-gnu@1.63.1':
+  '@ata-validator/native-linux-arm64-gnu@1.63.2':
     optional: true
 
-  '@ata-validator/native-linux-arm64-musl@1.63.1':
+  '@ata-validator/native-linux-arm64-musl@1.63.2':
     optional: true
 
-  '@ata-validator/native-linux-x64-gnu@1.63.1':
+  '@ata-validator/native-linux-x64-gnu@1.63.2':
     optional: true
 
-  '@ata-validator/native-linux-x64-musl@1.63.1':
+  '@ata-validator/native-linux-x64-musl@1.63.2':
     optional: true
 
-  '@ata-validator/native-win32-x64@1.63.1':
+  '@ata-validator/native-win32-x64@1.63.2':
     optional: true
 
   '@babel/code-frame@7.29.7':
@@ -13682,11 +13682,11 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@typia/interface@15.3.1': {}
+  '@typia/interface@15.4.0': {}
 
-  '@typia/utils@15.3.1':
+  '@typia/utils@15.4.0':
     dependencies:
-      '@typia/interface': 15.3.1
+      '@typia/interface': 15.4.0
 
   '@ungap/structured-clone@1.3.3': {}
 
@@ -14236,15 +14236,15 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
-  ata-validator@1.63.1(yaml@2.9.1):
+  ata-validator@1.63.2(yaml@2.9.1):
     optionalDependencies:
-      '@ata-validator/native-darwin-arm64': 1.63.1
-      '@ata-validator/native-darwin-x64': 1.63.1
-      '@ata-validator/native-linux-arm64-gnu': 1.63.1
-      '@ata-validator/native-linux-arm64-musl': 1.63.1
-      '@ata-validator/native-linux-x64-gnu': 1.63.1
-      '@ata-validator/native-linux-x64-musl': 1.63.1
-      '@ata-validator/native-win32-x64': 1.63.1
+      '@ata-validator/native-darwin-arm64': 1.63.2
+      '@ata-validator/native-darwin-x64': 1.63.2
+      '@ata-validator/native-linux-arm64-gnu': 1.63.2
+      '@ata-validator/native-linux-arm64-musl': 1.63.2
+      '@ata-validator/native-linux-x64-gnu': 1.63.2
+      '@ata-validator/native-linux-x64-musl': 1.63.2
+      '@ata-validator/native-win32-x64': 1.63.2
       yaml: 2.9.1
 
   atomically@2.1.1:
@@ -18599,7 +18599,7 @@ snapshots:
     dependencies:
       tagged-tag: 1.0.0
 
-  typebox@1.4.6: {}
+  typebox@1.4.7: {}
 
   typed-array-buffer@1.0.3:
     dependencies:
@@ -18661,10 +18661,10 @@ snapshots:
       '@typescript/typescript-win32-arm64': 7.0.2
       '@typescript/typescript-win32-x64': 7.0.2
 
-  typia@15.3.1(ttsc@0.37.0(typescript@7.0.2)):
+  typia@15.4.0(ttsc@0.37.0(typescript@7.0.2)):
     dependencies:
-      '@typia/interface': 15.3.1
-      '@typia/utils': 15.3.1
+      '@typia/interface': 15.4.0
+      '@typia/utils': 15.4.0
       randexp: 0.5.3
     optionalDependencies:
       ttsc: 0.37.0(typescript@7.0.2)
