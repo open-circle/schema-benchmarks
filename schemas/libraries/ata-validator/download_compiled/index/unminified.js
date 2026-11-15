@@ -20,7 +20,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	value: mod,
 	enumerable: true
 }) : target, mod));
-// ../node_modules/.pnpm/@ata-project+keywords@0.3.3_ata-validator@1.63.1_yaml@2.9.1_/node_modules/@ata-project/keywords/index.js
+// ../node_modules/.pnpm/@ata-project+keywords@0.3.3_ata-validator@1.63.2_yaml@2.9.1_/node_modules/@ata-project/keywords/index.js
 var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CONSTRUCTORS = {
 		Object,
@@ -535,27 +535,27 @@ var require_keywords$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		enumerable: false
 	});
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/native-load.browser.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/native-load.browser.js
 var require_native_load_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = function loadNative() {
 		return null;
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/env.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/env.js
 var require_env = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function env(name) {
 		return typeof process !== "undefined" && process.env ? process.env[name] : void 0;
 	}
 	module.exports = { env };
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/compile-fn.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/compile-fn.js
 var require_compile_fn = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function compileFunction(...args) {
 		return new Function(...args);
 	}
 	module.exports = { compileFunction };
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/keywords.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/keywords.js
 var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const RESERVED = /* @__PURE__ */ new Set([
 		"$id",
@@ -692,7 +692,7 @@ var require_keywords = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		schemaUsesDataContext
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/dialect.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/dialect.js
 var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const V1_DIALECTS = /* @__PURE__ */ new Set([
 		"https://json-schema.org/v1",
@@ -733,7 +733,7 @@ var require_dialect = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		draftCode
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/draft7.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/draft7.js
 var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { DRAFT7_SCHEMAS, DRAFT6_SCHEMAS, DRAFT4_SCHEMAS, DRAFT2019_SCHEMAS, draftCode } = require_dialect();
 	function isDraft7(schema) {
@@ -1066,7 +1066,7 @@ var require_draft7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		stripFormatAssertions
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/metaschemas.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/metaschemas.js
 var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const METASCHEMAS = /* @__PURE__ */ new Map([
 		["https://json-schema.org/draft/2020-12/schema", {
@@ -1985,7 +1985,7 @@ var require_metaschemas = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = { METASCHEMAS };
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/vocabularies.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/vocabularies.js
 var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CORE_VOCABULARY = "https://json-schema.org/draft/2020-12/vocab/core";
 	let KEYWORDS_BY_VOCABULARY = null;
@@ -2100,7 +2100,7 @@ var require_vocabularies = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		keywordsByVocabulary
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/schema-scan.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/schema-scan.js
 var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const NULLABLE = 1;
 	const REF_SIBLINGS = 2;
@@ -2192,7 +2192,7 @@ var require_schema_scan = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		enumerable: false
 	});
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/safe-regex.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/safe-regex.js
 var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function __ataSafeRegex() {
 		const WS = [
@@ -2926,7 +2926,7 @@ var require_safe_regex = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = __ataSafeRegex();
 	module.exports.engineSource = () => __ataSafeRegex.toString();
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/defaults.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/defaults.js
 var require_defaults = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const MAX_DEPTH = 512;
 	function buildDefaultsApplier(schema, keyMatcher) {
@@ -3183,7 +3183,7 @@ var require_defaults = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		EMBED
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/schema-order.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/schema-order.js
 var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const _keyIndexCache = /* @__PURE__ */ new WeakMap();
 	const _rankCache = /* @__PURE__ */ new WeakMap();
@@ -3415,7 +3415,7 @@ var require_schema_order = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		registerDocuments
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/error-codes.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/error-codes.js
 var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const CODES = Object.freeze({
 		ATA1001: {
@@ -3636,14 +3636,14 @@ var require_error_codes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		codeFor
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/native.browser.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/native.browser.js
 var require_native_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const message = (err) => err && err.message || "validation failed";
 	message.fromNative = message.nativeTargeted = () => null;
 	message.NATIVE_KEYWORDS = [];
 	module.exports = message;
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/levenshtein.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/levenshtein.js
 var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let scratchA = /* @__PURE__ */ new Int32Array(64);
 	let scratchB = /* @__PURE__ */ new Int32Array(64);
@@ -3699,7 +3699,7 @@ var require_levenshtein = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = { levenshtein };
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/pointer.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/pointer.js
 var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Resolve a JSON pointer against a document, for the diagnostic paths that run
@@ -3743,7 +3743,7 @@ var require_pointer = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		UNRESOLVED: Symbol("ata.pointer.unresolved")
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/suggestions.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/suggestions.js
 var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const { resolvePointer: walk, UNRESOLVED } = require_pointer();
@@ -3878,7 +3878,7 @@ var require_suggestions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		suggestCoercion
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/enrich-error.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/enrich-error.js
 var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor } = require_error_codes();
 	let _fromNative = null;
@@ -4219,7 +4219,7 @@ var require_enrich_error = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		DOC_BASE
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/correlate.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/correlate.js
 var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { levenshtein } = require_levenshtein();
 	const MAX_DISTANCE = 2;
@@ -4323,7 +4323,7 @@ var require_correlate = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = { correlateTypos };
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/rejections.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/rejections.js
 var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { ordinalFor: schemaOrdinal, rankFor: schemaRank } = require_schema_order();
 	var LazyRejection = class {
@@ -4534,7 +4534,7 @@ var require_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		_setPositionsFor
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/diagnostic-source.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/diagnostic-source.js
 var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const KEY = Symbol.for("ata.diagnosticSource");
 	const DESCRIPTOR = {
@@ -4566,7 +4566,7 @@ var require_diagnostic_source = /* @__PURE__ */ __commonJSMin(((exports, module)
 		getDiagnosticSource
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/json-rejections.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/json-rejections.js
 var require_json_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { needsOrdering, sortErrorsBySchemaOrder, attachRelated, _setPositionsFor } = require_rejections();
 	const { setDiagnosticSource: attachDiagnosticSource } = require_diagnostic_source();
@@ -4693,7 +4693,7 @@ var require_json_rejections = /* @__PURE__ */ __commonJSMin(((exports, module) =
 	_setPositionsFor(lazyPositionsFor);
 	module.exports = { LazyJsonRejection };
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/strict-check.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/strict-check.js
 var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { METASCHEMAS } = require_metaschemas();
 	const { levenshtein } = require_levenshtein();
@@ -4889,7 +4889,7 @@ var require_strict_check = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = { checkSchemaStrict };
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/source-positions.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/source-positions.js
 var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build a map of JSON pointer → { line, col, text } by scanning JSON text.
@@ -5044,7 +5044,7 @@ var require_source_positions = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		escapePtr
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/data-positions.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/data-positions.js
 var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/**
 	* Build pointer → { byteOffset, length, line, col, text } from a JSON
@@ -5432,7 +5432,7 @@ var require_data_positions = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		buildTargetedPositionMap
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/data-position-cache.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/data-position-cache.js
 var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { buildDataPositionMap, buildTargetedPositionMap } = require_data_positions();
 	/**
@@ -5518,7 +5518,7 @@ var require_data_position_cache = /* @__PURE__ */ __commonJSMin(((exports, modul
 	}
 	module.exports = { createCache };
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/branch-collapse.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/branch-collapse.js
 var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const __ATA_SEVERITY = {
 		type: 10,
@@ -5608,7 +5608,7 @@ var require_branch_collapse = /* @__PURE__ */ __commonJSMin(((exports, module) =
 		_multi: __ataMulti
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/unique-items.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/unique-items.js
 var require_unique_items = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function _deq(a, b) {
 		if (a === b) return true;
@@ -5783,7 +5783,7 @@ var require_unique_items = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		_uqp
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/uri-core.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/uri-core.js
 var require_uri_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function __ataUri(ip6) {
 		const C = /* @__PURE__ */ new Uint8Array(128);
@@ -6000,7 +6000,7 @@ var require_uri_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = { __ataUri };
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/formats.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/formats.js
 var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function isDigit(c) {
 		return c >= 48 && c <= 57;
@@ -6454,7 +6454,7 @@ var require_formats = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		URI_TEMPLATE_EXPR
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/interpreter-core.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/interpreter-core.js
 var require_interpreter_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let _safeRe = null;
 	const compileSafe = (src) => (_safeRe || (_safeRe = require_safe_regex())).compileSafe(src);
@@ -8135,7 +8135,7 @@ var require_interpreter_core = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		enumerable: false
 	});
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/interpreter.browser.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/interpreter.browser.js
 var require_interpreter_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const core = require_interpreter_core();
 	core._setPlanCompiler(null, true);
@@ -8146,7 +8146,7 @@ var require_interpreter_browser = /* @__PURE__ */ __commonJSMin(((exports, modul
 		if (t && typeof t.unref === "function") t.unref();
 	};
 	function load() {
-		import("./plan-compiler-DBnA3d7I.js").then((m) => /* @__PURE__ */ __toESM(m.default, 1)).then((m) => {
+		import("./plan-compiler-DMwTxbHn.js").then((m) => /* @__PURE__ */ __toESM(m.default, 1)).then((m) => {
 			const mod = m && m.install ? m : m.default;
 			core._setPlanCompiler(() => mod.install);
 		}, () => core._setPlanCompiler(null));
@@ -8161,7 +8161,7 @@ var require_interpreter_browser = /* @__PURE__ */ __commonJSMin(((exports, modul
 	};
 	module.exports = core;
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/error-messages.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/error-messages.js
 var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function resolveOwner(rootSchema, schemaPath) {
 		if (!schemaPath || typeof schemaPath !== "string" || schemaPath[0] !== "#") return void 0;
@@ -8218,13 +8218,13 @@ var require_error_messages = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		pickMessage
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/native-attach.browser.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/native-attach.browser.js
 var require_native_attach_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function attachNative() {}
 	attachNative.installFast = function installFast() {};
 	module.exports = attachNative;
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/buffer-gate.browser.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/buffer-gate.browser.js
 var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = {
 		bufferNeedsSlowPath: () => false,
@@ -8233,7 +8233,7 @@ var require_buffer_gate_browser = /* @__PURE__ */ __commonJSMin(((exports, modul
 		}
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/standard-schema.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/standard-schema.js
 var require_standard_schema = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const _pathBuckets = /* @__PURE__ */ new Map();
 	const PATH_LENGTHS_MAX = 256;
@@ -8343,7 +8343,7 @@ var require_standard_schema = /* @__PURE__ */ __commonJSMin(((exports, module) =
 		installStandard
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/refine.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/refine.js
 var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const REFINE = Symbol.for("ata.t.refine");
 	function getRefinements(schema) {
@@ -8393,11 +8393,11 @@ var require_refine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		runRefinements
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/version.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/version.js
 var require_version = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = "1.63.1";
+	module.exports = "1.63.2";
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/shape-classifier.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/shape-classifier.js
 var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const PRIMITIVE_TYPES = /* @__PURE__ */ new Set([
 		"string",
@@ -8513,7 +8513,7 @@ var require_shape_classifier = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		PRIMITIVE_TYPES
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/tier0.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/tier0.js
 var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const TYPE_MASK = {
 		string: 1,
@@ -8753,7 +8753,7 @@ var require_tier0 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		TYPE_MASK
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/validator-core.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/validator-core.js
 var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	let _nativeMod;
 	function callable(m) {
@@ -10504,7 +10504,7 @@ var require_validator_core = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		enumerable: false
 	});
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/aot.browser.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/aot.browser.js
 var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function unavailable(name) {
 		return function() {
@@ -10526,7 +10526,7 @@ var require_aot_browser = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		loadBundle
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/tiering.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/tiering.js
 var require_tiering = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const core = require_validator_core();
 	const { compileFunction } = require_compile_fn();
@@ -10774,19 +10774,19 @@ var require_tiering = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		TIER_CALLS
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/index.browser.mjs
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/index.browser.mjs
 var import_keywords = require_keywords$1();
 var import_validator_core = /* @__PURE__ */ __toESM(require_validator_core(), 1);
 var import_tiering = /* @__PURE__ */ __toESM(require_tiering(), 1);
 const api = /* @__PURE__ */ (() => {
-	import_validator_core.default._registerTiering(import_tiering.default.createTiering(() => import("./codegen-engine-DBG8JnyP.js").then((m) => /* @__PURE__ */ __toESM(m.default, 1))));
+	import_validator_core.default._registerTiering(import_tiering.default.createTiering(() => import("./codegen-engine-CI29zX0k.js").then((m) => /* @__PURE__ */ __toESM(m.default, 1))));
 	try {
 		if (typeof document !== "undefined") console.info("ata-validator: this page compiles its schemas in the browser, which takes the validator runtime (about 51 KB gzipped). A schema the build can read can be compiled by the build instead, a few KB for a form: https://github.com/ata-core/unplugin-ata");
 	} catch {}
 	return import_validator_core.default;
 })();
 const Validator = /* @__PURE__ */ (() => api.Validator)();
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/t.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/t.js
 var require_t$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const OPTIONAL = Symbol.for("ata.t.optional");
 	const { attach: attachRefine } = require_refine();
@@ -11092,7 +11092,7 @@ const productSchema = t.object({
 export { require_compile_fn as _, require_formats as a, require_branch_collapse as c, require_suggestions as d, require_native_browser as f, require_safe_regex as g, require_defaults as h, require_interpreter_browser as i, require_rejections as l, require_schema_order as m, require_validator_core as n, require_uri_core as o, require_error_codes as p, require_buffer_gate_browser as r, require_unique_items as s, require_aot_browser as t, require_enrich_error as u, require_env as v, __commonJSMin as y };
 
 import { _ as require_compile_fn, a as require_formats, c as require_branch_collapse, d as require_suggestions, f as require_native_browser, g as require_safe_regex, h as require_defaults, i as require_interpreter_browser, l as require_rejections, m as require_schema_order, n as require_validator_core, o as require_uri_core, p as require_error_codes, r as require_buffer_gate_browser, s as require_unique_items, t as require_aot_browser, u as require_enrich_error, v as require_env, y as __commonJSMin } from "./index.js";
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/combined-runtime.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/combined-runtime.js
 var require_combined_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function apState() {
 		return {
@@ -11236,7 +11236,7 @@ var require_combined_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		}
 	});
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/regex-linear.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/regex-linear.js
 var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { parse } = require_safe_regex();
 	const NATIVE_ESCAPES = /* @__PURE__ */ new Set([
@@ -11270,6 +11270,7 @@ var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		"x",
 		"u"
 	]);
+	const MAX_WAYS = 4096;
 	const MAX_BOUNDED_CHOICES = 64;
 	const atom = (n) => n.t === "char" || n.t === "class" || n.t === "any";
 	function anchored(ast) {
@@ -11341,7 +11342,7 @@ var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			}
 		};
 		const r = info(ast);
-		if (r === null || r.u > 1 || r.b > MAX_BOUNDED_CHOICES) return false;
+		if (r === null || r.u > 1 || r.b > MAX_BOUNDED_CHOICES || !(waysOf(ast) <= MAX_WAYS)) return false;
 		return r.u === 0 || anchored(ast);
 	}
 	function charSet(node) {
@@ -11503,7 +11504,31 @@ var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		for (let p = 0; p < sets.length && ok; p++) disjoint(follow[p]);
 		if (!ok) return false;
 		if (bounded > MAX_BOUNDED_CHOICES) return false;
+		if (!(waysOf(ast) <= MAX_WAYS)) return false;
 		return unbounded === 0 || anchored(ast);
+	}
+	function waysOf(n) {
+		switch (n.t) {
+			case "star":
+			case "plus": return waysOf(n.child);
+			case "quest": return atom(n.child) ? 2 : 1 + waysOf(n.child);
+			case "repeat":
+				if (n.max === Infinity) return waysOf(n.child);
+				if (atom(n.child)) return n.max - n.min + 1;
+				return (n.max - n.min + 1) * Math.pow(waysOf(n.child), n.max);
+			case "group": return waysOf(n.child);
+			case "concat": {
+				let w = 1;
+				for (const part of n.parts) w *= waysOf(part);
+				return w;
+			}
+			case "alt": {
+				let w = 0;
+				for (const part of n.opts) w += waysOf(part);
+				return w;
+			}
+			default: return 1;
+		}
 	}
 	function sequenceOf(ast) {
 		if (ast.t !== "concat") return null;
@@ -11654,13 +11679,14 @@ var require_regex_linear = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		} catch {
 			return false;
 		}
+		if (!(waysOf(ast) <= MAX_WAYS)) return false;
 		return simpleRule(ast) || deterministicRule(ast) || oneChoiceRule(ast) || delimitedLoopRule(ast);
 	}
 	module.exports = { nativeIsLinear };
 }));
-// (ignored) ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/email-literal.js
+// (ignored) ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/email-literal.js
 var require_email_literal = /* @__PURE__ */ __commonJSMin((() => {}));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/formats-source.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/formats-source.js
 var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const _formats = () => require_formats();
 	function idnEmailSource(v, isStr) {
@@ -11782,7 +11808,7 @@ var require_formats_source = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 		durationSource
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/enrich-site.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/enrich-site.js
 var require_enrich_site = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { CODES, codeFor } = require_error_codes();
 	const { suggestFor } = require_suggestions();
@@ -11864,7 +11890,7 @@ var require_enrich_site = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		makeRich
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler-errors.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler-errors.js
 var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { env } = require_env();
 	const { compileFunction } = require_compile_fn();
@@ -12761,7 +12787,7 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 				}
 			});
 			const expected = types.join(", ");
-			const expectedParam = !Array.isArray(schema.type) ? `'${types[0]}'` : JSON.stringify(types);
+			const expectedParam = !Array.isArray(schema.type) ? `'${esc(String(types[0]))}'` : JSON.stringify(types);
 			{
 				const typeSp = `${schemaPrefix}/type`;
 				const lit = buildErrorLiteral({
@@ -12769,7 +12795,7 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 					schemaPath: typeSp,
 					sourceMap: ctx.sourceMap
 				});
-				lines.push(`if(!(${conds.join("||")})){_e.push({code:'${lit.codeStr}',keyword:'type',instancePath:${pathExpr || "\"\""},schemaPath:'${typeSp}'${ordinalField(ctx, `${typeSp}`)},params:{type:${expectedParam}},message:'must be ${expected}',docUrl:'${lit.docUrl}'${lit.frame}});if(!_all)return{valid:false,errors:_e}}`);
+				lines.push(`if(!(${conds.join("||")})){_e.push({code:'${lit.codeStr}',keyword:'type',instancePath:${pathExpr || "\"\""},schemaPath:'${typeSp}'${ordinalField(ctx, `${typeSp}`)},params:{type:${expectedParam}},message:'must be ${esc(expected)}',docUrl:'${lit.docUrl}'${lit.frame}});if(!_all)return{valid:false,errors:_e}}`);
 			}
 		}
 		const isObj = false;
@@ -13464,7 +13490,7 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 			"anyOf",
 			"oneOf"
 		]);
-		for (const t of types) for (const k of TYPE_KEYWORDS[t] || []) drop.add(k);
+		for (const t of types) if (Object.prototype.hasOwnProperty.call(TYPE_KEYWORDS, t)) for (const k of TYPE_KEYWORDS[t]) drop.add(k);
 		if (types.includes("string") && typeof schema.format === "string" && FORMAT_CODEGEN[schema.format]) drop.add("format");
 		let rest = null;
 		for (const k of Object.keys(schema)) {
@@ -13783,10 +13809,10 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 				}
 			});
 			const expected = types.join(", ");
-			const expectedParam = !Array.isArray(schema.type) ? `'${types[0]}'` : JSON.stringify(types);
+			const expectedParam = !Array.isArray(schema.type) ? `'${esc(String(types[0]))}'` : JSON.stringify(types);
 			const typeOk = `_tok${ctx.varCounter++}`;
 			lines.push(`const ${typeOk}=${conds.join("||")}`);
-			lines.push(`if(!${typeOk}){${fail("type", "type", `{type:${expectedParam}}`, `'must be ${expected}'`)}}`);
+			lines.push(`if(!${typeOk}){${fail("type", "type", `{type:${expectedParam}}`, `'must be ${esc(expected)}'`)}}`);
 			if (types.length === 1) {
 				isObj = types[0] === "object";
 				isArr = types[0] === "array";
@@ -14967,7 +14993,7 @@ var require_js_compiler_errors = /* @__PURE__ */ __commonJSMin(((exports, module
 		}
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/js-compiler.js
 var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileFunction } = require_compile_fn();
 	let _compileSeq = 0;
@@ -15553,8 +15579,8 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return null;
 	}
 	function buildTypeCheck(types) {
-		if (types.length === 1) return TYPE_CHECKS[types[0]] || (() => true);
-		const fns = types.map((t) => TYPE_CHECKS[t]).filter(Boolean);
+		if (types.length === 1) return typeCheckOf(types[0]) || (() => true);
+		const fns = types.map(typeCheckOf).filter(Boolean);
 		return (d) => {
 			for (let i = 0; i < fns.length; i++) if (fns[i](d)) return true;
 			return false;
@@ -15598,6 +15624,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (+m === 0) return "true";
 		return `!(Number.isInteger(${v}/${m})||Math.abs(${v}/${m}-Math.round(${v}/${m}))<1e-9)`;
 	}
+	const typeCheckOf = (t) => Object.prototype.hasOwnProperty.call(TYPE_CHECKS, t) ? TYPE_CHECKS[t] : void 0;
 	const TYPE_CHECKS = {
 		string: (d) => typeof d === "string",
 		number: (d) => Number.isFinite(d),
@@ -18233,7 +18260,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function genUniqueItemsNode(schema, v, lines, ctx, knownType, hoisted, isArr, types) {
 		const si = ctx.varCounter++;
 		const itemType = schema.items && typeof schema.items === "object" && schema.items.type;
-		const isPrimItems = itemType === "string" || itemType === "number" || itemType === "integer";
+		const isPrimItems = (!Array.isArray(schema.prefixItems) || schema.prefixItems.length === 0) && (itemType === "string" || itemType === "number" || itemType === "integer");
 		const maxItems = schema.maxItems;
 		let inner;
 		if (isPrimItems && maxItems && maxItems <= 16) inner = `for(let _i=1;_i<${v}.length;_i++){for(let _k=0;_k<_i;_k++){if(${v}[_i]===${v}[_k])return false}}`;
@@ -19849,7 +19876,7 @@ var require_js_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		formatNameOf
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/scan-runtime.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/scan-runtime.js
 var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function hex4(s, i) {
 		for (let k = i; k < i + 4; k++) {
@@ -20006,7 +20033,7 @@ var require_scan_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		MAX_SKIP_DEPTH
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/scan-compiler.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/scan-compiler.js
 var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileFunction } = require_compile_fn();
 	const { compileToJSCodegen } = require_js_compiler();
@@ -20759,6 +20786,7 @@ var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 			const x = bit.get(k);
 			reqMasks[x.w] |= x.b;
 		}
+		if (names.length >= HASH_DISPATCH_MIN && new Set(names.map(spanHash)).size !== names.length) decline("properties:hash-collision");
 		out.push("c=s.charCodeAt(++i);");
 		const useHash = names.length >= HASH_DISPATCH_MIN;
 		if (useHash) out.push("var _sa" + n + "=new Int32Array(" + (Math.ceil(names.length / 32) || 1) + "),_nx" + n + "=0,_f" + n + "=0" + (counting ? ",_c" + n + "=0" : "") + ";");
@@ -20945,7 +20973,7 @@ var require_scan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 		BAIL
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/clone-emit.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/clone-emit.js
 var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileToJSCodegen, unevalContributions } = require_js_compiler();
 	function resolveLocalPointer(root, ref) {
@@ -21230,7 +21258,7 @@ var require_clone_emit = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		resolveLocalPointer
 	};
 }));
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/codegen-engine.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/codegen-engine.js
 var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { compileFunction } = require_compile_fn();
 	const core = require_validator_core();
@@ -22225,7 +22253,7 @@ var require_codegen_engine = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 export default require_codegen_engine();
 
 import { c as require_branch_collapse, y as __commonJSMin } from "./index.js";
-// ../node_modules/.pnpm/ata-validator@1.63.1_yaml@2.9.1/node_modules/ata-validator/lib/plan-compiler.js
+// ../node_modules/.pnpm/ata-validator@1.63.2_yaml@2.9.1/node_modules/ata-validator/lib/plan-compiler.js
 var require_plan_compiler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { collapseBranches } = require_branch_collapse();
 	const branchTitle = (n) => n && n.schema && typeof n.schema.title === "string" ? n.schema.title : "";
