@@ -12,8 +12,8 @@ allowBuilds:
   msw: false
   sharp: false
 catalog:
-  "@mionjs/bin-compiler": "0.14.1"
-  "@mionjs/devtools": "0.14.1"
+  "@mionjs/bin-compiler": "0.20.0"
+  "@mionjs/devtools": "0.20.0"
   "@oxfmt/binding-linux-x64-gnu": ^0.78.0
   "@ttsc/unplugin": "0.37.1"
   "@types/node": ^26
