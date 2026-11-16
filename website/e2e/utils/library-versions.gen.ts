@@ -9,7 +9,7 @@ export const libraryVersions = {
   "@paseri/paseri": "1.9.7",
   "@railway-ts/pipelines": "0.1.29",
   "@remix-run/data-schema": "1.0.0",
-  "@sapphire/shapeshift": "5.0.0",
+  "@sapphire/shapeshift": "6.0.0",
   ajv: "8.20.0",
   arktype: "2.2.9",
   "ata-validator": "1.63.2",
