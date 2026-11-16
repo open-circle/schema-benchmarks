@@ -24,18 +24,18 @@ const __rt_pf$2F_rt$2FZ2sc5xQPKB = [
 		};
 	}
 ];
-// ../schemas/.mion/types/WOvb_ST9k4yn.js
-const __rt_WOvb_ST9k4yn = [
+// ../schemas/.mion/types/WOvb_T8ipcma.js
+const __rt_WOvb_T8ipcma = [
 	"val",
 	() => [__rt_pf$2F_rt$2FZ2sc5xQPKB],
 	,
-	"WOvb_ST9k4yn",
+	"WOvb_T8ipcma",
 	"objectLiteral",
 	,
 	,
 	,
 	["_rt:Z2sc5xQPKB"],
-	function g_WOvb_ST9k4yn(utl) {
+	function g_WOvb_T8ipcma(utl) {
 		const Z2sc5xQPKB = utl.getPureFn("_rt:Z2sc5xQPKB");
 		const ctxFn0 = function(v) {
 			if (!Array.isArray(v.tags)) return false;
@@ -59,46 +59,46 @@ const __rt_WOvb_ST9k4yn = [
 			for (let i2 = 0; i2 < v.ratings.length; i2++) if (!(typeof v.ratings[i2] === "object" && v.ratings[i2] !== null && typeof v.ratings[i2].id === "number" && typeof v.ratings[i2].stars === "number" && v.ratings[i2].stars <= 5 && v.ratings[i2].stars >= 1 && typeof v.ratings[i2].title === "string" && (v.ratings[i2].title.length <= 100 || v.ratings[i2].title.length <= 200 && Z2sc5xQPKB(v.ratings[i2].title) <= 100) && v.ratings[i2].title.length >= 1 && (v.ratings[i2].title.length >= 2 || Z2sc5xQPKB(v.ratings[i2].title) >= 1) && typeof v.ratings[i2].text === "string" && (v.ratings[i2].text.length <= 1e3 || v.ratings[i2].text.length <= 2e3 && Z2sc5xQPKB(v.ratings[i2].text) <= 1e3) && v.ratings[i2].text.length >= 1 && (v.ratings[i2].text.length >= 2 || Z2sc5xQPKB(v.ratings[i2].text) >= 1) && ctxFn2(v, i2))) return false;
 			return true;
 		};
-		function WOvb_ST9k4yn(v) {
+		function WOvb_T8ipcma(v) {
 			return typeof v === "object" && v !== null && typeof v.id === "number" && v.created instanceof Date && !isNaN(v.created.getTime()) && typeof v.title === "string" && (v.title.length <= 100 || v.title.length <= 200 && Z2sc5xQPKB(v.title) <= 100) && v.title.length >= 1 && (v.title.length >= 2 || Z2sc5xQPKB(v.title) >= 1) && typeof v.brand === "string" && (v.brand.length <= 30 || v.brand.length <= 60 && Z2sc5xQPKB(v.brand) <= 30) && v.brand.length >= 1 && (v.brand.length >= 2 || Z2sc5xQPKB(v.brand) >= 1) && typeof v.description === "string" && (v.description.length <= 500 || v.description.length <= 1e3 && Z2sc5xQPKB(v.description) <= 500) && v.description.length >= 1 && (v.description.length >= 2 || Z2sc5xQPKB(v.description) >= 1) && typeof v.price === "number" && v.price <= 1e4 && v.price >= 1 && (v.discount === null || typeof v.discount === "number" && v.discount <= 100 && v.discount >= 1) && typeof v.quantity === "number" && v.quantity <= 10 && v.quantity >= 0 && ctxFn0(v) && ctxFn1(v) && ctxFn3(v);
 		}
-		return WOvb_ST9k4yn;
+		return WOvb_T8ipcma;
 	}
 ];
-// ../schemas/.mion/types/WOvb_Nv5aYkb.js
-const __rt_WOvb_Nv5aYkb = [
+// ../schemas/.mion/types/WOvb_hnbk8EP.js
+const __rt_WOvb_hnbk8EP = [
 	"val",
 	,
 	,
-	"WOvb_Nv5aYkb",
+	"WOvb_hnbk8EP",
 	"union",
 	,
 	,
 	,
 	,
-	function g_WOvb_Nv5aYkb(utl) {
-		function WOvb_Nv5aYkb(v) {
+	function g_WOvb_hnbk8EP(utl) {
+		function WOvb_hnbk8EP(v) {
 			return v === "jpg" || v === "png";
 		}
-		return WOvb_Nv5aYkb;
+		return WOvb_hnbk8EP;
 	}
 ];
-// ../schemas/.mion/types/WOvb_PDuZ8b2.js
-const __rt_WOvb_PDuZ8b2 = [
+// ../schemas/.mion/types/WOvb_rI19P1G.js
+const __rt_WOvb_rI19P1G = [
 	"val",
 	,
 	,
-	"WOvb_PDuZ8b2",
+	"WOvb_rI19P1G",
 	"union",
 	,
 	,
 	,
 	,
-	function g_WOvb_PDuZ8b2(utl) {
-		function WOvb_PDuZ8b2(v) {
+	function g_WOvb_rI19P1G(utl) {
+		function WOvb_rI19P1G(v) {
 			return v === null || typeof v === "number" && v <= 100 && v >= 1;
 		}
-		return WOvb_PDuZ8b2;
+		return WOvb_rI19P1G;
 	}
 ];
 // ../schemas/.mion/types/pf/_rt/_abcB3do2M.js
@@ -120,30 +120,30 @@ const __rt_pf$2F_rt$2F_abcB3do2M = [
 		};
 	}
 ];
-// ../schemas/.mion/types/aZak_ST9k4yn.js
-const __rt_aZak_ST9k4yn = [
+// ../schemas/.mion/types/aZak_T8ipcma.js
+const __rt_aZak_T8ipcma = [
 	"verr",
 	() => [
-		__rt_WOvb_Nv5aYkb,
-		__rt_WOvb_PDuZ8b2,
+		__rt_WOvb_hnbk8EP,
+		__rt_WOvb_rI19P1G,
 		__rt_pf$2F_rt$2FZ2sc5xQPKB,
 		__rt_pf$2F_rt$2F_abcB3do2M
 	],
 	,
-	"aZak_ST9k4yn",
+	"aZak_T8ipcma",
 	"objectLiteral",
 	,
 	,
 	,
 	["_rt:_abcB3do2M", "_rt:Z2sc5xQPKB"],
-	function g_aZak_ST9k4yn(utl) {
+	function g_aZak_T8ipcma(utl) {
 		const nRT = utl.getPureFn("_rt:_abcB3do2M");
 		const Z2sc5xQPKB = utl.getPureFn("_rt:Z2sc5xQPKB");
-		const WOvb_PDuZ8b2 = utl.getRT("WOvb_PDuZ8b2");
-		const WOvb_Nv5aYkb = utl.getRT("WOvb_Nv5aYkb");
+		const WOvb_rI19P1G = utl.getRT("WOvb_rI19P1G");
+		const WOvb_hnbk8EP = utl.getRT("WOvb_hnbk8EP");
 		const reFmt0 = /* @__PURE__ */ new RegExp("^(?:https?|ftps?|wss?):\\/\\/[^\\s/$.?#-][^\\s]*$", "i");
 		const reFmt1 = /* @__PURE__ */ new RegExp("^(?:https?|ftps?|wss?):\\/\\/[^\\s/$.?#-][^\\s]*$", "i");
-		function aZak_ST9k4yn(v, pth = [], er = []) {
+		function aZak_T8ipcma(v, pth = [], er = []) {
 			if (!(typeof v === "object" && v !== null)) nRT(pth, er, "objectLiteral");
 			else {
 				if (!(typeof v.id === "number")) nRT(pth, er, "number", ["id"]);
@@ -240,7 +240,7 @@ const __rt_aZak_ST9k4yn = [
 					});
 					pth.pop();
 				}
-				if (!WOvb_PDuZ8b2.fn(v.discount)) nRT(pth, er, "union", ["discount"]);
+				if (!WOvb_rI19P1G.fn(v.discount)) nRT(pth, er, "union", ["discount"]);
 				if (!(typeof v.quantity === "number")) nRT(pth, er, "number", ["quantity"]);
 				if (typeof v.quantity === "number") {
 					pth.push("quantity");
@@ -333,7 +333,7 @@ const __rt_aZak_ST9k4yn = [
 						pth.pop();
 						pth.pop();
 					}
-					if (!WOvb_Nv5aYkb.fn(v.images[i1].type)) nRT(pth, er, "union", [
+					if (!WOvb_hnbk8EP.fn(v.images[i1].type)) nRT(pth, er, "union", [
 						"images",
 						i1,
 						"type"
@@ -527,7 +527,7 @@ const __rt_aZak_ST9k4yn = [
 							pth.pop();
 							pth.pop();
 						}
-						if (!WOvb_Nv5aYkb.fn(v.ratings[i2].images[i3].type)) nRT(pth, er, "union", [
+						if (!WOvb_hnbk8EP.fn(v.ratings[i2].images[i3].type)) nRT(pth, er, "union", [
 							"ratings",
 							i2,
 							"images",
@@ -579,10 +579,10 @@ const __rt_aZak_ST9k4yn = [
 			}
 			return er;
 		}
-		return aZak_ST9k4yn;
+		return aZak_T8ipcma;
 	}
 ];
-// ../node_modules/.pnpm/@mionjs+run-types@0.14.1/node_modules/@mionjs/run-types/dist/runtypes/classSerializerRegistry.js
+// ../node_modules/.pnpm/@mionjs+run-types@0.20.0/node_modules/@mionjs/run-types/dist/runtypes/classSerializerRegistry.js
 const classSerializers = /* @__PURE__ */ new Map();
 const classSerializersByName = /* @__PURE__ */ new Map();
 let epoch = 0;
@@ -616,7 +616,7 @@ function deserializeClass(entry, data, keys) {
 	}
 	return instance;
 }
-// ../node_modules/.pnpm/@mionjs+run-types@0.14.1/node_modules/@mionjs/run-types/dist/runtypes/circular.js
+// ../node_modules/.pnpm/@mionjs+run-types@0.20.0/node_modules/@mionjs/run-types/dist/runtypes/circular.js
 var CircularReferenceError = class extends Error {
 	path;
 	constructor(path) {
@@ -632,7 +632,7 @@ function formatCircularPath(path) {
 	else out += out ? `.${segment}` : segment;
 	return out;
 }
-// ../node_modules/.pnpm/@mionjs+run-types@0.14.1/node_modules/@mionjs/run-types/dist/runtypes/rtUtils.js
+// ../node_modules/.pnpm/@mionjs+run-types@0.20.0/node_modules/@mionjs/run-types/dist/runtypes/rtUtils.js
 function isRunTypeValue(val) {
 	return typeof val === "object" && val !== null && typeof val.id === "string" && "kind" in val;
 }
@@ -823,7 +823,7 @@ function materializeRTFn(entry) {
 		materializing.delete(entry.rtFnHash);
 	}
 }
-// ../node_modules/.pnpm/@mionjs+run-types@0.14.1/node_modules/@mionjs/run-types/dist/runtypes/entryTuple.js
+// ../node_modules/.pnpm/@mionjs+run-types@0.20.0/node_modules/@mionjs/run-types/dist/runtypes/entryTuple.js
 const KIND_RUN_TYPE = 0;
 const KIND_PURE_FN = 2;
 const KIND_MISSING = 3;
@@ -1190,7 +1190,7 @@ function resolveEntryTupleFn(fnName, identityFn, runTypeId, injected) {
 	if (utils.knowsType(typeId)) return identityFn;
 	throw new Error(`${fnName}(): no RTCompiledFn entry for "${key}" in rtUtils. The build pipeline didn't emit a factory for that runtype.`);
 }
-// ../node_modules/.pnpm/@mionjs+run-types@0.14.1/node_modules/@mionjs/run-types/dist/createRTFunctions.js
+// ../node_modules/.pnpm/@mionjs+run-types@0.20.0/node_modules/@mionjs/run-types/dist/createRTFunctions.js
 function resolveTupleEntry(fnName, identityFn, val, args) {
 	return resolveEntryTupleFn(fnName, identityFn, isRunTypeValue(val) ? val.id : void 0, args);
 }
@@ -1201,7 +1201,7 @@ const getValidationErrorsIdentity = () => [];
 const createValidateFn = createTypeFnArgsFunction("createValidateFn", (() => true));
 const createGetValidationErrorsFn = createTypeFnArgsFunction("createGetValidationErrorsFn", getValidationErrorsIdentity);
 // ../schemas/libraries/@mionjs/run-types/download/index.ts
-const validate = createValidateFn(void 0, void 0, __rt_WOvb_ST9k4yn);
-const getErrors = createGetValidationErrorsFn(void 0, void 0, __rt_aZak_ST9k4yn);
+const validate = createValidateFn(void 0, void 0, __rt_WOvb_T8ipcma);
+const getErrors = createGetValidationErrorsFn(void 0, void 0, __rt_aZak_T8ipcma);
 const data = {};
 if (!validate(data)) getErrors(data);
