@@ -26,7 +26,7 @@
     "@paseri/paseri": "jsr:^1.9.7",
     "@railway-ts/pipelines": "^0.1.29",
     "@remix-run/data-schema": "^1.0.0",
-    "@sapphire/shapeshift": "^5.0.0",
+    "@sapphire/shapeshift": "^6.0.0",
     "@schema-benchmarks/json-schema-tests": "workspace:*",
     "@schema-benchmarks/utils": "workspace:*",
     "@standard-schema/spec": "^1.1.0",
