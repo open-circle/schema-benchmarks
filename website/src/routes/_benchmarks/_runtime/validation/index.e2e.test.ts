@@ -40,7 +40,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
   test("table can be sorted by column", async ({ validationPage }) => {
     await helpers.desktop.expectTableSorting(validationPage.desktop.tableHandle, {
-      first: /@railway-ts/i,
+      first: /@mionjs/i,
       last: /zod/i,
     });
   });

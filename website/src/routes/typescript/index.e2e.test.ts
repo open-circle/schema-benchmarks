@@ -23,7 +23,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
   test("table can be sorted by column", async ({ typescriptPage }) => {
     await helpers.desktop.expectTableSorting(typescriptPage.desktop.tableHandle, {
-      first: /@paseri/i,
+      first: /@mionjs/i,
       last: /zod/i,
     });
   });

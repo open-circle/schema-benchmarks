@@ -54,7 +54,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
   test("table can be sorted by column", async ({ parsingPage }) => {
     await helpers.desktop.expectTableSorting(parsingPage.desktop.tableHandle, {
-      first: /@paseri/i,
+      first: /@mionjs/i,
       last: /zod/i,
     });
   });

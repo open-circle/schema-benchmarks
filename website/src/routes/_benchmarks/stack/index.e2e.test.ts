@@ -26,7 +26,7 @@ test.describe("desktop view", { tag: "@desktop" }, () => {
 
   test("table can be sorted by column", async ({ stackPage }) => {
     await helpers.desktop.expectTableSorting(stackPage.desktop.tableHandle, {
-      first: /@paseri\/compiler/i,
+      first: /@paseri/i,
       last: /zod/i,
     });
   });

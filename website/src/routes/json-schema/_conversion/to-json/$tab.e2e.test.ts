@@ -123,7 +123,7 @@ test.describe("benchmarks tab", () => {
 
     test("table can be sorted by column", async ({ toJsonPage }) => {
       await helpers.desktop.expectTableSorting(toJsonPage.benchmarks.desktop.tableHandle, {
-        first: /arktype/i,
+        first: /@mionjs/i,
         last: /zod/i,
       });
     });
