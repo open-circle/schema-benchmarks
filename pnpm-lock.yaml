@@ -180,8 +180,8 @@ catalogs:
       specifier: 0.20.0
       version: 0.20.0
     '@oxfmt/binding-linux-x64-gnu':
-      specifier: ^0.78.0
-      version: 0.78.0
+      specifier: ^0.79.0
+      version: 0.79.0
     '@ttsc/unplugin':
       specifier: 0.37.1
       version: 0.37.1
@@ -231,8 +231,8 @@ catalogs:
       specifier: 7.0.2
       version: 7.0.2
     up-fetch:
-      specifier: ^2.6.2
-      version: 2.6.2
+      specifier: ^2.6.3
+      version: 2.6.3
     valibot:
       specifier: ^1.5.0
       version: 1.5.0
@@ -373,7 +373,7 @@ importers:
         version: 7.0.2
       up-fetch:
         specifier: 'catalog:'
-        version: 2.6.2
+        version: 2.6.3
       vite-plus:
         specifier: 'catalog:'
         version: 1.6.0(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(@vitest/browser-playwright@5.1.0)(@vitest/browser-preview@5.1.0)(@vitest/browser@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(playwright@1.65.1)(terser@5.49.0)(typescript@7.0.2)(vitest@5.1.0)(yaml@2.9.1)
@@ -692,7 +692,7 @@ importers:
         version: 0.6.1
       up-fetch:
         specifier: 'catalog:'
-        version: 2.6.2
+        version: 2.6.3
       use-local-slice:
         specifier: ^2.0.0
         version: 2.0.0(react@19.3.1)
@@ -865,7 +865,7 @@ importers:
     optionalDependencies:
       '@oxfmt/binding-linux-x64-gnu':
         specifier: 'catalog:'
-        version: 0.78.0
+        version: 0.79.0
 
 packages:
 
@@ -3523,6 +3523,13 @@ packages:
 
   '@oxfmt/binding-linux-x64-gnu@0.78.0':
     resolution: {integrity: sha512-I2z2ISPjrl3CSRF5fmQkNnoh46UVU1GjM1V0+COJyNZcj0SDNM4DrPP2/gXCX38YJ1P2BL6sF2VdsJ+pEYEbJQ==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  '@oxfmt/binding-linux-x64-gnu@0.79.0':
+    resolution: {integrity: sha512-5pW/ZHYfjjQ71gQR+EKzDz8ZzWIDHlTUtWtxVFNgZbKxVZnRxiSXVrllbjpJtx1q8VtSPZ+Lyg9BLny3yw+PTA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [linux]
@@ -9421,8 +9428,8 @@ packages:
     resolution: {integrity: sha512-+NnOJcSiEtYsVgJmXUzQbJeRAFXJC4yPJYuh6kF9B0Rm6zunXcs/3GZOTllyocSbUDIxD6Bj7e/4ATw7sph1Sw==}
     hasBin: true
 
-  up-fetch@2.6.2:
-    resolution: {integrity: sha512-4gbk+M4hINuALoRonXDUPe+cDPj8gSqVNn6X3Ll6I+sbxALZpF/UFEntisXMiSdVWU3nX8/A8vvbB1f48HIlxA==}
+  up-fetch@2.6.3:
+    resolution: {integrity: sha512-Th2ULVFb12TbpEZvXx13Giplk7WfL368HI80yRrkDrNaNUYNQ6StNbQGj3J7RMbglkER/dKIgb3sgpb7dT8SfA==}
     engines: {node: '>=18'}
 
   upath@1.2.0:
@@ -12278,6 +12285,9 @@ snapshots:
     optional: true
 
   '@oxfmt/binding-linux-x64-gnu@0.78.0':
+    optional: true
+
+  '@oxfmt/binding-linux-x64-gnu@0.79.0':
     optional: true
 
   '@oxfmt/binding-linux-x64-musl@0.78.0':
@@ -18910,7 +18920,7 @@ snapshots:
 
   untun@0.2.2: {}
 
-  up-fetch@2.6.2: {}
+  up-fetch@2.6.3: {}
 
   upath@1.2.0: {}
 
