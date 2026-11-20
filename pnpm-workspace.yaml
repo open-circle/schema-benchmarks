@@ -83,3 +83,5 @@ permissions:
 skills:
   dirs:
     - .agents/skills
+patchedDependencies:
+  "@remix-run/data-schema": patches/@remix-run__data-schema.patch
