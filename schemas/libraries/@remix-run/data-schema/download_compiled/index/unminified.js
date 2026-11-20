@@ -1,4 +1,8 @@
-// ../node_modules/.pnpm/@remix-run+data-schema@1.0.0/node_modules/@remix-run/data-schema/dist/lib/schema.js
+// ../node_modules/.pnpm/@remix-run+data-schema@1.0.1_patch_hash=80774737b19a268f4086238ffbacf79073f56687752981c6f278c8fe6c398b1c/node_modules/@remix-run/data-schema/dist/lib/schema.js
+const schemaMetadata = Symbol("schemaMetadata");
+function getSchemaMetadata(schema) {
+	return readSchemaMetadata(schema) ?? { checks: [] };
+}
 const builtinSchemas = /* @__PURE__ */ new WeakSet();
 /**
 * Creates a sync Standard Schema-compatible schema from a validation function.
@@ -28,7 +32,7 @@ function createSchema(validator) {
 		},
 		pipe(...checks) {
 			if (checks.length === 0) return schema;
-			return createDerivedSchema(schema, function validate(value, context) {
+			let pipedSchema = createDerivedSchema(schema, function validate(value, context) {
 				let result = schema["~run"](value, context);
 				if (result.issues) return result;
 				for (let check of checks) if (!check.check(result.value)) {
@@ -42,9 +46,18 @@ function createSchema(validator) {
 				}
 				return result;
 			});
+			let existingChecks = getSchemaChecks(schema);
+			setSchemaMetadata(pipedSchema, {
+				...readSchemaMetadata(schema),
+				checks: [...existingChecks, ...checks.map((check) => ({
+					code: check.code,
+					values: check.values
+				}))]
+			});
+			return pipedSchema;
 		},
 		refine(predicate, message) {
-			return createDerivedSchema(schema, function validate(value, context) {
+			let refinedSchema = createDerivedSchema(schema, function validate(value, context) {
 				let result = schema["~run"](value, context);
 				if (result.issues) return result;
 				if (!predicate(result.value)) {
@@ -57,16 +70,50 @@ function createSchema(validator) {
 				}
 				return result;
 			});
+			copySchemaMetadata(schema, refinedSchema);
+			return refinedSchema;
 		},
 		transform(transformer) {
-			return createDerivedSchema(schema, function validate(value, context) {
+			let transformedSchema = createDerivedSchema(schema, function validate(value, context) {
 				let result = schema["~run"](value, context);
 				if (result.issues) return result;
 				return { value: transformer(result.value) };
 			});
+			let metadata = getSchemaMetadata(schema);
+			setSchemaMetadata(transformedSchema, {
+				...metadata,
+				inputChecks: metadata.inputChecks ?? metadata.checks
+			});
+			return transformedSchema;
 		}
 	};
+	setSchemaMetadata(schema, { checks: [] });
 	return schema;
+}
+function copySchemaMetadata(source, target) {
+	setSchemaMetadata(target, {
+		...readSchemaMetadata(source),
+		checks: getSchemaChecks(source)
+	});
+}
+function getSchemaChecks(schema) {
+	return readSchemaMetadata(schema)?.checks ?? [];
+}
+function readSchemaMetadata(schema) {
+	return hasSchemaMetadata(schema) ? schema[schemaMetadata] : void 0;
+}
+function setSchemaMetadata(schema, metadata) {
+	if (hasSchemaMetadata(schema)) {
+		schema[schemaMetadata] = metadata;
+		return;
+	}
+	Object.defineProperty(schema, schemaMetadata, {
+		value: metadata,
+		writable: true
+	});
+}
+function hasSchemaMetadata(schema) {
+	return schemaMetadata in schema;
 }
 function isBuiltinSchema(schema) {
 	return builtinSchemas.has(schema);
@@ -238,10 +285,12 @@ function instanceof_(constructor) {
 * @returns A schema that accepts `null` in addition to the wrapped schema
 */
 function nullable(schema) {
-	return createBuiltinSchema(function validate(value, context) {
+	let nullableSchema = createBuiltinSchema(function validate(value, context) {
 		if (value === null) return { value: null };
 		return schema["~run"](value, context);
 	});
+	copySchemaMetadata(schema, nullableSchema);
+	return nullableSchema;
 }
 /**
 * Create a schema that accepts finite numbers (excluding `NaN` and `Infinity`).
@@ -268,7 +317,7 @@ function number() {
 * @returns A schema that produces a typed object matching the shape
 */
 function object(shape, options) {
-	return createBuiltinSchema(function validate(value, context) {
+	let objectSchema = createBuiltinSchema(function validate(value, context) {
 		if (typeof value !== "object" || value === null || Array.isArray(value)) return fail("Expected object", context.path, {
 			code: "type.object",
 			input: value,
@@ -305,6 +354,11 @@ function object(shape, options) {
 		if (issues.length > 0) return { issues };
 		return { value: outputValues };
 	});
+	setSchemaMetadata(objectSchema, {
+		...getSchemaMetadata(objectSchema),
+		shape
+	});
+	return objectSchema;
 }
 /**
 * Create a schema that accepts strings.
@@ -353,7 +407,7 @@ function parse(schema, value, options) {
 	if (result.issues) throw new ValidationError(result.issues);
 	return result.value;
 }
-// ../node_modules/.pnpm/@remix-run+data-schema@1.0.0/node_modules/@remix-run/data-schema/dist/lib/checks.js
+// ../node_modules/.pnpm/@remix-run+data-schema@1.0.1_patch_hash=80774737b19a268f4086238ffbacf79073f56687752981c6f278c8fe6c398b1c/node_modules/@remix-run/data-schema/dist/lib/checks.js
 /**
 * Require a string to be at least `length` characters long.
 *
