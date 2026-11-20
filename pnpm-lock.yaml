@@ -251,6 +251,9 @@ overrides:
   vite@*: npm:@voidzero-dev/vite-plus-core@8.3.8000
   vitest@*: 5.1.0
 
+patchedDependencies:
+  '@remix-run/data-schema': 80774737b19a268f4086238ffbacf79073f56687752981c6f278c8fe6c398b1c
+
 importers:
 
   .:
@@ -409,7 +412,7 @@ importers:
         version: 0.1.29(typescript@7.0.2)
       '@remix-run/data-schema':
         specifier: ^1.0.1
-        version: 1.0.1
+        version: 1.0.1(patch_hash=80774737b19a268f4086238ffbacf79073f56687752981c6f278c8fe6c398b1c)
       '@sapphire/shapeshift':
         specifier: ^6.0.0
         version: 6.0.0
@@ -12452,7 +12455,7 @@ snapshots:
     dependencies:
       typescript: 7.0.2
 
-  '@remix-run/data-schema@1.0.1':
+  '@remix-run/data-schema@1.0.1(patch_hash=80774737b19a268f4086238ffbacf79073f56687752981c6f278c8fe6c398b1c)':
     dependencies:
       '@standard-schema/spec': 1.1.0
 

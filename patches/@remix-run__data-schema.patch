@@ -1,0 +1,35 @@
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 1ff09c509185e7cf28ea08c502f2fdd81079f7fc..0a297bf2692621cb0f687093d4f252f43efbe953 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -1,3 +1,3 @@
+ export { any, array, bigint, boolean, createIssue, createSchema, defaulted, enum_, fail, instanceof_, literal, map, null_, nullable, number, object, optional, parse, parseSafe, record, set, string, symbol, tuple, undefined_, union, ValidationError, variant, } from './lib/schema.ts';
+-export type { Check, ErrorMap, ErrorMapContext, InferInput, InferOutput, Issue, ParseOptions, Schema, ValidationOptions, ValidationResult, } from './lib/schema.ts';
++export type { Check, ErrorMap, ErrorMapContext, InferInput, InferOutput, Issue, ParseOptions, Schema, SchemaMetadata, SchemaWithMetadata, ValidationOptions, ValidationResult, schemaMetadata } from './lib/schema.ts';
+ //# sourceMappingURL=index.d.ts.map
+\ No newline at end of file
+diff --git a/dist/lib/schema.d.ts b/dist/lib/schema.d.ts
+index dfba0fc02eccdfc323a7a495fe34c423827918e0..f05bc569db7e1e7f33361370219ba54e759c19b5 100644
+--- a/dist/lib/schema.d.ts
++++ b/dist/lib/schema.d.ts
+@@ -86,8 +86,8 @@ export interface SchemaMetadata {
+     /** Original property schemas when the inspected schema describes an object. */
+     readonly shape?: ObjectShape;
+ }
+-declare const schemaMetadata: unique symbol;
+-type SchemaWithMetadata<metadata extends SchemaMetadata = SchemaMetadata> = {
++export declare const schemaMetadata: unique symbol;
++export type SchemaWithMetadata<metadata extends SchemaMetadata = SchemaMetadata> = {
+     [schemaMetadata]: metadata;
+ };
+ /**
+diff --git a/dist/lib/schema.js b/dist/lib/schema.js
+index 49dc743b0d2207764eb840e852f7f38a75b248ac..385d50c289637aff5505d20934744ebff69cd447 100644
+--- a/dist/lib/schema.js
++++ b/dist/lib/schema.js
+@@ -1,4 +1,4 @@
+-const schemaMetadata = Symbol('schemaMetadata');
++export const schemaMetadata = Symbol('schemaMetadata');
+ export function getSchemaMetadata(schema) {
+     return readSchemaMetadata(schema) ?? { checks: [] };
+ }
