@@ -25,9 +25,9 @@ export const libraryVersions = {
   typia: "15.4.1",
   valibot: "1.5.0",
   yup: "1.7.1",
-  "z-schema": "12.6.1",
+  "z-schema": "12.7.0",
   zod: "4.6.7",
   "zod/mini": "4.6.7",
   "zod/v3": "4.6.7",
-  "zod-compiler": "2.0.9",
+  "zod-compiler": "2.0.10",
 } as const satisfies Record<string, string>;
