@@ -1488,7 +1488,7 @@ var require_uniqWith = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	module.exports = uniqWith;
 }));
-// ../node_modules/.pnpm/@sapphire+shapeshift@6.0.0/node_modules/@sapphire/shapeshift/dist/index.mjs
+// ../node_modules/.pnpm/@sapphire+shapeshift@6.0.1/node_modules/@sapphire/shapeshift/dist/index.mjs
 var import_get = /* @__PURE__ */ __toESM(require_get(), 1);
 var import_es6 = /* @__PURE__ */ __toESM(require_es6(), 1);
 var import_uniqWith = /* @__PURE__ */ __toESM(require_uniqWith(), 1);
