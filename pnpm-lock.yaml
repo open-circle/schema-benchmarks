@@ -541,8 +541,8 @@ importers:
         specifier: 5.1.0
         version: 5.1.0(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(@vitest/browser-playwright@5.1.0)(@vitest/browser-preview@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(msw@3.0.7(@types/node@26.1.2)(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(graphql@16.14.2)(supports-color@7.2.0)(typescript@7.0.2))
       zod-compiler:
-        specifier: ^2.0.10
-        version: 2.0.10(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)(zod@4.6.7)
+        specifier: ^2.0.12
+        version: 2.0.12(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)(zod@4.6.7)
 
   utils:
     devDependencies:
@@ -9827,8 +9827,8 @@ packages:
     resolution: {integrity: sha512-dSvYKdvLsAHCDqPOhIwk/q5CvuWtTB3Dgpoe0uVEFjTzIOAmsQpprX25InCvrvJsirEbu1OHyy67n/kAj1Sw/w==}
     engines: {node: '>=18'}
 
-  zod-compiler@2.0.10:
-    resolution: {integrity: sha512-XZFtox+Wpb+5UtVgKUPR+tKVRTRl99v0xvqypD2EqGLm1MUtmwVw5ke2jD2TaH/3RCfYy8Qk3N1uSaScZ4uqLw==}
+  zod-compiler@2.0.12:
+    resolution: {integrity: sha512-9JHQ0nebEpJyPY7xWHfHvaLb4G5UMDQiVjv2XLoQiR7AAj7/YrMlMtUA3lT35AMDfhUXtZ5Als1iFDWjXTf3dA==}
     hasBin: true
     peerDependencies:
       '@rsbuild/core': ^1.0.0 || ^2.0.0
@@ -19209,7 +19209,7 @@ snapshots:
       normalize-path: 3.0.0
       readable-stream: 4.7.0
 
-  zod-compiler@2.0.10(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)(zod@4.6.7):
+  zod-compiler@2.0.12(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@26.1.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.49.0)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.2)(rollup@4.62.2)(zod@4.6.7):
     dependencies:
       '@jridgewell/remapping': 2.3.5
       acorn: 8.18.0
