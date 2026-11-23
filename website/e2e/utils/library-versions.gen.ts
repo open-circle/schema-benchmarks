@@ -29,5 +29,5 @@ export const libraryVersions = {
   zod: "4.6.7",
   "zod/mini": "4.6.7",
   "zod/v3": "4.6.7",
-  "zod-compiler": "2.0.10",
+  "zod-compiler": "2.0.12",
 } as const satisfies Record<string, string>;
