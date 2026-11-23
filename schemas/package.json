@@ -70,6 +70,6 @@
     "vite": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:",
-    "zod-compiler": "^2.0.10"
+    "zod-compiler": "^2.0.12"
   }
 }
