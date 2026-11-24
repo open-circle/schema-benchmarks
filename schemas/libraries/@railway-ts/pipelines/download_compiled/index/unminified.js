@@ -1,5 +1,25 @@
-// ../node_modules/.pnpm/@railway-ts+pipelines@0.1.29_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/schema/index.mjs
-var RESULT_BRAND = /* @__PURE__ */ Symbol("RESULT_BRAND");
+// ../node_modules/.pnpm/@railway-ts+pipelines@0.2.1_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/option-BQCaaEBP.mjs
+/**
+* Symbol used to identify Result objects.
+*
+* Not meant to be used directly, but it must stay in the published type
+* declarations: `Result` refers to it, and without it a plain
+* `{ ok: true, value }` object would type-check as a `Result`.
+*
+* `Symbol.for` makes every copy of this module (each entry point, or a second
+* installed copy of the package) share one symbol, so Results compare equal no
+* matter which copy created them.
+*/
+const RESULT_BRAND = Symbol.for("@railway-ts/pipelines/RESULT_BRAND");
+/**
+* Creates a Result containing a value.
+*
+* @example
+* const result: Result<number, string> = ok(123);
+*
+* @param value - The value to contain
+* @returns A Result containing the value
+*/
 function ok(value) {
 	return {
 		ok: true,
@@ -7,6 +27,15 @@ function ok(value) {
 		[RESULT_BRAND]: "ok"
 	};
 }
+/**
+* Creates a Result containing an error.
+*
+* @example
+* const error: Result<number, string> = err("An error occurred");
+*
+* @param error - The error to contain
+* @returns A Result containing the error
+*/
 function err(error) {
 	return {
 		ok: false,
@@ -14,16 +43,45 @@ function err(error) {
 		[RESULT_BRAND]: "error"
 	};
 }
+/**
+* Type guard that checks if a Result is an Ok variant containing a value.
+*
+* @example
+* const result: Result<number, string> = ok(123);
+* if (isOk(result)) {
+*   // TypeScript knows result.value exists here
+*   console.log(result.value);
+* }
+*
+* @param result - The result to check
+* @returns A type predicate indicating if the result is an Ok variant
+*/
 function isOk(result) {
 	return result.ok;
 }
+/**
+* Type guard that checks if a Result is an Error variant.
+*
+* @example
+* const result: Result<number, string> = err("error");
+* if (isErr(result)) {
+*   // TypeScript knows result.error exists here
+*   console.log(result.error);
+* }
+*
+* @param result - The result to check
+* @returns A type predicate indicating if the result is an Error variant
+*/
 function isErr(result) {
 	return !result.ok;
 }
-var _abortEarly = false;
+// ../node_modules/.pnpm/@railway-ts+pipelines@0.2.1_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/schema/index.mjs
+let _abortEarly = false;
+/** @internal */
 function _getAbortEarly() {
 	return _abortEarly;
 }
+/** @internal - Sets abortEarly for the duration of fn's synchronous execution */
 function _withAbortEarly(enabled, fn) {
 	const prev = _abortEarly;
 	_abortEarly = enabled;
@@ -62,8 +120,7 @@ function object(schema, { strict = true } = {}) {
 			const validator = schema[key];
 			if (!validator) continue;
 			if (abortEarly && allErrors.length > 0) break;
-			const value = obj[key];
-			const result = validator(value, [...parentPath, key]);
+			const result = validator(obj[key], [...parentPath, key]);
 			if (result instanceof Promise) {
 				if (abortEarly && allErrors.length > 0) continue;
 				pendingResults.push(result.then((r) => {
@@ -93,6 +150,17 @@ function required(validator, message = "Field is required") {
 		return validator(value, path);
 	};
 }
+/**
+* Create a validator that only accepts null values.
+*
+* @example
+* const validate = nullable();
+* validate(null);        // ok(null)
+* validate('some value'); // err([{ path: [], message: 'Must be null' }])
+*
+* @param message - Custom error message
+* @returns A validator that ensures the value is exactly null
+*/
 function nullable(message = "Must be null") {
 	return (value, path = []) => {
 		if (value !== null) return err([{
@@ -102,6 +170,18 @@ function nullable(message = "Must be null") {
 		return ok(null);
 	};
 }
+/**
+* Combine multiple validators into a single validator, applying them in sequence.
+* Each validator's output feeds into the next. Short-circuits on first error.
+*
+* @example
+* const validate = chain(string(), nonEmpty(), minLength(8));
+* validate('password123'); // ok("password123")
+* validate('abc');         // err([{ path: [], message: 'Must be at least 8 characters' }])
+*
+* @param validators - A list of validators to compose
+* @returns A combined validator that applies all validators in sequence
+*/
 function chain(...validators) {
 	return (value, path = []) => {
 		let result = ok(value);
@@ -118,6 +198,17 @@ function validate(value, validator, pathOrOptions = [], maybeOptions) {
 	if ((Array.isArray(pathOrOptions) ? maybeOptions : pathOrOptions)?.abortEarly) return _withAbortEarly(true, () => validator(value, path));
 	return validator(value, path);
 }
+/**
+* Create a validator that ensures a value is a string.
+*
+* @example
+* const validate = string();
+* validate('John'); // ok("John")
+* validate(42);     // err([{ path: [], message: 'Must be a string' }])
+*
+* @param message - Custom error message
+* @returns A validator that checks if a value is a string
+*/
 function string(message = "Must be a string") {
 	return (value, path = []) => {
 		if (typeof value !== "string") return err([{
@@ -127,24 +218,59 @@ function string(message = "Must be a string") {
 		return ok(value);
 	};
 }
-function minLength(min2, message = `Must be at least ${min2} characters`) {
+/**
+* Create a validator that ensures a string's length is at least a minimum value.
+*
+* @example
+* const validate = minLength(3);
+* validate('john_doe'); // ok("john_doe")
+* validate('jo');       // err([{ path: [], message: 'Must be at least 3 characters' }])
+*
+* @param min - The minimum length (inclusive)
+* @param message - Custom error message
+* @returns A validator that checks if a string meets the minimum length
+*/
+function minLength(min, message = `Must be at least ${min} characters`) {
 	return (value, path = []) => {
-		if (value.length < min2) return err([{
+		if (value.length < min) return err([{
 			path,
 			message
 		}]);
 		return ok(value);
 	};
 }
-function maxLength(max2, message = `Must be at most ${max2} characters`) {
+/**
+* Create a validator that ensures a string's length is at most a maximum value.
+*
+* @example
+* const validate = maxLength(10);
+* validate('short');                // ok("short")
+* validate('this is too long!!!'); // err([{ path: [], message: 'Must be at most 10 characters' }])
+*
+* @param max - The maximum length (inclusive)
+* @param message - Custom error message
+* @returns A validator that checks if a string meets the maximum length
+*/
+function maxLength(max, message = `Must be at most ${max} characters`) {
 	return (value, path = []) => {
-		if (value.length > max2) return err([{
+		if (value.length > max) return err([{
 			path,
 			message
 		}]);
 		return ok(value);
 	};
 }
+/**
+* Create a validator that ensures a string is a valid URL.
+*
+* @example
+* const validate = url();
+* validate('https://example.com');  // ok("https://example.com")
+* validate('not-a-url');            // err([{ path: [], message: 'Invalid URL format' }])
+*
+* @param message - Custom error message
+* @returns A validator that checks if a string is a valid URL
+*/
 function url(message = "Invalid URL format") {
 	return (value, path = []) => {
 		try {
@@ -192,6 +318,19 @@ function array(itemValidator) {
 		return ok(validatedItems);
 	};
 }
+/**
+* Create a validator that ensures a value is a string and one of the allowed enum values.
+*
+* @example
+* const validate = stringEnum(['admin', 'user']);
+* validate('admin'); // ok("admin")
+* validate(42);      // err([{ path: [], message: 'Value must be a string' }])
+* validate('other'); // err([{ path: [], message: 'Value must be one of: admin, user' }])
+*
+* @param allowedValues - Array of acceptable string enum values
+* @param message - Custom error message
+* @returns A validator that checks if a value is a string and in the allowed list
+*/
 function stringEnum(allowedValues, message = `Value must be one of: ${allowedValues.join(", ")}`) {
 	return chain(string("Value must be a string"), (value, path = []) => {
 		if (!allowedValues.includes(value)) return err([{
@@ -201,6 +340,17 @@ function stringEnum(allowedValues, message = `Value must be one of: ${allowedVal
 		return ok(value);
 	});
 }
+/**
+* Create a validator that ensures a value is a number and not NaN.
+*
+* @example
+* const validate = number();
+* validate(25);           // ok(25)
+* validate('not a number'); // err([{ path: [], message: 'Must be a number' }])
+*
+* @param message - Custom error message
+* @returns A validator that checks if a value is a number
+*/
 function number(message = "Must be a number") {
 	return (value, path = []) => {
 		if (typeof value !== "number" || Number.isNaN(value)) return err([{
@@ -210,6 +360,18 @@ function number(message = "Must be a number") {
 		return ok(value);
 	};
 }
+/**
+* Create a validator that ensures a number is at least a minimum value.
+*
+* @example
+* const validate = min(18);
+* validate(21); // ok(21)
+* validate(16); // err([{ path: [], message: 'Must be at least 18' }])
+*
+* @param value - The minimum value (inclusive)
+* @param message - Custom error message
+* @returns A validator that checks if a number is at least the minimum
+*/
 function min(value, message = `Must be at least ${value}`) {
 	return (input, path = []) => {
 		if (input < value) return err([{
@@ -219,6 +381,18 @@ function min(value, message = `Must be at least ${value}`) {
 		return ok(input);
 	};
 }
+/**
+* Create a validator that ensures a number is at most a maximum value.
+*
+* @example
+* const validate = max(100);
+* validate(75);  // ok(75)
+* validate(150); // err([{ path: [], message: 'Must be at most 100' }])
+*
+* @param value - The maximum value (inclusive)
+* @param message - Custom error message
+* @returns A validator that checks if a number is at most the maximum
+*/
 function max(value, message = `Must be at most ${value}`) {
 	return (input, path = []) => {
 		if (input > value) return err([{
@@ -228,6 +402,17 @@ function max(value, message = `Must be at most ${value}`) {
 		return ok(input);
 	};
 }
+/**
+* Create a validator that ensures a value is a valid Date object.
+*
+* @example
+* const validate = date();
+* validate(new Date());      // ok(Date)
+* validate('not a date');    // err([{ path: [], message: 'Must be a Date object' }])
+*
+* @param message - Custom error message
+* @returns A validator that checks if value is a valid Date
+*/
 function date(message = "Must be a Date object") {
 	return (value, path = []) => {
 		if (!(value instanceof Date)) return err([{
