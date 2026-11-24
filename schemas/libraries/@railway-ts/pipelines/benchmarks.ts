@@ -1,3 +1,5 @@
+// needed for type declarations to work
+import type { RESULT_BRAND as _RESULT_BRAND } from "@railway-ts/pipelines/result";
 import type { Validator } from "@railway-ts/pipelines/schema";
 import {
   is,
