@@ -7,7 +7,7 @@ export const libraryVersions = {
   "@mionjs/run-types": "0.20.0",
   "@paseri/compiler": "0.7.7",
   "@paseri/paseri": "1.9.7",
-  "@railway-ts/pipelines": "0.1.29",
+  "@railway-ts/pipelines": "0.2.1",
   "@remix-run/data-schema": "1.0.1",
   "@sapphire/shapeshift": "6.0.1",
   ajv: "8.20.0",
@@ -29,5 +29,5 @@ export const libraryVersions = {
   zod: "4.6.7",
   "zod/mini": "4.6.7",
   "zod/v3": "4.6.7",
-  "zod-compiler": "2.0.12",
+  "zod-compiler": "2.0.14",
 } as const satisfies Record<string, string>;
