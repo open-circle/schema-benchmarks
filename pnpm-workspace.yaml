@@ -14,7 +14,7 @@ allowBuilds:
 catalog:
   "@mionjs/bin-compiler": "0.20.0"
   "@mionjs/devtools": "0.20.0"
-  "@oxfmt/binding-linux-x64-gnu": ^0.79.0
+  "@oxfmt/binding-linux-x64-gnu": ^0.80.0
   "@ttsc/unplugin": "0.37.2"
   "@types/node": ^26
   "@types/react": ^19.3.0
