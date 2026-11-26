@@ -1,4 +1,4 @@
-// ../node_modules/.pnpm/@railway-ts+pipelines@0.4.1_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/option-BwSKfXch.mjs
+// ../node_modules/.pnpm/@railway-ts+pipelines@0.6.0_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/option-BwSKfXch.mjs
 /**
 * Symbol used to identify Result objects.
 *
@@ -75,7 +75,7 @@ function isOk(result) {
 function isErr(result) {
 	return !result.ok;
 }
-// ../node_modules/.pnpm/@railway-ts+pipelines@0.4.1_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/schema/index.mjs
+// ../node_modules/.pnpm/@railway-ts+pipelines@0.6.0_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/schema/index.mjs
 let _abortEarly = false;
 /** @internal */
 function _getAbortEarly() {
@@ -101,7 +101,7 @@ function object(schema, { strict = true } = {}) {
 		const allErrors = [];
 		const validatedObj = {};
 		if (strict !== false) {
-			const extraKeys = Object.keys(obj).filter((key) => !Object.prototype.hasOwnProperty.call(schema, key));
+			const extraKeys = Object.keys(obj).filter((key) => !Object.hasOwn(schema, key));
 			if (extraKeys.length > 0) {
 				if (abortEarly) return err([{
 					path: [...parentPath, extraKeys[0]],
@@ -116,19 +116,22 @@ function object(schema, { strict = true } = {}) {
 		if (abortEarly && allErrors.length > 0) return err(allErrors);
 		const pendingResults = [];
 		for (const key in schema) {
-			if (!Object.prototype.hasOwnProperty.call(schema, key)) continue;
+			if (!Object.hasOwn(schema, key)) continue;
 			const validator = schema[key];
 			if (!validator) continue;
 			if (abortEarly && allErrors.length > 0) break;
-			const result = validator(obj[key], [...parentPath, key]);
+			const present = Object.hasOwn(obj, key);
+			const result = validator(present ? obj[key] : void 0, [...parentPath, key]);
 			if (result instanceof Promise) {
 				if (abortEarly && allErrors.length > 0) continue;
 				pendingResults.push(result.then((r) => {
-					if (isOk(r)) validatedObj[key] = r.value;
-					else allErrors.push(...r.error);
+					if (isOk(r)) {
+						if (present || r.value !== void 0) validatedObj[key] = r.value;
+					} else allErrors.push(...r.error);
 				}));
-			} else if (isOk(result)) validatedObj[key] = result.value;
-			else {
+			} else if (isOk(result)) {
+				if (present || result.value !== void 0) validatedObj[key] = result.value;
+			} else {
 				allErrors.push(...result.error);
 				if (abortEarly) break;
 			}
