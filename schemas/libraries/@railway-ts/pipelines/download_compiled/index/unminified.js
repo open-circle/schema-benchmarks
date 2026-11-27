@@ -1,4 +1,4 @@
-// ../node_modules/.pnpm/@railway-ts+pipelines@0.6.0_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/option-BwSKfXch.mjs
+// ../node_modules/.pnpm/@railway-ts+pipelines@0.6.1_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/option-BwSKfXch.mjs
 /**
 * Symbol used to identify Result objects.
 *
@@ -75,7 +75,7 @@ function isOk(result) {
 function isErr(result) {
 	return !result.ok;
 }
-// ../node_modules/.pnpm/@railway-ts+pipelines@0.6.0_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/schema/index.mjs
+// ../node_modules/.pnpm/@railway-ts+pipelines@0.6.1_typescript@7.0.2/node_modules/@railway-ts/pipelines/dist/schema/index.mjs
 let _abortEarly = false;
 /** @internal */
 function _getAbortEarly() {
@@ -431,34 +431,31 @@ function date(message = "Must be a Date object") {
 }
 function union(validators, options) {
 	const { collectAllErrors = true, errorPrefix } = options || {};
-	const buildError = (allErrors) => err(allErrors.flat().map((error) => ({
-		path: error.path,
-		message: errorPrefix ? `${errorPrefix}: ${error.message}` : error.message
-	})));
+	const buildError = (allErrors) => {
+		const reported = (collectAllErrors ? allErrors : allErrors.slice(0, 1)).flat();
+		return err(errorPrefix ? reported.map((error) => ({
+			...error,
+			message: `${errorPrefix}: ${error.message}`
+		})) : reported);
+	};
 	return (value, parentPath = []) => {
-		if (validators.length === 0) return err([{
+		if (validators.length === 0) return buildError([[{
 			path: parentPath,
 			message: "No validators provided to union"
-		}]);
+		}]]);
 		const allErrors = [];
 		for (let i = 0; i < validators.length; i++) {
 			const result = validators[i](value, parentPath);
 			if (result instanceof Promise) return (async () => {
-				const asyncResult = await result;
-				if (isOk(asyncResult)) return asyncResult;
-				allErrors.push(asyncResult.error);
-				if (!collectAllErrors) return buildError(allErrors);
-				for (let j = i + 1; j < validators.length; j++) {
-					const r = await validators[j](value, parentPath);
+				for (let j = i; j < validators.length; j++) {
+					const r = await (j === i ? result : validators[j](value, parentPath));
 					if (isOk(r)) return r;
 					allErrors.push(r.error);
-					if (!collectAllErrors) break;
 				}
 				return buildError(allErrors);
 			})();
 			if (isOk(result)) return result;
 			allErrors.push(result.error);
-			if (!collectAllErrors) break;
 		}
 		return buildError(allErrors);
 	};
