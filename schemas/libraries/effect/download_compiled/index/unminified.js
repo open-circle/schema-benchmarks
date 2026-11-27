@@ -1,4 +1,4 @@
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Pipeable.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Pipeable.js
 /**
 * The `Pipeable` module defines the shared interface and implementation helpers
 * for values that support Effect-style method chaining with `.pipe(...)`.
@@ -103,7 +103,7 @@ const Class$1 = /*#__PURE__*/ function() {
 	PipeableBase.prototype = Prototype$1;
 	return PipeableBase;
 }();
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Function.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Function.js
 /**
 * Creates a function that can be called in data-first style or data-last
 * (`pipe`-friendly) style.
@@ -374,7 +374,7 @@ function memoizeIdempotent(f) {
 		return result;
 	};
 }
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/equal.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/equal.js
 const errorSiteKeys = [
 	"line",
 	"column",
@@ -382,45 +382,49 @@ const errorSiteKeys = [
 	"originalLine",
 	"originalColumn"
 ];
+const ownKeys = (obj) => {
+	const names = Object.getOwnPropertyNames(obj);
+	const syms = Object.getOwnPropertySymbols(obj);
+	return syms.length > 0 ? [...names, ...syms] : names;
+};
 /** @internal */
 const getAllObjectKeys = (obj) => {
-	const keys = new Set(Reflect.ownKeys(obj));
-	if (obj.constructor === Object) return keys;
+	const own = ownKeys(obj);
+	const proto = Object.getPrototypeOf(obj);
+	if (proto === Object.prototype || proto === null) return own;
+	const keys = new Set(own);
 	if (obj instanceof Error) {
 		keys.delete("stack");
 		for (const key of errorSiteKeys) if (!Object.prototype.propertyIsEnumerable.call(obj, key)) keys.delete(key);
 	}
-	const proto = Object.getPrototypeOf(obj);
 	let current = proto;
 	while (current !== null && current !== Object.prototype) {
-		const ownKeys = Reflect.ownKeys(current);
-		for (let i = 0; i < ownKeys.length; i++) keys.add(ownKeys[i]);
+		for (const key of ownKeys(current)) keys.add(key);
 		current = Object.getPrototypeOf(current);
 	}
-	if (keys.has("constructor") && typeof obj.constructor === "function" && proto === obj.constructor.prototype) keys.delete("constructor");
+	if (typeof obj.constructor === "function" && proto === obj.constructor.prototype) keys.delete("constructor");
 	return keys;
 };
 /** @internal */
 const byReferenceInstances = /*#__PURE__*/ new WeakSet();
 /** @internal */
-const viewBytes = (view) => new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
-/** @internal */
-const isArrayBufferLike = (u) => u instanceof ArrayBuffer || typeof SharedArrayBuffer !== "undefined" && u instanceof SharedArrayBuffer;
+const objectKind = (u) => Array.isArray(u) ? 5 : ArrayBuffer.isView(u) ? u instanceof DataView ? 7 : 6 : Object.getPrototypeOf(u) === Object.prototype ? 0 : u instanceof Date ? 1 : u instanceof RegExp ? 2 : u instanceof Map ? 3 : u instanceof Set ? 4 : u instanceof ArrayBuffer ? 8 : typeof SharedArrayBuffer !== "undefined" && u instanceof SharedArrayBuffer ? 9 : 0;
 /**
 * Returns `undefined` for detached buffers, which can no longer be read.
 *
 * @internal
 */
-const bufferBytes = (buffer) => {
+const toBytes = (u, kind) => {
 	try {
-		return new Uint8Array(buffer);
+		return kind === 7 ? new Uint8Array(u.buffer, u.byteOffset, u.byteLength) : new Uint8Array(u);
 	} catch {
 		return;
 	}
 };
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/hash.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/hash.js
 /**
-* Back-edge count used to avoid caching entry-point-dependent hashes.
+* Back-edge count used to avoid caching entry-point-dependent hashes and
+* comparisons.
 *
 * @internal
 */
@@ -429,7 +433,9 @@ let backEdges = 0;
 const addBackEdge = () => {
 	backEdges++;
 };
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/record.js
+/** @internal */
+const hashCache = /*#__PURE__*/ new WeakMap();
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/record.js
 /**
 * Lists own enumerable string and symbol keys without reading property values.
 * Use this when discovering struct fields; explicitly selected fields are read
@@ -460,7 +466,7 @@ function assignProperties(self, source) {
 	}
 	for (const key of ownEnumerableKeys(source)) assignProperty(self, key, source[key]);
 }
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Predicate.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Predicate.js
 /**
 * Defines runtime checks for values.
 *
@@ -689,7 +695,7 @@ function isObjectKeyword(input) {
 * @since 2.0.0
 */
 const hasProperty = /*#__PURE__*/ dual(2, (self, property) => isObjectKeyword(self) && property in self);
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Hash.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Hash.js
 /**
 * Computes Effect hash values and defines the interface for objects that want
 * to provide their own hash implementation. Hashes are small numeric
@@ -761,38 +767,40 @@ const hash = (self) => {
 		case "bigint": return string$1(self.toString(10));
 		case "string": return string$1(self);
 		case "function":
-		case "object": if (self === null) break;
-		else if (self instanceof Date) {
-			if (Number.isNaN(self.getTime())) return string$1("Invalid Date");
-			return string$1(self.toISOString());
-		} else if (self instanceof RegExp) return string$1(self.toString());
-		else {
-			if (byReferenceInstances.has(self)) return random(self);
-			const cached = hashCache.get(self);
-			if (cached !== void 0) return cached;
-			if (visitedObjects.has(self)) {
-				addBackEdge();
-				return string$1("[Circular]");
+		case "object": {
+			if (self === null) break;
+			const kind = objectKind(self);
+			if (kind === 1) {
+				if (Number.isNaN(self.getTime())) return string$1("Invalid Date");
+				return string$1(self.toISOString());
+			} else if (kind === 2) return string$1(self.toString());
+			else {
+				if (byReferenceInstances.has(self)) return random(self);
+				const cached = hashCache.get(self);
+				if (cached !== void 0) return cached;
+				if (visitedObjects.has(self)) {
+					addBackEdge();
+					return string$1("[Circular]");
+				}
+				visitedObjects.add(self);
+				const seen = backEdges;
+				let h;
+				try {
+					if (isHash(self)) h = self[symbol$1]();
+					else if (typeof self === "function") h = random(self);
+					else if (kind >= 7) {
+						const bytes = toBytes(self, kind);
+						h = bytes === void 0 ? random(self) : hashIndexed(bytes);
+					} else if (kind >= 5) h = hashIndexed(self);
+					else if (kind === 3) h = hashMap(self);
+					else if (kind === 4) h = hashSet(self);
+					else h = structure(self);
+				} finally {
+					visitedObjects.delete(self);
+				}
+				if (seen === backEdges) hashCache.set(self, h);
+				return h;
 			}
-			visitedObjects.add(self);
-			const seen = backEdges;
-			let h;
-			try {
-				if (isHash(self)) h = self[symbol$1]();
-				else if (typeof self === "function") h = random(self);
-				else if (isArrayBufferLike(self)) {
-					const bytes = bufferBytes(self);
-					h = bytes === void 0 ? random(self) : array(bytes);
-				} else if (self instanceof DataView) h = array(viewBytes(self));
-				else if (Array.isArray(self) || ArrayBuffer.isView(self)) h = array(self);
-				else if (self instanceof Map) h = hashMap(self);
-				else if (self instanceof Set) h = hashSet(self);
-				else h = structure(self);
-			} finally {
-				visitedObjects.delete(self);
-			}
-			if (seen === backEdges) hashCache.set(self, h);
-			return h;
 		}
 	}
 	return optimize(mix(string$1(String(self))));
@@ -828,8 +836,9 @@ const hash = (self) => {
 * @since 2.0.0
 */
 const random = (self) => {
-	if (!randomHashCache.has(self)) randomHashCache.set(self, optimize(Math.random() * 4294967296 | 0));
-	return randomHashCache.get(self);
+	let h = randomHashCache.get(self);
+	if (h === void 0) randomHashCache.set(self, h = optimize(Math.random() * 4294967296 | 0));
+	return h;
 };
 const mix = (h) => {
 	h ^= h >>> 16;
@@ -1115,13 +1124,17 @@ const array = (arr) => {
 	for (const element of arr) h = combine(h, hash(element));
 	return optimize(h);
 };
+const hashIndexed = (arr) => {
+	let h = 6151;
+	for (let i = 0; i < arr.length; i++) h = combine(h, hash(arr[i]));
+	return optimize(h);
+};
 const hashMap = /*#__PURE__*/ unordered(/*#__PURE__*/ string$1("Map"), ([k, v]) => combine(hash(k), hash(v)));
 const setSeed = /*#__PURE__*/ string$1("Set");
 const hashSet = /*#__PURE__*/ unordered(setSeed, (element) => combine(setSeed, hash(element)));
 const randomHashCache = /*#__PURE__*/ new WeakMap();
-const hashCache = /*#__PURE__*/ new WeakMap();
 const visitedObjects = /*#__PURE__*/ new WeakSet();
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Equal.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Equal.js
 /**
 * Defines the unique string identifier for the `Equal` interface.
 *
@@ -1167,72 +1180,89 @@ function equals$1() {
 	return compareBoth(arguments[0], arguments[1]);
 }
 function compareBoth(self, that) {
-	if (self === that) return true;
-	if (self == null || that == null) return false;
+	if (self == null || that == null) return self === that;
 	const selfType = typeof self;
-	if (selfType !== typeof that) return false;
-	if (selfType === "number" && self !== self && that !== that) return true;
-	if (selfType !== "object" && selfType !== "function") return false;
-	if (byReferenceInstances.has(self) || byReferenceInstances.has(that)) return false;
+	if (selfType !== "object" && selfType !== "function") return self === that || self !== self && that !== that;
+	if (self === that) {
+		if (pathLeft.length > 0 && !hashCache.has(self)) hash(self);
+		return true;
+	}
+	if (selfType !== typeof that || byReferenceInstances.has(self) || byReferenceInstances.has(that)) return false;
 	return compareObjects(self, that);
 }
 function compareObjects(self, that) {
 	const depth = pathLeft.length;
-	for (let i = depth; i-- > 0;) if (pathLeft[i] === self && pathRight[i] === that) return true;
-	if (depth) return compareOnPath(self, that);
-	let known = results.get(self);
-	if (!known) results.set(self, known = /* @__PURE__ */ new WeakMap());
-	let result = known.get(that);
-	if (result === void 0) known.set(that, result = compareOnPath(self, that));
-	return result;
-}
-function compareOnPath(self, that) {
+	const prev = seen.get(self);
+	if (prev === that) return true;
+	let known;
+	if (!depth || prev !== void 0) {
+		known = results.get(self);
+		const cached = known?.get(that);
+		if (cached !== void 0) return cached;
+	}
+	let revisited = false;
+	for (let i = depth; i-- > 0;) {
+		const sameLeft = pathLeft[i] === self;
+		if (sameLeft || pathRight[i] === that) {
+			addBackEdge();
+			if (sameLeft && pathRight[i] === that) return true;
+			revisited = true;
+		}
+	}
+	if (revisited && hash(self) !== hash(that)) return false;
+	const seenBack = backEdges;
 	pathLeft.push(self);
 	pathRight.push(that);
+	let result;
 	try {
-		return compareStructure(self, that);
+		result = compareStructure(self, that);
 	} finally {
 		pathLeft.pop();
 		pathRight.pop();
+		if (!depth) seen.clear();
 	}
+	if (seenBack !== backEdges) return result && hash(self) === hash(that);
+	if (depth && prev === void 0) {
+		if (result) seen.set(self, that);
+	} else {
+		if (!known) results.set(self, known = /* @__PURE__ */ new WeakMap());
+		known.set(that, result);
+	}
+	return result;
 }
 const pathLeft = [];
 const pathRight = [];
+const seen = /*#__PURE__*/ new Map();
 const results = /*#__PURE__*/ new WeakMap();
 function compareStructure(self, that) {
-	if (hash(self) !== hash(that)) return false;
-	else if (self instanceof Date) {
-		if (!(that instanceof Date)) return false;
-		const selfTime = self.getTime();
-		const thatTime = that.getTime();
-		return selfTime === thatTime || Number.isNaN(selfTime) && Number.isNaN(thatTime);
-	} else if (self instanceof RegExp) return that instanceof RegExp && self.toString() === that.toString();
+	const selfHash = hashCache.get(self);
+	if (selfHash !== void 0 && selfHash !== (hashCache.get(that) ?? selfHash)) return false;
+	const kind = objectKind(self);
+	if (kind === 1 || kind === 2) {
+		if (objectKind(that) !== kind) return false;
+		if (kind === 2) return self.toString() === that.toString();
+		if (hash(self) !== hash(that)) return false;
+		const a = self.getTime();
+		const b = that.getTime();
+		return a === b || a !== a && b !== b;
+	}
 	const bothEquals = isEqual(self);
 	if (bothEquals !== isEqual(that) || typeof self === "function" && !bothEquals) return false;
-	else if (bothEquals) return self[symbol](that);
-	else if (Array.isArray(self)) {
-		if (!Array.isArray(that) || self.length !== that.length) return false;
-		return compareArrays(self, that);
-	} else if (isArrayBufferLike(self)) {
-		if (!isArrayBufferLike(that) || self instanceof ArrayBuffer !== that instanceof ArrayBuffer) return false;
-		const selfBytes = bufferBytes(self);
-		const thatBytes = bufferBytes(that);
+	if ((bothEquals || isHash(self) || isHash(that)) && hash(self) !== hash(that)) return false;
+	if (bothEquals) return self[symbol](that);
+	if (kind !== objectKind(that)) return false;
+	if (kind >= 7) {
+		const selfBytes = toBytes(self, kind);
+		const thatBytes = toBytes(that, kind);
 		return selfBytes !== void 0 && thatBytes !== void 0 && compareTypedArrays(selfBytes, thatBytes);
-	} else if (ArrayBuffer.isView(self)) {
-		const selfIsDataView = self instanceof DataView;
-		if (!ArrayBuffer.isView(that) || self.byteLength !== that.byteLength || selfIsDataView !== that instanceof DataView) return false;
-		if (selfIsDataView) return compareTypedArrays(viewBytes(self), viewBytes(that));
-		return compareTypedArrays(self, that);
-	} else if (self instanceof Map) {
-		if (!(that instanceof Map) || self.size !== that.size) return false;
-		return compareHashed(self, that, entryHash, equalEntries);
-	} else if (self instanceof Set) {
-		if (!(that instanceof Set) || self.size !== that.size) return false;
-		return compareHashed(self, that, hash, compareBoth);
-	}
+	} else if (kind === 5) return compareArrays(self, that);
+	else if (kind === 6) return self.byteLength === that.byteLength && compareTypedArrays(self, that);
+	else if (kind === 3) return self.size === that.size && compareHashed(self, that, entryHash, equalEntries);
+	else if (kind === 4) return self.size === that.size && compareHashed(self, that, hash, compareBoth);
 	return compareRecords(self, that);
 }
 function compareArrays(self, that) {
+	if (self.length !== that.length) return false;
 	for (let i = 0; i < self.length; i++) if (!compareBoth(self[i], that[i])) return false;
 	return true;
 }
@@ -1244,8 +1274,9 @@ function compareTypedArrays(self, that) {
 function compareRecords(self, that) {
 	const selfKeys = getAllObjectKeys(self);
 	const thatKeys = getAllObjectKeys(that);
-	if (selfKeys.size !== thatKeys.size) return false;
-	for (const key of selfKeys) if (!thatKeys.has(key) || !compareBoth(self[key], that[key])) return false;
+	const thatIsSet = thatKeys instanceof Set;
+	if ((selfKeys instanceof Set ? selfKeys.size : selfKeys.length) !== (thatIsSet ? thatKeys.size : thatKeys.length)) return false;
+	for (const key of selfKeys) if (!(thatIsSet ? thatKeys.has(key) : Object.hasOwn(that, key)) || !compareBoth(self[key], that[key])) return false;
 	return true;
 }
 function compareHashed(self, that, hashOf, equivalent) {
@@ -1316,13 +1347,13 @@ const equalEntries = (self, that) => compareBoth(self[0], that[0]) && compareBot
 * @since 2.0.0
 */
 const isEqual = (u) => hasProperty(u, "~effect/Equal") && typeof u["~effect/Equal"] === "function";
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/array.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/array.js
 /**
 * @since 2.0.0
 */
 /** @internal */
 const isArrayNonEmpty$1 = (self) => self.length > 0;
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Redactable.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Redactable.js
 /**
 * Defines the symbol used to identify objects that implement the {@link Redactable}
 * protocol.
@@ -1444,7 +1475,7 @@ const emptyContext$1 = {
 		return pipeArguments(this, arguments);
 	}
 };
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Formatter.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Formatter.js
 /**
 * Formats JavaScript values into readable strings.
 *
@@ -1622,7 +1653,7 @@ function safeGet(input, key) {
 		return "[property access threw]";
 	}
 }
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Inspectable.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Inspectable.js
 /**
 * Controls how values appear in logs and debugging output.
 *
@@ -1750,7 +1781,7 @@ const BaseProto = {
 		return format$1(this.toJSON());
 	}
 };
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/stackTraceLimit.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/stackTraceLimit.js
 /**
 * Check if `Error.stackTraceLimit` is writable.
 * Returns `false` if the property is frozen, non-writable, or `Error` is non-extensible.
@@ -1781,7 +1812,7 @@ const getStackTraceLimit = () => Error.stackTraceLimit;
 const setStackTraceLimit = (value) => {
 	if (canWriteStackTraceLimit) Error.stackTraceLimit = value;
 };
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Utils.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Utils.js
 /**
 * Yields its wrapped value exactly once, then completes with the value sent
 * back in.
@@ -1863,7 +1894,7 @@ const pickInternalCall = () => {
 };
 /** @internal */
 const internalCall = /*#__PURE__*/ pickInternalCall();
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/core.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/core.js
 /** @internal */
 const EffectTypeId = `~effect/Effect`;
 /** @internal */
@@ -2243,7 +2274,7 @@ const TaggedError$1 = (tag) => {
 const DoneTypeId = "~effect/Cause/Done";
 /** @internal */
 const isDone = (u) => hasProperty(u, DoneTypeId);
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/option.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/option.js
 /**
 * @since 2.0.0
 */
@@ -2313,7 +2344,7 @@ const SomeImpl = function(value) {
 SomeImpl.prototype = SomeProto;
 /** @internal */
 const some$1 = (value) => new SomeImpl(value);
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/result.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/result.js
 const TypeId$14 = "~effect/Result";
 const CommonProto = {
 	[TypeId$14]: {
@@ -2382,7 +2413,7 @@ const SuccessImpl = function(success) {
 	this.success = success;
 };
 SuccessImpl.prototype = SuccessProto;
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Order.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Order.js
 /**
 * Defines comparison functions for ordered values.
 *
@@ -2565,7 +2596,7 @@ const isLessThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== 1
 * @since 4.0.0
 */
 const isGreaterThanOrEqualTo$1 = (O) => dual(2, (self, that) => O(self, that) !== -1);
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Option.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Option.js
 /**
 * Creates an `Option` representing the absence of a value.
 *
@@ -2626,7 +2657,7 @@ const none = () => none$1;
 * @since 2.0.0
 */
 const some = some$1;
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Array.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Array.js
 /**
 * Exposes the global array constructor.
 *
@@ -2775,7 +2806,7 @@ const empty$1 = () => [];
 * @since 2.0.0
 */
 const map$2 = /*#__PURE__*/ dual(2, (self, f) => self.map(f));
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/BigDecimal.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/BigDecimal.js
 /**
 * Decimal numbers and arithmetic for cases where JavaScript `number` rounding
 * is not precise enough. A `BigDecimal` stores digits as a `bigint` plus a
@@ -3066,7 +3097,7 @@ const toExponential = (n) => {
 * @since 2.0.0
 */
 const isZero = (n) => n.value === bigint0$1;
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Effectable.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Effectable.js
 /**
 * Create a low-level `Effect` prototype.
 *
@@ -3091,7 +3122,7 @@ const Prototype = (options) => makePrimitiveProto({
 	op: options.label,
 	[evaluate]: options.evaluate
 });
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Context.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Context.js
 /**
 * Runtime type identifier attached to `Context` service keys and used by
 * `isKey` to recognize them.
@@ -3571,7 +3602,7 @@ const serviceNotFoundError = (service) => {
 * @since 3.11.0
 */
 const Reference = Service;
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Duration.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Duration.js
 const TypeId$11 = "~effect/Duration";
 const bigint0 = /*#__PURE__*/ BigInt(0);
 const bigint1 = /*#__PURE__*/ BigInt(1);
@@ -3984,7 +4015,7 @@ const Equivalence$3 = (self, that) => matchPair(self, that, {
 * @since 2.0.0
 */
 const equals = /*#__PURE__*/ dual(2, (self, that) => Equivalence$3(self, that));
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Scheduler.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Scheduler.js
 /**
 * Controls how runnable Effect fiber tasks are dispatched.
 *
@@ -4272,7 +4303,7 @@ for (let i = 0; i < 16; i++) {
 	hexCodes[/*#__PURE__*/ "0123456789abcdef".charCodeAt(i)] = i;
 	hexCodes[/*#__PURE__*/ "0123456789ABCDEF".charCodeAt(i)] = i;
 }
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Tracer.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Tracer.js
 /**
 * Defines the string key for the parent-span context service.
 *
@@ -4308,10 +4339,10 @@ const ParentSpanKey = "effect/Tracer/ParentSpan";
 * @since 4.0.0
 */
 const TracerKey = "effect/Tracer";
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/metric.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/metric.js
 /** @internal */
 const FiberRuntimeMetricsKey = "effect/Metric/FiberRuntimeMetrics";
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/references.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/references.js
 /** @internal */
 const CurrentStackFrame = /*#__PURE__*/ Reference("effect/References/CurrentStackFrame", {
 	fiberCached: true,
@@ -4332,7 +4363,7 @@ const MinimumLogLevel = /*#__PURE__*/ Reference("effect/References/MinimumLogLev
 	fiberCached: true,
 	defaultValue: () => "Info"
 });
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/effect.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/effect.js
 /** @internal */
 var Interrupt = class extends ReasonBase {
 	constructor(fiberId, annotations = constEmptyAnnotations) {
@@ -5068,7 +5099,14 @@ const forkUnsafe = (parent, effect, immediate = false, daemon = false, uninterru
 	if (immediate) child.evaluate(effect);
 	else {
 		child._asyncContext = captureAsyncContext();
-		parentRuntime.currentDispatcher.scheduleTask(() => child.evaluate(effect), 0);
+		let resumed = false;
+		child.yieldWith(() => {
+			resumed = true;
+		});
+		parentRuntime.currentDispatcher.scheduleTask(() => {
+			if (resumed) return;
+			child.evaluate(effect);
+		}, 0);
 	}
 	return child;
 };
@@ -5126,7 +5164,7 @@ const colors = {
 	bgBrightRed: "101"
 };
 colors.gray, colors.blue, colors.green, colors.yellow, colors.red, colors.bgBrightRed, colors.black;
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Cause.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Cause.js
 /**
 * Narrows a `Reason` to `Fail`.
 *
@@ -5211,7 +5249,7 @@ const die$1 = causeDie;
 * @since 2.0.0
 */
 const map = causeMap;
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Exit.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Exit.js
 /**
 * Creates a successful Exit containing the given value.
 *
@@ -5329,7 +5367,7 @@ const void_ = exitVoid;
 * @since 2.0.0
 */
 const isSuccess = exitIsSuccess;
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/dateTime.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/dateTime.js
 /** @internal */
 const TypeId$10 = "~effect/DateTime";
 /** @internal */
@@ -6010,6 +6048,10 @@ const flatMapEager = flatMapEager$1;
 * @since 4.0.0
 */
 const fnUntracedEager = fnUntracedEager$1;
+const typedArrayPrototype = /*#__PURE__*/ Object.getPrototypeOf(Uint8Array.prototype);
+(/*#__PURE__*/ Object.getOwnPropertyDescriptor(typedArrayPrototype, "buffer")).get;
+(/*#__PURE__*/ Object.getOwnPropertyDescriptor(typedArrayPrototype, "byteOffset")).get;
+(/*#__PURE__*/ Object.getOwnPropertyDescriptor(typedArrayPrototype, "byteLength")).get;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 const codes = /*#__PURE__*/ (/* @__PURE__ */ new Uint8Array(123)).fill(255);
 for (let i = 0; i < 64; i++) codes[/*#__PURE__*/ alphabet.charCodeAt(i)] = i;
@@ -6019,7 +6061,7 @@ codes[/*#__PURE__*/ "=".charCodeAt(0)] = 0;
 ({ ...PipeInspectableProto });
 BaseProto.toString, BaseProto[NodeInspectSymbol];
 ({ ...PipeInspectableProto });
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/schema/annotations.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/schema/annotations.js
 /** @internal */
 function resolve$1(ast) {
 	return ast.checks ? ast.checks[ast.checks.length - 1].annotations : ast.annotations;
@@ -6036,7 +6078,7 @@ const getExpected = /*#__PURE__*/ memoize((ast) => {
 	if (typeof identifier === "string") return identifier;
 	return ast.getExpected(getExpected);
 });
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/schema/parser.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/schema/parser.js
 /** @internal */
 const missing = /*#__PURE__*/ Symbol.for("effect/schema/parser/missing");
 /** @internal */
@@ -6051,7 +6093,7 @@ const isSameExit = (result) => result[missing] === true;
 const toOption = (value) => value === missing ? none() : some(value);
 /** @internal */
 const fromOptionExit = (option) => option._tag === "None" ? missingExit : succeed(option.value);
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/SchemaIssue.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/SchemaIssue.js
 /**
 * Describes problems found while decoding, encoding, or checking data with
 * schemas.
@@ -6544,7 +6586,7 @@ function findMessage(issue) {
 	const message = (issue._tag === "Filter" ? issue.filter.annotations : "annotations" in issue ? issue.annotations : issue.ast.annotations)?.[issue._tag === "MissingKey" ? "messageMissingKey" : issue._tag === "UnexpectedKey" ? "messageUnexpectedKey" : "message"];
 	if (typeof message === "string") return message;
 }
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/schema/cause.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/schema/cause.js
 /** @internal */
 function getSchemaIssue(cause) {
 	let issue;
@@ -6560,7 +6602,7 @@ function getSchemaIssueOrThrow(cause, message) {
 	if (issue === void 0) throw new Error(message, { cause });
 	return issue;
 }
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/SchemaGetter.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/SchemaGetter.js
 const makeGetter = (fields) => Object.assign(Object.create(Prototype$1), fields);
 const passthrough_$1 = /*#__PURE__*/ makeGetter({ _tag: "Passthrough" });
 function passthrough$1() {
@@ -6641,7 +6683,7 @@ function transform$1(f) {
 function Number$3() {
 	return transform$1(globalThis.Number);
 }
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/SchemaTransformation.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/SchemaTransformation.js
 /**
 * Constructs schema middleware from its decode and encode functions.
 *
@@ -6793,7 +6835,7 @@ function passthrough() {
 * @since 4.0.0
 */
 const numberFromString = /*#__PURE__*/ new Transformation(/*#__PURE__*/ Number$3(), /*#__PURE__*/ transform$1((n) => Object.is(n, -0) ? "-0" : globalThis.String(n)));
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/SchemaAST.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/SchemaAST.js
 /**
 * Represents Effect schemas as runtime trees.
 *
@@ -8130,7 +8172,6 @@ function isFinite(annotations) {
 			payload: null
 		},
 		toJsonSchema: () => ({ type: "number" }),
-		toCode: () => ({ runtime: "Schema.isFinite()" }),
 		arbitraryConstraint: { number: "finite" },
 		...annotations
 	});
@@ -8525,7 +8566,7 @@ function getConstructorDescriptor(ast) {
 	const getDescriptor = ast.annotations?.[CONSTRUCTOR_ANNOTATION_KEY];
 	return isFunction(getDescriptor) ? getDescriptor(ast.typeParameters) : void 0;
 }
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/schema/interpreter.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/schema/interpreter.js
 const flatMapTransformation = (result, current, f) => isSameExit(result) ? f(current) : flatMapEager(result, f);
 function compileTransformation(transformation) {
 	const apply = compileTransformationUnsafe(transformation);
@@ -8673,7 +8714,7 @@ function compile(ast, compile, compileField, base, specialize) {
 		});
 	};
 }
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/schema/compilerRegistry.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/schema/compilerRegistry.js
 /** @internal */
 const invalid = /*#__PURE__*/ Symbol();
 const cache = /*#__PURE__*/ new WeakMap();
@@ -8703,7 +8744,7 @@ function resolve(ast) {
 	cache.set(ast, entry);
 	return entry;
 }
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/SchemaParser.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/SchemaParser.js
 /**
 * Runs schemas against real values.
 *
@@ -8887,7 +8928,7 @@ function constructSync(entry, input, options) {
 }
 const normalCompiler = (ast) => resolve(ast).parser;
 const constructorCompiler = (ast) => resolve(ast).makeEffect;
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/schema/make.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/schema/make.js
 /** @internal */
 const TypeId$2 = "~effect/Schema/Schema";
 const RebuildOptions = /*#__PURE__*/ Symbol();
@@ -8943,7 +8984,7 @@ function make$1(ast, options) {
 	self.ast = ast;
 	return self;
 }
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Struct.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Struct.js
 /**
 * Wraps a plain function as a {@link Lambda} value so it can be used with
 * {@link map}, {@link mapPick}, and {@link mapOmit}.
@@ -8982,7 +9023,7 @@ function make$1(ast, options) {
 * @since 4.0.0
 */
 const lambda = (f) => f;
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/internal/schemaError.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/internal/schemaError.js
 const SchemaErrorTypeId = "~effect/Schema/SchemaError";
 function isSchemaError$1(u) {
 	return hasProperty(u, "~effect/Schema/SchemaError") && u["~effect/Schema/SchemaError"] === "~effect/Schema/SchemaError";
@@ -8995,7 +9036,7 @@ function isSchemaError$1(u) {
 ({ ...BaseProto });
 ({ ...BaseProto });
 ({ ...BaseProto });
-// ../node_modules/.pnpm/effect@4.1.5/node_modules/effect/dist/Schema.js
+// ../node_modules/.pnpm/effect@4.1.6/node_modules/effect/dist/Schema.js
 /**
 * Creates a schema for a **parametric** type (a generic container such as
 * `Array<A>`, `Option<A>`, etc.) by accepting a list of type-parameter schemas
@@ -9688,8 +9729,7 @@ const isGreaterThanOrEqualTo = /*#__PURE__*/ makeIsGreaterThanOrEqualTo({
 			id: "effect/schema/isGreaterThanOrEqualTo",
 			payload: { minimum: encodeNumberPayload(minimum) }
 		},
-		toJsonSchema: () => ({ minimum }),
-		toCode: () => ({ runtime: `Schema.isGreaterThanOrEqualTo(${format$1(minimum)})` })
+		toJsonSchema: () => ({ minimum })
 	})
 });
 /**
@@ -9718,8 +9758,7 @@ const isLessThanOrEqualTo = /*#__PURE__*/ makeIsLessThanOrEqualTo({
 			id: "effect/schema/isLessThanOrEqualTo",
 			payload: { maximum: encodeNumberPayload(maximum) }
 		},
-		toJsonSchema: () => ({ maximum }),
-		toCode: () => ({ runtime: `Schema.isLessThanOrEqualTo(${format$1(maximum)})` })
+		toJsonSchema: () => ({ maximum })
 	})
 });
 /**
@@ -9772,7 +9811,6 @@ function makeIsMinLength(minLength, minCodePoints, annotations) {
 			minLength: minCodePoints,
 			minItems: minLength
 		}, true] : [{}, true],
-		toCode: () => ({ runtime: `Schema.isMinLength(${minLength})` }),
 		[STRUCTURAL_ANNOTATION_KEY]: true,
 		arbitraryConstraint: { minLength },
 		...annotations
@@ -9813,7 +9851,6 @@ function isMaxLength(maxLength, annotations) {
 			maxLength,
 			maxItems: maxLength
 		}, true] : [{}, true],
-		toCode: () => ({ runtime: `Schema.isMaxLength(${maxLength})` }),
 		[STRUCTURAL_ANNOTATION_KEY]: true,
 		arbitraryConstraint: { maxLength },
 		...annotations
