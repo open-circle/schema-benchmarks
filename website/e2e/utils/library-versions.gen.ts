@@ -25,7 +25,7 @@ export const libraryVersions = {
   typia: "15.5.0",
   valibot: "1.5.0",
   yup: "1.7.1",
-  "z-schema": "12.8.0",
+  "z-schema": "12.9.0",
   zod: "4.6.7",
   "zod/mini": "4.6.7",
   "zod/v3": "4.6.7",
