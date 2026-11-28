@@ -54,7 +54,7 @@
     "typia": "^15.5.0",
     "valibot": "catalog:",
     "yup": "^1.7.1",
-    "z-schema": "^12.8.0",
+    "z-schema": "^12.9.0",
     "zod": "^4.6.7",
     "zod-to-json-schema": "^3.25.2"
   },

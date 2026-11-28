@@ -379,8 +379,8 @@ importers:
         specifier: ^8.0.1
         version: 8.0.1
       tar:
-        specifier: ^7.5.23
-        version: 7.5.23
+        specifier: ^7.5.24
+        version: 7.5.24
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -508,8 +508,8 @@ importers:
         specifier: ^1.7.1
         version: 1.7.1
       z-schema:
-        specifier: ^12.8.0
-        version: 12.8.0
+        specifier: ^12.9.0
+        version: 12.9.0
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -9011,8 +9011,8 @@ packages:
   tar-stream@3.2.0:
     resolution: {integrity: sha512-ojzvCvVaNp6aOTFmG7jaRD0meowIAuPc3cMMhSgKiVWws1GyHbGd/xvnyuRKcKlMpt3qvxx6r0hreCNITP9hIg==}
 
-  tar@7.5.23:
-    resolution: {integrity: sha512-lkukzdoGngZHJZXxW4S/E4Fp9ghTDlyZXrQGRNoJ/LXvDKcXUTq2sg5yQe74po7Voea6n/IN09+wE/QvJMiifA==}
+  tar@7.5.24:
+    resolution: {integrity: sha512-to/OxuCk5DeVONcjjODT7aeoRq5NIPPlfPc0tNML+wLlnf6u5BcJz97Uukv3pT3jzorkFhUevylkAiBr+ZmV2w==}
     engines: {node: '>=18'}
 
   teex@1.0.1:
@@ -9864,8 +9864,8 @@ packages:
   yup@1.7.1:
     resolution: {integrity: sha512-GKHFX2nXul2/4Dtfxhozv701jLQHdf6J34YDh2cEkpqoo8le5Mg6/LrdseVLrFarmFygZTlfIhHx/QKfb/QWXw==}
 
-  z-schema@12.8.0:
-    resolution: {integrity: sha512-v5RHgJDpsGQsb8uxx373v8y471B3Ceof3NMhln3kRCIOlxgdOd1TKkBjsU1C9wSYgJ1uGn4BY4h38Ot1L+LCUw==}
+  z-schema@12.9.0:
+    resolution: {integrity: sha512-bdV9kbshhosv+7l+HpLGjaPWkXC49r0Ea7Y+d21MZMcbnjK2oWxMl6qpDFdQN4tTWskA4K61ase3htKVqwnXDw==}
     engines: {node: '>=22.0.0'}
     hasBin: true
 
@@ -11313,7 +11313,7 @@ snapshots:
       node-fetch: 2.7.0
       nopt: 8.1.0
       semver: 7.8.5
-      tar: 7.5.23
+      tar: 7.5.24
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -11578,7 +11578,7 @@ snapshots:
       p-retry: 6.2.1
       parse-imports: 2.2.1
       semver: 7.8.5
-      tar: 7.5.23
+      tar: 7.5.24
       tmp-promise: 3.0.3
       urlpattern-polyfill: 8.0.2
 
@@ -18359,7 +18359,7 @@ snapshots:
       - bare-buffer
       - react-native-b4a
 
-  tar@7.5.23:
+  tar@7.5.24:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
@@ -19264,7 +19264,7 @@ snapshots:
       toposort: 2.0.2
       type-fest: 2.19.0
 
-  z-schema@12.8.0:
+  z-schema@12.9.0:
     dependencies:
       punycode: 2.3.1
       safe-regex2: 5.1.1
